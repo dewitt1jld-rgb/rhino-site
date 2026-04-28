@@ -2,7 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { createClient } from "@/lib/supabase";
+
+const supabase = createClient();
+
+const handleLogout = async () => {
+  await supabase.auth.signOut();
+window.location.href = "/login";
+};
 
 type Profile = {
   company_name: string | null;
@@ -15,6 +22,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -140,6 +148,11 @@ export default function Navbar() {
                 <Link href="/contact" className="ctaButton" style={{ color: "#fff", fontWeight: 800 }}>
                   Request Online Training
                 </Link>
+
+              <button onClick={handleLogout} className="logoutBtn">
+               Logout
+              </button>
+              
               </>
             )}
           </div>
@@ -237,6 +250,19 @@ export default function Navbar() {
           gap: 16px;
           text-decoration: none;
         }
+          .logoutBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
 
         .brandLogoWrap {
           width: 100px;

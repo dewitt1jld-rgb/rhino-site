@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../lib/supabase";
+import { createClient } from "@/lib/supabase";
 
 type RequireActiveAccessProps = {
   children: React.ReactNode;
@@ -11,6 +11,7 @@ export default function RequireActiveAccess({
 }: RequireActiveAccessProps) {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
+  const supabase = createClient();
 
   useEffect(() => {
     let mounted = true;
