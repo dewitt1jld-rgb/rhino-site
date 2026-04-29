@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
+import SearchModal from "@/components/SearchModal";
 
 const supabase = createClient();
 
@@ -22,6 +23,19 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+  const handleKey = (e: KeyboardEvent) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      e.preventDefault();
+      setSearchOpen(true);
+    }
+  };
+
+  window.addEventListener("keydown", handleKey);
+  return () => window.removeEventListener("keydown", handleKey);
+}, []);
 
 
   useEffect(() => {
@@ -112,14 +126,14 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          <Link
-            href="/dashboard#main-search"
-            className="searchButton"
-            aria-label="Search training"
-            title="Search training"
-          >
-            🔍
-          </Link>
+         <button
+  onClick={() => setSearchOpen(true)}
+  className="searchButton"
+  aria-label="Search training"
+  title="Search training"
+>
+  🔍
+</button>
 
           <div className="desktopActions">
             {!loadingUser && !isLoggedIn && (
@@ -152,7 +166,7 @@ export default function Navbar() {
               <button onClick={handleLogout} className="logoutBtn">
                Logout
               </button>
-              
+
               </>
             )}
           </div>
@@ -221,6 +235,11 @@ export default function Navbar() {
             )}
           </div>
         </div>
+        <SearchModal 
+        
+  open={searchOpen} 
+  onClose={() => setSearchOpen(false)} 
+/>
       </header>
 
       <style jsx>{`
@@ -321,6 +340,21 @@ export default function Navbar() {
           display: flex;
           gap: 50px;
         }
+          .searchBar {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: text;
+  min-width: 220px;
+}
+
+.searchPlaceholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
 
         .navLink {
           padding: 10px 14px;

@@ -1,11 +1,52 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { createClient } from "@/lib/supabase";
 
 export default function Pricing() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const showNewSignupMessage = router.query.newSignup === "1";
   const showNoAccessMessage = router.query.noAccess === "1";
+  const showCanceledMessage = router.query.canceled === "true";
+  const supabase = createClient();
 
+  const handleCheckout = async () => {
+  try {
+    setLoading(true);
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+      return;
+    }
+
+    alert(data.error || "Checkout could not be started. Please try again.");
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong starting checkout.");
+  } finally {
+    setLoading(false);
+  }
+};
+ 
   return (
     <>
       <main className="pageShell">
@@ -13,92 +54,105 @@ export default function Pricing() {
           {showNewSignupMessage && (
             <div className="statusBanner successBanner">
               <strong>Account created successfully.</strong> Your account is ready,
-              but a paid subscription is still required to unlock the training
-              platform. You can review your options below and preview the unlocked
-              videos first.
+              but a paid subscription is required to unlock the training platform.
             </div>
           )}
 
           {showNoAccessMessage && (
             <div className="statusBanner warningBanner">
-              <strong>No active access found.</strong> Your account exists, but you
-              do not currently have an active training subscription. Choose a plan
-              below to unlock the member area.
+              <strong>No active access found.</strong> Subscribe below to unlock
+              the member training area.
             </div>
           )}
 
-          <div className="heroBlock">
-            <div className="eyebrow">Membership Access</div>
-            <h1 className="pageTitle">Pricing</h1>
-            <p className="pageText">
-              Choose the plan that fits your training needs. You can also use this
-              page to preview unlocked content before purchasing full access.
-            </p>
-          </div>
-
-          <div className="pricingGrid">
-            <div className="planCard">
-              <div className="planLabel">Starter</div>
-              <h2 className="planTitle">Basic</h2>
-              <div className="price">$29<span>/month</span></div>
-              <p className="planText">Access to core training content.</p>
-              <ul className="featureList">
-                <li>Core machine training</li>
-                <li>Selected support pages</li>
-                <li>Basic reference content</li>
-              </ul>
-              <button className="planButton">Choose Basic</button>
+          {showCanceledMessage && (
+            <div className="statusBanner warningBanner">
+              <strong>Checkout canceled.</strong> No payment was completed.
             </div>
+          )}
 
+          <section className="heroBlock">
+            <div className="eyebrow">Membership Access</div>
+            <h1 className="pageTitle">Rhino Training Access</h1>
+            <p className="pageText">
+              Get full access to the Rhino training platform, machine setup
+              guides, calibration walkthroughs, troubleshooting pages, and future
+              training updates.
+            </p>
+          </section>
+
+          <section className="pricingWrap">
             <div className="planCard featuredPlan">
-              <div className="planLabel">Best Value</div>
-              <h2 className="planTitle">Pro</h2>
-              <div className="price">$59<span>/month</span></div>
-              <p className="planText">Full access to all training and videos.</p>
+              <div className="planLabel">Full Access</div>
+
+              <h2 className="planTitle">Training Platform Membership</h2>
+
+              <div className="price">
+                $1500<span>/month</span>
+              </div>
+
+              <p className="planText">
+                One simple subscription gives you access to the full training
+                library.
+              </p>
+
               <ul className="featureList">
                 <li>Full Rhino training library</li>
-                <li>All videos and walkthroughs</li>
-                <li>Reference pages and updates</li>
+                <li>Machine setup and calibration guides</li>
+                <li>Step-by-step technical reference pages</li>
+                <li>Searchable training content</li>
+                <li>New pages and updates as they are added</li>
               </ul>
-              <button className="planButton featuredButton">Choose Pro</button>
+
+              <button
+                className="planButton featuredButton"
+                onClick={handleCheckout}
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Start Training Access"}
+              </button>
+
+              <p className="smallNote">
+                Secure checkout powered by Stripe.
+              </p>
             </div>
-          </div>
+          </section>
         </div>
       </main>
 
       <style jsx>{`
         .pageShell {
-          min-height: calc(100vh - 80px);
+          min-height: 100vh;
           background:
-            radial-gradient(circle at top right, rgba(88, 130, 255, 0.1), transparent 22%),
-            linear-gradient(180deg, #070b12 0%, #05070c 100%);
-          padding: 40px 20px 60px;
+            radial-gradient(circle at top left, rgba(245, 158, 11, 0.1), transparent 34%),
+            linear-gradient(135deg, #05070b 0%, #0d1118 45%, #05070b 100%);
+          color: #ffffff;
+          padding: 90px 24px;
         }
 
         .contentWrap {
-          max-width: 1100px;
+          max-width: 1120px;
           margin: 0 auto;
         }
 
         .statusBanner {
-          margin-bottom: 24px;
-          padding: 18px 20px;
+          padding: 16px 18px;
           border-radius: 16px;
-          font-size: 1rem;
-          line-height: 1.7;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          margin-bottom: 22px;
+          line-height: 1.6;
+          font-size: 15px;
         }
 
         .successBanner {
-          background: rgba(76, 175, 80, 0.14);
-          color: #e9ffe7;
-          border-color: rgba(76, 175, 80, 0.28);
+          background: rgba(34, 197, 94, 0.12);
+          border: 1px solid rgba(34, 197, 94, 0.35);
+          color: #ffffff;
         }
 
         .warningBanner {
-          background: rgba(255, 193, 7, 0.12);
-          color: #fff4cf;
-          border-color: rgba(255, 193, 7, 0.26);
+          background: rgba(245, 158, 11, 0.12);
+          border: 1px solid rgba(245, 158, 11, 0.35);
+          color: #ffffff;
         }
 
         .heroBlock {
@@ -107,135 +161,163 @@ export default function Pricing() {
         }
 
         .eyebrow {
-          color: rgba(255, 255, 255, 0.56);
-          font-size: 0.78rem;
-          font-weight: 800;
-          letter-spacing: 0.14em;
+          color: #fbbf24;
           text-transform: uppercase;
+          letter-spacing: 0.14em;
+          font-size: 13px;
+          font-weight: 900;
           margin-bottom: 12px;
         }
 
         .pageTitle {
-          margin: 0 0 14px;
-          color: #ffffff;
-          font-size: clamp(2.3rem, 4vw, 3.6rem);
-          line-height: 1;
-          font-weight: 900;
-          letter-spacing: -0.03em;
+          margin: 0;
+          font-size: 48px;
+          letter-spacing: -0.04em;
+          line-height: 1.05;
         }
 
         .pageText {
-          margin: 0 auto;
-          max-width: 760px;
-          color: rgba(255, 255, 255, 0.74);
-          font-size: 1.04rem;
-          line-height: 1.8;
+          max-width: 720px;
+          margin: 18px auto 0;
+          color: rgba(255, 255, 255, 0.82);
+          font-size: 17px;
+          line-height: 1.75;
         }
 
-        .pricingGrid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 24px;
+        .pricingWrap {
+          display: flex;
+          justify-content: center;
         }
 
         .planCard {
-          border-radius: 24px;
-          padding: 28px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.045) 0%,
-            rgba(255, 255, 255, 0.025) 100%
-          );
-          box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+          width: 100%;
+          max-width: 520px;
+          border-radius: 26px;
+          padding: 34px;
+          background: rgba(255, 255, 255, 0.055);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          box-shadow:
+            0 24px 70px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .featuredPlan {
-          border-color: rgba(255, 255, 255, 0.16);
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.08) 0%,
-            rgba(255, 255, 255, 0.035) 100%
-          );
+          border-color: rgba(245, 158, 11, 0.42);
+          background:
+            radial-gradient(circle at top left, rgba(245, 158, 11, 0.16), transparent 42%),
+            rgba(255, 255, 255, 0.055);
         }
 
         .planLabel {
-          color: rgba(255, 255, 255, 0.56);
-          font-size: 0.74rem;
-          font-weight: 800;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          margin-bottom: 14px;
+          display: inline-flex;
+          padding: 7px 12px;
+          border-radius: 999px;
+          background: rgba(245, 158, 11, 0.16);
+          border: 1px solid rgba(245, 158, 11, 0.35);
+          color: #fbbf24;
+          font-size: 13px;
+          font-weight: 900;
+          margin-bottom: 18px;
         }
 
         .planTitle {
-          margin: 0 0 12px;
-          color: #ffffff;
-          font-size: 1.8rem;
-          font-weight: 850;
+          margin: 0;
+          font-size: 28px;
+          letter-spacing: -0.03em;
         }
 
         .price {
-          color: #ffffff;
-          font-size: 2.6rem;
-          font-weight: 900;
-          margin-bottom: 14px;
+          margin-top: 22px;
+          font-size: 50px;
+          font-weight: 950;
+          letter-spacing: -0.04em;
         }
 
         .price span {
-          font-size: 1rem;
-          font-weight: 600;
+          font-size: 17px;
+          font-weight: 700;
           color: rgba(255, 255, 255, 0.68);
-          margin-left: 6px;
+          margin-left: 4px;
         }
 
         .planText {
-          margin: 0 0 18px;
-          color: rgba(255, 255, 255, 0.74);
+          margin: 14px 0 22px;
+          color: rgba(255, 255, 255, 0.78);
           line-height: 1.7;
         }
 
         .featureList {
-          margin: 0 0 24px;
-          padding-left: 18px;
-          color: rgba(255, 255, 255, 0.82);
-          line-height: 1.9;
+          list-style: none;
+          padding: 0;
+          margin: 0 0 28px;
+          display: grid;
+          gap: 12px;
+        }
+
+        .featureList li {
+          color: rgba(255, 255, 255, 0.9);
+          line-height: 1.5;
+        }
+
+        .featureList li::before {
+          content: "✓";
+          color: #4ade80;
+          font-weight: 900;
+          margin-right: 10px;
         }
 
         .planButton {
           width: 100%;
-          min-height: 52px;
           border: none;
           border-radius: 16px;
-          background: rgba(255, 255, 255, 0.1);
-          color: #ffffff;
-          font-size: 1rem;
-          font-weight: 800;
+          padding: 15px 18px;
+          font-size: 16px;
+          font-weight: 900;
           cursor: pointer;
-          transition: transform 0.2s ease, background 0.2s ease;
-        }
-
-        .planButton:hover {
-          transform: translateY(-1px);
-          background: rgba(255, 255, 255, 0.16);
+          transition:
+            transform 160ms ease,
+            background 160ms ease,
+            opacity 160ms ease;
         }
 
         .featuredButton {
-          background: #ffffff;
-          color: #05070c;
+          background: #f59e0b;
+          color: #111827;
         }
 
         .featuredButton:hover {
-          background: #f2f2f2;
+          transform: translateY(-2px);
+          background: #fbbf24;
         }
 
-        @media (max-width: 820px) {
-          .pricingGrid {
-            grid-template-columns: 1fr;
+        .planButton:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        .smallNote {
+          margin: 14px 0 0;
+          text-align: center;
+          color: rgba(255, 255, 255, 0.58);
+          font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+          .pageShell {
+            padding: 64px 18px;
           }
 
-          .pageShell {
-            padding: 28px 16px 44px;
+          .pageTitle {
+            font-size: 36px;
+          }
+
+          .planCard {
+            padding: 24px;
+          }
+
+          .price {
+            font-size: 42px;
           }
         }
       `}</style>
