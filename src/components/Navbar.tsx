@@ -7,11 +7,6 @@ import SearchModal from "@/components/SearchModal";
 
 const supabase = createClient();
 
-const handleLogout = async () => {
-  await supabase.auth.signOut();
-window.location.href = "/login";
-};
-
 type Profile = {
   company_name: string | null;
   first_name: string | null;
@@ -25,22 +20,27 @@ export default function Navbar() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  useEffect(() => {
-  const handleKey = (e: KeyboardEvent) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-      e.preventDefault();
-      setSearchOpen(true);
-    }
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
   };
 
-  window.addEventListener("keydown", handleKey);
-  return () => window.removeEventListener("keydown", handleKey);
-}, []);
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
 
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     onScroll();
+
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -48,8 +48,10 @@ export default function Navbar() {
   useEffect(() => {
     async function loadUserProfile() {
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      const user = session?.user;
 
       if (!user) {
         setProfile(null);
@@ -98,51 +100,69 @@ export default function Navbar() {
       <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
         <div className="navbarInner">
           <Link href="/" className="brand" onClick={closeMenu}>
-            <div className="brandLogoWrap">
-              <Image src="/logo-only1.png" alt="logo" width={100} height={100} />
-            </div>
+  <span className="brandLogoBox">
+    <Image
+      src="/logo-only1.png"
+      alt="Rhino Wrangler logo"
+      width={100}
+      height={100
+      }
+      priority
+    />
+  </span>
 
-            <div className="brandBlock">
-              <span className="brandTitle">The Rhino Wrangler</span>
-              <span className="brandSub">Training Platform</span>
-            </div>
-          </Link>
+  <span className="brandTextBox">
+    <span className="brandTitle">The Rhino Wrangler</span>
+    <span className="brandSub">Training Platform</span>
+  </span>
+</Link>
 
-          <nav className="desktopNav">
-            <Link href="/" className={`navLink ${isActive("/") ? "active" : ""}`} style={{ color: "#fff", fontWeight: 800, fontSize: "1.2rem" }}>
-              Home
-            </Link>
+          <div className="centerGroup">
+            <nav className="desktopNav">
+              <Link href="/" className={`navLink ${isActive("/") ? "active" : ""}`} style={{ fontSize: "1.5rem", fontWeight: 950 }}>
+                Home
+              </Link>
 
-            <Link href="/pricing" className={`navLink ${isActive("/pricing") ? "active" : ""}`} style={{ color: "#fff", fontWeight: 800, fontSize: "1.2rem" }}>
-              Pricing
-            </Link>
+              <Link
+                href="/pricing"
+                className={`navLink ${isActive("/pricing") ? "active" : ""}`}style={{ fontSize: "1.5rem", fontWeight: 950 }}
+              >
+                Pricing
+              </Link>
 
-            <Link href="/dashboard" className={`navLink ${isActive("/dashboard") ? "active" : ""}`} style={{ color: "#fff", fontWeight: 800, fontSize: "1.2rem" }}>
-              Training
-            </Link>
+              <Link
+                href="/dashboard"
+                className={`navLink ${isActive("/dashboard") ? "active" : ""}`}style={{ fontSize: "1.5rem", fontWeight: 950 }}
+              >
+                Training
+              </Link>
 
-            <Link href="/contact" className={`navLink ${isActive("/contact") ? "active" : ""}`} style={{ color: "#fff", fontWeight: 800, fontSize: "1.2rem" }}>
-              Contact
-            </Link>
-          </nav>
+              <Link
+                href="/contact"
+                className={`navLink ${isActive("/contact") ? "active" : ""}`}style={{ fontSize: "1.5rem", fontWeight: 950 }}
+              >
+                Contact
+              </Link>
+            </nav>
 
-         <button
-  onClick={() => setSearchOpen(true)}
-  className="searchButton"
-  aria-label="Search training"
-  title="Search training"
->
-  🔍
-</button>
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="searchButton"
+              aria-label="Search training"
+              title="Search training"
+            >
+              🔍
+            </button>
+          </div>
 
           <div className="desktopActions">
             {!loadingUser && !isLoggedIn && (
               <>
-                <Link href="/login" className="loginButton" style={{ color: "#fff", fontWeight: 800 }}>
+                <Link href="/login" className="loginButton">
                   Member Login
                 </Link>
 
-                <Link href="/pricing" className="ctaButton" style={{ color: "#fff", fontWeight: 800 }}>
+                <Link href="/pricing" className="ctaButton">
                   Get Access
                 </Link>
               </>
@@ -150,23 +170,22 @@ export default function Navbar() {
 
             {!loadingUser && isLoggedIn && (
               <>
-               <Link href="/dashboard" className="loginButton portalButton" style={{ color: "#fff", fontWeight: 800 }}>
-                <div className="portalStack">
-                <span className="portalCompany">
-                  {profile?.company_name || profile?.first_name || "Account"}
-                </span>
-                <span className="portalSub">Training Portal</span>
-                </div>
-              </Link>
+                <Link href="/dashboard" className="loginButton portalButton">
+                  <div className="portalStack">
+                    <span className="portalCompany">
+                      {profile?.company_name || profile?.first_name || "Account"}
+                    </span>
+                    <span className="portalSub">Training Portal</span>
+                  </div>
+                </Link>
 
-                <Link href="/contact" className="ctaButton" style={{ color: "#fff", fontWeight: 800 }}>
+                <Link href="/contact" className="ctaButton">
                   Request Online Training
                 </Link>
 
-              <button onClick={handleLogout} className="logoutBtn">
-               Logout
-              </button>
-
+                <button onClick={handleLogout} className="logoutBtn">
+                  Logout
+                </button>
               </>
             )}
           </div>
@@ -183,40 +202,40 @@ export default function Navbar() {
         </div>
 
         <div className={`mobileMenu ${mobileOpen ? "show" : ""}`}>
-          <Link href="/" className="mobileLink" onClick={closeMenu} style={{ color: "#fff", fontWeight: 800 }}>
+          <Link href="/" className="mobileLink" onClick={closeMenu}>
             Home
           </Link>
 
-          <Link href="/pricing" className="mobileLink" onClick={closeMenu} style={{ color: "#fff", fontWeight: 800 }}>
+          <Link href="/pricing" className="mobileLink" onClick={closeMenu}>
             Pricing
           </Link>
 
-          <Link href="/dashboard" className="mobileLink" onClick={closeMenu} style={{ color: "#fff", fontWeight: 800 }}>
+          <Link href="/dashboard" className="mobileLink" onClick={closeMenu}>
             Training
           </Link>
 
-          <Link href="/contact" className="mobileLink" onClick={closeMenu} style={{ color: "#fff", fontWeight: 800 }}>
+          <Link href="/contact" className="mobileLink" onClick={closeMenu}>
             Contact
           </Link>
 
-          <Link
-            href="/dashboard#main-search"
+          <button
             className="searchButton mobileFull"
-            onClick={closeMenu}
-            aria-label="Search training"
-            title="Search training"
+            onClick={() => {
+              closeMenu();
+              setSearchOpen(true);
+            }}
           >
             🔍 Search Training
-          </Link>
+          </button>
 
           <div className="mobileButtons">
             {!loadingUser && !isLoggedIn && (
               <>
-                <Link href="/login" className="loginButton mobileFull" onClick={closeMenu} style={{ color: "#fff", fontWeight: 800 }}>
+                <Link href="/login" className="loginButton mobileFull" onClick={closeMenu}>
                   Member Login
                 </Link>
 
-                <Link href="/pricing" className="ctaButton mobileFull" onClick={closeMenu} style={{ color: "#fff", fontWeight: 800 }}>
+                <Link href="/pricing" className="ctaButton mobileFull" onClick={closeMenu}>
                   Get Access
                 </Link>
               </>
@@ -224,262 +243,282 @@ export default function Navbar() {
 
             {!loadingUser && isLoggedIn && (
               <>
-                <Link href="/dashboard" className="loginButton mobileFull" onClick={closeMenu} style={{ color: "#fff", fontWeight: 800 }}>
+                <Link href="/dashboard" className="loginButton mobileFull" onClick={closeMenu}>
                   {portalLabel}
                 </Link>
 
-                <Link href="/contact" className="ctaButton mobileFull" onClick={closeMenu} style={{ color: "#fff", fontWeight: 800 }}>
+                <Link href="/contact" className="ctaButton mobileFull" onClick={closeMenu}>
                   Request Online Training
                 </Link>
+
+                <button onClick={handleLogout} className="logoutBtn mobileFull">
+                  Logout
+                </button>
               </>
             )}
           </div>
         </div>
-        <SearchModal 
-        
-  open={searchOpen} 
-  onClose={() => setSearchOpen(false)} 
-/>
       </header>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       <style jsx>{`
         .navbar {
           position: sticky;
           top: 0;
           z-index: 1000;
-          width: 100%;
-          background: rgba(8, 10, 14, 0.9);
-          backdrop-filter: blur(16px);
+          background: #1f2329;
+          color: #ffffff;
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .navbarInner {
-          max-width: 1300px;
-          margin: 0 auto;
-          padding: 0 14px;
-          height: 80px;
-          display: flex;
+          width: 100%;
+          min-height: 86px;
+          display: grid;
+          grid-template-columns: minmax(320px, 1fr) auto minmax(320px, 1fr);
           align-items: center;
-          justify-content: space-between;
+          gap: 24px;
+          padding: 0 36px;
         }
 
-        .brand {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          text-decoration: none;
-        }
-          .logoutBtn {
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.2s;
+       .brand {
+  justify-self: start;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  color: #ffffff;
+  text-decoration: none;
+  width: auto;
+  max-width: none;
 }
 
-.logoutBtn:hover {
-  background: rgba(255, 255, 255, 0.18);
+.brandLogoBox {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(15px);
 }
 
-        .brandLogoWrap {
-          width: 100px;
-          height: 100px;
+.brandTextBox {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  line-height: 1.05;
+  flex: 0 0 auto;
+  transform: translateX(30px) translateY(-20px);
+}
+
+.brandTitle {
+  font-size: 1.35rem;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.brandSub {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: nowrap;
+}
+
+        .centerGroup {
+          justify-self: center;
           display: flex;
           align-items: center;
-          justify-content: center;
-          transform: translateX(-120px) translateY(25px);
-        }
-
-        .brandBlock {
-          display: flex;
-          flex-direction: column;
-          line-height: 1.5;
-          align-items: center;
-          justify-content: center;
-          transform: translateY(-50px);
-        }
-
-        .brandTitle {
-          color: #ffffff;
-          font-size: 1.2rem;
-          font-weight: 900;
-        }
-
-        .brandSub {
-          color: rgba(255, 255, 255, 0.78);
-          font-size: 0.8rem;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-        }
-
-        .searchButton {
-          width: 46px;
-          height: 46px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 12px;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.16);
-          color: #ffffff;
-          text-decoration: none;
-          font-size: 1.1rem;
-          transition: all 0.22s ease;
-        }
-
-        .searchButton:hover {
-          background: rgba(255, 255, 255, 0.12);
-          border-color: rgba(255, 255, 255, 0.26);
-          transform: translateY(-1px);
+          gap: 26px;
         }
 
         .desktopNav {
           display: flex;
-          gap: 50px;
+          align-items: center;
+          gap: 42px;
         }
-          .searchBar {
-  display: flex;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: text;
-  min-width: 220px;
-}
-
-.searchPlaceholder {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 14px;
-}
 
         .navLink {
-          padding: 10px 14px;
-          font-size: 1.4rem;
-          font-weight: 800;
-          border-radius: 10px;
+          color: #ffffff;
           text-decoration: none;
+          font-size: 1.18rem;
+          font-weight: 900;
+          transition: color 0.2s ease;
         }
 
-        .navLink:hover {
-          background: rgba(255, 255, 255, 0.1);
+        .navLink:hover,
+        .navLink.active {
+          color: #f59e0b;
+        }
+
+        .searchButton {
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          width: 48px;
+          height: 48px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 1.1rem;
+        }
+
+        .searchButton:hover {
+          background: rgba(245, 158, 11, 0.18);
+          border-color: rgba(245, 158, 11, 0.5);
         }
 
         .desktopActions {
+          justify-self: end;
           display: flex;
-          gap: 30px;
-          transform: translateX(250px);
+          align-items: center;
+          gap: 18px;
         }
 
         .loginButton,
         .ctaButton {
-          padding: 12px 16px;
-          border-radius: 10px;
-          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
           text-decoration: none;
+          font-weight: 900;
+          font-size: 1rem;
           white-space: nowrap;
         }
 
-        .loginButton:hover,
-        .ctaButton:hover {
-          background: rgba(255, 255, 255, 0.15);
-        }
-
         .portalButton {
-          max-width: 260px;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          text-align: center;
         }
 
         .portalStack {
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-        text-align: center;
-         line-height: 1.2;
+          display: flex;
+          flex-direction: column;
+          line-height: 1.05;
         }
 
         .portalCompany {
-         color: #ffffff;
-        font-size: 0.9rem;
-        font-weight: 900;
-        white-space: nowrap;
+          font-weight: 950;
+          font-size: 0.95rem;
         }
 
         .portalSub {
-         color: rgba(255, 255, 255, 0.7);
-          font-size: 0.7rem;
-         font-weight: 700;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
+          margin-top: 4px;
+          font-size: 0.75rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.72);
+        }
+
+        .logoutBtn {
+          border: none;
+          border-radius: 10px;
+          padding: 12px 16px;
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          font-weight: 800;
+          cursor: pointer;
+        }
+
+        .logoutBtn:hover {
+          background: rgba(255, 255, 255, 0.14);
         }
 
         .menuButton {
           display: none;
-          flex-direction: column;
-          gap: 4px;
-          background: none;
           border: none;
+          background: transparent;
           cursor: pointer;
         }
 
         .menuButton span {
-          width: 22px;
-          height: 2px;
-          background: white;
+          display: block;
+          width: 26px;
+          height: 3px;
+          margin: 5px 0;
+          background: #ffffff;
+          border-radius: 999px;
         }
 
         .mobileMenu {
           display: none;
-          padding: 20px;
-          background: rgba(8, 10, 14, 0.98);
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .mobileMenu.show {
-          display: block;
-        }
+        @media (max-width: 1250px) {
+          .navbarInner {
+            grid-template-columns: auto 1fr auto;
+          }
 
-        .mobileLink {
-          display: block;
-          padding: 12px 0;
-          text-decoration: none;
-        }
-
-        .mobileButtons {
-          margin-top: 16px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        .mobileFull {
-          width: 100%;
-          box-sizing: border-box;
-        }
-
-        @media (max-width: 1050px) {
-          .desktopNav,
-          .desktopActions,
-          .navbarInner > .searchButton {
+          .centerGroup,
+          .desktopActions {
             display: none;
           }
 
           .menuButton {
-            display: flex;
+            display: block;
+            justify-self: end;
           }
 
-          .brandLogoWrap {
-            transform: none;
-            width: 70px;
-            height: 70px;
+          .mobileMenu {
+            display: none;
+            padding: 18px 24px 24px;
+            background: #1f2329;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
           }
 
-          .brandBlock {
-            transform: none;
+          .mobileMenu.show {
+            display: grid;
+            gap: 14px;
+          }
+
+          .mobileLink,
+          .mobileFull {
+            width: 100%;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 900;
+            padding: 12px 0;
+            text-align: left;
+          }
+
+          .mobileButtons {
+            display: grid;
+            gap: 12px;
+            margin-top: 10px;
+          }
+
+          .searchButton.mobileFull {
+            width: 100%;
+            height: auto;
+            padding: 12px;
+            justify-content: flex-start;
+          }
+        }
+
+        @media (max-width: 650px) {
+          .navbarInner {
+            min-height: 76px;
+            padding: 0 16px;
+          }
+
+          .brand {
+            gap: 10px;
+          }
+
+          .brandLogo {
+            width: 58px;
+            height: 58px;
+          }
+
+          .brandTitle {
+            font-size: 1rem;
+          }
+
+          .brandSub {
+            font-size: 0.68rem;
           }
         }
       `}</style>

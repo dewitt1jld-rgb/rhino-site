@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase";
 
+
 export default function Pricing() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -10,10 +11,17 @@ export default function Pricing() {
   const showNoAccessMessage = router.query.noAccess === "1";
   const showCanceledMessage = router.query.canceled === "true";
   const supabase = createClient();
+  const [agreed, setAgreed] = useState(false);
 
-  const handleCheckout = async () => {
+ const handleCheckout = async () => {
+  if (!agreed) {
+    alert("You must agree to the Terms before continuing.");
+    return;
+  }
+
   try {
     setLoading(true);
+    
 
     const {
       data: { session },
@@ -41,7 +49,6 @@ export default function Pricing() {
     alert(data.error || "Checkout could not be started. Please try again.");
   } catch (error) {
     console.error(error);
-    alert("Something went wrong starting checkout.");
   } finally {
     setLoading(false);
   }
@@ -103,14 +110,47 @@ export default function Pricing() {
                 <li>Searchable training content</li>
                 <li>New pages and updates as they are added</li>
               </ul>
+<p style={{ fontSize: "0.9rem", color: "#555", lineHeight: "1.5" }}>
+  The Rhino Wrangler is an independent training program and is not affiliated
+  with, sponsored by, or endorsed by DeMichele Group. Payments to The Rhino
+  Wrangler are for Rhino Wrangler training only and do not replace or apply
+  toward any DeMichele Group software, machine, service, or subscription fees.
+</p>
 
-              <button
-                className="planButton featuredButton"
-                onClick={handleCheckout}
-                disabled={loading}
-              >
-                {loading ? "Loading..." : "Start Training Access"}
-              </button>
+<p style={{ fontSize: "0.9rem", color: "#555", lineHeight: "1.5" }}>
+  By continuing, you agree to the{" "}
+  <a href="/terms" style={{ textDecoration: "underline" }}>
+    Terms of Service
+  </a>
+  .
+</p>
+<label style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+  <input
+    type="checkbox"
+    checked={agreed}
+    onChange={(e) => setAgreed(e.target.checked)}
+  />
+  <span style={{ fontSize: "0.9rem" }}>
+    I agree to the{" "}
+    <a href="/terms" style={{ textDecoration: "underline" }}>
+      Terms of Service
+    </a>{" "}
+    and understand that The Rhino Wrangler is an independent training program
+    not affiliated with or endorsed by DeMichele Group.
+  </span>
+</label>
+<button
+  className="planButton featuredButton"
+  onClick={handleCheckout}
+  disabled={!agreed || loading}
+  style={{
+    opacity: agreed && !loading ? 1 : 0.5,
+    cursor: agreed && !loading ? "pointer" : "not-allowed",
+  }}
+>
+  {loading ? "Loading..." : "Start Training Access"}
+</button>
+              
 
               <p className="smallNote">
                 Secure checkout powered by Stripe.
@@ -119,6 +159,7 @@ export default function Pricing() {
           </section>
         </div>
       </main>
+      
 
       <style jsx>{`
         .pageShell {

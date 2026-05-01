@@ -38,12 +38,12 @@ export default function RequireActiveAccess({
       if (!mounted) return;
 
       if (accessError || !access) {
-        router.replace("/pricing?noAccess=1");
+        router.replace("/account-inactive?noAccess=1");
         return;
       }
 
       if (access.status !== "active") {
-        router.replace("/pricing?noAccess=1");
+        router.replace("/account-inactive?noAccess=1");
         return;
       }
 

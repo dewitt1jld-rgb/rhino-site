@@ -60,6 +60,6 @@
     description: "Input output testing, troubleshooting outputs, clamps, photo eyes, sensors.",
     href: "/dashboard/rhino-training/machine-setup/i-o-testing",
     category: "Machine Setup",
-    tags: ["io","IO", "i-o","i/o", "input", "output", "troubleshooting", "clamps", "photo eye"],
+    tags: ["ii", "io","IO", "i-o","i/o", "input", "output", "troubleshooting", "clamps", "photo eye"],
   },
 ];
