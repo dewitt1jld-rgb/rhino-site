@@ -124,7 +124,7 @@ export default function AdminDashboardPage() {
     });
 
   return (
-    <main style={{ padding: "40px", maxWidth: "1200px", margin: "0 auto" }}>
+    <main style={{ padding: "40px", maxWidth: "1600px", margin: "0 auto" }}>
       <h1>Admin Dashboard</h1>
       <p style={{ color: "#666" }}>Manage Rhino Wrangler member access.</p>
 

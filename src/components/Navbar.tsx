@@ -21,9 +21,13 @@ export default function Navbar() {
   const [accessStatus, setAccessStatus] = useState<string | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+ 
 
   const isLoggedIn = !!profile;
   const hasActiveAccess = accessStatus === "active";
+  const isAdmin =
+  userEmail?.trim().toLowerCase() === "landon@therhinowrangler.com";
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -57,6 +61,7 @@ export default function Navbar() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+      setUserEmail(session?.user?.email || null);
 
       const user = session?.user;
 
@@ -162,7 +167,7 @@ export default function Navbar() {
     style={{ fontSize: "1.5rem", fontWeight: 950 }}
   >
     Virtual Classes
-  </Link>
+  </Link>  
 )}
 
               <Link
@@ -184,7 +189,26 @@ export default function Navbar() {
               >
                 Contact
               </Link>
-            </nav>
+
+              {isAdmin && (
+  <div className="adminDropdown">
+    <button className="adminDropdownButton">
+      Admin ▾
+    </button>
+
+    <div className="adminDropdownMenu">
+      <Link href="/dashboard/admin" className="adminDropdownLink">
+        Member Admin
+      </Link>
+
+      <Link href="/dashboard/class-admin" className="adminDropdownLink">
+        Class Reservations
+      </Link>
+    </div>
+  </div>
+)}
+              
+                          </nav>
 
             <button
               onClick={() => setSearchOpen(true)}
@@ -194,6 +218,8 @@ export default function Navbar() {
             >
               🔍
             </button>
+
+            
           </div>
 
           <div className="desktopActions">
@@ -268,6 +294,7 @@ export default function Navbar() {
           <Link href="/contact" className="mobileLink" onClick={closeMenu}>
             Contact
           </Link>
+          
 
           <button
             className="searchButton mobileFull"
@@ -317,6 +344,8 @@ export default function Navbar() {
                 >
                   Request Online Training
                 </Link>
+
+
 
                 <button
                   onClick={handleLogout}
@@ -404,6 +433,52 @@ export default function Navbar() {
           align-items: center;
           gap: 26px;
         }
+          .adminDropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.adminDropdownButton {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 950;
+  cursor: pointer;
+  padding: 10px 4px;
+}
+
+.adminDropdownMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 220px;
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
+  z-index: 9999;
+}
+
+.adminDropdown:hover .adminDropdownMenu {
+  display: grid;
+}
+
+.adminDropdownLink {
+  color: white;
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.adminDropdownLink:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
 
         .desktopNav {
           display: flex;

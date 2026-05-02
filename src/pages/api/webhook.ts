@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
 
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 const supabaseAdmin = createSupabaseClient(
@@ -119,6 +120,90 @@ export default async function handler(
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
+
+    if (session.metadata?.purchase_type === "virtual_class") {
+  const metadata = session.metadata;
+
+  const { error } = await supabaseAdmin
+    .from("class_reservations")
+ .insert({
+  class_id: metadata.class_id || null,
+  stripe_session_id: session.id,
+  stripe_payment_intent_id:
+    typeof session.payment_intent === "string"
+      ? session.payment_intent
+      : null,
+  class_name: metadata.class_name || "",
+  class_dates: metadata.class_dates || "",
+  class_timezone: metadata.class_timezone || "",
+  student_name: metadata.student_name || "",
+  student_email: metadata.student_email || "",
+  company_name: metadata.company_name || "",
+  amount_paid: session.amount_total,
+  currency: session.currency,
+  status: "paid",
+});
+
+  if (error) {
+    console.error("Error saving class reservation:", error);
+    throw error;
+  }
+  await sendEmail({
+  to: metadata.student_email || "",
+  subject: "You're booked for Rhino Wrangler Certified",
+  html: `
+    <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6;">
+      <h1>You're booked!</h1>
+
+      <p>Thank you for reserving your seat in:</p>
+
+      <h2>Rhino Wrangler Certified: Complete Software Masterclass</h2>
+
+      <p>
+        <strong>Student:</strong> ${metadata.student_name || ""}<br />
+        <strong>Company:</strong> ${metadata.company_name || ""}<br />
+        <strong>Class Dates:</strong> ${metadata.class_dates || ""}<br />
+        <strong>Class Time:</strong> 8:00 AM – 3:00 PM<br />
+        <strong>Time Zone:</strong> ${metadata.class_timezone || "Eastern Time"}
+      </p>
+
+      <p>
+        This is a 4-day live training experience covering workflows,
+        troubleshooting, guided walkthroughs, and real-world operation.
+      </p>
+
+      <h3>What to have ready</h3>
+      <ul>
+        <li>Computer capable of running your software</li>
+        <li>Stable internet connection</li>
+        <li>Access to your systems</li>
+        <li>Notebook or digital notes</li>
+      </ul>
+
+      <p>
+        Webinar access details will be sent before class begins.
+      </p>
+
+      <p>
+        Questions? Contact:
+        <br />
+        <a href="mailto:landon@therhinowrangler.com">
+          landon@therhinowrangler.com
+        </a>
+      </p>
+
+      <hr />
+
+      <p style="font-size: 13px; color: #6b7280;">
+        The Rhino Wrangler is an independent training program and is not affiliated
+        with or endorsed by DeMichele Group.
+      </p>
+    </div>
+  `,
+});
+
+  return res.status(200).json({ received: true });
+}
 
     const profileId = session.metadata?.profile_id;
     const userEmail = session.metadata?.email;

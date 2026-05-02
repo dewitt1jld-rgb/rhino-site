@@ -41,24 +41,25 @@ export default function Home() {
     Get Access
   </Link>
 
-  <Link
-    href="/contact"
-    style={{
-      minWidth: "220px",
-      borderRadius: "14px",
-      padding: "14px 22px",
-      background: "rgba(255, 255, 255, 0.08)",
-      color: "#ffffff",
-      border: "1px solid rgba(255, 255, 255, 0.18)",
-      fontWeight: 900,
-      textDecoration: "none",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-  >
-    Virtual Live Training Classes
-  </Link>
+
+<Link
+  href="/classes"
+  style={{
+    minWidth: "220px",
+    borderRadius: "14px",
+    padding: "14px 22px",
+    background: "rgba(255, 255, 255, 0.08)",
+    color: "#ffffff",
+    border: "1px solid rgba(255, 255, 255, 0.18)",
+    fontWeight: 900,
+    textDecoration: "none",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }}
+>
+  Virtual Live Training Classes
+</Link>
 </div>
       </section>
 
