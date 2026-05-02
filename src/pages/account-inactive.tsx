@@ -1,8 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabase";
 
 export default function AccountInactivePage() {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
+  const [justReturned, setJustReturned] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(false);
+
+  useEffect(() => {
+    if (router.query.portalReturn === "1") {
+      setJustReturned(true);
+      setCheckingAccess(true);
+    }
+  }, [router.query.portalReturn]);
+
+  useEffect(() => {
+    if (!justReturned) return;
+
+    async function checkAccess() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) return;
+
+      const response = await fetch("/api/check-access", {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.status === "active") {
+        window.location.href = "/dashboard";
+      }
+    }
+
+    checkAccess();
+
+    const interval = setInterval(checkAccess, 1500);
+
+    return () => clearInterval(interval);
+  }, [justReturned]);
 
   async function handleRestoreAccess() {
     try {
@@ -50,40 +92,70 @@ export default function AccountInactivePage() {
   return (
     <main className="page">
       <section className="card">
-        <div className="badge">Access Required</div>
+        <div className="badge">
+          {justReturned ? "Verifying Payment" : "Access Required"}
+        </div>
 
-        <h1>Training Access Inactive</h1>
+        <h1>
+          {justReturned ? "Checking Your Access..." : "Training Access Inactive"}
+        </h1>
 
         <p className="lead">
-          Your Rhino Wrangler training access is currently inactive.
+          {justReturned
+            ? "We’re verifying your payment and restoring your training access."
+            : "Your Rhino Wrangler training access is currently inactive."}
         </p>
 
         <p className="text">
-          This may be due to a failed payment, expired subscription, or account
-          status change. To restore access, update your billing information and
-          complete your renewal payment.
+          {justReturned
+            ? "This usually only takes a few seconds. If your payment was completed successfully, you will be redirected to your training dashboard automatically."
+            : "This may be due to a failed payment, expired subscription, or account status change. To restore access, update your billing information and complete your renewal payment."}
         </p>
 
-        <div className="notice">
-          <strong>Existing customer?</strong>
-          <span>
-            Use the billing portal to update your payment method and complete
-            your yearly renewal. You do not need to purchase initial access
-            again.
-          </span>
-        </div>
+        {justReturned && checkingAccess && (
+          <div className="checkingBox">
+            <div className="spinner" />
+            <span>Checking account status...</span>
+          </div>
+        )}
+
+        {!justReturned && (
+          <div className="notice">
+            <strong>Existing customer?</strong>
+            <span>
+              Use the billing portal to update your payment method and complete
+              your yearly renewal. You do not need to purchase initial access
+              again.
+            </span>
+          </div>
+        )}
 
         <div className="actions">
-          <button
-            type="button"
-            onClick={handleRestoreAccess}
-            disabled={loading}
-            className="primaryButton"
-          >
-            {loading ? "Opening Billing Portal..." : "Restore Access"}
-          </button>
+          {!justReturned && (
+            <button
+              type="button"
+              onClick={handleRestoreAccess}
+              disabled={loading}
+              className="primaryButton"
+            >
+              {loading ? "Opening Billing Portal..." : "Restore Access"}
+            </button>
+          )}
 
-          <a href="mailto:landon@therhinowrangler.com" className="secondaryButton">
+          {justReturned && (
+            <button
+              type="button"
+              onClick={() => (window.location.href = "/dashboard")}
+              className="primaryButton"
+            >
+              Go to Dashboard
+            </button>
+          )}
+
+          <a
+            href="mailto:landon@therhinowrangler.com"
+            className="secondaryButton"
+          >
             Contact Support
           </a>
         </div>
@@ -109,6 +181,7 @@ export default function AccountInactivePage() {
           background: rgba(255, 255, 255, 0.96);
           border: 1px solid rgba(17, 24, 39, 0.08);
           box-shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
+          overflow: hidden;
         }
 
         .badge {
@@ -162,20 +235,39 @@ export default function AccountInactivePage() {
           color: rgba(255, 255, 255, 0.78);
         }
 
+        .checkingBox {
+          margin-top: 26px;
+          padding: 18px;
+          border-radius: 18px;
+          background: #111827;
+          color: #ffffff;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-weight: 800;
+        }
+
+        .spinner {
+          width: 18px;
+          height: 18px;
+          border-radius: 999px;
+          border: 3px solid rgba(255, 255, 255, 0.25);
+          border-top-color: #f59e0b;
+          animation: spin 0.8s linear infinite;
+        }
+
         .actions {
           display: flex;
           flex-wrap: wrap;
           gap: 14px;
           margin-top: 28px;
-         justify-content: center; 
-         align-items: center;
-         .primaryButton,
-          .secondaryButton {
-           min-width: 180px;
+          justify-content: center;
+          align-items: center;
         }
 
         .primaryButton,
         .secondaryButton {
+          min-width: 180px;
           border: none;
           border-radius: 14px;
           padding: 14px 18px;
@@ -202,6 +294,12 @@ export default function AccountInactivePage() {
         .secondaryButton {
           background: #991b1b;
           color: #ffffff;
+        }
+
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
         }
 
         @media (max-width: 650px) {

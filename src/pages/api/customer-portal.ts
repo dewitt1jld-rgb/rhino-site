@@ -59,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: access.stripe_customer_id,
-      return_url: `${baseUrl}/dashboard`,
+      return_url: `${baseUrl}/account-inactive?portalReturn=1`,
     });
 
     return res.status(200).json({ url: portalSession.url });

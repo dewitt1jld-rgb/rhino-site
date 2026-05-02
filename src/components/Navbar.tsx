@@ -14,11 +14,16 @@ type Profile = {
 
 export default function Navbar() {
   const router = useRouter();
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [accessStatus, setAccessStatus] = useState<string | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const isLoggedIn = !!profile;
+  const hasActiveAccess = accessStatus === "active";
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -47,6 +52,8 @@ export default function Navbar() {
 
   useEffect(() => {
     async function loadUserProfile() {
+      setLoadingUser(true);
+
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -55,17 +62,25 @@ export default function Navbar() {
 
       if (!user) {
         setProfile(null);
+        setAccessStatus(null);
         setLoadingUser(false);
         return;
       }
 
-      const { data } = await supabase
+      const { data: profileData } = await supabase
         .from("profiles")
         .select("company_name, first_name")
         .eq("id", user.id)
         .single();
 
-      setProfile(data ?? null);
+      const { data: accessData } = await supabase
+        .from("member_access")
+        .select("status")
+        .eq("profile_id", user.id)
+        .maybeSingle();
+
+      setProfile(profileData ?? null);
+      setAccessStatus(accessData?.status ?? null);
       setLoadingUser(false);
     }
 
@@ -80,14 +95,12 @@ export default function Navbar() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const isActive = (href: string) => {
+  const isActiveLink = (href: string) => {
     if (href === "/") return router.pathname === "/";
     return router.pathname === href || router.pathname.startsWith(`${href}/`);
   };
 
   const closeMenu = () => setMobileOpen(false);
-
-  const isLoggedIn = !!profile;
 
   const portalLabel = profile?.company_name
     ? `${profile.company_name} Training Portal`
@@ -100,46 +113,74 @@ export default function Navbar() {
       <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
         <div className="navbarInner">
           <Link href="/" className="brand" onClick={closeMenu}>
-  <span className="brandLogoBox">
-    <Image
-      src="/logo-only1.png"
-      alt="Rhino Wrangler logo"
-      width={100}
-      height={100
-      }
-      priority
-    />
-  </span>
+            <span className="brandLogoBox">
+              <Image
+                src="/logo-only1.png"
+                alt="Rhino Wrangler logo"
+                width={100}
+                height={100}
+                priority
+              />
+            </span>
 
-  <span className="brandTextBox">
-    <span className="brandTitle">The Rhino Wrangler</span>
-    <span className="brandSub">Training Platform</span>
-  </span>
-</Link>
+            <span className="brandTextBox">
+              <span className="brandTitle">The Rhino Wrangler</span>
+              <span className="brandSub">Training Platform</span>
+            </span>
+          </Link>
 
           <div className="centerGroup">
             <nav className="desktopNav">
-              <Link href="/" className={`navLink ${isActive("/") ? "active" : ""}`} style={{ fontSize: "1.5rem", fontWeight: 950 }}>
-                Home
-              </Link>
+              {!hasActiveAccess && (
+                <Link
+                  href="/"
+                  className={`navLink ${isActiveLink("/") ? "active" : ""}`}
+                  style={{ fontSize: "1.5rem", fontWeight: 950 }}
+                >
+                  Explore Platform
+                </Link>
+              )}
 
-              <Link
-                href="/pricing"
-                className={`navLink ${isActive("/pricing") ? "active" : ""}`}style={{ fontSize: "1.5rem", fontWeight: 950 }}
-              >
-                Pricing
-              </Link>
+             {!isLoggedIn && (
+  <Link
+    href="/pricing"
+    className={`navLink ${
+      isActiveLink("/pricing") ? "active" : ""
+    }`}
+    style={{ fontSize: "1.5rem", fontWeight: 950 }}
+  >
+    Pricing
+  </Link>
+)}
+
+{isLoggedIn && (
+  <Link
+    href="/classes"
+    className={`navLink ${
+      isActiveLink("/classes") ? "active" : ""
+    }`}
+    style={{ fontSize: "1.5rem", fontWeight: 950 }}
+  >
+    Virtual Classes
+  </Link>
+)}
 
               <Link
                 href="/dashboard"
-                className={`navLink ${isActive("/dashboard") ? "active" : ""}`}style={{ fontSize: "1.5rem", fontWeight: 950 }}
+                className={`navLink ${
+                  isActiveLink("/dashboard") ? "active" : ""
+                }`}
+                style={{ fontSize: "1.5rem", fontWeight: 950 }}
               >
-                Training
+                Digital Training
               </Link>
 
               <Link
                 href="/contact"
-                className={`navLink ${isActive("/contact") ? "active" : ""}`}style={{ fontSize: "1.5rem", fontWeight: 950 }}
+                className={`navLink ${
+                  isActiveLink("/contact") ? "active" : ""
+                }`}
+                style={{ fontSize: "1.5rem", fontWeight: 950 }}
               >
                 Contact
               </Link>
@@ -202,16 +243,26 @@ export default function Navbar() {
         </div>
 
         <div className={`mobileMenu ${mobileOpen ? "show" : ""}`}>
-          <Link href="/" className="mobileLink" onClick={closeMenu}>
-            Home
-          </Link>
+          {!hasActiveAccess && (
+            <Link href="/" className="mobileLink" onClick={closeMenu}>
+              Explore Platform
+            </Link>
+          )}
 
-          <Link href="/pricing" className="mobileLink" onClick={closeMenu}>
-            Pricing
-          </Link>
+        {!isLoggedIn && (
+  <Link href="/pricing" className="mobileLink" onClick={closeMenu}>
+    Pricing
+  </Link>
+)}
+
+{isLoggedIn && (
+  <Link href="/classes" className="mobileLink" onClick={closeMenu}>
+    Virtual Classes
+  </Link>
+)}
 
           <Link href="/dashboard" className="mobileLink" onClick={closeMenu}>
-            Training
+            Digital Training
           </Link>
 
           <Link href="/contact" className="mobileLink" onClick={closeMenu}>
@@ -231,11 +282,19 @@ export default function Navbar() {
           <div className="mobileButtons">
             {!loadingUser && !isLoggedIn && (
               <>
-                <Link href="/login" className="loginButton mobileFull" onClick={closeMenu}>
+                <Link
+                  href="/login"
+                  className="loginButton mobileFull"
+                  onClick={closeMenu}
+                >
                   Member Login
                 </Link>
 
-                <Link href="/pricing" className="ctaButton mobileFull" onClick={closeMenu}>
+                <Link
+                  href="/pricing"
+                  className="ctaButton mobileFull"
+                  onClick={closeMenu}
+                >
                   Get Access
                 </Link>
               </>
@@ -243,15 +302,26 @@ export default function Navbar() {
 
             {!loadingUser && isLoggedIn && (
               <>
-                <Link href="/dashboard" className="loginButton mobileFull" onClick={closeMenu}>
+                <Link
+                  href="/dashboard"
+                  className="loginButton mobileFull"
+                  onClick={closeMenu}
+                >
                   {portalLabel}
                 </Link>
 
-                <Link href="/contact" className="ctaButton mobileFull" onClick={closeMenu}>
+                <Link
+                  href="/contact"
+                  className="ctaButton mobileFull"
+                  onClick={closeMenu}
+                >
                   Request Online Training
                 </Link>
 
-                <button onClick={handleLogout} className="logoutBtn mobileFull">
+                <button
+                  onClick={handleLogout}
+                  className="logoutBtn mobileFull"
+                >
                   Logout
                 </button>
               </>
@@ -282,52 +352,51 @@ export default function Navbar() {
           padding: 0 36px;
         }
 
-       .brand {
-  justify-self: start;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 14px;
-  color: #ffffff;
-  text-decoration: none;
-  width: auto;
-  max-width: none;
-}
+        .brand {
+          justify-self: start;
+          display: inline-flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 14px;
+          color: #ffffff;
+          text-decoration: none;
+          width: auto;
+          max-width: none;
+        }
 
-.brandLogoBox {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(15px);
-}
+        .brandLogoBox {
+          display: inline-flex;
+          flex: 0 0 auto;
+          align-items: center;
+          justify-content: center;
+          transform: translateY(3px);
+        }
 
-.brandTextBox {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  line-height: 1.05;
-  flex: 0 0 auto;
-  transform: translateX(30px) translateY(-20px);
-}
+        .brandTextBox {
+          display: inline-flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          line-height: 1.05;
+          flex: 0 0 auto;
+        }
 
-.brandTitle {
-  font-size: 1.35rem;
-  font-weight: 950;
-  letter-spacing: -0.03em;
-  white-space: nowrap;
-}
+        .brandTitle {
+          font-size: 1.35rem;
+          font-weight: 950;
+          letter-spacing: -0.03em;
+          white-space: nowrap;
+        }
 
-.brandSub {
-  margin-top: 6px;
-  font-size: 0.82rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.72);
-  white-space: nowrap;
-}
+        .brandSub {
+          margin-top: 6px;
+          font-size: 0.82rem;
+          font-weight: 900;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.72);
+          white-space: nowrap;
+        }
 
         .centerGroup {
           justify-self: center;
@@ -339,15 +408,14 @@ export default function Navbar() {
         .desktopNav {
           display: flex;
           align-items: center;
-          gap: 42px;
+          gap: 38px;
         }
 
         .navLink {
           color: #ffffff;
           text-decoration: none;
-          font-size: 1.18rem;
-          font-weight: 900;
           transition: color 0.2s ease;
+          white-space: nowrap;
         }
 
         .navLink:hover,
@@ -508,9 +576,9 @@ export default function Navbar() {
             gap: 10px;
           }
 
-          .brandLogo {
-            width: 58px;
-            height: 58px;
+          .brandLogoBox img {
+            width: 70px;
+            height: 70px;
           }
 
           .brandTitle {

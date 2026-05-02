@@ -33,13 +33,54 @@ export default async function handler(
       return res.status(401).json({ error: "User not found" });
     }
 
+    const { extraReceiptEmail } = req.body || {};
+
+    const { data: existingAccess, error: accessCheckError } =
+      await supabaseAdmin
+        .from("member_access")
+        .select("status, stripe_customer_id, stripe_subscription_id")
+        .eq("profile_id", user.id)
+        .maybeSingle();
+
+    if (accessCheckError) {
+      console.error("Failed to check existing member access:", accessCheckError);
+      return res.status(500).json({ error: "Unable to verify account access." });
+    }
+
+    if (
+      existingAccess?.stripe_customer_id ||
+      existingAccess?.stripe_subscription_id
+    ) {
+      return res.status(409).json({
+        error:
+          "This account has already purchased initial access. Please use the billing portal or contact support.",
+      });
+    }
+
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || req.headers.origin || "http://localhost:3000";
+
+    const metadata = {
+      profile_id: user.id,
+      email: user.email || "",
+      extra_receipt_email: extraReceiptEmail || "",
+    };
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
       customer_creation: "always",
 
+      // Forces Stripe Checkout to use the logged-in account email.
+      customer_email: user.email || undefined,
+
       payment_intent_data: {
         setup_future_usage: "off_session",
+
+        // Stripe receipt goes to the logged-in account email.
+        receipt_email: user.email || undefined,
+
+        metadata,
       },
 
       line_items: [
@@ -49,18 +90,15 @@ export default async function handler(
         },
       ],
 
-      metadata: {
-        profile_id: user.id,
-        email: user.email || "",
-      },
+      metadata,
 
-      success_url: `${req.headers.origin}/success`,
-      cancel_url: `${req.headers.origin}/pricing?canceled=true`,
+      success_url: `${baseUrl}/welcome`,
+      cancel_url: `${baseUrl}/pricing?canceled=true`,
     });
 
-    res.status(200).json({ url: session.url });
+    return res.status(200).json({ url: session.url });
   } catch (err: any) {
     console.error("Stripe checkout error:", err);
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 }

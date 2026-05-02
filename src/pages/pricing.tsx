@@ -1,67 +1,99 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { createClient } from "@/lib/supabase";
-
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
 export default function Pricing() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [extraReceiptEmail, setExtraReceiptEmail] = useState("");
 
   const showNewSignupMessage = router.query.newSignup === "1";
   const showNoAccessMessage = router.query.noAccess === "1";
   const showCanceledMessage = router.query.canceled === "true";
-  const supabase = createClient();
-  const [agreed, setAgreed] = useState(false);
 
- const handleCheckout = async () => {
-  if (!agreed) {
-    alert("You must agree to the Terms before continuing.");
-    return;
-  }
-
-  try {
-    setLoading(true);
-    
-
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (!session) {
-      router.push("/login");
+  const handleCheckout = async () => {
+    if (!agreed) {
+      alert("You must agree to the Terms before continuing.");
       return;
     }
 
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-      },
-    });
+    try {
+      setLoading(true);
 
-    const data = await res.json();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-    if (data.url) {
-      window.location.href = data.url;
-      return;
+      if (!session) {
+        router.push("/login");
+        return;
+      }
+
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          extraReceiptEmail: extraReceiptEmail.trim() || null,
+        }),
+      });
+
+      if (response.status === 409) {
+        alert(
+          "You're already set up with Rhino Wrangler.\n\n" +
+            "We'll take you to billing so you can manage or restore your access."
+        );
+
+        const portalRes = await fetch("/api/customer-portal", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
+
+        const portalData = await portalRes.json();
+
+        if (portalData.url) {
+          window.location.href = portalData.url;
+          return;
+        }
+
+        alert(
+          portalData.error ||
+            "Unable to open billing portal. Please contact support."
+        );
+
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+        return;
+      }
+
+      alert(data.error || "Checkout could not be started. Please try again.");
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    alert(data.error || "Checkout could not be started. Please try again.");
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
- 
   return (
     <>
       <main className="pageShell">
         <div className="contentWrap">
           {showNewSignupMessage && (
             <div className="statusBanner successBanner">
-              <strong>Account created successfully.</strong> Your account is ready,
-              but a paid subscription is required to unlock the training platform.
+              <strong>Account created successfully.</strong> Your account is
+              ready, but paid access is required to unlock the training platform.
             </div>
           )}
 
@@ -88,6 +120,12 @@ export default function Pricing() {
             </p>
           </section>
 
+          <div className="exploreWrap">
+            <Link href="/" className="exploreButton">
+              ← Explore Platform
+            </Link>
+          </div>
+
           <section className="pricingWrap">
             <div className="planCard featuredPlan">
               <div className="planLabel">Full Access</div>
@@ -95,12 +133,12 @@ export default function Pricing() {
               <h2 className="planTitle">Training Platform Membership</h2>
 
               <div className="price">
-                $1500<span>/month</span>
+                $1500<span> initial access</span>
               </div>
 
               <p className="planText">
-                One simple subscription gives you access to the full training
-                library.
+                One setup payment gives your team access to the Rhino Wrangler
+                training platform.
               </p>
 
               <ul className="featureList">
@@ -110,56 +148,57 @@ export default function Pricing() {
                 <li>Searchable training content</li>
                 <li>New pages and updates as they are added</li>
               </ul>
-<p style={{ fontSize: "0.9rem", color: "#555", lineHeight: "1.5" }}>
-  The Rhino Wrangler is an independent training program and is not affiliated
-  with, sponsored by, or endorsed by DeMichele Group. Payments to The Rhino
-  Wrangler are for Rhino Wrangler training only and do not replace or apply
-  toward any DeMichele Group software, machine, service, or subscription fees.
-</p>
 
-<p style={{ fontSize: "0.9rem", color: "#555", lineHeight: "1.5" }}>
-  By continuing, you agree to the{" "}
-  <a href="/terms" style={{ textDecoration: "underline" }}>
-    Terms of Service
-  </a>
-  .
-</p>
-<label style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-  <input
-    type="checkbox"
-    checked={agreed}
-    onChange={(e) => setAgreed(e.target.checked)}
-  />
-  <span style={{ fontSize: "0.9rem" }}>
-    I agree to the{" "}
-    <a href="/terms" style={{ textDecoration: "underline" }}>
-      Terms of Service
-    </a>{" "}
-    and understand that The Rhino Wrangler is an independent training program
-    not affiliated with or endorsed by DeMichele Group.
-  </span>
-</label>
-<button
-  className="planButton featuredButton"
-  onClick={handleCheckout}
-  disabled={!agreed || loading}
-  style={{
-    opacity: agreed && !loading ? 1 : 0.5,
-    cursor: agreed && !loading ? "pointer" : "not-allowed",
-  }}
->
-  {loading ? "Loading..." : "Start Training Access"}
-</button>
-              
-
-              <p className="smallNote">
-                Secure checkout powered by Stripe.
+              <p className="disclaimer">
+                The Rhino Wrangler is an independent training program and is not
+                affiliated with, sponsored by, or endorsed by DeMichele Group.
+                Payments to The Rhino Wrangler are for Rhino Wrangler training
+                only and do not replace or apply toward any DeMichele Group
+                software, machine, service, or subscription fees.
               </p>
+
+              <p className="disclaimer">
+                By continuing, you agree to the{" "}
+                <Link href="/terms">Terms of Service</Link>.
+              </p>
+
+              <label className="receiptField">
+                <span>Additional receipt email optional</span>
+                <input
+                  type="email"
+                  value={extraReceiptEmail}
+                  onChange={(e) => setExtraReceiptEmail(e.target.value)}
+                  placeholder="billing@example.com"
+                />
+              </label>
+
+              <label className="termsCheck">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                />
+                <span>
+                  I agree to the{" "}
+                  <Link href="/terms">Terms of Service</Link> and understand
+                  that The Rhino Wrangler is an independent training program not
+                  affiliated with or endorsed by DeMichele Group.
+                </span>
+              </label>
+
+              <button
+                className="planButton featuredButton"
+                onClick={handleCheckout}
+                disabled={!agreed || loading}
+              >
+                {loading ? "Loading..." : "Start Training Access"}
+              </button>
+
+              <p className="smallNote">Secure checkout powered by Stripe.</p>
             </div>
           </section>
         </div>
       </main>
-      
 
       <style jsx>{`
         .pageShell {
@@ -225,6 +264,25 @@ export default function Pricing() {
           line-height: 1.75;
         }
 
+        .exploreWrap {
+          display: flex;
+          justify-content: center;
+          margin: 28px 0;
+        }
+
+        .exploreButton {
+          padding: 10px 18px;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          text-decoration: none;
+          font-weight: 900;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
         .pricingWrap {
           display: flex;
           justify-content: center;
@@ -235,18 +293,13 @@ export default function Pricing() {
           max-width: 520px;
           border-radius: 26px;
           padding: 34px;
-          background: rgba(255, 255, 255, 0.055);
-          border: 1px solid rgba(255, 255, 255, 0.14);
-          box-shadow:
-            0 24px 70px rgba(0, 0, 0, 0.35),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
-
-        .featuredPlan {
-          border-color: rgba(245, 158, 11, 0.42);
           background:
             radial-gradient(circle at top left, rgba(245, 158, 11, 0.16), transparent 42%),
             rgba(255, 255, 255, 0.055);
+          border: 1px solid rgba(245, 158, 11, 0.42);
+          box-shadow:
+            0 24px 70px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .planLabel {
@@ -307,8 +360,53 @@ export default function Pricing() {
           margin-right: 10px;
         }
 
+        .disclaimer {
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.58);
+          line-height: 1.55;
+        }
+
+        .disclaimer a,
+        .termsCheck a {
+          color: #fbbf24;
+        }
+
+        .receiptField {
+          display: grid;
+          gap: 8px;
+          margin-top: 18px;
+          color: rgba(255, 255, 255, 0.78);
+          font-weight: 800;
+        }
+
+        .receiptField input {
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 12px;
+          padding: 12px 14px;
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          font-size: 1rem;
+        }
+
+        .receiptField input::placeholder {
+          color: rgba(255, 255, 255, 0.45);
+        }
+
+        .termsCheck {
+          display: flex;
+          gap: 10px;
+          margin-top: 20px;
+          color: rgba(255, 255, 255, 0.78);
+          line-height: 1.5;
+        }
+
+        .termsCheck input {
+          margin-top: 4px;
+        }
+
         .planButton {
           width: 100%;
+          margin-top: 20px;
           border: none;
           border-radius: 16px;
           padding: 15px 18px;
