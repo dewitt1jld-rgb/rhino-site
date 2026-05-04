@@ -10,138 +10,198 @@ type SidebarItem = {
 
 const rhinoTrainingMenu: SidebarItem[] = [
   {
-    title: "Fab Job",
-    slug: "/dashboard/rhino-training/fab-job",
-  },
-  {
-    title: "Manual Cutting",
-    slug: "/dashboard/rhino-training/manual-cutting",
-  },
-  {
-    title: "Fab Frames",
-    slug: "/dashboard/rhino-training/fab-frames",
-  },
-  {
-    title: "System Settings",
-    slug: "/dashboard/rhino-training/system-settings",
-  },
-  {
-    title: "Databases",
-    slug: "/dashboard/rhino-training/databases",
-  },
-  {
-    title: "Home Axis",
-    slug: "/dashboard/rhino-training/home-axis",
+    title: "All Rhino Machines",
+    slug: "/dashboard/rhino-training/all-rhino-machines",
+    children: [
+      {
+        title: "Fab Job",
+        slug: "/dashboard/rhino-training/fab-job",
+      },
+      {
+        title: "Manual Cutting",
+        slug: "/dashboard/rhino-training/manual-cutting",
+      },
+      {
+        title: "System Settings",
+        slug: "/dashboard/rhino-training/system-settings",
+      },
+      {
+        title: "Home Axis",
+        slug: "/dashboard/rhino-training/home-axis",
+      },
+      {
+        title: "Fab Frames",
+        slug: "/dashboard/rhino-training/fab-frames",
+      },
+      {
+        title: "Exit",
+        slug: "/dashboard/rhino-training/exit",
+      },
+    ],
   },
   {
     title: "Machine Setup",
-    slug: "/dashboard/rhino-training/machine-setup",
+    slug: "/dashboard/rhino-training/machine-setup/i-o-testing",
     children: [
       {
-        title: "I-O Testing",
+        title: "I/O Testing",
         slug: "/dashboard/rhino-training/machine-setup/i-o-testing",
-      },
-      {
-        title: "Jog Axis",
-        slug: "/dashboard/rhino-training/machine-setup/jog-axis",
-      },
-      {
-        title: "Fab Test",
-        slug: "/dashboard/rhino-training/machine-setup/fab-test",
-      },
-      {
-        title: "Axis Parameters",
-        slug: "/dashboard/rhino-training/machine-setup/axis-parameters",
-      },
-      {
-        title: "Old Fab Test",
-        slug: "/dashboard/rhino-training/machine-setup/old-fab-test",
       },
       {
         title: "Change Saw Blade",
         slug: "/dashboard/rhino-training/machine-setup/change-saw-blade",
       },
       {
+        title: "Jog Axis",
+        slug: "/dashboard/rhino-training/machine-setup/jog-axis",
+      },
+      {
+        title: "Axis Parameters",
+        slug: "/dashboard/rhino-training/machine-setup/axis-parameters",
+      },
+      {
+        title: "Fab Test",
+        slug: "/dashboard/rhino-training/machine-setup/fab-test",
+      },
+      {
+        title: "Old Fab Test",
+        slug: "/dashboard/rhino-training/machine-setup/old-fab-test",
+      },
+      {
         title: "Cut Test",
         slug: "/dashboard/rhino-training/machine-setup/cut-test",
       },
+    ],
+  },
+  {
+    title: "Calibrate",
+    slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-pusher",
+    children: [
       {
-        title: "Calibrate",
-        slug: "/dashboard/rhino-training/machine-setup/calibrate",
-        children: [
-          {
-            title: "Calibrate Pusher",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-pusher",
-          },
-          {
-            title: "Calibrate Plunger",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-plunger",
-          },
-          {
-            title: "Calibrate Drills",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-drills",
-          },
-          {
-            title: "Calibrate Saw angle",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-saw-angle",
-          },
-          {
-            title: "Set Calibration Torque",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/set-calibration-torque",
-          },
-          {
-            title: "Calibrate Miter Cut Length",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-miter-cut-length",
-          },
-          {
-            title: "Calibrate Rollers",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-rollers",
-          },
-          {
-            title: "Calibrate Robot",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-robot",
-          },
-          {
-            title: "5000/5500/5600 Calibrations",
-            slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations",
-            children: [
-              {
-                title: "Calibrate Rotational Spindles",
-                slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations/calibrate-rotational-spindles",
-              },
-              {
-                title: "Calibrate Saw Angle",
-                slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations/calibrate-saw-angle",
-              },
-              {
-                title: "Calibrate Pusher",
-                slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations/calibrate-pusher",
-              },
-              {
-                title: "Calibrate Miter Cut Length",
-                slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations/calibrate-miter-cut-length",
-              },
-              {
-                title: "Calibrate Tool Rack",
-                slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations/calibrate-tool-rack",
-              },
-              {
-                title: "Set Calibration Torque",
-                slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations/set-calibration-torque",
-              },
-              {
-                title: "Calibrate Drills",
-                slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations/calibrate-drills",
-              },
-              {
-                title: "Calibrate Rollers",
-                slug: "/dashboard/rhino-training/machine-setup/calibrate/5000-5500-5600-calibrations/calibrate-rollers",
-              },
-            ],
-          },
-        ],
+        title: "Calibrate Pusher",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-pusher",
+      },
+      {
+        title: "Calibrate Plunger",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-plunger",
+      },
+      {
+        title: "Calibrate Drills",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-drills",
+      },
+      {
+        title: "Calibrate Saw",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-saw-angle",
+      },
+      {
+        title: "Set Calibration Torque",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/set-calibration-torque",
+      },
+      {
+        title: "Calibrate Miter Cut Length",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-miter-cut-length",
+      },
+      {
+        title: "Calibrate Rollers",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-rollers",
+      },
+      {
+        title: "Calibrate Robot",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-robot",
+      },
+      {
+        title: "Calibrate Carousel",
+        slug: "/dashboard/rhino-training/machine-setup/calibrate/calibrate-carousel",
       },
     ],
+  },
+  {
+    title: "Databases",
+    slug: "/dashboard/rhino-training/machine-setup/databases/parts-library",
+    children: [
+      {
+        title: "Parts Library",
+        slug: "/dashboard/rhino-training/machine-setup/databases/parts-library",
+      },
+      {
+        title: "Tool Library",
+        slug: "/dashboard/rhino-training/machine-setup/databases/tool-library",
+      },
+      {
+        title: "Stock Inventory",
+        slug: "/dashboard/rhino-training/machine-setup/databases/stock-inventory",
+      },
+      {
+        title: "Chuck Library",
+        slug: "/dashboard/rhino-training/machine-setup/databases/chuck-library",
+      },
+      {
+        title: "Drop Inventory",
+        slug: "/dashboard/rhino-training/machine-setup/databases/drop-inventory",
+      },
+      {
+        title: "Reports",
+        slug: "/dashboard/rhino-training/machine-setup/databases/reports",
+      },
+      {
+        title: "Racks",
+        slug: "/dashboard/rhino-training/machine-setup/databases/racks",
+      },
+      {
+        title: "Carousel Library",
+        slug: "/dashboard/rhino-training/machine-setup/databases/carousel-library",
+      },
+    ],
+  },
+  {
+    title: "5600/5700 Calibration",
+    slug: "/dashboard/rhino-training/5600-5700-calibration",
+    children: [
+      {
+        title: "Cal. Rotational Spindles",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-rotational-spindles",
+      },
+      {
+        title: "Cal. Saw Cut Angle",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-saw-cut-angle",
+      },
+      {
+        title: "Cal. Pusher",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-pusher",
+      },
+      {
+        title: "Cal. Miter Cut Length",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-miter-cut-length",
+      },
+      {
+        title: "Cal. Tool Rack",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-tool-rack",
+      },
+      {
+        title: "Set Calibration Torque",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/set-calibration-torque",
+      },
+      {
+        title: "Cal. Drills",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-drills",
+      },
+      {
+        title: "Cal. Rollers",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-rollers",
+      },
+      {
+        title: "How a Dial Ind. Works",
+        slug: "/dashboard/rhino-training/5600-5700-calibration/how-a-dial-ind-works",
+      },
+    ],
+  },
+  {
+    title: "Spindle Maintenance",
+    slug: "/dashboard/rhino-training/spindle-maintenance",
+  },
+  {
+    title: "Troubleshooting",
+    slug: "/dashboard/rhino-training/troubleshooting",
   },
 ];
 
@@ -208,7 +268,6 @@ function SidebarNode({
             type="button"
             className={`nodeLink nodeButton ${isActive ? "activeLink" : ""}`}
             onClick={() => toggleOpen(item.slug)}
-            style={{ cursor: "pointer" }}
           >
             {item.title}
           </button>
@@ -216,7 +275,6 @@ function SidebarNode({
           <Link
             href={item.slug}
             className={`nodeLink ${isActive ? "activeLink" : ""}`}
-            style={{ cursor: "pointer" }}
           >
             {item.title}
           </Link>
@@ -271,16 +329,7 @@ export default function TrainingSidebar() {
     <>
       <aside className="sidebar trainingSidebar">
         <div className="sidebarHeader">
-          <h2
-            className="sidebarTitle"
-            style={{
-              color: "white",
-              fontSize: "1.4rem",
-              fontWeight: 900,
-            }}
-          >
-            Rhino Training
-          </h2>
+          <h2 className="sidebarTitle">Rhino Training</h2>
         </div>
 
         <div className="sidebarTree">
@@ -321,7 +370,7 @@ export default function TrainingSidebar() {
           margin-bottom: 18px;
         }
 
-        .sidebarHeader h2.sidebarTitle {
+        .sidebarTitle {
           color: #ffffff;
           font-size: 1.8rem;
           font-weight: 900;
@@ -351,7 +400,6 @@ export default function TrainingSidebar() {
 
         .nodeRow:hover {
           background: rgba(255, 255, 255, 0.05);
-          cursor: pointer;
         }
 
         .activeRow {
@@ -375,7 +423,6 @@ export default function TrainingSidebar() {
 
         .toggleButton:hover {
           background: rgba(255, 255, 255, 0.08);
-          color: #ffffff;
         }
 
         .toggleSpacer {
@@ -389,7 +436,6 @@ export default function TrainingSidebar() {
         .chevron {
           font-size: 0.95rem;
           line-height: 1;
-          cursor: pointer;
         }
 
         .nodeLink {
@@ -408,16 +454,13 @@ export default function TrainingSidebar() {
           border: none;
           background: transparent;
           text-align: left;
-          cursor: pointer;
         }
 
         .nodeLink:hover {
-          color: #ffffff;
           background: rgba(255, 255, 255, 0.08);
         }
 
         .activeLink {
-          color: #ffffff;
           background: rgba(255, 255, 255, 0.14);
           box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
         }
@@ -430,7 +473,7 @@ export default function TrainingSidebar() {
 
         .level-1 .nodeLink {
           font-size: 1rem;
-          font-weight: 700;
+          font-weight: 800;
         }
 
         .level-2 .nodeLink {
@@ -441,21 +484,12 @@ export default function TrainingSidebar() {
         .level-3 .nodeLink {
           font-size: 0.91rem;
           font-weight: 600;
-          color: #ffffff;
-        }
-
-        .level-4 .nodeLink {
-          font-size: 0.88rem;
-          font-weight: 500;
-          color: #ffffff;
         }
 
         @media (max-width: 1100px) {
           .sidebar {
             width: 280px;
             min-width: 280px;
-          }
-        }
           }
         }
       `}</style>

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import TrainingSidebar from "@/components/TrainingSidebar";
+import TrainingPageStyles from "@/components/TrainingPageStyles";
+
+
 
 type Props = {
   children: React.ReactNode;
@@ -10,10 +13,13 @@ export default function TrainingLayout({ children }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
+    
     <main className="layout">
       <div className="desktopSidebar">
         <TrainingSidebar />
       </div>
+      <TrainingPageStyles />
+      
 
       <section className="pageShell">
         <div className="content">
