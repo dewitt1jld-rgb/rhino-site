@@ -10,13 +10,25 @@ export default function TrainingPageStyles() {
 
       .heroPanel,
       .panel,
-      .completionBox {
-        background: rgba(17, 19, 24, 0.94);
-        border: 1px solid rgba(148, 163, 184, 0.18);
+      .completionBox,
+      .contentCard,
+      .card,
+      .trainingCard,
+      .stepCard,
+      .finalCard {
+        background:
+          linear-gradient(
+            135deg,
+            rgba(17, 24, 39, 0.94),
+            rgba(10, 15, 25, 0.96)
+          );
+        border: 1px solid rgba(245, 158, 11, 0.28);
         border-radius: 24px;
         padding: 28px;
         margin-bottom: 24px;
-        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+        box-shadow:
+          0 18px 45px rgba(0, 0, 0, 0.22),
+          inset 0 1px 0 rgba(255, 255, 255, 0.04);
       }
 
       .heroPanel h1 {
@@ -31,7 +43,12 @@ export default function TrainingPageStyles() {
       .panelHeader p,
       .helperText,
       .callout p,
-      .completionBox p {
+      .completionBox p,
+      .contentCard p,
+      .card p,
+      .trainingCard p,
+      .stepCard p,
+      .finalCard p {
         color: #d8e0ec;
         font-size: 1.05rem;
         line-height: 1.75;
@@ -42,9 +59,14 @@ export default function TrainingPageStyles() {
       }
 
       .panelHeader h2,
-      .completionBox h2 {
+      .completionBox h2,
+      .contentCard h2,
+      .card h2,
+      .trainingCard h2,
+      .stepCard h2,
+      .finalCard h2 {
         margin: 0 0 10px;
-        color: #ffffff;
+        color: #f59e0b;
         font-size: 1.8rem;
         letter-spacing: -0.03em;
       }
@@ -64,8 +86,6 @@ export default function TrainingPageStyles() {
         grid-template-columns: auto 1fr;
         gap: 16px;
         align-items: flex-start;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 18px;
         padding: 18px;
       }
@@ -74,8 +94,9 @@ export default function TrainingPageStyles() {
         width: 44px;
         height: 44px;
         border-radius: 14px;
-        background: rgba(255, 255, 255, 0.12);
-        color: #ffffff;
+        background: rgba(245, 158, 11, 0.16);
+        color: #f59e0b;
+        border: 1px solid rgba(245, 158, 11, 0.42);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -85,7 +106,7 @@ export default function TrainingPageStyles() {
 
       .stepCard h3 {
         margin: 0 0 8px;
-        color: #ffffff;
+        color: #f59e0b;
         font-size: 1.15rem;
       }
 
@@ -104,14 +125,14 @@ export default function TrainingPageStyles() {
 
       .buttonInfo {
         background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.24);
         border-radius: 18px;
         padding: 18px;
       }
 
       .buttonInfo h3 {
         margin: 0 0 8px;
-        color: #ffffff;
+        color: #f59e0b;
         font-size: 1.1rem;
       }
 
@@ -129,7 +150,7 @@ export default function TrainingPageStyles() {
 
       .callout h3 {
         margin: 0 0 8px;
-        color: #ffffff;
+        color: #f59e0b;
       }
 
       .callout p {
@@ -153,14 +174,37 @@ export default function TrainingPageStyles() {
 
       .completionBox {
         text-align: center;
-        background: rgba(6, 40, 27, 0.9);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(6, 40, 27, 0.9),
+            rgba(8, 52, 34, 0.92)
+          );
         border-color: rgba(34, 197, 94, 0.35);
+      }
+
+      .contentCard img,
+      .card img,
+      .trainingCard img,
+      .stepCard img,
+      .panel img,
+      .heroPanel img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 16px 38px rgba(0, 0, 0, 0.35);
       }
 
       @media (max-width: 800px) {
         .heroPanel,
         .panel,
-        .completionBox {
+        .completionBox,
+        .contentCard,
+        .card,
+        .trainingCard,
+        .stepCard,
+        .finalCard {
           padding: 22px;
         }
 

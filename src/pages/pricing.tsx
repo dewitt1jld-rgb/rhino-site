@@ -138,7 +138,7 @@ export default function Pricing() {
 
               <p className="planText">
                 One setup payment gives your team access to the Rhino Wrangler
-                training platform.
+                training platform. Renews for only 50$ per month. Charged yearly. 
               </p>
 
               <ul className="featureList">
@@ -146,7 +146,14 @@ export default function Pricing() {
                 <li>Machine setup and calibration guides</li>
                 <li>Step-by-step technical reference pages</li>
                 <li>Searchable training content</li>
-                <li>New pages and updates as they are added</li>
+                <li>24/7 Support (Questions & Quick Fixes only)</li>
+                <li>Downloadable maintinance guide</li>
+                <li>Full length tutotial videos</li>
+                <li>$500 off any scheduled training class (limit 1 per year)</li>
+                <li>New content and page updates</li>
+                <li>Dedicated to providing top tier info</li>
+                <li>Takes Guesswork out of troubleshooting</li>
+              
               </ul>
 
               <p className="disclaimer">
@@ -157,10 +164,7 @@ export default function Pricing() {
                 software, machine, service, or subscription fees.
               </p>
 
-              <p className="disclaimer">
-                By continuing, you agree to the{" "}
-                <Link href="/terms">Terms of Service</Link>.
-              </p>
+             
 
               <label className="receiptField">
                 <span>Additional receipt email optional</span>
@@ -180,9 +184,7 @@ export default function Pricing() {
                 />
                 <span>
                   I agree to the{" "}
-                  <Link href="/terms">Terms of Service</Link> and understand
-                  that The Rhino Wrangler is an independent training program not
-                  affiliated with or endorsed by DeMichele Group.
+                  <Link href="/terms"style={{ textDecoration: "underline" }}>Terms of Service</Link> 
                 </span>
               </label>
 
@@ -324,7 +326,7 @@ export default function Pricing() {
           margin-top: 22px;
           font-size: 50px;
           font-weight: 950;
-          letter-spacing: -0.04em;
+          letter-spacing: 0.025em;
         }
 
         .price span {

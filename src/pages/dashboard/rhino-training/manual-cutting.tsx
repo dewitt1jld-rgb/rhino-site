@@ -177,7 +177,7 @@ export default function ManualCuttingPage() {
 
           <div className="callout danger">
             <p>
-              If you have a 5000 series machine, this page may be disabled on
+              If you have a 5000 series machine, this page may be disabled ons
               your machine. When DeMichele updates this feature and it works
               again, this training page should be updated.
             </p>

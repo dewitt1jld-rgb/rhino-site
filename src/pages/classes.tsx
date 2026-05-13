@@ -139,8 +139,9 @@ useEffect(() => {
           <div style={styles.card}>
             <h3 style={styles.cardTitle}>4-Day Live Training</h3>
             <p style={styles.cardText}>
-              A complete 24-hour training experience taught live over four class
-              days.
+              A complete training experience taught live over four
+              days. Training will include PartnerPak, Glazier Studio and RhinoFab 
+              Software. 
             </p>
           </div>
 
@@ -148,14 +149,14 @@ useEffect(() => {
             <h3 style={styles.cardTitle}>Beginner to Advanced</h3>
             <p style={styles.cardText}>
               Built for all skill levels — from first-time users to experienced
-              operators who want deeper mastery.
+              operators who want deeper mastery and understanding of the programs.
             </p>
           </div>
 
           <div style={styles.card}>
             <h3 style={styles.cardTitle}>Guided Walkthroughs</h3>
             <p style={styles.cardText}>
-              Students follow along through screens, workflows,
+              Includes follow along screens, workflows,
               troubleshooting, and real-world training examples.
             </p>
           </div>
@@ -345,14 +346,14 @@ useEffect(() => {
         <h2 style={styles.sectionTitle}>Cancellation & Reschedule Policy</h2>
 
         <p style={styles.policyText}>
-          Students may cancel or reschedule their reservation up to two weeks
-          before class begins. If the class starts within two weeks, students
+          Customers may cancel or reschedule their reservation up to two weeks
+          before class begins. If the class starts within two weeks, Customers
           must contact The Rhino Wrangler directly for reschedule options.
         </p>
 
         <p style={styles.policyText}>
-          No refunds are given inside the two-week cutoff window. Reschedule
-          availability is not guaranteed and may depend on future class openings.
+          No refunds will be given inside the two-week cutoff window. Reschedule
+          availability will depend on future class openings.
         </p>
       </section>
 

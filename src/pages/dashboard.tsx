@@ -90,7 +90,7 @@ export default function Dashboard() {
                 <div style={logoGlow}></div>
 
                 <img
-                  src="/rhino-logo.png"
+                  src="https://rhino-training-cdn.b-cdn.net/logo-content-media/images/rhino-logo.png"
                   alt="The Rhino Wrangler logo"
                   style={{
                     width: "100%",

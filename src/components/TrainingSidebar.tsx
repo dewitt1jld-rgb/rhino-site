@@ -199,10 +199,52 @@ const rhinoTrainingMenu: SidebarItem[] = [
     title: "Spindle Maintenance",
     slug: "/dashboard/rhino-training/spindle-maintenance",
   },
-  {
-    title: "Troubleshooting",
-    slug: "/dashboard/rhino-training/troubleshooting",
-  },
+ {
+  title: "Troubleshooting",
+  slug: "/dashboard/rhino-training/troubleshooting",
+  children: [
+    {
+      title: "Roller Cleat Alignment",
+      slug: "/dashboard/rhino-training/troubleshooting/roller-cleat-alignment",
+    },
+    {
+      title: "Failed to Connect to 192.168.42.1",
+      slug: "/dashboard/rhino-training/troubleshooting/failed-to-connect-192-168-42-1",
+    },
+    {
+      title: "Saw/Drill Coolant",
+      slug: "/dashboard/rhino-training/troubleshooting/saw-drill-coolant",
+    },
+    {
+      title: "Air Manifold",
+      slug: "/dashboard/rhino-training/troubleshooting/air-manifold",
+    },
+    {
+      title: "Incorrect Part Length",
+      slug: "/dashboard/rhino-training/troubleshooting/incorrect-part-length",
+    },
+    {
+      title: "Angled Cutting",
+      slug: "/dashboard/rhino-training/troubleshooting/angled-cutting",
+    },
+    {
+      title: "E-Stops",
+      slug: "/dashboard/rhino-training/troubleshooting/e-stops",
+    },
+    {
+      title: "Maintenance",
+      slug: "/dashboard/rhino-training/troubleshooting/maintenance",
+    },
+    {
+      title: "Photo Eye Adjustment",
+      slug: "/dashboard/rhino-training/troubleshooting/photo-eye-adjustment",
+    },
+    {
+      title: "Drill Collisions",
+      slug: "/dashboard/rhino-training/troubleshooting/drill-collisions",
+    },
+  ],
+},
 ];
 
 function collectOpenSlugs(items: SidebarItem[], pathname: string): string[] {

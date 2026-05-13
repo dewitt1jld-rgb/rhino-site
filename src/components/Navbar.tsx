@@ -107,11 +107,14 @@ export default function Navbar() {
 
   const closeMenu = () => setMobileOpen(false);
 
-  const portalLabel = profile?.company_name
-    ? `${profile.company_name} Training Portal`
-    : profile?.first_name
-    ? `${profile.first_name}'s Training Portal`
-    : "Training Portal";
+const portalLabel = (
+  <div className="portalLabel">
+    <div className="companyName">
+      {profile?.company_name || profile?.first_name || ""}
+    </div>
+    <div className="portalSub">Dashboard</div>
+  </div>
+);
 
   return (
     <>
@@ -119,12 +122,12 @@ export default function Navbar() {
         <div className="navbarInner">
           <Link href="/" className="brand" onClick={closeMenu}>
             <span className="brandLogoBox">
-              <Image
-                src="/logo-only1.png"
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/logo-content-media/images/rhino-logo.png"
                 alt="Rhino Wrangler logo"
-                width={100}
-                height={100}
-                priority
+                width={150}
+                height={150}
+              
               />
             </span>
 
@@ -159,15 +162,29 @@ export default function Navbar() {
 )}
 
 {isLoggedIn && (
-  <Link
-    href="/classes"
-    className={`navLink ${
-      isActiveLink("/classes") ? "active" : ""
-    }`}
-    style={{ fontSize: "1.5rem", fontWeight: 950 }}
-  >
-    Virtual Classes
-  </Link>  
+<Link
+  href="/classes"
+  className={`navLink ${isActiveLink("/classes") ? "active" : ""}`}
+  style={{
+    fontSize: "1.5rem",
+    fontWeight: 950,
+    transform: "translateX(-30px)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    lineHeight: 1.05,
+  }}
+>
+  <span style={{ display: "block", color: "#f59e0b" }}>
+    Virtual Class
+  </span>
+
+  <span style={{ display: "block", color: "#f59e0b" }}>
+    Schedule
+  </span>
+</Link>
 )}
 
               <Link
@@ -177,7 +194,7 @@ export default function Navbar() {
                 }`}
                 style={{ fontSize: "1.5rem", fontWeight: 950 }}
               >
-                Digital Training
+                Training pages
               </Link>
 
               <Link
@@ -242,14 +259,11 @@ export default function Navbar() {
                     <span className="portalCompany">
                       {profile?.company_name || profile?.first_name || "Account"}
                     </span>
-                    <span className="portalSub">Training Portal</span>
+                    <span className="portalSub">Dashboard</span>
                   </div>
                 </Link>
 
-                <Link href="/contact" className="ctaButton">
-                  Request Online Training
-                </Link>
-
+               
                 <button onClick={handleLogout} className="logoutBtn">
                   Logout
                 </button>
@@ -337,16 +351,7 @@ export default function Navbar() {
                   {portalLabel}
                 </Link>
 
-                <Link
-                  href="/contact"
-                  className="ctaButton mobileFull"
-                  onClick={closeMenu}
-                >
-                  Request Online Training
-                </Link>
-
-
-
+              
                 <button
                   onClick={handleLogout}
                   className="logoutBtn mobileFull"
@@ -386,11 +391,12 @@ export default function Navbar() {
           display: inline-flex;
           flex-direction: row;
           align-items: center;
-          gap: 14px;
+          gap: 5px;
           color: #ffffff;
           text-decoration: none;
           width: auto;
-          max-width: none;
+          max-width: 360px;
+          height: 64px;
         }
 
         .brandLogoBox {
@@ -398,7 +404,7 @@ export default function Navbar() {
           flex: 0 0 auto;
           align-items: center;
           justify-content: center;
-          transform: translateY(3px);
+          transform: translateY(15px);
         }
 
         .brandTextBox {
@@ -415,6 +421,7 @@ export default function Navbar() {
           font-weight: 950;
           letter-spacing: -0.03em;
           white-space: nowrap;
+          transform: translate(20px, -35px);
         }
 
         .brandSub {
@@ -425,6 +432,7 @@ export default function Navbar() {
           text-transform: uppercase;
           color: rgba(255, 255, 255, 0.72);
           white-space: nowrap;
+          transform: translate(40px, -35px);
         }
 
         .centerGroup {
@@ -437,6 +445,27 @@ export default function Navbar() {
   position: relative;
   display: inline-flex;
   align-items: center;
+}
+  .portalLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+}
+
+.companyName {
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+}
+
+.portalSub {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f59e0b;
+  text-align: center;
 }
 
 .adminDropdownButton {
@@ -479,7 +508,22 @@ export default function Navbar() {
 .adminDropdownLink:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+.navLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* ✅ THIS keeps it centered */
+  justify-content: center;
+  text-align: center;
+  line-height: 1.05;
+}
 
+.navMain {
+  color: #ffffff;        /* top line stays white */
+}
+
+.navSubLine {
+  color: #f59e0b;        /* bottom line gold */
+}
         .desktopNav {
           display: flex;
           align-items: center;
