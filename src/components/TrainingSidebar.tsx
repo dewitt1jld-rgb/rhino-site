@@ -243,6 +243,18 @@ const rhinoTrainingMenu: SidebarItem[] = [
       title: "Drill Collisions",
       slug: "/dashboard/rhino-training/troubleshooting/drill-collisions",
     },
+       {
+      title: "Loading Drill Bits",
+      slug: "/dashboard/rhino-training/troubleshooting/loading-drill-bits",
+    },
+       {
+      title: "Tool Index Help",
+      slug: "/dashboard/rhino-training/troubleshooting/tool-index-help",
+    },
+       {
+      title: "Back Fence Rollers",
+      slug: "/dashboard/rhino-training/troubleshooting/back-fence-rollers",
+    },
   ],
 },
 ];
