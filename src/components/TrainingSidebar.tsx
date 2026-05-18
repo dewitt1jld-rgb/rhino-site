@@ -195,68 +195,71 @@ const rhinoTrainingMenu: SidebarItem[] = [
       },
     ],
   },
+
+ {
+title: "Troubleshooting",
+slug: "/dashboard/rhino-training/troubleshooting",
+children: [
+  {
+    title: "Air Manifold",
+    slug: "/dashboard/rhino-training/troubleshooting/air-manifold",
+  },
+  {
+    title: "Angled Cutting",
+    slug: "/dashboard/rhino-training/troubleshooting/angled-cutting",
+  },
+  {
+    title: "Back Fence Rollers",
+    slug: "/dashboard/rhino-training/troubleshooting/back-fence-rollers",
+  },
+  {
+    title: "Drill Collisions",
+    slug: "/dashboard/rhino-training/troubleshooting/drill-collisions",
+  },
+  {
+    title: "E-Stops",
+    slug: "/dashboard/rhino-training/troubleshooting/e-stops",
+  },
+  {
+    title: "Failed to Connect to 192.168.42.1",
+    slug: "/dashboard/rhino-training/troubleshooting/failed-to-connect-192-168-42-1",
+  },
+  {
+    title: "Incorrect Part Length",
+    slug: "/dashboard/rhino-training/troubleshooting/incorrect-part-length",
+  },
+  {
+    title: "Loading Drill Bits",
+    slug: "/dashboard/rhino-training/troubleshooting/loading-drill-bits",
+  },
+  {
+    title: "Maintenance",
+    slug: "/dashboard/rhino-training/troubleshooting/maintenance",
+  },
+  {
+    title: "Photo Eye Adjustment",
+    slug: "/dashboard/rhino-training/troubleshooting/photo-eye-adjustment",
+  },
+  {
+    title: "Roller Cleat Alignment",
+    slug: "/dashboard/rhino-training/troubleshooting/roller-cleat-alignment",
+  },
+  {
+    title: "Saw/Drill Coolant",
+    slug: "/dashboard/rhino-training/troubleshooting/saw-drill-coolant",
+  },
+  {
+    title: "Tool Index Help",
+    slug: "/dashboard/rhino-training/troubleshooting/tool-index-help",
+  },
+],
+
+
+},
   {
     title: "Spindle Maintenance",
     slug: "/dashboard/rhino-training/spindle-maintenance",
   },
- {
-  title: "Troubleshooting",
-  slug: "/dashboard/rhino-training/troubleshooting",
-  children: [
-    {
-      title: "Roller Cleat Alignment",
-      slug: "/dashboard/rhino-training/troubleshooting/roller-cleat-alignment",
-    },
-    {
-      title: "Failed to Connect to 192.168.42.1",
-      slug: "/dashboard/rhino-training/troubleshooting/failed-to-connect-192-168-42-1",
-    },
-    {
-      title: "Saw/Drill Coolant",
-      slug: "/dashboard/rhino-training/troubleshooting/saw-drill-coolant",
-    },
-    {
-      title: "Air Manifold",
-      slug: "/dashboard/rhino-training/troubleshooting/air-manifold",
-    },
-    {
-      title: "Incorrect Part Length",
-      slug: "/dashboard/rhino-training/troubleshooting/incorrect-part-length",
-    },
-    {
-      title: "Angled Cutting",
-      slug: "/dashboard/rhino-training/troubleshooting/angled-cutting",
-    },
-    {
-      title: "E-Stops",
-      slug: "/dashboard/rhino-training/troubleshooting/e-stops",
-    },
-    {
-      title: "Maintenance",
-      slug: "/dashboard/rhino-training/troubleshooting/maintenance",
-    },
-    {
-      title: "Photo Eye Adjustment",
-      slug: "/dashboard/rhino-training/troubleshooting/photo-eye-adjustment",
-    },
-    {
-      title: "Drill Collisions",
-      slug: "/dashboard/rhino-training/troubleshooting/drill-collisions",
-    },
-       {
-      title: "Loading Drill Bits",
-      slug: "/dashboard/rhino-training/troubleshooting/loading-drill-bits",
-    },
-       {
-      title: "Tool Index Help",
-      slug: "/dashboard/rhino-training/troubleshooting/tool-index-help",
-    },
-       {
-      title: "Back Fence Rollers",
-      slug: "/dashboard/rhino-training/troubleshooting/back-fence-rollers",
-    },
-  ],
-},
 ];
 
 function collectOpenSlugs(items: SidebarItem[], pathname: string): string[] {

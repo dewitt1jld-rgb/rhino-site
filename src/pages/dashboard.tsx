@@ -117,7 +117,7 @@ export default function Dashboard() {
             </div>
 
             <div className="cards-grid">
-              <Link href="/dashboard/glazier-studio-partnerpak" className="card-link">
+              <Link href="/dashboard/glazier-studio" className="card-link">
                 <div className="dashboard-card">
                   <div style={cardNumberStyle}>01</div>
                   <h2 style={cardTitleStyle}>Glazier Studio & PartnerPak</h2>
@@ -128,24 +128,25 @@ export default function Dashboard() {
                 </div>
               </Link>
 
-              <Link href="/dashboard/tutorial-videos" className="card-link">
-                <div className="dashboard-card">
-                  <div style={cardNumberStyle}>02</div>
-                  <h2 style={cardTitleStyle}>Tutorial Videos</h2>
-                  <p style={cardTextStyle}>
-                    Visual walkthroughs and hands-on video instruction for quick
-                    learning and review.
-                  </p>
-                </div>
-              </Link>
-
+            
               <Link href="/dashboard/rhino-training" className="card-link">
                 <div className="dashboard-card">
-                  <div style={cardNumberStyle}>03</div>
+                  <div style={cardNumberStyle}>02</div>
                   <h2 style={cardTitleStyle}>Rhino Training</h2>
                   <p style={cardTextStyle}>
                     Learn Rhino tools, design processes, and practical production
                     workflows step by step.
+                  </p>
+                </div>
+              </Link>
+
+                <Link href="/dashboard/tutorial-videos" className="card-link">
+                <div className="dashboard-card">
+                  <div style={cardNumberStyle}>03</div>
+                  <h2 style={cardTitleStyle}>Tutorial Videos</h2>
+                  <p style={cardTextStyle}>
+                    Visual walkthroughs and hands-on video instruction for quick
+                    learning and review.
                   </p>
                 </div>
               </Link>
