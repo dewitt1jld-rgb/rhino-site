@@ -42,6 +42,12 @@ const glazierMenu: SidebarItem[] = [
   slug: "/dashboard/glazier-studio/doors-and-library-fab/door-fabrication",
 },
 
+    {
+  title: "Library Fabrication",
+  slug: "/dashboard/glazier-studio/doors-and-library-fab/library-fab",
+},
+
+
   ],
 },
 {
@@ -70,6 +76,16 @@ const glazierMenu: SidebarItem[] = [
   title: "Drill Bit Sizing",
   slug: "/dashboard/glazier-studio/general-settings/drill-bit-sizing",
 },
+
+{
+  title: "File Tab",
+  slug: "/dashboard/glazier-studio/general-settings/file-tab",
+},
+
+{
+  title: "Help Tab",
+  slug: "/dashboard/glazier-studio/general-settings/help-tab",
+},
   ],
 },
 {
@@ -88,6 +104,11 @@ const glazierMenu: SidebarItem[] = [
   title: "Fabrication Options",
   slug: "/dashboard/glazier-studio/metal-groups/fabrication-options",
 },
+
+{
+  title: "Fab Formula Builder",
+  slug: "/dashboard/glazier-studio/metal-groups/fab-formula-builder",
+},
   ],
 },
 {
@@ -104,10 +125,10 @@ const glazierMenu: SidebarItem[] = [
   title: "Reports and Drawings",
   slug: "/dashboard/glazier-studio/reports-and-drawings",
   children: [
-    {
-      title: "Overview",
-      slug: "/dashboard/glazier-studio/reports-and-drawings/overview",
-    },
+ {
+  title: "Glass Fabrication",
+  slug: "/dashboard/glazier-studio/reports-and-drawings/glass-fabrication",
+},
   ],
 },
 
