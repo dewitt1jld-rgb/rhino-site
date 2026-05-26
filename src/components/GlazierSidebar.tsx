@@ -27,6 +27,16 @@ const glazierMenu: SidebarItem[] = [
       title: "Glazier Studio App",
       slug: "/dashboard/glazier-studio/all-about-frames/glazier-studio-app",
    },
+
+      {
+      title: "Metal Fabrication",
+      slug: "/dashboard/glazier-studio/all-about-frames/metal-fabrication",
+   },
+
+   {
+  title: "Menu Drop Downs",
+  slug: "/dashboard/glazier-studio/all-about-frames/menu-drop-downs",
+},
   ],
 },
 {
@@ -86,6 +96,11 @@ const glazierMenu: SidebarItem[] = [
   title: "Help Tab",
   slug: "/dashboard/glazier-studio/general-settings/help-tab",
 },
+
+{
+  title: "Inventory",
+  slug: "/dashboard/glazier-studio/general-settings/inventory",
+},
   ],
 },
 {
@@ -109,8 +124,14 @@ const glazierMenu: SidebarItem[] = [
   title: "Fab Formula Builder",
   slug: "/dashboard/glazier-studio/metal-groups/fab-formula-builder",
 },
+
+{
+  title: "Metal Groups",
+  slug: "/dashboard/glazier-studio/metal-groups/metal-groups",
+},
   ],
 },
+
 {
   title: "Out of Shape Frames",
   slug: "/dashboard/glazier-studio/out-of-shape-frames",
