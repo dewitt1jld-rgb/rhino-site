@@ -1,10 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import SeoSchema from "@/components/SeoSchema";
 
 export default function PartnerPakTrainingPage() {
+  const schema = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: "PartnerPak Training",
+  description:
+    "PartnerPak training and PPAK tutorials covering frame building, metal groups, catalog parts, doors, Library Fab, Fab Rules Library, reports, drawings, fabrication options, and glass fabrication workflows.",
+  provider: {
+    "@type": "Organization",
+    name: "The Rhino Wrangler",
+    url: "https://therhinowrangler.com",
+  },
+  url: "https://therhinowrangler.com/learn/partnerpak-training",
+};
   return (
     <main className="landingPage">
+      <SeoSchema data={schema} />
       <section className="hero">
         <p className="eyebrow">PartnerPak Training</p>
         <h1>PartnerPak Training for Glass Shops and Fabrication Teams</h1>

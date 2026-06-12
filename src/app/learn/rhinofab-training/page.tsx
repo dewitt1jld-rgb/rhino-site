@@ -1,10 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import SeoSchema from "@/components/SeoSchema";
 
 export default function RhinoFabTrainingPage() {
+  const schema = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: "RhinoFab Training",
+  description:
+    "Professional RhinoFab training for Rhino 5000, Rhino 5600, Rhino 5700, Rhino 9500, Rhino 9700, CNC RhinoFab machines, calibration workflows, troubleshooting, and glass fabrication shops.",
+  provider: {
+    "@type": "Organization",
+    name: "The Rhino Wrangler",
+    url: "https://therhinowrangler.com",
+  },
+  url: "https://therhinowrangler.com/learn/rhinofab-training",
+};
   return (
     <main className="landingPage">
+      <SeoSchema data={schema} />
       <section className="hero">
         <p className="eyebrow">RhinoFab Training</p>
 

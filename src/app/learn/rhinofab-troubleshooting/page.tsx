@@ -1,10 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import SeoSchema from "@/components/SeoSchema";
 
 export default function RhinoFabTroubleshootingPage() {
+  const schema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "RhinoFab Troubleshooting",
+  description:
+    "RhinoFab troubleshooting guides for Rhino 5000, Rhino 5600, Rhino 5700, drill collisions, air manifold issues, coolant problems, photo eye alignment, failed machine connections, calibration problems, and production downtime.",
+  publisher: {
+    "@type": "Organization",
+    name: "The Rhino Wrangler",
+    url: "https://therhinowrangler.com",
+  },
+  url: "https://therhinowrangler.com/learn/rhinofab-troubleshooting",
+};
   return (
     <main className="landingPage">
+      <SeoSchema data={schema} />
       <section className="hero">
         <p className="eyebrow">RhinoFab Troubleshooting</p>
         <h1>RhinoFab Troubleshooting Guides for Real Production Problems</h1>

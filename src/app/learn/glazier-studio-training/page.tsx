@@ -1,10 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import SeoSchema from "@/components/SeoSchema";
 
 export default function GlazierStudioTrainingPage() {
+  const schema = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: "Glazier Studio Training",
+  description:
+    "Professional Glazier Studio training with GS tutorials for project setup, frame building, metal groups, catalog parts, reports, drawings, fabrication workflows, and glass fabrication teams.",
+  provider: {
+    "@type": "Organization",
+    name: "The Rhino Wrangler",
+    url: "https://therhinowrangler.com",
+  },
+  url: "https://therhinowrangler.com/learn/glazier-studio-training",
+};
   return (
     <main className="landingPage">
+      <SeoSchema data={schema} />
       <section className="hero">
         <p className="eyebrow">Glazier Studio Training</p>
 
