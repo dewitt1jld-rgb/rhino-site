@@ -3,46 +3,46 @@
 import Link from "next/link";
 import SeoSchema from "@/components/SeoSchema";
 
-export default function RhinoFabSupportPage() {
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "Course",
-  name: "Rhino 5700 Training",
-  description:
-    "Rhino 5700 training, support, calibration procedures, troubleshooting guides, and tutorial videos for CNC glass fabrication teams.",
-  provider: {
-    "@type": "Organization",
-    name: "The Rhino Wrangler",
-    url: "https://therhinowrangler.com",
-  },
-  url: "https://therhinowrangler.com/learn/rhino-5700",
-};
+export default function GlazierStudioHelpPage() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Glazier Studio Help",
+    description:
+      "Glazier Studio help, training, tutorials, project setup guidance, frame building support, metal groups, catalog parts, reports, drawings, and glass fabrication workflow help for glass shops.",
+    publisher: {
+      "@type": "Organization",
+      name: "The Rhino Wrangler",
+      url: "https://therhinowrangler.com",
+    },
+    url: "https://therhinowrangler.com/learn/glazier-studio-help",
+  };
 
   return (
     <main className="landingPage">
       <SeoSchema data={schema} />
 
       <section className="hero">
-        <p className="eyebrow">Rhino 5700</p>
-        <h1>Rhino 5700 Training, Support & Troubleshooting</h1>
+        <p className="eyebrow">Glazier Studio Help</p>
+        <h1>Glazier Studio Help for Glass Shops and Fabrication Teams</h1>
         <p className="lead">
-          The Rhino Wrangler provides RhinoFab support resources for glass shops
-          that need help with training, troubleshooting, calibration, operator
-          workflows, machine setup, and CNC glass fabrication problems.
+          The Rhino Wrangler provides Glazier Studio help for glass shops that
+          need support with project setup, frame building, metal groups, catalog
+          parts, reports, drawings, fabrication workflows, and everyday software
+          questions.
         </p>
         <p className="lead secondaryLead">
-          Get support for RhinoFab, Rhino Fab, Rhino 5000, Rhino 5600, Rhino
-          5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, saw and drill
-          workflows, coolant problems, photo eyes, tool index issues, and common
-          production problems.
+          Find Glazier Studio tutorials, GS help, written guides, video training,
+          and live virtual classes designed for estimators, project managers,
+          fabricators, and shop teams.
         </p>
 
         <div className="actions">
           <Link href="/pricing" className="primaryButton">
             Get Training Access
           </Link>
-          <Link href="/learn/rhinofab-troubleshooting" className="secondaryButton">
-            View Troubleshooting Guides
+          <Link href="/learn/glazier-studio-training" className="secondaryButton">
+            View Glazier Studio Training
           </Link>
           <Link href="/contact" className="secondaryButton">
             Contact The Rhino Wrangler
@@ -52,20 +52,18 @@ const schema = {
 
       <section className="machineStrip">
         {[
-       
-  "Rhino 5700",
-  "RhinoFab 5700",
-  "5700 Calibration",
-  "5700 Training",
-  "5700 Support",
-  "5700 Troubleshooting",
-  "Rotational Spindles",
-  "Saw Calibration",
-  "Drill Calibration",
-  "Tool Rack",
-  "Fab Test",
-  "Machine Setup",
-
+          "Glazier Studio Help",
+          "GS Tutorials",
+          "Project Setup",
+          "Frame Building",
+          "All About Frames",
+          "Metal Groups",
+          "Catalog Parts",
+          "Doors",
+          "Library Fab",
+          "Reports",
+          "Drawings",
+          "Glass Fabrication",
         ].map((topic) => (
           <span key={topic}>{topic}</span>
         ))}
@@ -73,53 +71,54 @@ const schema = {
 
       <section className="contentGrid">
         <article>
-          <h2>Support for real production problems</h2>
+          <h2>Help for everyday Glazier Studio questions</h2>
           <p>
-            RhinoFab issues can slow down an entire shop. The Rhino Wrangler
-            helps teams understand what to check, what each issue may point to,
-            and how to approach machine problems with a clear process.
+            Glazier Studio can affect estimating, project setup, drawings,
+            reports, fabrication output, and shop communication. The Rhino
+            Wrangler helps teams find answers faster.
           </p>
         </article>
 
         <article>
-          <h2>Training plus troubleshooting</h2>
+          <h2>Support for real glass shop workflows</h2>
           <p>
-            Support works best when operators understand both the machine and
-            the workflow. Members get training pages, troubleshooting guides,
-            and tutorial videos built around real RhinoFab shop use.
+            Help content is organized around the way shops actually use Glazier
+            Studio, from setting up jobs to building frames and preparing
+            fabrication information.
           </p>
         </article>
 
         <article>
-          <h2>Built for glass fabrication teams</h2>
+          <h2>Searchable guides and videos</h2>
           <p>
-            These resources are written for operators, fabricators, maintenance
-            teams, shop managers, and companies training new RhinoFab users.
+            Members can review written guides and tutorial videos instead of
+            relying only on memory, scattered notes, or one experienced user in
+            the company.
           </p>
         </article>
       </section>
 
       <section className="panel">
         <div className="panelHeader">
-          <p className="eyebrow">Support Topics</p>
-          <h2>RhinoFab support areas covered</h2>
+          <p className="eyebrow">Help Topics</p>
+          <h2>Glazier Studio help topics covered</h2>
         </div>
 
         <div className="topicGrid">
           {[
-  "Rotational spindle calibration",
-  "Saw calibration",
-  "Drill calibration",
-  "Roller calibration",
-  "Pusher calibration",
-  "Tool rack calibration",
-  "Machine setup",
-  "Fab testing",
-  "Tool index support",
-  "Coolant systems",
-  "Photo eye alignment",
-  "Production troubleshooting",
-].map((topic) => (
+            "Project setup help",
+            "Frame building help",
+            "Editing frames",
+            "All About Frames",
+            "Out of Shape Frames",
+            "Metal Groups",
+            "Catalog Parts",
+            "Doors and Library Fab",
+            "Reports and Drawings",
+            "General Settings",
+            "File tab help",
+            "Glass fabrication help",
+          ].map((topic) => (
             <div className="topicCard" key={topic}>
               {topic}
             </div>
@@ -129,68 +128,65 @@ const schema = {
 
       <section className="splitPanel">
         <div>
-          <p className="eyebrow">Structured Support</p>
-          <h2>Stop guessing and start checking the right things</h2>
+          <p className="eyebrow">Software Help That Connects</p>
+          <h2>Understand how Glazier Studio decisions affect production</h2>
           <p>
-            When a RhinoFab machine is not cutting correctly, drilling
-            correctly, connecting properly, or responding as expected, it is easy
-            to lose time guessing. A structured support process helps your team
-            narrow the problem faster.
+            Small software decisions can create big production problems. Project
+            setup, frame information, metal groups, catalog parts, doors,
+            reports, drawings, and fabrication settings all affect how smoothly
+            jobs move through the company.
           </p>
           <p>
-            The Rhino Wrangler gives shops a place to review machine concepts,
-            training procedures, calibration checks, troubleshooting paths, and
-            operator reminders without relying only on memory or one experienced
-            person in the shop.
+            The Rhino Wrangler gives your team a place to review Glazier Studio
+            help content, understand what each screen affects, and learn how
+            office setup connects to fabrication output.
           </p>
         </div>
 
         <div className="highlightBox">
-          <h3>Support resources help teams:</h3>
+          <h3>Glazier Studio help resources can:</h3>
           <ul>
-            <li>Reduce avoidable downtime</li>
-            <li>Improve operator confidence</li>
-            <li>Train new users faster</li>
-            <li>Repeat fixes more consistently</li>
-            <li>Understand machine symptoms better</li>
+            <li>Reduce repeated software questions</li>
+            <li>Improve project setup consistency</li>
+            <li>Help new users learn faster</li>
+            <li>Connect office workflows to shop output</li>
+            <li>Improve confidence across your team</li>
           </ul>
         </div>
       </section>
 
       <section className="panel">
         <div className="panelHeader">
-          <p className="eyebrow">Support Process</p>
-          <h2>From problem to production</h2>
+          <p className="eyebrow">Help Process</p>
+          <h2>From question to confident workflow</h2>
         </div>
 
         <div className="processGrid">
           <article>
             <span className="stepNumber">01</span>
-            <h3>Identify the symptom</h3>
+            <h3>Find the screen or workflow</h3>
             <p>
-              Start with what the RhinoFab is actually doing: wrong lengths,
-              collision warnings, coolant failure, communication problems,
-              sensor issues, tooling problems, or calibration drift.
+              Start with the area causing confusion: project setup, frames,
+              metal groups, catalog parts, reports, drawings, doors, or
+              fabrication output.
             </p>
           </article>
 
           <article>
             <span className="stepNumber">02</span>
-            <h3>Use the right guide</h3>
+            <h3>Review the guide or video</h3>
             <p>
-              Find the related support page, tutorial video, or troubleshooting
-              guide for the machine area involved: saw, drills, pusher,
-              spindles, air, coolant, sensors, or software connection.
+              Use the related written guide or tutorial video to understand what
+              the screen does, what settings matter, and how it affects the job.
             </p>
           </article>
 
           <article>
             <span className="stepNumber">03</span>
-            <h3>Verify before production</h3>
+            <h3>Apply it consistently</h3>
             <p>
-              After making a correction, verify the result with a test movement,
-              test cut, calibration check, coolant check, or sample part before
-              returning to full production.
+              Help your team repeat the same workflow across jobs so estimating,
+              project management, and fabrication stay aligned.
             </p>
           </article>
         </div>
@@ -200,51 +196,50 @@ const schema = {
         <div className="highlightBox">
           <h3>Helpful for:</h3>
           <ul>
-            <li>RhinoFab operators</li>
-            <li>Glass fabrication shops</li>
-            <li>Maintenance teams</li>
+            <li>New Glazier Studio users</li>
+            <li>Estimators</li>
+            <li>Project managers</li>
             <li>Shop managers</li>
-            <li>New employee training</li>
-            <li>Teams without an in-house expert</li>
+            <li>Fabrication teams</li>
+            <li>Companies training new employees</li>
           </ul>
         </div>
 
         <div>
-          <p className="eyebrow">Machine Coverage</p>
-          <h2>Support for multiple RhinoFab machine families</h2>
+          <p className="eyebrow">GS Help + Training</p>
+          <h2>Help your team stop relying on tribal knowledge</h2>
           <p>
-            Shops may search for RhinoFab support, Rhino Fab support, Rhino 5700
-            support, Rhino 900 support, Rhino 950 support, Rhino 9500 support,
-            or Rhino 9600 support depending on the machine and naming they use.
+            Many shops depend on one or two experienced users to answer every
+            Glazier Studio question. That slows down the whole team and makes
+            training harder.
           </p>
           <p>
-            The Rhino Wrangler organizes training and troubleshooting around the
-            workflows those teams care about most: setup, calibration, saw and
-            drill operation, tooling, maintenance, machine communication, and
-            production recovery.
+            The Rhino Wrangler gives members a searchable training library with
+            Glazier Studio help, GS tutorials, written guides, and tutorial
+            videos that users can review when they need them.
           </p>
         </div>
       </section>
 
       <section className="inlineCta">
-        <p className="eyebrow">Training + Support</p>
-        <h2>Train and support your Rhino 5700 operators.</h2>
+        <p className="eyebrow">Glazier Studio Help</p>
+        <h2>Give your team a better place to find software answers.</h2>
         <p>
-          Pair RhinoFab support pages with troubleshooting guides, tutorial
-          videos, written training, and live virtual classes so your shop has a
-          repeatable resource for common machine and production issues.
+          Pair Glazier Studio help with full Glazier Studio training,
+          PartnerPak training, RhinoFab training, tutorial videos, and live
+          virtual classes.
         </p>
-        <Link href="/learn/rhinofab-training" className="secondaryButton">
-          View RhinoFab Training
+        <Link href="/learn/glazier-studio-training" className="secondaryButton">
+          View Glazier Studio Training
         </Link>
       </section>
 
       <section className="cta">
-        <h2>Support your team before downtime becomes expensive.</h2>
+        <h2>Train your team before software mistakes become shop problems.</h2>
         <p>
-          RhinoFab support, training, and troubleshooting resources help glass
-          shops reduce confusion, improve consistency, and recover faster when
-          machine problems interrupt production.
+          Glazier Studio help resources can reduce confusion, improve
+          consistency, and help your team move from project setup to fabrication
+          with fewer mistakes.
         </p>
         <Link href="/pricing" className="primaryButton">
           View Training Options
@@ -348,15 +343,6 @@ function LandingStyles() {
         font-weight: 900;
         border-radius: 14px;
         padding: 14px 18px;
-        transition:
-          transform 0.18s ease,
-          border-color 0.18s ease,
-          background 0.18s ease;
-      }
-
-      .primaryButton:hover,
-      .secondaryButton:hover {
-        transform: translateY(-2px);
       }
 
       .primaryButton {
