@@ -355,6 +355,10 @@ export default function RhinoFabTrainingPage() {
     <Link href="/learn/partnerpak-help" className="topicCard">
       PartnerPak Help
     </Link>
+
+        <Link href="/learn/cnc-glass-fabrication-training" className="topicCard">
+      CNC Glass Fabrication Training
+    </Link>
   </div>
 </section>
 
@@ -375,6 +379,8 @@ function LandingStyles() {
         color: white;
         padding: 80px 24px;
       }
+
+      
 
       .hero,
       .cta,
@@ -523,15 +529,25 @@ function LandingStyles() {
       }
 
       .machineGrid div,
-      .topicGrid div {
-        border-radius: 14px;
-        padding: 14px;
-        text-align: center;
-        font-weight: 900;
-        color: white;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(245, 158, 11, 0.18);
-      }
+  .topicCard {
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  border-radius: 18px;
+  padding: 18px;
+  color: rgba(255, 255, 255, 0.86);
+  font-weight: 850;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.topicCard:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.08);
+  transform: translateY(-2px);
+}
 
       .twoColumn {
         display: grid;
