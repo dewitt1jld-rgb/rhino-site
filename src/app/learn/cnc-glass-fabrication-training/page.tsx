@@ -52,7 +52,7 @@ export default function RhinoFabSupportPage() {
 
       <section className="machineStrip">
         {[
-[
+
   "CNC Glass Fabrication",
   "RhinoFab",
   "Rhino Fab",
@@ -65,7 +65,7 @@ export default function RhinoFabSupportPage() {
   "Rhino 9500",
   "Rhino 9600",
   "Fabrication Training",
-]
+
         ].map((topic) => (
           <span key={topic}>{topic}</span>
         ))}
@@ -107,7 +107,7 @@ export default function RhinoFabSupportPage() {
 
         <div className="topicGrid">
           {[
-[
+
   "RhinoFab machine training",
   "RhinoFab troubleshooting",
   "RhinoFab machine support",
@@ -120,7 +120,7 @@ export default function RhinoFabSupportPage() {
   "Fabrication software",
   "Tutorial videos",
   "Live virtual classes",
-]
+
           ].map((topic) => (
             <div className="topicCard" key={topic}>
               {topic}
