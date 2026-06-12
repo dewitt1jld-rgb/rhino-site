@@ -4,6 +4,13 @@ const siteUrl = "https://therhinowrangler.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
+   {
+  url: `${siteUrl}/learn`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 1,
+},
+    
     {
       url: `${siteUrl}/`,
       lastModified: new Date(),

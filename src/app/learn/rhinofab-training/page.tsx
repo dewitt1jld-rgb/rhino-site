@@ -317,6 +317,47 @@ export default function RhinoFabTrainingPage() {
         </div>
       </section>
 
+      <section className="panel">
+  <div className="panelHeader">
+    <p className="eyebrow">Related Resources</p>
+    <h2>Continue Learning</h2>
+  </div>
+
+  <div className="topicGrid">
+    <Link href="/learn/rhinofab-training" className="topicCard">
+      RhinoFab Training
+    </Link>
+
+    <Link href="/learn/rhinofab-support" className="topicCard">
+      RhinoFab Support
+    </Link>
+
+    <Link href="/learn/rhinofab-troubleshooting" className="topicCard">
+      RhinoFab Troubleshooting
+    </Link>
+
+    <Link href="/learn/rhinofab-machine-support" className="topicCard">
+      RhinoFab Machine Support
+    </Link>
+
+    <Link href="/learn/glazier-studio-training" className="topicCard">
+      Glazier Studio Training
+    </Link>
+
+    <Link href="/learn/glazier-studio-help" className="topicCard">
+      Glazier Studio Help
+    </Link>
+
+    <Link href="/learn/partnerpak-training" className="topicCard">
+      PartnerPak Training
+    </Link>
+
+    <Link href="/learn/partnerpak-help" className="topicCard">
+      PartnerPak Help
+    </Link>
+  </div>
+</section>
+
       <LandingStyles />
     </main>
   );
