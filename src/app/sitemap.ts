@@ -64,5 +64,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   changeFrequency: "monthly",
   priority: 0.95,
 },
+{
+  url: `${siteUrl}/learn/rhino-5700`,
+  lastModified: new Date(),
+  changeFrequency: "monthly",
+  priority: 0.95,
+},
   ];
 }
