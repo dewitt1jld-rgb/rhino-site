@@ -8,7 +8,7 @@ type SidebarItem = {
   children?: SidebarItem[];
 };
 
-const rhinoTrainingMenu: SidebarItem[] = [
+export const RhinoTrainingMenu: SidebarItem[] = [
   {
     title: "All Rhino Machines",
     slug: "/dashboard/rhino-training/all-rhino-machines",
@@ -361,7 +361,7 @@ export default function TrainingSidebar() {
   const pathname = router.pathname;
 
   const defaultOpen = useMemo(
-    () => collectOpenSlugs(rhinoTrainingMenu, pathname),
+    () => collectOpenSlugs(RhinoTrainingMenu, pathname),
     [pathname]
   );
 
@@ -390,7 +390,7 @@ export default function TrainingSidebar() {
         </div>
 
         <div className="sidebarTree">
-          {rhinoTrainingMenu.map((item) => (
+          {RhinoTrainingMenu.map((item) => (
             <SidebarNode
               key={item.slug}
               item={item}

@@ -1,8 +1,11 @@
+import { useState } from "react";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
+import SearchModal from "../components/SearchModal";
 import RequireActiveAccess from "../components/RequireActiveAccess";
 
 export default function Dashboard() {
+  const [searchOpen, setSearchOpen] = useState(false);
+
   return (
     <>
       <main
@@ -12,171 +15,171 @@ export default function Dashboard() {
           color: "white",
         }}
       >
-        <section
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            minHeight: "760px",
-            backgroundImage:
-              "linear-gradient(rgba(7, 17, 31, 0.12), rgba(7, 17, 31, 0.25)), url('/smoke-bg.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-            <RequireActiveAccess>
-          <div style={heroOverlay}></div>
-
-          <div
+        <RequireActiveAccess>
+          <section
             style={{
               position: "relative",
-              zIndex: 3,
-              maxWidth: "1480px",
-              margin: "0 auto",
-              padding: "56px 32px 80px",
+              overflow: "hidden",
+              minHeight: "760px",
+              backgroundImage:
+                "linear-gradient(rgba(7, 17, 31, 0.12), rgba(7, 17, 31, 0.25)), url('/smoke-bg.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
           >
-            <div className="hero-grid">
-              <div>
-                <div style={badgeStyle}>MEMBER TRAINING PORTAL</div>
+            <div style={heroOverlay}></div>
 
-                <h1
-                  style={{
-                    fontSize: "58px",
-                    lineHeight: 1.02,
-                    fontWeight: 800,
-                    margin: "18px 0 18px 0",
-                    maxWidth: "680px",
-                    letterSpacing: "-1.5px",
-                  }}
-                >
-                  Built to help your team learn faster and work smarter
-                </h1>
+            <div
+              style={{
+                position: "relative",
+                zIndex: 3,
+                maxWidth: "1480px",
+                margin: "0 auto",
+                padding: "56px 32px 80px",
+              }}
+            >
+              <div className="hero-grid">
+                <div>
+                  <div style={badgeStyle}>MEMBER TRAINING PORTAL</div>
 
-                <p
-                  style={{
-                    fontSize: "18px",
-                    lineHeight: 1.75,
-                    color: "rgba(255,255,255,0.85)",
-                    maxWidth: "650px",
-                    marginBottom: "24px",
-                  }}
-                >
-                  Search our training library, jump into guided learning paths,
-                  and access the tools your team needs to stay sharp, efficient,
-                  and confident in the field.
-                </p>
+                  <h1
+                    style={{
+                      fontSize: "58px",
+                      lineHeight: 1.02,
+                      fontWeight: 800,
+                      margin: "18px 0 18px 0",
+                      maxWidth: "680px",
+                      letterSpacing: "-1.5px",
+                    }}
+                  >
+                    Built to help your team learn faster and work smarter
+                  </h1>
+
+                  <p
+                    style={{
+                      fontSize: "18px",
+                      lineHeight: 1.75,
+                      color: "rgba(255,255,255,0.85)",
+                      maxWidth: "650px",
+                      marginBottom: "24px",
+                    }}
+                  >
+                    Search our training library, jump into guided learning paths,
+                    and access the tools your team needs to stay sharp,
+                    efficient, and confident in the field.
+                  </p>
+                </div>
 
                 <div
                   style={{
+                    position: "relative",
+                    minHeight: "390px",
                     display: "flex",
-                    flexWrap: "wrap",
-                    gap: "12px",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                
+                  <div style={logoGlow}></div>
+
+                  <img
+                    src="https://rhino-training-cdn.b-cdn.net/logo-content-media/images/rhino-logo.png"
+                    alt="The Rhino Wrangler logo"
+                    style={{
+                      width: "100%",
+                      maxWidth: "700px",
+                      objectFit: "contain",
+                      position: "relative",
+                      zIndex: 5,
+                      opacity: 0.97,
+                      mixBlendMode: "screen",
+                      filter:
+                        "drop-shadow(0 18px 55px rgba(255,255,255,0.20))",
+                    }}
+                  />
                 </div>
               </div>
 
-              <div
-                style={{
-                  position: "relative",
-                  minHeight: "390px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+              <button
+                id="main-search"
+                type="button"
+                style={searchWrap}
+                onClick={() => setSearchOpen(true)}
               >
-                <div style={logoGlow}></div>
+                <span style={searchIcon}>⌕</span>
+                <span style={searchPlaceholder}>
+                  Search training topics, videos, setup guides, troubleshooting,
+                  and workflows...
+                </span>
+              </button>
 
-                <img
-                  src="https://rhino-training-cdn.b-cdn.net/logo-content-media/images/rhino-logo.png"
-                  alt="The Rhino Wrangler logo"
-                  style={{
-                    width: "100%",
-                    maxWidth: "700px",
-                    objectFit: "contain",
-                    position: "relative",
-                    zIndex: 5,
-                    opacity: 0.97,
-                    mixBlendMode: "screen",
-                    filter:
-                      "drop-shadow(0 18px 55px rgba(255,255,255,0.20))",
-                  }}
-                />
-              </div>
-            </div>
+              <div className="cards-grid">
+                <Link href="/dashboard/glazier-studio" className="card-link">
+                  <div className="dashboard-card">
+                    <div style={cardNumberStyle}>01</div>
+                    <h2 style={cardTitleStyle}>Glazier Studio & PartnerPak</h2>
+                    <p style={cardTextStyle}>
+                      Platform-specific training, workflow help, setup guidance,
+                      and feature instruction in one place.
+                    </p>
+                  </div>
+                </Link>
 
-            <div id="main-search" style={searchWrap}>
-              <span style={searchIcon}>⌕</span>
-              <input
-                type="text"
-                placeholder="Search training topics, videos, setup guides, troubleshooting, and workflows..."
-                style={searchInput}
-              />
-            </div>
-
-            <div className="cards-grid">
-              <Link href="/dashboard/glazier-studio" className="card-link">
-                <div className="dashboard-card">
-                  <div style={cardNumberStyle}>01</div>
-                  <h2 style={cardTitleStyle}>Glazier Studio & PartnerPak</h2>
-                  <p style={cardTextStyle}>
-                    Platform-specific training, workflow help, setup guidance, and
-                    feature instruction in one place.
-                  </p>
-                </div>
-              </Link>
-
-            
-              <Link href="/dashboard/rhino-training" className="card-link">
-                <div className="dashboard-card">
-                  <div style={cardNumberStyle}>02</div>
-                  <h2 style={cardTitleStyle}>Rhino Training</h2>
-                  <p style={cardTextStyle}>
-                    Learn Rhino tools, design processes, and practical production
-                    workflows step by step.
-                  </p>
-                </div>
-              </Link>
+                <Link href="/dashboard/rhino-training" className="card-link">
+                  <div className="dashboard-card">
+                    <div style={cardNumberStyle}>02</div>
+                    <h2 style={cardTitleStyle}>Rhino Training</h2>
+                    <p style={cardTextStyle}>
+                      Learn Rhino tools, design processes, and practical
+                      production workflows step by step.
+                    </p>
+                  </div>
+                </Link>
 
                 <Link href="/dashboard/tutorial-videos" className="card-link">
-                <div className="dashboard-card">
-                  <div style={cardNumberStyle}>03</div>
-                  <h2 style={cardTitleStyle}>Tutorial Videos</h2>
-                  <p style={cardTextStyle}>
-                    Visual walkthroughs and hands-on video instruction for quick
-                    learning and review.
-                  </p>
-                </div>
-              </Link>
+                  <div className="dashboard-card">
+                    <div style={cardNumberStyle}>03</div>
+                    <h2 style={cardTitleStyle}>Tutorial Videos</h2>
+                    <p style={cardTextStyle}>
+                      Visual walkthroughs and hands-on video instruction for
+                      quick learning and review.
+                    </p>
+                  </div>
+                </Link>
 
-              <Link href="/dashboard/estimator-training" className="card-link">
-                <div className="dashboard-card">
-                  <div style={cardNumberStyle}>04</div>
-                  <h2 style={cardTitleStyle}>Estimator Training</h2>
-                  <p style={cardTextStyle}>
-                    Build confidence in estimating, pricing workflows, and software
-                    usage for accurate project prep.
-                  </p>
-                </div>
-              </Link>
+                <Link href="/dashboard/estimator-training" className="card-link">
+                  <div className="dashboard-card">
+                    <div style={cardNumberStyle}>04</div>
+                    <h2 style={cardTitleStyle}>Estimator Training</h2>
+                    <p style={cardTextStyle}>
+                      Build confidence in estimating, pricing workflows, and
+                      software usage for accurate project prep.
+                    </p>
+                  </div>
+                </Link>
 
-              <Link href="/dashboard/introductory-software-training" className="card-link">
-                <div className="dashboard-card">
-                  <div style={cardNumberStyle}>05</div>
-                  <h2 style={cardTitleStyle}>Introductory Software Training</h2>
-                  <p style={cardTextStyle}>
-                    A clean starting point for new users who need foundational
-                    lessons before moving deeper.
-                  </p>
-                </div>
-              </Link>
+                <Link
+                  href="/dashboard/introductory-software-training"
+                  className="card-link"
+                >
+                  <div className="dashboard-card">
+                    <div style={cardNumberStyle}>05</div>
+                    <h2 style={cardTitleStyle}>
+                      Introductory Software Training
+                    </h2>
+                    <p style={cardTextStyle}>
+                      A clean starting point for new users who need foundational
+                      lessons before moving deeper.
+                    </p>
+                  </div>
+                </Link>
+              </div>
             </div>
-          </div>
-          </RequireActiveAccess>
-        </section>
+          </section>
+        </RequireActiveAccess>
       </main>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       <style jsx>{`
         .hero-grid {
@@ -210,11 +213,8 @@ export default function Dashboard() {
           backdrop-filter: blur(14px);
           cursor: pointer;
           min-height: 220px;
-          transition:
-            transform 0.25s ease,
-            box-shadow 0.25s ease,
-            border-color 0.25s ease,
-            background 0.25s ease;
+          transition: transform 0.25s ease, box-shadow 0.25s ease,
+            border-color 0.25s ease, background 0.25s ease;
         }
 
         .dashboard-card:hover {
@@ -279,18 +279,8 @@ const badgeStyle = {
   letterSpacing: "0.14em",
 };
 
-const pillStyle = {
-  padding: "10px 16px",
-  borderRadius: "999px",
-  background: "rgba(255,255,255,0.10)",
-  border: "1px solid rgba(255,255,255,0.14)",
-  color: "#e5e7eb",
-  fontSize: "14px",
-  fontWeight: 600,
-  backdropFilter: "blur(10px)",
-};
-
 const searchWrap = {
+  width: "100%",
   display: "flex",
   alignItems: "center",
   gap: "12px",
@@ -302,6 +292,8 @@ const searchWrap = {
   borderRadius: "18px",
   padding: "18px 22px",
   backdropFilter: "blur(18px)",
+  cursor: "pointer",
+  textAlign: "left" as const,
 };
 
 const searchIcon = {
@@ -310,11 +302,7 @@ const searchIcon = {
   lineHeight: 1,
 };
 
-const searchInput = {
-  width: "100%",
-  border: "none",
-  outline: "none",
-  background: "transparent",
+const searchPlaceholder = {
   color: "#111827",
   fontSize: "16px",
 };

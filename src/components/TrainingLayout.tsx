@@ -35,15 +35,7 @@ export default function TrainingLayout({ children }: Props) {
           {children}
         </div>
 
-        <footer className="trainingFooter">
-          <div>© {new Date().getFullYear()} The Rhino Wrangler</div>
 
-          <div className="footerLinks">
-            <Link href="/terms">Terms</Link>
-            <Link href="/privacy">Privacy</Link>
-            <a href="mailto:your@email.com">Contact</a>
-          </div>
-        </footer>
       </section>
 
       {mobileMenuOpen && (

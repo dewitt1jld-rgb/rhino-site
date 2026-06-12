@@ -8,7 +8,7 @@ type SidebarItem = {
   children?: SidebarItem[];
 };
 
-const glazierMenu: SidebarItem[] = [
+export const glazierMenu: SidebarItem[] = [
 {
   title: "All About Frames",
   slug: "/dashboard/glazier-studio/all-about-frames",
@@ -101,6 +101,16 @@ const glazierMenu: SidebarItem[] = [
   title: "Inventory",
   slug: "/dashboard/glazier-studio/general-settings/inventory",
 },
+
+{
+  title: "Server VS Standalone",
+  slug: "/dashboard/glazier-studio/general-settings/server-vs-standalone",
+},
+
+{
+  title: "System Settings",
+  slug: "/dashboard/glazier-studio/general-settings/system-settings",
+},
   ],
 },
 {
@@ -128,6 +138,16 @@ const glazierMenu: SidebarItem[] = [
 {
   title: "Metal Groups",
   slug: "/dashboard/glazier-studio/metal-groups/metal-groups",
+},
+
+{
+  title: "Primary Fabrications",
+  slug: "/dashboard/glazier-studio/metal-groups/primary-fabrications",
+},
+
+{
+  title: "Secondary Fabrications",
+  slug: "/dashboard/glazier-studio/metal-groups/secondary-fabrications",
 },
   ],
 },

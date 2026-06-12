@@ -305,9 +305,9 @@ const portalLabel = (
             Digital Training
           </Link>
 
-          <Link href="/contact" className="mobileLink" onClick={closeMenu}>
-            Contact
-          </Link>
+      <Link href="/contact">
+  Contact
+</Link>
           
 
           <button

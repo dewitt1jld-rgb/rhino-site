@@ -1,5 +1,50 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
+export const metadata: Metadata = {
+  title: {
+    default: "The Rhino Wrangler",
+    template: "%s | The Rhino Wrangler",
+  },
+
+  description:
+    "Professional RhinoFab, Glazier Studio, PartnerPak, and estimating software training. Troubleshooting guides, video tutorials, virtual classes, and certification resources.",
+
+  keywords: [
+    "RhinoFab Training",
+    "RhinoFab Troubleshooting",
+    "Glazier Studio Training",
+    "PartnerPak Training",
+    "Estimator Training",
+    "CNC Glass Fabrication",
+    "Glass Fabrication Software",
+    "Rhino Wrangler",
+  ],
+
+  metadataBase: new URL("https://therhinowrangler.com"),
+
+  openGraph: {
+    title: "The Rhino Wrangler",
+    description:
+      "Professional RhinoFab, Glazier Studio, PartnerPak, and estimating software training.",
+    url: "https://therhinowrangler.com",
+    siteName: "The Rhino Wrangler",
+    locale: "en_US",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "The Rhino Wrangler",
+    description:
+      "Professional RhinoFab, Glazier Studio, PartnerPak, and estimating software training.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 export default function RootLayout({
   children,
 }: {
@@ -32,11 +77,7 @@ export default function RootLayout({
             © {new Date().getFullYear()} The Rhino Wrangler
           </div>
 
-          <div style={{ display: "flex", gap: "15px", justifyContent: "center" }}>
-            <Link href="/terms">Terms</Link>
-            <Link href="/privacy">Privacy</Link>
-            <a href="mailto:your@email.com">Contact</a>
-          </div>
+     
         </footer>
       </body>
     </html>

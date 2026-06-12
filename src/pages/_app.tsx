@@ -27,7 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <div style={{ display: "flex", gap: "15px", justifyContent: "center" }}>
           <Link href="/terms">Terms</Link>
           <Link href="/privacy">Privacy</Link>
-          <a href="mailto:your@email.com">Contact</a>
+          <Link href="/contact">Contact</Link>
         </div>
       </footer>
     </>
