@@ -279,7 +279,7 @@ export default async function handler(
       }
 
 const oneYearFromNow =
-  Math.floor(Date.now() / 1000) + 2 * 60;
+  Math.floor(Date.now() / 1000) + 365 * 24 * 60 * 60;
       const renewalSchedule = await stripe.subscriptionSchedules.create({
         customer: session.customer as string,
         start_date: oneYearFromNow,
