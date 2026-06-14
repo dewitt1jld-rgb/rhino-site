@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
+import { buildWelcomeEmail } from "@/lib/emails/welcomeEmail";
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -321,17 +322,10 @@ const oneYearFromNow =
 
       if (userEmail) {
         await sendEmail({
-          to: userEmail,
-          subject: "Welcome to The Rhino Wrangler Training Platform",
-          html: `
-            <h1>Welcome to The Rhino Wrangler</h1>
-            <p>Your training access is now active.</p>
-            <p>You can log in and begin training here:</p>
-            <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/dashboard">Go to Training Dashboard</a></p>
-            <p><strong>Important:</strong> The Rhino Wrangler is an independent training program and is not affiliated with, sponsored by, or endorsed by DeMichele Group.</p>
-            <p>Payments to The Rhino Wrangler are for Rhino Wrangler training only and do not replace or apply toward any DeMichele Group software, machine, service, or subscription fees.</p>
-          `,
-        });
+  to: userEmail,
+  subject: "Welcome to The Rhino Wrangler",
+  html: buildWelcomeEmail(userEmail),
+});
       }
 
       if (extraReceiptEmail) {
