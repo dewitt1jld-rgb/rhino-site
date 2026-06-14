@@ -13,23 +13,23 @@ export default function Pricing() {
   const showNoAccessMessage = router.query.noAccess === "1";
   const showCanceledMessage = router.query.canceled === "true";
 
-  const handleCheckout = async () => {
+const handleCheckout = async () => {
+  try {
+    setLoading(true);
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      router.push("/signup?returnTo=/pricing");
+      return;
+    }
+
     if (!agreed) {
       alert("You must agree to the Terms before continuing.");
       return;
     }
-
-    try {
-      setLoading(true);
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) {
-        router.push("/login");
-        return;
-      }
 
       const response = await fetch("/api/checkout", {
         method: "POST",
@@ -191,7 +191,7 @@ export default function Pricing() {
               <button
                 className="planButton featuredButton"
                 onClick={handleCheckout}
-                disabled={!agreed || loading}
+                disabled={loading}
               >
                 {loading ? "Loading..." : "Start Training Access"}
               </button>

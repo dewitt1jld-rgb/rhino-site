@@ -246,9 +246,9 @@ const portalLabel = (
                   Member Login
                 </Link>
 
-                <Link href="/pricing" className="ctaButton">
-                  Get Access
-                </Link>
+              <Link href="/signup">
+               Get Access
+              </Link>
               </>
             )}
 

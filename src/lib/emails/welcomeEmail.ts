@@ -27,46 +27,39 @@ const portraitUrl =
     <table width="100%" cellpadding="0" cellspacing="0" style="background:#050b14;padding:32px 16px;">
       <tr>
         <td align="center">
-          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;background:#07111f;border:1px solid rgba(245,158,11,.28);border-radius:24px;overflow:hidden;">
-            
-            <tr>
-              <td align="center" style="padding:34px 28px 18px;">
-                <img src="${logoUrl}" alt="The Rhino Wrangler" style="max-width:180px;width:100%;height:auto;margin-bottom:22px;" />
-                <p style="margin:0 0 10px;color:#f59e0b;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;">
-                  Welcome to The Rhino Wrangler
-                </p>
-                <h1 style="margin:0;font-size:34px;line-height:1.05;color:#ffffff;">
-                  Your Training Access Is Active
-                </h1>
-                <p style="margin:18px auto 0;max-width:540px;color:rgba(255,255,255,.76);font-size:16px;line-height:1.7;">
-                  Thank you for purchasing access to The Rhino Wrangler Training Platform.
-                  Your account is now active and ready to use.
-                </p>
-              </td>
-            </tr>
+  <div style="text-align:center;padding:8px 0 20px;">
+  <img
+    src="${portraitUrl}"
+    alt="Landon DeWitt"
+    style="
+      width:160px;
+      height:160px;
+      object-fit:cover;
+      border-radius:20px;
+      border:1px solid rgba(245,158,11,.35);
+      display:block;
+      margin:0 auto 14px;
+    "
+  />
 
-            <tr>
-              <td style="padding:10px 28px 0;">
-                <div style="background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;">
-                  <h2 style="margin:0 0 14px;color:#ffffff;font-size:22px;">A Message From The Rhino Wrangler</h2>
+  <p style="margin:0;color:#ffffff;font-size:18px;font-weight:700;">
+    Landon DeWitt
+  </p>
 
-                  <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td style="vertical-align:top;width:120px;padding-right:18px;">
-                        <img src="${portraitUrl}" alt="Landon DeWitt" style="width:140px;height:140px;object-fit:cover;border-radius:18px;border:1px solid rgba(245,158,11,.35);" />
-                      </td>
-                      <td style="vertical-align:middle;width:160px;padding-right:24px;">
-                        <p style="margin:0 0 14px;color:rgba(255,255,255,.76);font-size:15px;line-height:1.7;">
-                          My name is Landon DeWitt, founder of The Rhino Wrangler.
-                        </p>
-                        <p style="margin:0 0 14px;color:rgba(255,255,255,.76);font-size:15px;line-height:1.7;">
-                          For more than six years I worked directly in technical support for RhinoFab software and CNC fabrication systems.
-                          During that time I helped hundreds of fabrication shops troubleshoot machines, train operators, configure software,
-                          and solve production problems.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+  <p style="margin:6px 0 0;color:#f59e0b;font-size:14px;font-weight:600;">
+    Founder, The Rhino Wrangler
+  </p>
+</div>
+
+<p style="margin:0 0 14px;color:rgba(255,255,255,.76);font-size:15px;line-height:1.8;">
+  My name is Landon DeWitt, founder of The Rhino Wrangler.
+</p>
+
+<p style="margin:0 0 14px;color:rgba(255,255,255,.76);font-size:15px;line-height:1.8;">
+  For more than six years I worked directly in technical support for RhinoFab software and CNC fabrication systems.
+  During that time I helped hundreds of fabrication shops troubleshoot machines, train operators, configure software,
+  and solve production problems.
+</p>
 
                   <p style="margin:16px 0 0;color:rgba(255,255,255,.76);font-size:15px;line-height:1.7;">
                     After leaving technical support, I continued working in the glass industry as both an installation technician and field trainer.
