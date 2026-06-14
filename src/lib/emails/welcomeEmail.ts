@@ -18,7 +18,7 @@ export function buildWelcomeEmail(email: string) {
   "https://rhino-training-cdn.b-cdn.net/logo-content-media/images/rhino-logo.png";
 
 const portraitUrl =
-  "https://rhino-training-cdn.b-cdn.net/logo-content-media/images/self%20portrait.png";
+  "https://rhino-training-cdn.b-cdn.net/logo-content-media/images/800%20px%20selfie.png";
 
   return `
     <!DOCTYPE html>
@@ -53,9 +53,9 @@ const portraitUrl =
                   <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                       <td style="vertical-align:top;width:120px;padding-right:18px;">
-                        <img src="${portraitUrl}" alt="Landon DeWitt" style="width:110px;height:110px;object-fit:cover;border-radius:18px;border:1px solid rgba(245,158,11,.35);" />
+                        <img src="${portraitUrl}" alt="Landon DeWitt" style="width:140px;height:140px;object-fit:cover;border-radius:18px;border:1px solid rgba(245,158,11,.35);" />
                       </td>
-                      <td style="vertical-align:top;">
+                      <td style="vertical-align:middle;width:160px;padding-right:24px;">
                         <p style="margin:0 0 14px;color:rgba(255,255,255,.76);font-size:15px;line-height:1.7;">
                           My name is Landon DeWitt, founder of The Rhino Wrangler.
                         </p>
