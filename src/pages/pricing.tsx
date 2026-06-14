@@ -191,7 +191,7 @@ const handleCheckout = async () => {
               <button
                 className="planButton featuredButton"
                 onClick={handleCheckout}
-                disabled={loading}
+                disabled={!agreed || loading}
               >
                 {loading ? "Loading..." : "Start Training Access"}
               </button>
