@@ -2,7 +2,7 @@ import TrainingLayout from "@/components/TrainingLayout";
 import RequireActiveAccess from "@/components/RequireActiveAccess";
 
 const videoUrl =
-  "https://rhino-training-cdn.b-cdn.net/spindle-maintinance/video/spindle-cleaning.htm";
+  "https://rhino-training-cdn.b-cdn.net/spindle-maintinance/video/spindle%20maintenance.mp4";
 
 export default function SpindleMaintenancePage() {
   return (
