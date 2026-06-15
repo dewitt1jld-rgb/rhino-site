@@ -1,9 +1,31 @@
 import Link from "next/link";
+import { useState } from "react";
 
 const logoUrl =
   "https://rhino-training-cdn.b-cdn.net/logo-content-media/images/rhino-logo.png";
 
+
+
+const previewVideos = [
+  {
+    title: "Machine Calibration",
+    text: "A sample overview of calibration and operation.",
+    url: "https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/3-intro-videos/rhino-intro.mp4",
+  },
+  {
+    title: "GS & PPAK Guides",
+    text: "A preview of step-by-step setup and training.",
+    url: "https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/3-intro-videos/gs-intro2.mp4",
+  },
+  {
+    title: "Tutorial Videos",
+    text: "A sample look at video walkthroughs.",
+    url: "https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/3-intro-videos/tutorial-videos-intro.mp4",
+  },
+];
+
 export default function Home() {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
   return (
     <main className="page">
       <section className="hero">
@@ -102,20 +124,41 @@ export default function Home() {
         </p>
 
         <div className="previewCards">
-          {[
-            ["Machine Startup Basics", "A sample overview of safe startup and first-step operation."],
-            ["Calibration Walkthrough", "A preview of step-by-step setup and calibration training."],
-            ["Troubleshooting Example", "A sample look at how issues are explained and solved."],
-          ].map(([title, text]) => (
-            <div className="previewCard" key={title}>
-              <div className="videoBox">
-                <div className="play">▶</div>
-              </div>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </div>
-          ))}
-        </div>
+  {previewVideos.map((video) => (
+    <button
+      key={video.title}
+      type="button"
+      className="previewCard"
+      onClick={() => setActiveVideo(video.url)}
+    >
+      <div className="videoBox">
+        <div className="play">▶</div>
+      </div>
+
+      <h3>{video.title}</h3>
+      <p>{video.text}</p>
+    </button>
+  ))}
+</div>
+
+{activeVideo && (
+  <div className="videoModal" onClick={() => setActiveVideo(null)}>
+    <div className="videoModalCard" onClick={(e) => e.stopPropagation()}>
+      <button
+        type="button"
+        className="closeVideo"
+        onClick={() => setActiveVideo(null)}
+      >
+        ×
+      </button>
+
+      <video controls autoPlay className="modalVideo">
+        <source src={activeVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+)}
       </section>
 
       <section className="ctaBox">
@@ -229,6 +272,63 @@ export default function Home() {
           transform: translateY(22px);
           animation: headlineRise 0.8s ease forwards;
         }
+
+        .previewCard {
+  cursor: pointer;
+  text-align: left;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: rgba(255, 255, 255, 0.055);
+  color: inherit;
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+}
+
+.previewCard:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+  transform: translateY(-2px);
+}
+
+.videoModal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.videoModalCard {
+  position: relative;
+  width: min(100%, 960px);
+  background: #050b14;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 24px;
+  padding: 18px;
+}
+
+.closeVideo {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: none;
+  background: #f59e0b;
+  color: #111827;
+  font-size: 28px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.modalVideo {
+  width: 100%;
+  border-radius: 16px;
+  display: block;
+}
 
         .line1 {
           animation-delay: 0.1s;
