@@ -279,46 +279,7 @@ export default async function handler(
         return res.status(200).json({ received: true });
       }
 
-const oneYearFromNow =
-  Math.floor(Date.now() / 1000) + 365 * 24 * 60 * 60;
-      const renewalSchedule = await stripe.subscriptionSchedules.create({
-        customer: session.customer as string,
-        start_date: oneYearFromNow,
-        end_behavior: "release",
-        default_settings: {
-          default_payment_method: paymentMethodId,
-        },
-        metadata: {
-          profile_id: profileId,
-          email: userEmail || "",
-          subscription_type: "annual_renewal",
-        },
-        phases: [
-          {
-            items: [
-              {
-                price: process.env.STRIPE_RENEWAL_PRICE_ID!,
-                quantity: 1,
-              },
-            ],
-          },
-        ],
-      });
-
-      // For now we are storing the renewal schedule ID in stripe_subscription_id.
-      // Later, we can add a separate stripe_schedule_id column if you want it cleaner.
-      const { error: scheduleSaveError } = await supabaseAdmin
-        .from("member_access")
-        .update({
-          stripe_subscription_id: renewalSchedule.id,
-        })
-        .eq("profile_id", profileId);
-
-      if (scheduleSaveError) {
-        console.error("Failed to save renewal schedule ID:", scheduleSaveError);
-      } else {
-        console.log("Annual renewal schedule created:", renewalSchedule.id);
-      }
+   
 
       if (userEmail) {
         await sendEmail({

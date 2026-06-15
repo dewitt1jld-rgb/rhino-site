@@ -133,12 +133,11 @@ const handleCheckout = async () => {
               <h2 className="planTitle">Training Platform Membership</h2>
 
               <div className="price">
-                $1500<span> initial access</span>
+                $2500<span> LifeTime access</span>
               </div>
 
               <p className="planText">
-                One setup payment gives your team access to the Rhino Wrangler
-                training platform. Renews for only 50$ per month. Charged yearly. 
+                One Time payment gives your company access for life. 
               </p>
 
               <ul className="featureList">
@@ -146,10 +145,8 @@ const handleCheckout = async () => {
                 <li>Machine setup and calibration guides</li>
                 <li>Step-by-step technical reference pages</li>
                 <li>Searchable training content</li>
-                <li>24/7 Support (Questions & Quick Fixes only)</li>
                 <li>Downloadable maintinance guide</li>
                 <li>Full length tutotial videos</li>
-                <li>$500 off any scheduled training class (limit 1 per year)</li>
                 <li>New content and page updates</li>
                 <li>Dedicated to providing top tier info</li>
                 <li>Takes Guesswork out of troubleshooting</li>
@@ -167,7 +164,7 @@ const handleCheckout = async () => {
              
 
               <label className="receiptField">
-                <span>Additional receipt email optional</span>
+                <span>Additional email for reciept (optional)</span>
                 <input
                   type="email"
                   value={extraReceiptEmail}

@@ -139,8 +139,7 @@ export function buildWelcomeEmail(email: string) {
                 <div style="border-top:1px solid #263244;padding-top:22px;">
                   <p style="margin:0 0 10px;color:#9ca3af;font-size:13px;line-height:1.7;">
                     <strong style="color:#ffffff;">Billing Reminder:</strong>
-                    Your initial access has been activated. Annual renewal is $750/year and will be billed automatically
-                    using the payment method on file unless canceled beforehand.
+                    Your initial access has been activated. Your lifetime access purchase has been activated. There are no annual renewal charges for this membership.
                   </p>
 
                   <p style="margin:0 0 10px;color:#9ca3af;font-size:13px;line-height:1.7;">

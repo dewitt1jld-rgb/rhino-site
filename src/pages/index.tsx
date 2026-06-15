@@ -120,7 +120,7 @@ export default function Home() {
       <section className="section previewSection">
         <h2>Preview what’s inside</h2>
         <p className="sectionText">
-          Below are examples of the type of training content customers can expect inside the locked training portal.
+          Below are examples of the type of training content customers can expect inside the training portal. New content is added each month!
         </p>
 
         <div className="previewCards">
