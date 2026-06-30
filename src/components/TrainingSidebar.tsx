@@ -403,153 +403,172 @@ export default function TrainingSidebar() {
         </div>
       </aside>
 
-      <style jsx>{`
-        .sidebar {
-          width: 320px;
-          min-width: 320px;
-          height: calc(100vh - 80px);
-          position: sticky;
-          top: 80px;
-          overflow-y: auto;
-          background: linear-gradient(
-            180deg,
-            rgba(10, 12, 18, 0.96) 0%,
-            rgba(6, 8, 12, 0.98) 100%
-          );
-          border-right: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 24px 18px 32px;
-          color: #ffffff;
-        }
+    <style jsx>{`
+  .sidebar {
+    width: 320px;
+    min-width: 320px;
+    height: calc(100vh - 80px);
+    position: sticky;
+    top: 80px;
+    overflow-y: auto;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 12, 18, 0.96) 0%,
+      rgba(6, 8, 12, 0.98) 100%
+    );
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 24px 18px 32px;
+    color: #ffffff;
+  }
 
-        .sidebarHeader {
-          padding: 0 8px 18px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-          margin-bottom: 18px;
-        }
+  .sidebarHeader {
+    padding: 0 8px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 18px;
+  }
 
-        .sidebarTitle {
-          color: #ffffff;
-          font-size: 1.8rem;
-          font-weight: 900;
-          margin: 0;
-          line-height: 1.1;
-        }
+  .sidebarTitle {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0;
+    line-height: 1.1;
+  }
 
-        .sidebarTree {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
+  .sidebarTree {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
 
-        .nodeWrap {
-          display: flex;
-          flex-direction: column;
-        }
+  .nodeWrap {
+    display: flex;
+    flex-direction: column;
+  }
 
-        .nodeRow {
-          display: flex;
-          align-items: center;
-          min-height: 42px;
-          border-radius: 12px;
-          transition: background 0.2s ease;
-          cursor: pointer;
-        }
+  .nodeRow {
+    display: flex;
+    align-items: center;
+    min-height: 28px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+    cursor: pointer;
+  }
 
-        .nodeRow:hover {
-          background: rgba(255, 255, 255, 0.05);
-        }
+  .nodeRow:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
 
-        .activeRow {
-          background: rgba(255, 255, 255, 0.07);
-        }
+  .activeRow {
+    background: rgba(245, 158, 11, 0.08);
+  }
 
-        .toggleButton {
-          width: 30px;
-          height: 30px;
-          border: none;
-          background: transparent;
-          color: #ffffff;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          border-radius: 8px;
-          margin-right: 2px;
-          flex-shrink: 0;
-        }
+  .toggleButton {
+    width: 16px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: #f59e0b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 0;
+    flex-shrink: 0;
+    padding: 0;
+  }
 
-        .toggleButton:hover {
-          background: rgba(255, 255, 255, 0.08);
-        }
+  .toggleButton:hover {
+    background: rgba(245, 158, 11, 0.12);
+  }
 
-        .toggleSpacer {
-          display: inline-block;
-          width: 30px;
-          height: 30px;
-          margin-right: 2px;
-          flex-shrink: 0;
-        }
+  .toggleSpacer {
+    display: inline-block;
+    width: 16px;
+    height: 24px;
+    margin-right: 0;
+    flex-shrink: 0;
+  }
 
-        .chevron {
-          font-size: 0.95rem;
-          line-height: 1;
-        }
+  .chevron {
+    font-size: 0.72rem;
+    line-height: 1;
+  }
 
-        .nodeLink {
-          color: #ffffff;
-          text-decoration: none;
-          font-weight: 700;
-          line-height: 1.35;
-          padding: 8px 10px;
-          border-radius: 10px;
-          flex: 1;
-          cursor: pointer;
-        }
+  .nodeLink {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.25;
+    padding: 3px 4px;
+    border-radius: 6px;
+    flex: 1;
+    cursor: pointer;
+  }
 
-        .nodeButton {
-          width: 100%;
-          border: none;
-          background: transparent;
-          text-align: left;
-        }
+  .nodeButton {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+  }
 
-        .nodeLink:hover {
-          background: rgba(255, 255, 255, 0.08);
-        }
+  .nodeLink:hover {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.08);
+  }
 
-        .activeLink {
-          background: rgba(255, 255, 255, 0.14);
-          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-        }
+  .activeLink {
+    color: #f59e0b;
+    font-weight: 800;
+  }
 
-        .childrenWrap {
-          margin-left: 16px;
-          padding-left: 8px;
-          border-left: 1px solid rgba(255, 255, 255, 0.08);
-        }
+  .childrenWrap {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+  }
 
-        .level-1 .nodeLink {
-          font-size: 1rem;
-          font-weight: 800;
-        }
+  .level-1 .nodeLink {
+    color: #f59e0b;
+    font-size: 1rem;
+    font-weight: 900;
+  }
 
-        .level-2 .nodeLink {
-          font-size: 0.95rem;
-          font-weight: 600;
-        }
+  .level-1 .toggleButton {
+    color: #f59e0b;
+  }
 
-        .level-3 .nodeLink {
-          font-size: 0.91rem;
-          font-weight: 600;
-        }
+  .level-2 .nodeLink {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
 
-        @media (max-width: 1100px) {
-          .sidebar {
-            width: 280px;
-            min-width: 280px;
-          }
-        }
-      `}</style>
-    </>
+  .level-2 .nodeLink:hover,
+  .level-2 .activeLink {
+    color: #f59e0b;
+  }
+
+  .level-3 .nodeLink {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .level-3 .nodeLink:hover,
+  .level-3 .activeLink {
+    color: #f59e0b;
+  }
+
+  @media (max-width: 1100px) {
+    .sidebar {
+      width: 280px;
+      min-width: 280px;
+    }
+  }
+`}</style>
+         </>
   );
 }
