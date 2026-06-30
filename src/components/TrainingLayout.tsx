@@ -1,44 +1,43 @@
 import { useState } from "react";
-import Link from "next/link";
 import TrainingSidebar from "@/components/TrainingSidebar";
 import TrainingPageStyles from "@/components/TrainingPageStyles";
 
-
-
 type Props = {
   children: React.ReactNode;
+  showSidebar?: boolean;
 };
 
-export default function TrainingLayout({ children }: Props) {
+export default function TrainingLayout({ children, showSidebar = true }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    
-    <main className="layout">
-      <div className="desktopSidebar">
-        <TrainingSidebar />
-      </div>
+    <main className={showSidebar ? "layout" : "layout noSidebar"}>
+      {showSidebar && (
+        <div className="desktopSidebar">
+          <TrainingSidebar />
+        </div>
+      )}
+
       <TrainingPageStyles />
-      
 
       <section className="pageShell">
         <div className="content">
-          <button
-            type="button"
-            className="mobileDrawerTab"
-            onClick={() => setMobileMenuOpen(true)}
-            aria-label="Open training menu"
-          >
-            ☰
-          </button>
+          {showSidebar && (
+            <button
+              type="button"
+              className="mobileDrawerTab"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open training menu"
+            >
+              ☰
+            </button>
+          )}
 
           {children}
         </div>
-
-
       </section>
 
-      {mobileMenuOpen && (
+      {showSidebar && mobileMenuOpen && (
         <div className="mobileOverlay" onClick={() => setMobileMenuOpen(false)}>
           <div className="mobileDrawer" onClick={(e) => e.stopPropagation()}>
             <button
@@ -65,6 +64,10 @@ export default function TrainingLayout({ children }: Props) {
           color: #ffffff;
         }
 
+        .layout.noSidebar {
+          grid-template-columns: 1fr;
+        }
+
         .desktopSidebar {
           width: 320px;
         }
@@ -81,31 +84,6 @@ export default function TrainingLayout({ children }: Props) {
           max-width: 1180px;
           width: 100%;
           margin: 0 auto;
-        }
-
-        .trainingFooter {
-          border-top: 1px solid rgba(255, 255, 255, 0.12);
-          padding: 22px;
-          text-align: center;
-          font-size: 0.9rem;
-          color: rgba(255, 255, 255, 0.7);
-        }
-
-        .footerLinks {
-          display: flex;
-          gap: 16px;
-          justify-content: center;
-          margin-top: 10px;
-        }
-
-        .footerLinks a {
-          color: rgba(255, 255, 255, 0.82);
-          text-decoration: none;
-        }
-
-        .footerLinks a:hover {
-          color: #f59e0b;
-          text-decoration: underline;
         }
 
         .mobileDrawerTab {
