@@ -403,7 +403,7 @@ export default function TrainingSidebar() {
         </div>
       </aside>
 
-    <style jsx>{`
+    <style jsx global>{`
   .sidebar {
     width: 320px;
     min-width: 320px;
