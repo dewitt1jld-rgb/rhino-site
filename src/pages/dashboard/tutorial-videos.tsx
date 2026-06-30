@@ -78,8 +78,7 @@ export default function TutorialVideosPage() {
 
   return (
     <RequireActiveAccess>
-      <TrainingLayout>
-        <div className="pageWrap">
+            <div className="pageWrap">
           <div className="breadcrumb">
             Training Pages / Tutorial Video Library
           </div>
@@ -439,7 +438,6 @@ export default function TutorialVideosPage() {
             }
           }
         `}</style>
-      </TrainingLayout>
-    </RequireActiveAccess>
+         </RequireActiveAccess>
   );
 }
