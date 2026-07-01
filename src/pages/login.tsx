@@ -165,23 +165,22 @@ export default function LoginPage() {
           font-size: 1rem;
         }
 
-   .migrationButton {
+.migrationBanner a.migrationButton {
   display: inline-block;
   background: #f59e0b;
   color: #111827 !important;
   padding: 13px 22px;
   border-radius: 12px;
   font-weight: 900;
-  text-decoration: none;
+  text-decoration: none !important;
   transition: 0.2s ease;
 }
 
-.migrationButton:hover {
+.migrationBanner a.migrationButton:hover {
   background: #fbbf24;
   color: #111827 !important;
   transform: translateY(-2px);
 }
-
         .loginCard {
           width: 100%;
           max-width: 420px;
