@@ -239,10 +239,10 @@ export default function LoginPage() {
           text-align: center;
         }
 
-        a {
-          color: white;
-          font-weight: 700;
-        }
+       .footer a {
+  color: white;
+  font-weight: 700;
+}
 
         @media (max-width: 700px) {
           .pageShell {
