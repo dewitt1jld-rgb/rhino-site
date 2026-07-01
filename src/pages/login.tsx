@@ -76,8 +76,16 @@ export default function LoginPage() {
               Submit a transfer request and we'll move your access over.
             </p>
 
-     <Link href="/transfer-access" className="migrationButton">
-  <span>Transfer My Existing Access</span>
+<Link href="/transfer-access" className="migrationButton">
+  <span
+    style={{
+      color: "#f59e0b",
+      fontWeight: 900,
+      textDecoration: "none",
+    }}
+  >
+    Transfer My Existing Access
+  </span>
 </Link>
           </div>
 
