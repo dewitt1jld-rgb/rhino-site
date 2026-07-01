@@ -259,7 +259,7 @@ export default async function handler(
             </p>
 
             <p>
-              This is a 4-day live training experience covering workflows,
+              This is a 3-day live training experience covering workflows,
               troubleshooting, guided walkthroughs, and real-world operation.
             </p>
 

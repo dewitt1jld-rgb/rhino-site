@@ -137,7 +137,7 @@ useEffect(() => {
 
         <div style={styles.grid}>
           <div style={styles.card}>
-            <h3 style={styles.cardTitle}>4-Day Live Training</h3>
+            <h3 style={styles.cardTitle}>3-Day Live Training</h3>
             <p style={styles.cardText}>
               A complete training experience taught live over four
               days. Training will include PartnerPak, Glazier Studio and RhinoFab 
