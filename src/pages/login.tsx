@@ -165,21 +165,22 @@ export default function LoginPage() {
           font-size: 1rem;
         }
 
-        .migrationButton {
-          display: inline-block;
-          background: #f59e0b;
-          color: #111827;
-          padding: 13px 22px;
-          border-radius: 12px;
-          font-weight: 900;
-          text-decoration: none;
-          transition: 0.2s ease;
-        }
+   .migrationButton {
+  display: inline-block;
+  background: #f59e0b;
+  color: #111827 !important;
+  padding: 13px 22px;
+  border-radius: 12px;
+  font-weight: 900;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
 
-        .migrationButton:hover {
-          background: #fbbf24;
-          transform: translateY(-2px);
-        }
+.migrationButton:hover {
+  background: #fbbf24;
+  color: #111827 !important;
+  transform: translateY(-2px);
+}
 
         .loginCard {
           width: 100%;
