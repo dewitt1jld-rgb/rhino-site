@@ -66,16 +66,41 @@ export default function IntroSoftwareLessonPage() {
         <h1>{lesson.title}</h1>
         <p className="lessonDescription">{lesson.description}</p>
 
+        <div className="miniProgress">
+          <div className="miniProgressTop">
+            <span>Lesson Steps</span>
+            <span>
+              {hasSteps ? stepIndex + 1 : 0}/{steps.length}
+            </span>
+          </div>
+          <div className="progressTrack">
+            <div
+              className="progressFill"
+              style={{
+                width: hasSteps
+                  ? `${((stepIndex + 1) / steps.length) * 100}%`
+                  : "0%",
+              }}
+            />
+          </div>
+        </div>
+
         <div className="stepList">
           {hasSteps ? (
             steps.map((step, index) => (
               <button
                 key={step.title}
                 type="button"
-                className={index === stepIndex ? "stepItem active" : "stepItem"}
+                className={
+                  index === stepIndex
+                    ? "stepItem active"
+                    : index < stepIndex
+                    ? "stepItem complete"
+                    : "stepItem"
+                }
                 onClick={() => setStepIndex(index)}
               >
-                <span>{index + 1}</span>
+                <span>{index < stepIndex ? "✓" : index + 1}</span>
                 {step.title}
               </button>
             ))
@@ -97,13 +122,51 @@ export default function IntroSoftwareLessonPage() {
 
             <h2>{currentStep.title}</h2>
 
+            {currentStep.goal && (
+              <div className="goalBox">
+                <strong>Goal:</strong> {currentStep.goal}
+              </div>
+            )}
+
             <p className="bodyText">{currentStep.body}</p>
 
-            {currentStep.videoUrl && (
+            {currentStep.videoUrl ? (
               <div className="videoBox">
                 <video controls src={currentStep.videoUrl} />
               </div>
+            ) : (
+              <div className="placeholderBox">
+                <span>Video Placeholder</span>
+                <p>A training video can be added here later.</p>
+              </div>
             )}
+
+            {currentStep.checklist && currentStep.checklist.length > 0 && (
+              <div className="sectionBox">
+                <h3>Before You Continue</h3>
+                <ul>
+                  {currentStep.checklist.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="infoGrid">
+              {currentStep.tip && (
+                <div className="tipBox">
+                  <h3>Helpful Tip</h3>
+                  <p>{currentStep.tip}</p>
+                </div>
+              )}
+
+              {currentStep.warning && (
+                <div className="warningBox">
+                  <h3>Important</h3>
+                  <p>{currentStep.warning}</p>
+                </div>
+              )}
+            </div>
 
             {currentStep.documentUrl && (
               <a
@@ -201,6 +264,38 @@ export default function IntroSoftwareLessonPage() {
           margin-bottom: 28px;
         }
 
+        .miniProgress {
+          margin-bottom: 24px;
+          padding: 14px;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.045);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .miniProgressTop {
+          display: flex;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 10px;
+          color: rgba(255, 255, 255, 0.82);
+          font-size: 0.9rem;
+          font-weight: 900;
+        }
+
+        .progressTrack {
+          height: 8px;
+          overflow: hidden;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .progressFill {
+          height: 100%;
+          border-radius: 999px;
+          background: #f59e0b;
+          transition: width 0.25s ease;
+        }
+
         .stepList {
           display: flex;
           flex-direction: column;
@@ -240,6 +335,11 @@ export default function IntroSoftwareLessonPage() {
           color: white;
         }
 
+        .stepItem.complete span {
+          background: rgba(34, 197, 94, 0.16);
+          color: #22c55e;
+        }
+
         .lessonStage {
           display: flex;
           align-items: center;
@@ -249,7 +349,7 @@ export default function IntroSoftwareLessonPage() {
 
         .stageCard {
           width: 100%;
-          max-width: 920px;
+          max-width: 960px;
           min-height: 540px;
           padding: 42px;
           border-radius: 24px;
@@ -276,11 +376,25 @@ export default function IntroSoftwareLessonPage() {
           margin: 0 0 18px;
         }
 
+        .goalBox {
+          margin: 0 0 22px;
+          padding: 16px 18px;
+          border-radius: 14px;
+          background: rgba(245, 158, 11, 0.12);
+          border: 1px solid rgba(245, 158, 11, 0.3);
+          color: rgba(255, 255, 255, 0.88);
+          line-height: 1.6;
+        }
+
+        .goalBox strong {
+          color: #fbbf24;
+        }
+
         .bodyText {
           font-size: 18px;
           line-height: 1.8;
           color: rgba(255, 255, 255, 0.78);
-          max-width: 780px;
+          max-width: 820px;
         }
 
         .videoBox {
@@ -294,6 +408,83 @@ export default function IntroSoftwareLessonPage() {
         video {
           width: 100%;
           display: block;
+        }
+
+        .placeholderBox {
+          margin-top: 26px;
+          padding: 34px;
+          border-radius: 18px;
+          border: 1px dashed rgba(245, 158, 11, 0.4);
+          background: rgba(245, 158, 11, 0.06);
+        }
+
+        .placeholderBox span {
+          display: block;
+          color: #fbbf24;
+          font-weight: 900;
+          margin-bottom: 6px;
+        }
+
+        .placeholderBox p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.68);
+        }
+
+        .sectionBox {
+          margin-top: 26px;
+          padding: 24px;
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.045);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sectionBox h3,
+        .tipBox h3,
+        .warningBox h3 {
+          margin: 0 0 12px;
+          color: white;
+          font-size: 20px;
+        }
+
+        .sectionBox ul {
+          margin: 0;
+          padding-left: 20px;
+        }
+
+        .sectionBox li {
+          margin-bottom: 10px;
+          color: rgba(255, 255, 255, 0.78);
+          line-height: 1.55;
+        }
+
+        .infoGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+          margin-top: 18px;
+        }
+
+        .tipBox,
+        .warningBox {
+          padding: 20px;
+          border-radius: 16px;
+          line-height: 1.6;
+        }
+
+        .tipBox {
+          background: rgba(34, 197, 94, 0.1);
+          border: 1px solid rgba(34, 197, 94, 0.24);
+        }
+
+        .warningBox {
+          background: rgba(245, 158, 11, 0.1);
+          border: 1px solid rgba(245, 158, 11, 0.26);
+        }
+
+        .tipBox p,
+        .warningBox p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.76);
         }
 
         .documentLink {
@@ -363,6 +554,10 @@ export default function IntroSoftwareLessonPage() {
 
           h2 {
             font-size: 32px;
+          }
+
+          .infoGrid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
