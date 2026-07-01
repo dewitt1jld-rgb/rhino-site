@@ -43,7 +43,6 @@ export default function LoginPage() {
       return;
     }
 
-    // 🔍 Check member access
     const { data: access, error: accessError } = await supabase
       .from("member_access")
       .select("status")
@@ -67,37 +66,52 @@ export default function LoginPage() {
   return (
     <>
       <div className="pageShell">
-        <div className="loginCard">
-          <h1 className="title">Member Login</h1>
+        <div className="contentWrap">
+          <div className="migrationBanner">
+            <h2>Already purchased training on our previous website?</h2>
 
-          <form onSubmit={handleLogin} className="form">
-            <input
-              type="email"
-              placeholder="Email"
-              className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <p>
+              If you purchased Rhino Wrangler training before the new platform
+              launched, you do <strong>not</strong> need to purchase again.
+              Submit a transfer request and we'll move your access over.
+            </p>
 
-            <input
-              type="password"
-              placeholder="Password"
-              className="input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <Link href="/transfer-access" className="migrationButton">
+              Transfer My Existing Access
+            </Link>
+          </div>
 
-            {errorMessage && <div className="error">{errorMessage}</div>}
+          <div className="loginCard">
+            <h1 className="title">Member Login</h1>
 
-            <button type="submit" className="button" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </button>
+            <form onSubmit={handleLogin} className="form">
+              <input
+                type="email"
+                placeholder="Email"
+                className="input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-            <div className="footer">
-              Don’t have an account?{" "}
-              <Link href="/signup">Create one</Link>
-            </div>
-          </form>
+              <input
+                type="password"
+                placeholder="Password"
+                className="input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              {errorMessage && <div className="error">{errorMessage}</div>}
+
+              <button type="submit" className="button" disabled={loading}>
+                {loading ? "Logging in..." : "Login"}
+              </button>
+
+              <div className="footer">
+                Don’t have an account? <Link href="/signup">Create one</Link>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -107,7 +121,64 @@ export default function LoginPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #05070c;
+          background:
+            radial-gradient(circle at top left, rgba(245, 158, 11, 0.08), transparent 32%),
+            #05070c;
+          padding: 60px 20px;
+        }
+
+        .contentWrap {
+          width: 100%;
+          max-width: 760px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 28px;
+        }
+
+        .migrationBanner {
+          width: 100%;
+          padding: 28px;
+          border-radius: 20px;
+          background: linear-gradient(
+            135deg,
+            rgba(245, 158, 11, 0.18),
+            rgba(15, 23, 42, 0.88)
+          );
+          border: 1px solid rgba(245, 158, 11, 0.42);
+          text-align: center;
+          box-shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+        }
+
+        .migrationBanner h2 {
+          margin: 0 0 12px;
+          color: #f59e0b;
+          font-size: 1.65rem;
+          font-weight: 900;
+        }
+
+        .migrationBanner p {
+          margin: 0 auto 20px;
+          max-width: 620px;
+          color: rgba(255, 255, 255, 0.82);
+          line-height: 1.65;
+          font-size: 1rem;
+        }
+
+        .migrationButton {
+          display: inline-block;
+          background: #f59e0b;
+          color: #111827;
+          padding: 13px 22px;
+          border-radius: 12px;
+          font-weight: 900;
+          text-decoration: none;
+          transition: 0.2s ease;
+        }
+
+        .migrationButton:hover {
+          background: #fbbf24;
+          transform: translateY(-2px);
         }
 
         .loginCard {
@@ -151,6 +222,11 @@ export default function LoginPage() {
           cursor: pointer;
         }
 
+        .button:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
         .error {
           color: #ff6b6b;
           font-size: 14px;
@@ -165,6 +241,24 @@ export default function LoginPage() {
         a {
           color: white;
           font-weight: 700;
+        }
+
+        @media (max-width: 700px) {
+          .pageShell {
+            padding: 32px 16px;
+          }
+
+          .migrationBanner {
+            padding: 22px;
+          }
+
+          .migrationBanner h2 {
+            font-size: 1.35rem;
+          }
+
+          .loginCard {
+            padding: 26px;
+          }
         }
       `}</style>
     </>
