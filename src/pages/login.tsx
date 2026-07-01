@@ -76,9 +76,9 @@ export default function LoginPage() {
               Submit a transfer request and we'll move your access over.
             </p>
 
-            <Link href="/transfer-access" className="migrationButton">
-              Transfer My Existing Access
-            </Link>
+     <Link href="/transfer-access" className="migrationButton">
+  <span>Transfer My Existing Access</span>
+</Link>
           </div>
 
           <div className="loginCard">
@@ -165,21 +165,30 @@ export default function LoginPage() {
           font-size: 1rem;
         }
 
-.migrationBanner a.migrationButton {
-  display: inline-block;
+.migrationButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: #f59e0b;
-  color: #111827 !important;
   padding: 13px 22px;
   border-radius: 12px;
-  font-weight: 900;
-  text-decoration: none !important;
+  text-decoration: none;
   transition: 0.2s ease;
 }
 
-.migrationBanner a.migrationButton:hover {
+.migrationButton span {
+  color: #111827;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.migrationButton:hover {
   background: #fbbf24;
-  color: #111827 !important;
   transform: translateY(-2px);
+}
+
+.migrationButton:hover span {
+  color: #111827;
 }
         .loginCard {
           width: 100%;
