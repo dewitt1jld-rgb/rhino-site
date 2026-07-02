@@ -1,18 +1,39 @@
 import Link from "next/link";
-import { introSoftwareCourse } from "@/data/introSoftwareCourse";
+
+const lessons = [
+  {
+    number: "01",
+    title: "Download, Install & Activate Software",
+    time: "20 min",
+    description:
+      "Download or update Glazier Studio and PartnerPak, enter your customer number, and confirm the software is ready.",
+    href: "/dashboard/introductory-software-training/download-install",
+  },
+  {
+    number: "02",
+    title: "Start Your First Frame",
+    time: "Coming Soon",
+    description:
+      "Open the program, begin a new frame, and learn the basic frame-building workflow.",
+    href: "#",
+  },
+];
 
 export default function IntroductorySoftwareTrainingPage() {
   return (
     <main className="page">
       <section className="hero">
-        <p className="eyebrow">{introSoftwareCourse.subtitle}</p>
-        <h1>{introSoftwareCourse.title}</h1>
-        <p className="lead">{introSoftwareCourse.description}</p>
+        <p className="eyebrow">Beginner Course</p>
+        <h1>Glazier Studio / PartnerPak Foundations</h1>
+        <p className="lead">
+          A guided training path for new users. Work through each lesson in
+          order without jumping around the full training library.
+        </p>
 
         <div className="courseStats">
-          <span>{introSoftwareCourse.lessons.length} Lessons</span>
           <span>Guided Course</span>
           <span>Beginner Friendly</span>
+          <span>Glazier Studio / PartnerPak</span>
         </div>
       </section>
 
@@ -29,12 +50,8 @@ export default function IntroductorySoftwareTrainingPage() {
         </div>
 
         <div className="lessonList">
-          {introSoftwareCourse.lessons.map((lesson) => (
-            <Link
-              key={lesson.slug}
-              href={`/dashboard/introductory-software-training/${lesson.slug}`}
-              className="lessonCard"
-            >
+          {lessons.map((lesson) => (
+            <Link key={lesson.number} href={lesson.href} className="lessonCard">
               <div className="lessonNumber">{lesson.number}</div>
 
               <div className="lessonBody">
@@ -45,7 +62,9 @@ export default function IntroductorySoftwareTrainingPage() {
 
                 <p>{lesson.description}</p>
 
-                <div className="enterLesson">Enter Lesson →</div>
+                <div className="enterLesson">
+                  {lesson.href === "#" ? "Coming Soon" : "Enter Lesson →"}
+                </div>
               </div>
             </Link>
           ))}
@@ -217,7 +236,8 @@ export default function IntroductorySoftwareTrainingPage() {
             padding: 20px;
           }
 
-          .panelHeader {
+          .panelHeader,
+          .lessonTop {
             flex-direction: column;
             align-items: flex-start;
           }
