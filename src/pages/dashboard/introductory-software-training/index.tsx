@@ -4,7 +4,7 @@ const lessons = [
   {
     number: "01",
     title: "Download, Install & Activate Software",
-    time: "20 min",
+    time: "20-60 min",
     status: "Available",
     description:
       "Download or update Glazier Studio and PartnerPak, enter your customer number, and confirm the software is ready.",
@@ -13,11 +13,11 @@ const lessons = [
   {
     number: "02",
     title: "Start Your First Frame",
-    time: "Coming Soon",
-    status: "Coming Soon",
+    time: "15 min",
+status: "Available",
     description:
-      "Open the program, begin a new frame, and learn the basic frame-building workflow.",
-    href: "#",
+      "Open the program, Understand the layout, and learn the basic frame-building workflow.",
+    href: "/dashboard/introductory-software-training/lesson-2-launch",
   },
 ];
 
