@@ -19,7 +19,7 @@ type TrainingVideo = {
 export default function IntroSoftwareLessonPage() {
   const router = useRouter();
   const lessonSlug = router.query.lesson as string | undefined;
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const lesson = useMemo(
     () => introSoftwareCourse.lessons.find((item) => item.slug === lessonSlug),
