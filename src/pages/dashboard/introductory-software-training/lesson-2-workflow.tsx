@@ -31,14 +31,14 @@ export default function LessonTwoWorkflowPage() {
             2. Program Walkthrough
           </Link>
 
-          <div className="step active">3. Order of Opperations (preview)</div>
+          <div className="step active">3. Order of Opperations </div>
         </div>
       </aside>
 
       <section className="stage">
         <article className="card">
           <p className="eyebrow">Step 3 of 3</p>
-          <h2>Big Picture Workflow</h2>
+          <h2>Order of Opperations</h2>
 
           <div className="goalBox">
             <strong>Goal:</strong> Understand the general order of operations, where to start and what the end goal is. 

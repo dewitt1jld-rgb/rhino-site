@@ -30,7 +30,7 @@ export default function LessonTwoOverviewPage() {
             href="/dashboard/introductory-software-training/lesson-2-workflow"
             className="step"
           >
-            3. Big Picture Workflow
+            3. Order of Opperations
           </Link>
         </div>
       </aside>
@@ -56,10 +56,28 @@ export default function LessonTwoOverviewPage() {
              This video covers a quick overview of the program, where screens are located and how the program functions on a basic level. 
             </p>
 
-            <div className="placeholderBox">
-              <span>Video Placeholder</span>
-              
-            </div>
+          <div className="videoCard">
+  <video
+    controls
+    preload="metadata"
+    poster="https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/glazierstudio-training/all-about-frames/thumbnails/general-overview.png"
+  >
+    <source
+      src="https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/glazierstudio-training/all-about-frames/General%20Overview.mp4"
+      type="video/mp4"
+    />
+    Your browser does not support the video tag.
+  </video>
+
+  <div className="videoInfo">
+    <h4>General Program Overview</h4>
+    <p>
+      Learn how Glazier Studio and PartnerPak fit together, where the major
+      screens are located, and how information flows from estimating through
+      fabrication.
+    </p>
+  </div>
+</div>
           </div>
 
           <div className="sectionBox">
@@ -263,6 +281,36 @@ function SharedStyles() {
         background: rgba(255, 255, 255, 0.045);
         border: 1px solid rgba(255, 255, 255, 0.08);
       }
+
+      .videoCard {
+  margin-top: 20px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.videoCard video {
+  width: 100%;
+  display: block;
+  background: #000;
+}
+
+.videoInfo {
+  padding: 18px;
+}
+
+.videoInfo h4 {
+  margin: 0 0 8px;
+  color: #fbbf24;
+  font-size: 20px;
+}
+
+.videoInfo p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+}
 
       .goalBox {
         margin-top: 0;

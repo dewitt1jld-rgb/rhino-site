@@ -28,7 +28,7 @@ export default function LessonTwoLaunchPage() {
             href="/dashboard/introductory-software-training/lesson-2-workflow"
             className="step"
           >
-            3. Big Picture Workflow
+            3. Order of Opperations
           </Link>
         </div>
       </aside>
@@ -47,7 +47,7 @@ export default function LessonTwoLaunchPage() {
             Before learning how to build projects and frames, you need to know
             how to open the software quickly. This section shows where Glazier
             Studio is installed, how to launch the program, and how to create a
-            desktop shortcut for daily use.
+            desktop shortcut.
           </p>
 
           <div className="sectionBox">
@@ -59,13 +59,12 @@ export default function LessonTwoLaunchPage() {
             </p>
 
             <div className="codeBox">
-              C:\Program Files (x86)\DeMichele Group\Glazier Studio
+              <li>C:\Program Files (x86)\DeMichele Group\Glazier Studio</li>
+              <li>C:\Program Files (x86)\DeMichele Group\PartnerPak studio</li>
             </div>
 
             <p>
-              Inside this folder, look for the Glazier Studio application icon.
-              If PartnerPak is installed on the computer, you may also see the
-              PartnerPak application.
+              Inside this folder, look for the Glazier Studio or PartnerPak application icon.
             </p>
           </div>
 
@@ -75,6 +74,7 @@ export default function LessonTwoLaunchPage() {
             <ul>
               <li>Find the Glazier Studio application icon.</li>
               <li>Right-click the icon.</li>
+              <li>Select Show more options</li>
               <li>Select <strong>Send to</strong>.</li>
               <li>Select <strong>Desktop create shortcut</strong>.</li>
               <li>Repeat the same process for PartnerPak if your company uses it.</li>
@@ -82,7 +82,7 @@ export default function LessonTwoLaunchPage() {
 
             <p>
               Creating a desktop shortcut makes it easier to launch the software
-              throughout the day without searching through program folders.
+              throughout the day without searching through program folders. Alternitavly you may click the search bar at the bottom of the screen and search for either application. 
             </p>
           </div>
 
@@ -90,14 +90,12 @@ export default function LessonTwoLaunchPage() {
             <h3>Program Walkthrough Placeholder</h3>
 
             <p>
-              A walkthrough video will be added here. This video should introduce
-              the main areas of Glazier Studio and PartnerPak without getting
-              into detailed frame-building yet.
+              This video will cover a general overview of how the program works. The next lessons will do a deep dive on each topic covered in this video. 
             </p>
 
             <div className="placeholderBox">
-              <span>Video Placeholder</span>
-              <p>Program walkthrough video will go here.</p>
+              <span>How to create a Desktop Icon</span>
+              <p>This video will cover how to launch the programs and make a desktop icon.</p>
             </div>
           </div>
 
@@ -131,7 +129,7 @@ export default function LessonTwoLaunchPage() {
                 <h4>Use Catalog Parts</h4>
                 <p>
                   Catalog parts are the individual components that make up the
-                  frame, such as heads, jambs, sills, mullions, and stops.
+                  frame, such as heads, jambs, sills, horizontals, and stops.
                 </p>
               </div>
 
@@ -154,13 +152,11 @@ export default function LessonTwoLaunchPage() {
             </p>
 
             <div className="workflowBox">
+               <span>Create Metal Groups</span>
+              <span>→</span>
               <span>Build Frames</span>
               <span>→</span>
-              <span>Apply Metal Groups</span>
-              <span>→</span>
-              <span>Use Catalog Parts</span>
-              <span>→</span>
-              <span>Run Reports</span>
+              <span>Run estimation Reports</span>
               <span>→</span>
               <span>Send to Fabrication</span>
             </div>
@@ -174,20 +170,12 @@ export default function LessonTwoLaunchPage() {
           </div>
 
           <div className="infoGrid">
-            <div className="tipBox">
-              <h3>Helpful Tip</h3>
-              <p>
-                Most users open Glazier Studio many times throughout the day.
-                Creating a desktop shortcut saves time and keeps the program
-                easy to access.
-              </p>
-            </div>
+            
 
             <div className="warningBox">
               <h3>Important</h3>
               <p>
-                Do not move or delete files from the program folder unless you
-                are told to do so by support or your company administrator.
+                If you are connected to the network you are currently working with live company wide projects. Do not delete or modify any company created metal groups or projects. These tutorials will never ask you to over-ride something created by another user in your company. 
               </p>
             </div>
           </div>
