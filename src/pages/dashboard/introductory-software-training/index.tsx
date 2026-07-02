@@ -80,7 +80,7 @@ export default function IntroductorySoftwareTrainingPage() {
         ))}
       </section>
 
-      <style jsx>{`
+      <style jsx global>{`
         .page {
           min-height: 100vh;
           padding: 48px;
@@ -174,21 +174,21 @@ export default function IntroductorySoftwareTrainingPage() {
           flex-direction: column;
           gap: 22px;
         }
-
-        .lessonCard {
-          display: grid;
-          grid-template-columns: 80px 1fr;
-          gap: 24px;
-          align-items: center;
-          padding: 28px;
-          border-radius: 22px;
-          background: rgba(15, 23, 42, 0.82);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(14px);
-          text-decoration: none;
-          color: inherit;
-          transition: 0.25s ease;
-        }
+.lessonCard {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 28px;
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(14px);
+  text-decoration: none;
+  color: inherit;
+  transition: 0.25s ease;
+}
 
         .lessonCard:hover {
           transform: translateY(-4px);
