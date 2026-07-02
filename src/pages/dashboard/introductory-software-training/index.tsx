@@ -5,6 +5,7 @@ const lessons = [
     number: "01",
     title: "Download, Install & Activate Software",
     time: "20 min",
+    status: "Available",
     description:
       "Download or update Glazier Studio and PartnerPak, enter your customer number, and confirm the software is ready.",
     href: "/dashboard/introductory-software-training/download-install",
@@ -13,6 +14,7 @@ const lessons = [
     number: "02",
     title: "Start Your First Frame",
     time: "Coming Soon",
+    status: "Coming Soon",
     description:
       "Open the program, begin a new frame, and learn the basic frame-building workflow.",
     href: "#",
@@ -37,38 +39,45 @@ export default function IntroductorySoftwareTrainingPage() {
         </div>
       </section>
 
-      <section className="coursePanel">
-        <div className="panelHeader">
-          <div>
-            <h2>Course Lessons</h2>
-            <p>Click a lesson to enter the isolated training screen.</p>
-          </div>
-
-          <Link href="/dashboard" className="dashboardLink">
-            Back to Dashboard
-          </Link>
+      <section className="courseHeader">
+        <div>
+          <h2>Course Lessons</h2>
+          <p>Click a lesson to enter the isolated training screen.</p>
         </div>
 
-        <div className="lessonList">
-          {lessons.map((lesson) => (
-            <Link key={lesson.number} href={lesson.href} className="lessonCard">
-              <div className="lessonNumber">{lesson.number}</div>
+        <Link href="/dashboard" className="dashboardLink">
+          Back to Dashboard
+        </Link>
+      </section>
 
-              <div className="lessonBody">
-                <div className="lessonTop">
+      <section className="lessonList">
+        {lessons.map((lesson) => (
+          <Link
+            key={lesson.number}
+            href={lesson.href}
+            className={lesson.href === "#" ? "lessonCard disabled" : "lessonCard"}
+          >
+            <div className="lessonNumber">{lesson.number}</div>
+
+            <div className="lessonBody">
+              <div className="lessonTop">
+                <div>
                   <h3>{lesson.title}</h3>
-                  <span>{lesson.time}</span>
+                  <p>{lesson.description}</p>
                 </div>
 
-                <p>{lesson.description}</p>
-
-                <div className="enterLesson">
-                  {lesson.href === "#" ? "Coming Soon" : "Enter Lesson →"}
+                <div className="lessonMeta">
+                  <span className="status">{lesson.status}</span>
+                  <span className="time">{lesson.time}</span>
                 </div>
               </div>
-            </Link>
-          ))}
-        </div>
+
+              <div className="enterLesson">
+                {lesson.href === "#" ? "Coming Soon" : "Enter Lesson →"}
+              </div>
+            </div>
+          </Link>
+        ))}
       </section>
 
       <style jsx>{`
@@ -82,9 +91,11 @@ export default function IntroductorySoftwareTrainingPage() {
         }
 
         .hero,
-        .coursePanel {
+        .courseHeader,
+        .lessonList {
           max-width: 1000px;
-          margin: 0 auto;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .hero {
@@ -128,7 +139,12 @@ export default function IntroductorySoftwareTrainingPage() {
           font-weight: 800;
         }
 
-        .coursePanel {
+        .courseHeader {
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          align-items: center;
+          margin-bottom: 24px;
           padding: 28px;
           border-radius: 22px;
           background: rgba(15, 23, 42, 0.78);
@@ -136,20 +152,12 @@ export default function IntroductorySoftwareTrainingPage() {
           backdrop-filter: blur(14px);
         }
 
-        .panelHeader {
-          display: flex;
-          justify-content: space-between;
-          gap: 20px;
-          align-items: center;
-          margin-bottom: 24px;
-        }
-
-        .panelHeader h2 {
+        .courseHeader h2 {
           margin: 0 0 6px;
           font-size: 28px;
         }
 
-        .panelHeader p {
+        .courseHeader p {
           margin: 0;
           color: rgba(255, 255, 255, 0.65);
         }
@@ -158,52 +166,49 @@ export default function IntroductorySoftwareTrainingPage() {
           color: #f59e0b;
           font-weight: 900;
           text-decoration: none;
+          white-space: nowrap;
         }
 
-   .lessonList {
-  max-width: 1000px;
-  margin: 24px auto 0;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-   .lessonCard {
-  display: grid;
-  grid-template-columns: 80px 1fr auto;
-  gap: 24px;
-  align-items: center;
+        .lessonList {
+          display: flex;
+          flex-direction: column;
+          gap: 22px;
+        }
 
-  padding: 28px;
-
-  border-radius: 22px;
-
-  background: rgba(15, 23, 42, 0.82);
-
-  border: 1px solid rgba(255,255,255,.08);
-
-  backdrop-filter: blur(14px);
-
-  text-decoration: none;
-
-  color: inherit;
-
-  transition: .25s ease;
-}
-
-.lessonCard:hover {
-  transform: translateY(-4px);
-
-  border-color: rgba(245,158,11,.45);
-
-  box-shadow:
-    0 18px 40px rgba(0,0,0,.35),
-    0 0 30px rgba(245,158,11,.08);
-}
+        .lessonCard {
+          display: grid;
+          grid-template-columns: 80px 1fr;
+          gap: 24px;
+          align-items: center;
+          padding: 28px;
+          border-radius: 22px;
+          background: rgba(15, 23, 42, 0.82);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(14px);
+          text-decoration: none;
+          color: inherit;
+          transition: 0.25s ease;
+        }
 
         .lessonCard:hover {
-          border-color: rgba(245, 158, 11, 0.42);
-          transform: translateY(-2px);
+          transform: translateY(-4px);
+          border-color: rgba(245, 158, 11, 0.45);
+          box-shadow:
+            0 18px 40px rgba(0, 0, 0, 0.35),
+            0 0 30px rgba(245, 158, 11, 0.08);
           background: rgba(245, 158, 11, 0.07);
+        }
+
+        .lessonCard.disabled {
+          opacity: 0.78;
+          cursor: default;
+        }
+
+        .lessonCard.disabled:hover {
+          transform: none;
+          border-color: rgba(255, 255, 255, 0.08);
+          box-shadow: none;
+          background: rgba(15, 23, 42, 0.82);
         }
 
         .lessonNumber {
@@ -219,29 +224,58 @@ export default function IntroductorySoftwareTrainingPage() {
           font-weight: 950;
         }
 
-    .lessonTop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
+        .lessonBody {
+          display: flex;
+          flex-direction: column;
+        }
 
-.lessonTop span {
-  color: #fbbf24;
-  font-weight: 900;
-  white-space: nowrap;
-}
+        .lessonTop {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 24px;
+        }
 
-      .lessonBody {
-  display: flex;
-  flex-direction: column;
-}
+        .lessonTop h3 {
+          margin: 0;
+          font-size: 24px;
+          color: white;
+        }
 
-.lessonBody p {
-  margin: 14px 0 18px;
-  line-height: 1.7;
-  color: rgba(255,255,255,.72);
-}
+        .lessonTop p {
+          margin: 14px 0 18px;
+          line-height: 1.7;
+          color: rgba(255, 255, 255, 0.72);
+        }
+
+        .lessonMeta {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 8px;
+          white-space: nowrap;
+        }
+
+        .status {
+          padding: 7px 11px;
+          border-radius: 999px;
+          background: rgba(245, 158, 11, 0.12);
+          border: 1px solid rgba(245, 158, 11, 0.28);
+          color: #fbbf24;
+          font-weight: 900;
+          font-size: 0.85rem;
+        }
+
+        .time {
+          color: #fbbf24;
+          font-weight: 900;
+        }
+
+        .enterLesson {
+          color: #fbbf24;
+          font-weight: 900;
+        }
+
         @media (max-width: 700px) {
           .page {
             padding: 26px 16px;
@@ -251,11 +285,7 @@ export default function IntroductorySoftwareTrainingPage() {
             font-size: 34px;
           }
 
-          .coursePanel {
-            padding: 20px;
-          }
-
-          .panelHeader,
+          .courseHeader,
           .lessonTop {
             flex-direction: column;
             align-items: flex-start;
@@ -263,6 +293,10 @@ export default function IntroductorySoftwareTrainingPage() {
 
           .lessonCard {
             grid-template-columns: 1fr;
+          }
+
+          .lessonMeta {
+            align-items: flex-start;
           }
         }
       `}</style>
