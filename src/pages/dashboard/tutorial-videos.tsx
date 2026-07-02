@@ -195,7 +195,7 @@ export default function TutorialVideosPage() {
           )}
         </div>
 
-       <style jsx global>{`
+        <style jsx>{`
           .pageWrap {
             max-width: 1180px;
             width: 100%;

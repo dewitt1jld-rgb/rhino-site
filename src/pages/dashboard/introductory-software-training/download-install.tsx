@@ -129,7 +129,7 @@ export default function DownloadInstallPage() {
 
 function SharedStyles() {
   return (
-    <style jsx>{`
+    <style jsx global>{`
       .page {
         min-height: 100vh;
         display: grid;
