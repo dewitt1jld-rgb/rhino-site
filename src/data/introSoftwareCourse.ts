@@ -12,109 +12,60 @@ export const introSoftwareCourse = {
       time: "20 min",
       description:
         "Download or update to the latest version of Glazier Studio and PartnerPak, enter your customer number, and confirm the software opens correctly.",
-      steps: [
-        {
-          title: "Lesson Overview",
-          goal:
-            "Download or update to the latest version of Glazier Studio and PartnerPak.",
-          body:
-            "This lesson is focused only on getting the software installed, updated, activated, and ready to open. We are not drawing frames yet. That begins in Lesson 2.",
-          videoSubcategory: "Installs and Updates",
-          checklist: [
-            "Ensure that Glazier Studio and PartnerPak are fully up to date. If your company is running on a network and are a few versions behind you will need to be on the same version as them. Please download and install the latest versions and then call the Demichele group for assistance with this. You can contact them at  ",
-            "480-985-4926",
-          ],
-          tip:
-            "",
-          warning: "",
-          documentUrl: "",
-        },
-        {
-          title: "Download the Software",
-          goal:
-            "Get the correct Glazier Studio and PartnerPak installer onto the computer.",
-          body:
-            "Use the approved download link provided by your software provider, shop manager, or company. Make sure you are downloading the correct installer before continuing.",
-          checklist: [
-            "Locate the approved download link",
-            "Download the installer to the computer",
-            "Confirm the file finished downloading before running it",
-          ],
-          tip:
-            "If you are not sure which installer to use, stop here and verify with your shop manager or software provider.",
-          warning:
-            "Do not download installers from random websites or old shared folders unless you know they are approved.",
-          documentUrl: "",
-        },
-        {
-          title: "Install or Update the Program",
-          goal:
-            "Install the required software or update the existing installation to the latest version.",
-          body:
-            "Run the installer and follow the prompts. Install or update Glazier Studio first. If your company uses PartnerPak, install or update PartnerPak after Glazier Studio.",
-          checklist: [
-            "Run the installer",
-            "Complete the Glazier Studio installation or update",
-            "Install or update PartnerPak if your company uses it",
-            "Allow the installer to finish before opening the program",
-          ],
-          tip:
-            "If Windows asks for permission to make changes to the device, choose Yes if you are authorized to install software.",
-          warning:
-            "Do not cancel the installer halfway through unless you are told to do so.",
-          documentUrl: "",
-        },
-        {
-          title: "Enter the Customer Number",
-          goal: "Activate the software using your company customer number.",
-          body:
-            "When prompted, enter your company customer number exactly as provided. This connects the software to the correct company account and allows the program to activate properly.",
-          checklist: [
-            "Locate your company customer number",
-            "Enter the customer number exactly as provided",
-            "Confirm the software accepts the number",
-          ],
-          tip:
-            "If you do not know your customer number, ask your shop manager or contact your software provider.",
-          warning:
-            "Do not use another company’s customer number. The software should be activated under your own company account.",
-          documentUrl: "",
-        },
-        {
-          title: "Verify the Software Opens",
-          goal:
-            "Confirm Glazier Studio opens successfully after installation, update, and activation.",
-          body:
-            "Open Glazier Studio and confirm that the program launches without errors. If the program opens correctly, the installation portion is complete.",
-          checklist: [
-            "Open Glazier Studio",
-            "Confirm there are no startup errors",
-            "Confirm the software is ready for use",
-          ],
-          tip:
-            "If the program does not open, write down the exact error message before asking for help.",
-          warning:
-            "Do not move into frame training until the software opens correctly.",
-          documentUrl: "",
-        },
-        {
-          title: "Lesson Complete",
-          goal:
-            "Confirm the software is installed, updated, activated, and ready for Lesson 2.",
-          body:
-            "Great job. Glazier Studio and PartnerPak should now be installed or updated and activated. In Lesson 2, you will begin building your first frame.",
-          checklist: [
-            "Software installed or updated",
-            "Customer number entered",
-            "Program opens successfully",
-            "Ready to begin Lesson 2",
-          ],
-          tip:
-            "Leave the software installed and ready. The next lesson starts inside Glazier Studio.",
-          warning: "",
-          documentUrl: "",
-        },
-      ],
+     steps: [
+  {
+    title: "Download and Install Software",
+    goal:
+      "Download or update to the latest version of Glazier Studio and PartnerPak.",
+    body:
+      "Start by downloading and installing Glazier Studio. If your company uses PartnerPak, install or update PartnerPak as well. Watch the required videos below before moving forward.",
+    videoSubcategory: "Installs and Updates",
+    checklist: [
+    "Ensure that Glazier Studio and PartnerPak are fully up to date. If your company is running on a network and are a few versions behind you will need to be on the same version as them. Please download and install the latest versions and then call the Demichele group for assistance with this. You can contact them at 480-985-4926  ",
+    ],
+    tip:
+      "If Windows asks for permission to make changes to the device, choose Yes if you are authorized to install software.",
+    warning:
+      "Do not download installers from random websites or old shared folders unless you know they are approved.",
+    documentUrl: "",
+  },
+  {
+    title: "Get Customer Number",
+    goal:
+      "Locate the customer number needed to activate Glazier Studio and PartnerPak.",
+    body:
+      "After installation, the software will ask for your company customer number. This number connects the software to your company account. If you do not know your customer number, contact the Demichele Group by calling 480-985-4926.",
+    checklist: [
+      "Locate your company customer number",
+      "Enter the customer number exactly as provided",
+      "Confirm the software accepts the number",
+    ],
+    tip:
+      "Write down this customer number as you may need it later on.",
+    warning:
+      "",
+    documentUrl: "",
+  },
+  {
+    title: "Connect to Your Network",
+    goal:
+      "Connect to your company network so you can see all projects and data.",
+    body:
+      "This step is optional. Some shops may choose not to use a network but it is highly recomended as it makes sharing info much easier.",
+     
+
+    checklist: [
+      "Connect to the correct company network if required",
+      "Confirm shared folders or company resources are accessible",
+      "Skip this step if your company does not require a network connection",
+    ],
+    tip:
+      "If you are not sure whether your shop uses a network setup, ask anyone else that uses these programs and they will be able to tell you.",
+    warning:
+      "",
+    documentUrl: "",
+  },
+],
     },
     {
       slug: "lesson-2",
