@@ -85,10 +85,10 @@ export default function DownloadInstallPage() {
           <div className="sectionBox">
             <h3>Before You Continue</h3>
             <ul>
-              <li>Watch the Glazier Studio installation video.</li>
-              <li>Watch the PartnerPak installation video if your company uses PartnerPak.</li>
-              <li>Install or update the software on the computer.</li>
-              <li>Confirm the installation finishes successfully.</li>
+              <li>Please ensure Glazier Studio and PartnerPak are fully updated</li>
+              <li>If your company is on a network and their current programs are out of date you will also have to match your program to their version</li>
+              <li>To do this install the latest version of GS and PPAK and call the Demichele group to roll your device back to the correct version</li>
+              <li>480-985-4926</li>
             </ul>
           </div>
 
@@ -96,16 +96,14 @@ export default function DownloadInstallPage() {
             <div className="tipBox">
               <h3>Helpful Tip</h3>
               <p>
-                If Windows asks for permission to make changes to the device,
-                choose Yes if you are authorized to install software.
+                If Windows protects your PC, click "more info" and then click "run anyway".
               </p>
             </div>
 
             <div className="warningBox">
               <h3>Important</h3>
               <p>
-                Do not download installers from random websites or old shared
-                folders unless you know they are approved.
+                If you have any issues during install please call the Demichele group for support. 480-985-4926
               </p>
             </div>
           </div>

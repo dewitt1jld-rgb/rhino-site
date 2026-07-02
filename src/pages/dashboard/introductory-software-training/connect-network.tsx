@@ -32,8 +32,7 @@ export default function ConnectNetworkPage() {
           <h2>Connect to Your Network</h2>
 
           <div className="goalBox">
-            <strong>Goal:</strong> Confirm the computer is connected to the
-            correct company network if your setup requires it.
+            <strong>Goal:</strong> Connect to company network to see active projects and data
           </div>
 
           <p className="bodyText">
@@ -42,41 +41,83 @@ export default function ConnectNetworkPage() {
             files, databases, or fabrication resources.
           </p>
 
-          <div className="optionalBox">
-            <h3>This Step May Not Apply to Every Shop</h3>
-            <p>
-              If your company does not use a shared network setup, you can move
-              on to the next lesson. If you are unsure, ask your shop manager or
-              IT contact before changing network settings.
-            </p>
-          </div>
+        
+         <div className="sectionBox">
+  <h3>Step 1 - Open the Network Menu</h3>
 
-          <div className="sectionBox">
-            <h3>Before You Continue</h3>
-            <ul>
-              <li>Connect to the correct company network if required.</li>
-              <li>Confirm shared folders or company resources are accessible if your shop uses them.</li>
-              <li>Skip this step if your company does not require a network connection.</li>
-            </ul>
-          </div>
+  <p>
+    Inside <strong>Glazier Studio</strong> or <strong>PartnerPak</strong>,
+    click <strong>File</strong> in the upper left corner, then select
+    <strong> Network</strong>.
+  </p>
+
+  <div className="imageCard">
+    <img
+      src="https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/intro-to-glazier-studios/lesson-1/images/file-network.png"
+      alt="Open the Network Menu"
+    />
+  </div>
+
+  <h3 style={{ marginTop: "40px" }}>Step 2 - Login to the Network</h3>
+
+  <p>
+    A login window will appear. Select the same
+    <strong> Server Name</strong> another employee at your company uses.
+    Your <strong>User ID</strong> will normally be your first name. This is
+    the name that appears on projects you create.
+  </p>
+
+  <div className="imageCard">
+    <img
+      src="https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/intro-to-glazier-studios/lesson-1/images/network-login.png"
+      alt="Network Login"
+    />
+  </div>
+</div>
+
+<div className="sectionBox">
+  <h3>Before You Continue</h3>
+
+  <ul>
+    <li>Opened File → Network.</li>
+    <li>Selected the correct Server Name.</li>
+    <li>Selected your User ID.</li>
+    <li>Successfully connected to your company network.</li>
+  </ul>
+</div>
+
+<div className="infoGrid">
+  <div className="tipBox">
+    <h3>Helpful Tip</h3>
+
+    <p>
+      If you don't know which Server Name to use, open Glazier Studio or
+      PartnerPak on another employee's computer and use the exact same
+      Server Name shown there.
+    </p>
+  </div>
+
+  <div className="warningBox">
+    <h3>Important</h3>
+
+    <p>
+      If the Server Name list is empty, your computer is probably not
+      connected to your company network. Contact your shop manager or IT
+      administrator before continuing.
+    </p>
+  </div>
+</div>
 
           <div className="infoGrid">
             <div className="tipBox">
               <h3>Helpful Tip</h3>
               <p>
                 If you are not sure whether your shop uses a network setup, ask
-                your shop manager or IT contact.
+                yanother co-worker.
               </p>
             </div>
 
-            <div className="warningBox">
-              <h3>Important</h3>
-              <p>
-                Do not change network settings unless you are authorized to do
-                so.
-              </p>
-            </div>
-          </div>
+                 </div>
 
           <div className="completeBox">
             <h3>Lesson 1 Complete</h3>
