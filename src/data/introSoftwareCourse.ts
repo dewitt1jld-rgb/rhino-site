@@ -21,12 +21,11 @@ export const introSoftwareCourse = {
             "This lesson is focused only on getting the software installed, updated, activated, and ready to open. We are not drawing frames yet. That begins in Lesson 2.",
           videoSubcategory: "Installs and Updates",
           checklist: [
-            "Watch the Glazier Studio installation video",
-            "Watch the PartnerPak installation video if your company uses PartnerPak",
-            "Confirm you have access to the computer where the software will be installed or updated",
+            "Ensure that Glazier Studio and PartnerPak are fully up to date. If your company is running on a network and are a few versions behind you will need to be on the same version as them. Please download and install the latest versions and then call the Demichele group for assistance with this. You can contact them at  ",
+            "480-985-4926",
           ],
           tip:
-            "If you are setting up a shop computer, make sure you have permission to install or update software before beginning.",
+            "",
           warning: "",
           documentUrl: "",
         },
