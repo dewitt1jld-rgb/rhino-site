@@ -61,8 +61,9 @@ export default function ConnectNetworkPage() {
   <h3 style={{ marginTop: "40px" }}>Step 2 - Login to the Network</h3>
 
   <p>
-    A login window will appear. Select the same
-    <strong> Server Name</strong> another employee at your company uses.
+    A login window will appear. go to another coworkers computer and ask them to log into GS or PPAK. when you see the server login screen write down the
+    <strong> Server Name</strong> they use as that will be the same Server Name you will use on your computer. 
+    <p></p>
     Your <strong>User ID</strong> will normally be your first name. This is
     the name that appears on projects you create.
   </p>
@@ -82,7 +83,7 @@ export default function ConnectNetworkPage() {
     <li>Opened File → Network.</li>
     <li>Selected the correct Server Name.</li>
     <li>Selected your User ID.</li>
-    <li>Successfully connected to your company network.</li>
+    <li>Can view and access company jobs and data.</li>
   </ul>
 </div>
 
@@ -97,28 +98,10 @@ export default function ConnectNetworkPage() {
     </p>
   </div>
 
-  <div className="warningBox">
-    <h3>Important</h3>
 
-    <p>
-      If the Server Name list is empty, your computer is probably not
-      connected to your company network. Contact your shop manager or IT
-      administrator before continuing.
-    </p>
-  </div>
 </div>
 
-          <div className="infoGrid">
-            <div className="tipBox">
-              <h3>Helpful Tip</h3>
-              <p>
-                If you are not sure whether your shop uses a network setup, ask
-                yanother co-worker.
-              </p>
-            </div>
-
-                 </div>
-
+      
           <div className="completeBox">
             <h3>Lesson 1 Complete</h3>
             <p>
@@ -308,6 +291,36 @@ function SharedStyles() {
         background: rgba(245, 158, 11, 0.1);
         border: 1px solid rgba(245, 158, 11, 0.26);
       }
+
+.imageCard {
+  margin-top: 20px;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imageCard img {
+  display: block;
+  width: auto;
+  max-width: 700px;
+  height: auto;
+  border-radius: 10px;
+}
+.sectionBox h3 {
+  color: #fbbf24;
+  margin-bottom: 14px;
+}
+
+.sectionBox p {
+  color: rgba(255,255,255,.78);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
 
       .navButtons {
         display: flex;
