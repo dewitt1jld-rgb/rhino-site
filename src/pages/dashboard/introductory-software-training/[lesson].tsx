@@ -1,11 +1,25 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { createClient } from "@/lib/supabase";
 import { introSoftwareCourse } from "@/data/introSoftwareCourse";
+
+type TrainingVideo = {
+  id: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  subcategory: string | null;
+  training_type: string | null;
+  video_url: string;
+  thumbnail_url: string | null;
+  featured: boolean | null;
+};
 
 export default function IntroSoftwareLessonPage() {
   const router = useRouter();
   const lessonSlug = router.query.lesson as string | undefined;
+  const supabase = createClient();
 
   const lesson = useMemo(
     () => introSoftwareCourse.lessons.find((item) => item.slug === lessonSlug),
@@ -13,6 +27,40 @@ export default function IntroSoftwareLessonPage() {
   );
 
   const [stepIndex, setStepIndex] = useState(0);
+  const [trainingVideos, setTrainingVideos] = useState<TrainingVideo[]>([]);
+
+  const steps = lesson?.steps || [];
+  const currentStep = steps[stepIndex];
+  const hasSteps = steps.length > 0;
+  const isFirstStep = stepIndex === 0;
+  const isLastStep = stepIndex === steps.length - 1;
+
+  useEffect(() => {
+    async function loadVideos() {
+      if (!currentStep?.videoSubcategory) {
+        setTrainingVideos([]);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("training_videos")
+        .select(
+          "id, title, description, category, subcategory, training_type, video_url, thumbnail_url, featured"
+        )
+        .eq("subcategory", currentStep.videoSubcategory)
+        .order("title", { ascending: true });
+
+      if (error) {
+        console.error("Error loading course videos:", error);
+        setTrainingVideos([]);
+        return;
+      }
+
+      setTrainingVideos(data || []);
+    }
+
+    loadVideos();
+  }, [currentStep?.videoSubcategory, supabase]);
 
   if (!lesson) {
     return (
@@ -48,12 +96,6 @@ export default function IntroSoftwareLessonPage() {
       </main>
     );
   }
-
-  const steps = lesson.steps || [];
-  const currentStep = steps[stepIndex];
-  const hasSteps = steps.length > 0;
-  const isFirstStep = stepIndex === 0;
-  const isLastStep = stepIndex === steps.length - 1;
 
   return (
     <main className="page">
@@ -130,9 +172,33 @@ export default function IntroSoftwareLessonPage() {
 
             <p className="bodyText">{currentStep.body}</p>
 
-            {currentStep.videoUrl ? (
-              <div className="videoBox">
-                <video controls src={currentStep.videoUrl} />
+            {currentStep.videoSubcategory && trainingVideos.length > 0 ? (
+              <div className="requiredVideos">
+                <h3>Required Videos</h3>
+
+                <div className="videoGrid">
+                  {trainingVideos.map((video) => (
+                    <div className="videoCard" key={video.id}>
+                      <video
+                        controls
+                        preload="metadata"
+                        poster={video.thumbnail_url || undefined}
+                      >
+                        <source src={video.video_url} type="video/mp4" />
+                      </video>
+
+                      <div className="videoInfo">
+                        <h4>{video.title}</h4>
+                        {video.description && <p>{video.description}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : currentStep.videoSubcategory ? (
+              <div className="placeholderBox">
+                <span>Loading Videos</span>
+                <p>Installation videos are being loaded from the training library.</p>
               </div>
             ) : (
               <div className="placeholderBox">
@@ -349,7 +415,7 @@ export default function IntroSoftwareLessonPage() {
 
         .stageCard {
           width: 100%;
-          max-width: 960px;
+          max-width: 1040px;
           min-height: 540px;
           padding: 42px;
           border-radius: 24px;
@@ -397,17 +463,51 @@ export default function IntroSoftwareLessonPage() {
           max-width: 820px;
         }
 
-        .videoBox {
-          margin-top: 26px;
-          border-radius: 18px;
+        .requiredVideos {
+          margin-top: 30px;
+        }
+
+        .requiredVideos h3 {
+          margin: 0 0 16px;
+          color: #f59e0b;
+          font-size: 24px;
+          font-weight: 900;
+        }
+
+        .videoGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 20px;
+        }
+
+        .videoCard {
           overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.045);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .videoCard video {
+          width: 100%;
+          display: block;
           background: black;
         }
 
-        video {
-          width: 100%;
-          display: block;
+        .videoInfo {
+          padding: 16px;
+        }
+
+        .videoInfo h4 {
+          margin: 0 0 8px;
+          color: white;
+          font-size: 18px;
+        }
+
+        .videoInfo p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.68);
+          line-height: 1.5;
+          font-size: 0.95rem;
         }
 
         .placeholderBox {
@@ -556,6 +656,7 @@ export default function IntroSoftwareLessonPage() {
             font-size: 32px;
           }
 
+          .videoGrid,
           .infoGrid {
             grid-template-columns: 1fr;
           }
