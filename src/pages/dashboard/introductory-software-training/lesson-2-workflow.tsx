@@ -31,7 +31,7 @@ export default function LessonTwoWorkflowPage() {
             2. Program Walkthrough
           </Link>
 
-          <div className="step active">3. Big Picture Workflow</div>
+          <div className="step active">3. Order of Opperations (preview)</div>
         </div>
       </aside>
 
@@ -41,40 +41,39 @@ export default function LessonTwoWorkflowPage() {
           <h2>Big Picture Workflow</h2>
 
           <div className="goalBox">
-            <strong>Goal:</strong> Understand how Glazier Studio and PartnerPak
-            work together from project setup to estimating, reporting, and
-            fabrication.
+            <strong>Goal:</strong> Understand the general order of operations, where to start and what the end goal is. 
           </div>
 
           <p className="bodyText">
             Before learning the detailed tools, it helps to understand the full
-            workflow. Glazier Studio is where you build and organize the project.
-            PartnerPak helps move that information toward fabrication.
+            workflow. You will not follow these same steps each time but this is a good basic start to understanding how the software works.
           </p>
 
           <div className="sectionBox">
             <h3>The Typical Workflow</h3>
 
             <p>
-              Most jobs follow the same general path. You start with a customer
+              Most jobs follow the same general path. You start with a Bid
               request, create a project, build the frames, review the materials,
               run reports, and then send the job toward fabrication.
             </p>
 
             <div className="workflowStack">
-              <div className="workflowItem">Customer Request</div>
+              <div className="workflowItem">Bid Request</div>
               <div className="workflowArrow">↓</div>
               <div className="workflowItem">Create Project</div>
               <div className="workflowArrow">↓</div>
               <div className="workflowItem">Build Frames</div>
               <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Apply Metal Groups</div>
-              <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Use Catalog Parts</div>
-              <div className="workflowArrow">↓</div>
               <div className="workflowItem">Run Reports</div>
               <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Send to Fabrication</div>
+              <div className="workflowItem">Win Bid</div>
+              <div className="workflowArrow">↓</div>
+              <div className="workflowItem">Create correct metal groups</div>
+              <div className="workflowArrow">↓</div>
+              <div className="workflowItem">Touch up project</div>
+              <div className="workflowArrow">↓</div>
+              <div className="workflowItem">Send to Metal Fabrication/RhinoFab</div>
             </div>
           </div>
 
@@ -93,7 +92,7 @@ export default function LessonTwoWorkflowPage() {
               <div className="featureBox">
                 <h4>Frames</h4>
                 <p>
-                  Frames are the openings, storefronts, doors, and systems you
+                  Frames are the curtain walls, storefronts, doors, and systems you
                   create inside the project.
                 </p>
               </div>
@@ -124,11 +123,9 @@ export default function LessonTwoWorkflowPage() {
               </div>
 
               <div className="featureBox">
-                <h4>PartnerPak</h4>
+                <h4>metal fabrication</h4>
                 <p>
-                  PartnerPak helps prepare the project information for metal
-                  fabrication and can send work toward the saw or RhinoFab
-                  workflow.
+                  Is the final step before sending a project out to the RhinoFab saw to be cut and fabricated
                 </p>
               </div>
             </div>
@@ -161,14 +158,7 @@ export default function LessonTwoWorkflowPage() {
           </div>
 
           <div className="infoGrid">
-            <div className="tipBox">
-              <h3>Helpful Tip</h3>
-              <p>
-                Think of Glazier Studio as the project-building side and
-                PartnerPak as part of the fabrication-preparation side. They
-                work together, but they do not do the exact same job.
-              </p>
-            </div>
+            
 
             <div className="warningBox">
               <h3>Important</h3>

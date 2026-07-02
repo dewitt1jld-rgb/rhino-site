@@ -42,68 +42,49 @@ export default function LessonTwoOverviewPage() {
 
           <div className="goalBox">
             <strong>Goal:</strong> Understand what Glazier Studio and PartnerPak
-            are used for before learning the individual tools.
+            are used for before and how it all ties together. 
           </div>
 
           <p className="bodyText">
-            Glazier Studio is the main place where you create projects, build
-            frames, assign metal systems, add parts, and prepare reports.
-            PartnerPak helps take that project information and move it toward
-            fabrication.
+            Glazier Studio and Partnerpak are identical in function. I will use Glazier Studio for the majority of the training but all buttons and layouts are identical between the twho programs. 
+            The only diffrence between GS and PPAK is that PPAK hosts data for Kawneer while GS hosts data for all of the other vendors.  
           </p>
 
           <div className="sectionBox">
-            <h3>Program Walkthrough Placeholder</h3>
+            <h3>Program Overview</h3>
             <p>
-              A screen recording can be added here later to walk users through
-              the main program areas, menus, and layout.
+             This video covers a quick overview of the program, where screens are located and how the program functions on a basic level. 
             </p>
 
             <div className="placeholderBox">
               <span>Video Placeholder</span>
-              <p>Program overview video will go here.</p>
+              
             </div>
           </div>
 
           <div className="sectionBox">
-            <h3>What Glazier Studio Is For</h3>
+            <h3>What Glazier Studio & PartnerPak Are For</h3>
             <p>
-              Glazier Studio is where most of the project work begins. You can
-              create projects, build frames, review openings, assign materials,
-              and prepare the information needed for estimating and fabrication.
+              Glazier Studio / PartnerPak were originally designed as estimating software. they now do much more then that. 
+              While still being great estimating tools they also work as the interface to send frames, doors and material 
+              to RhinoFab equipment to be cut and fabricated. 
             </p>
           </div>
 
-          <div className="sectionBox">
-            <h3>What PartnerPak Is For</h3>
-            <p>
-              PartnerPak helps organize fabrication information after frames have
-              been created. It connects the project side of the software to the
-              fabrication side of the workflow.
-            </p>
-          </div>
-
+          
           <div className="featureGrid">
             <div className="featureBox">
-              <h4>Projects</h4>
+              <h4>Projects & Frames</h4>
               <p>
                 Projects keep job information organized so you can estimate,
-                draw, review, and fabricate work from one central location.
+                draw frames, review, and fabricate work from one central location.
               </p>
             </div>
 
-            <div className="featureBox">
-              <h4>Frames</h4>
-              <p>
-                Frames are the openings, storefronts, doors, windows, and
-                systems you build inside the software.
-              </p>
-            </div>
-
-            <div className="featureBox">
+             <div className="featureBox">
               <h4>Metal Groups</h4>
               <p>
-                Metal groups define the product system being used to create the
+                Metal groups are a compilation of parts that define the product system being used to create the
                 frame.
               </p>
             </div>
@@ -112,7 +93,7 @@ export default function LessonTwoOverviewPage() {
               <h4>Catalog Parts</h4>
               <p>
                 Catalog parts are the individual components that make up the
-                frame, such as heads, jambs, sills, mullions, and stops.
+                metal group and ultimately get used in the frame, such as heads, jambs, sills, mullions, and stops.
               </p>
             </div>
 
@@ -120,15 +101,21 @@ export default function LessonTwoOverviewPage() {
               <h4>Reports</h4>
               <p>
                 Reports turn project data into useful estimating, drawing,
-                material, and fabrication output.
+                material, and purchase orders. 
               </p>
             </div>
 
             <div className="featureBox">
-              <h4>Fabrication</h4>
+              <h4>Metal Fabrication</h4>
               <p>
-                PartnerPak helps prepare project and frame information so it can
-                move toward metal fabrication and RhinoFab output.
+                This screen is the final step before sending stock lengths out to a RhinoFab machine. 
+              </p>
+            </div>
+
+              <div className="featureBox">
+              <h4>Door fabrication</h4>
+              <p>
+                This screen is the final step before sending a door leaf out to a RhinoFab machine.
               </p>
             </div>
           </div>
