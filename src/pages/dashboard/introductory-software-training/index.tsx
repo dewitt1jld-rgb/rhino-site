@@ -160,24 +160,45 @@ export default function IntroductorySoftwareTrainingPage() {
           text-decoration: none;
         }
 
-        .lessonList {
-          display: flex;
-          flex-direction: column;
-          gap: 18px;
-        }
+   .lessonList {
+  max-width: 1000px;
+  margin: 24px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+   .lessonCard {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 24px;
+  align-items: center;
 
-        .lessonCard {
-          display: grid;
-          grid-template-columns: 76px 1fr;
-          gap: 20px;
-          padding: 22px;
-          border-radius: 18px;
-          background: rgba(255, 255, 255, 0.045);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          text-decoration: none;
-          color: inherit;
-          transition: 0.2s ease;
-        }
+  padding: 28px;
+
+  border-radius: 22px;
+
+  background: rgba(15, 23, 42, 0.82);
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  backdrop-filter: blur(14px);
+
+  text-decoration: none;
+
+  color: inherit;
+
+  transition: .25s ease;
+}
+
+.lessonCard:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(245,158,11,.45);
+
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.35),
+    0 0 30px rgba(245,158,11,.08);
+}
 
         .lessonCard:hover {
           border-color: rgba(245, 158, 11, 0.42);
@@ -198,31 +219,29 @@ export default function IntroductorySoftwareTrainingPage() {
           font-weight: 950;
         }
 
-        .lessonTop {
-          display: flex;
-          justify-content: space-between;
-          gap: 16px;
-          align-items: center;
-        }
+    .lessonTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
 
-        .lessonTop h3 {
-          margin: 0;
-          font-size: 22px;
-          color: white;
-        }
+.lessonTop span {
+  color: #fbbf24;
+  font-weight: 900;
+  white-space: nowrap;
+}
 
-        .lessonTop span,
-        .enterLesson {
-          color: #fbbf24;
-          font-weight: 900;
-        }
+      .lessonBody {
+  display: flex;
+  flex-direction: column;
+}
 
-        .lessonBody p {
-          color: rgba(255, 255, 255, 0.72);
-          line-height: 1.65;
-          margin: 10px 0 16px;
-        }
-
+.lessonBody p {
+  margin: 14px 0 18px;
+  line-height: 1.7;
+  color: rgba(255,255,255,.72);
+}
         @media (max-width: 700px) {
           .page {
             padding: 26px 16px;
