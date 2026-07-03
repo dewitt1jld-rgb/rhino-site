@@ -5,178 +5,88 @@ import RequireActiveAccess from "../../components/RequireActiveAccess";
 export default function RhinoTrainingPage() {
   return (
     <>
-        <RequireActiveAccess>
-      <div className="pageShell">
-        <TrainingSidebar />
+      <RequireActiveAccess>
+        <div className="pageShell">
+          <TrainingSidebar />
 
-        <main className="contentArea">
-          <div className="contentInner">
-            <div className="pageHeader">
-              <div className="eyebrow">Rhino Software Training</div>
-              <h1 className="pageTitle">Rhino Training</h1>
-              <p className="pageDescription">
-                Select a topic from the sidebar to open a specific Rhino training
-                page. This training area is designed to mirror the flow of the
-                software so users can learn inside a familiar structure.
-              </p>
+          <main className="contentArea">
+            <div className="contentInner">
+              <div className="pageHeader">
+                <div className="eyebrow">RhinoFab Knowledge Base</div>
+                <h1 className="pageTitle">Rhino Training</h1>
+
+                <p className="pageDescription">
+                  This section contains detailed RhinoFab training pages covering
+                  machine setup, Fab Job, manual cutting, calibration, databases,
+                  troubleshooting, maintenance, and system settings.
+                </p>
+
+                <p className="pageDescription">
+                  This area is not meant to be completed from beginning to end.
+                  Use it as a searchable reference while working inside the
+                  RhinoFab software or at the machine.
+                </p>
+              </div>
+
+              <section className="heroPanel">
+                <div className="heroText">
+                  <h2 className="heroTitle">
+                    Find the answer you need while working on the machine
+                  </h2>
+
+                  <p className="heroDescription">
+                    The Rhino Wrangler works best when used alongside RhinoFab.
+                    Keep the software or machine screen open, find the page that
+                    matches what you are working on, then follow the instructions
+                    step by step.
+                  </p>
+
+                  <div className="navigationCallout">
+                    <div className="arrow">⬅</div>
+
+                    <div>
+                      <h2>Use the Navigation Menu on the Left</h2>
+
+                      <p>
+                        Browse the categories in the left-hand navigation menu
+                        to find the RhinoFab training page you need. Each topic
+                        is broken down into detailed instructions, screenshots,
+                        videos, and reference material.
+                      </p>
+
+                      <p>
+                        Use the search button at the top of the screen to
+                        quickly find specific machine topics, troubleshooting
+                        pages, videos, or software features.
+                      </p>
+
+                      <p>
+                        Keep RhinoFab open while you work and use this site
+                        alongside the software whenever you have questions.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="callout info">
+                <strong>Best results:</strong> Use this knowledge base in tandem
+                with RhinoFab. When you have a question, open the matching Rhino
+                Wrangler page and follow the instructions while the software or
+                machine screen is open.
+              </section>
+
+              <section className="completionBox">
+                <h2>Need help with something specific?</h2>
+                <p>
+                  Use the left navigation menu or the search bar at the top of
+                  the page. This training library is built to help you quickly
+                  find answers instead of reading every page in order.
+                </p>
+              </section>
             </div>
-
-            <section className="heroPanel">
-              <div className="heroText">
-                <h2 className="heroTitle">Train the way your operators already think</h2>
-                <p className="heroDescription">
-                  The Rhino section is organized to follow the same menu logic as the
-                  actual machine software. This makes it easier for users to find help
-                  quickly, understand each screen, and move through training without
-                  feeling lost.
-                </p>
-
-                <div className="heroButtons">
-                  <Link
-                    href="/dashboard/rhino-training/machine-setup"
-                    className="primaryButton"
-                  >
-                    Open Machine Setup
-                  </Link>
-
-                  <Link
-                    href="/dashboard/rhino-training/fab-job"
-                    className="secondaryButton"
-                  >
-                    Open Fab Job
-                  </Link>
-                </div>
-              </div>
-
-              <div className="heroVisual">
-                <div className="visualCard">
-                  <div className="visualTopBar" />
-                  <div className="visualBody">
-                    <div className="visualSidebar">
-                      <div className="visualSidebarItem active" />
-                      <div className="visualSidebarItem" />
-                      <div className="visualSidebarItem" />
-                      <div className="visualSidebarItem" />
-                    </div>
-
-                    <div className="visualMain">
-                      <div className="visualHeader" />
-                      <div className="visualGrid">
-                        <div className="visualBox large" />
-                        <div className="visualBox" />
-                        <div className="visualBox" />
-                        <div className="visualBox" />
-                        <div className="visualBox" />
-                        <div className="visualBox" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section className="sectionBlock">
-              <div className="sectionHeader">
-                <h2 className="sectionTitle">Suggested starting points</h2>
-                <p className="sectionText">
-                  These are a few of the main areas users are likely to visit first.
-                </p>
-              </div>
-
-              <div className="cardGrid">
-                <Link
-                  href="/dashboard/rhino-training/machine-setup"
-                  className="topicCard"
-                >
-                  <div className="topicLabel">Main Section</div>
-                  <h3 className="topicTitle">Machine Setup</h3>
-                  <p className="topicText">
-                    Access calibration topics, jog controls, cut testing, and setup
-                    procedures.
-                  </p>
-                </Link>
-
-                <Link
-                  href="/dashboard/rhino-training/manual-cutting"
-                  className="topicCard"
-                >
-                  <div className="topicLabel">Main Section</div>
-                  <h3 className="topicTitle">Manual Cutting</h3>
-                  <p className="topicText">
-                    Open operator guidance related to manual cut workflows and related
-                    screens.
-                  </p>
-                </Link>
-
-                <Link
-                  href="/dashboard/rhino-training/databases"
-                  className="topicCard"
-                >
-                  <div className="topicLabel">Main Section</div>
-                  <h3 className="topicTitle">Databases</h3>
-                  <p className="topicText">
-                    Learn where database settings live and how they affect machine
-                    behavior.
-                  </p>
-                </Link>
-
-                <Link
-                  href="/dashboard/rhino-training/system-settings"
-                  className="topicCard"
-                >
-                  <div className="topicLabel">Main Section</div>
-                  <h3 className="topicTitle">System Settings</h3>
-                  <p className="topicText">
-                    Review system-level settings and configuration pages used during
-                    setup and troubleshooting.
-                  </p>
-                </Link>
-              </div>
-            </section>
-
-            <section className="sectionBlock">
-              <div className="sectionHeader">
-                <h2 className="sectionTitle">How this section is designed</h2>
-              </div>
-
-              <div className="infoPanel">
-                <div className="infoRow">
-                  <div className="infoNumber">01</div>
-                  <div className="infoContent">
-                    <h3 className="infoTitle">Software-style organization</h3>
-                    <p className="infoText">
-                      The sidebar follows the same structure users already recognize
-                      from the Rhino software menus.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="infoRow">
-                  <div className="infoNumber">02</div>
-                  <div className="infoContent">
-                    <h3 className="infoTitle">Expandable training tree</h3>
-                    <p className="infoText">
-                      Topics expand into subtopics, so large training libraries stay
-                      organized without overwhelming the user.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="infoRow">
-                  <div className="infoNumber">03</div>
-                  <div className="infoContent">
-                    <h3 className="infoTitle">Built for screenshots and step-by-step help</h3>
-                    <p className="infoText">
-                      Individual training pages can use your software screenshots,
-                      pictures, videos, and step instructions inside a consistent layout.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-        </main>
-      </div>
+          </main>
+        </div>
       </RequireActiveAccess>
 
       <style jsx>{`
@@ -184,7 +94,7 @@ export default function RhinoTrainingPage() {
           min-height: calc(100vh - 80px);
           display: flex;
           background:
-            radial-gradient(circle at top right, rgba(255, 255, 255, 0.04), transparent 24%),
+            radial-gradient(circle at top right, rgba(245, 158, 11, 0.06), transparent 24%),
             linear-gradient(180deg, #090c12 0%, #06080d 100%);
         }
 
@@ -194,7 +104,7 @@ export default function RhinoTrainingPage() {
         }
 
         .contentInner {
-          max-width: 1400px;
+          max-width: 1200px;
           margin: 0 auto;
           padding: 32px 32px 60px;
         }
@@ -204,9 +114,9 @@ export default function RhinoTrainingPage() {
         }
 
         .eyebrow {
-          color: rgba(255, 255, 255, 0.62);
+          color: #f59e0b;
           font-size: 0.78rem;
-          font-weight: 800;
+          font-weight: 900;
           letter-spacing: 0.14em;
           text-transform: uppercase;
           margin-bottom: 12px;
@@ -222,294 +132,101 @@ export default function RhinoTrainingPage() {
         }
 
         .pageDescription {
-          margin: 0;
-          max-width: 820px;
+          margin: 0 0 14px;
+          max-width: 900px;
           color: rgba(255, 255, 255, 0.76);
-          font-size: 1.02rem;
+          font-size: 1.04rem;
           line-height: 1.7;
         }
 
         .heroPanel {
-          display: grid;
-          grid-template-columns: 1.08fr 0.92fr;
-          gap: 24px;
-          align-items: stretch;
           margin-bottom: 28px;
         }
 
-        .heroText,
-        .heroVisual {
+        .heroText {
           border-radius: 24px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(245, 158, 11, 0.24);
           background: linear-gradient(
             180deg,
             rgba(255, 255, 255, 0.04) 0%,
             rgba(255, 255, 255, 0.025) 100%
           );
           box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
-        }
-
-        .heroText {
           padding: 32px;
         }
 
         .heroTitle {
-          margin: 0 0 14px;
-          color: #ffffff;
-          font-size: clamp(1.5rem, 2.3vw, 2.3rem);
+          margin: 0 0 18px;
+          color: #f59e0b;
+          font-size: clamp(1.7rem, 2.4vw, 2.5rem);
           line-height: 1.1;
           font-weight: 850;
         }
 
         .heroDescription {
           margin: 0;
-          color: rgba(255, 255, 255, 0.76);
-          font-size: 1rem;
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 1.06rem;
           line-height: 1.75;
-          max-width: 680px;
+          max-width: 900px;
         }
 
-        .heroButtons {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 14px;
-          margin-top: 26px;
-        }
-
-        .primaryButton,
-        .secondaryButton {
-          min-height: 48px;
-          padding: 0 18px;
-          border-radius: 14px;
-          text-decoration: none;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.96rem;
-          font-weight: 800;
-          transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-        }
-
-        .primaryButton {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.09);
-          border: 1px solid rgba(255, 255, 255, 0.14);
-        }
-
-        .primaryButton:hover {
-          transform: translateY(-1px);
-          background: rgba(255, 255, 255, 0.14);
-        }
-
-        .secondaryButton {
-          color: rgba(255, 255, 255, 0.92);
-          background: transparent;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .secondaryButton:hover {
-          transform: translateY(-1px);
-          background: rgba(255, 255, 255, 0.05);
-        }
-
-        .heroVisual {
-          padding: 20px;
+        .navigationCallout {
           display: flex;
           align-items: center;
-          justify-content: center;
-        }
-
-        .visualCard {
-          width: 100%;
-          max-width: 560px;
+          gap: 36px;
+          margin-top: 34px;
+          padding: 42px;
           border-radius: 22px;
-          overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          background: linear-gradient(180deg, #161b24 0%, #0e1219 100%);
-          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+          background: rgba(245, 158, 11, 0.08);
+          border: 2px solid rgba(245, 158, 11, 0.28);
         }
 
-        .visualTopBar {
-          height: 46px;
-          background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .visualBody {
-          display: flex;
-          min-height: 320px;
-        }
-
-        .visualSidebar {
-          width: 92px;
-          padding: 16px 12px;
-          border-right: 1px solid rgba(255, 255, 255, 0.06);
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          background: rgba(255, 255, 255, 0.02);
-        }
-
-        .visualSidebarItem {
-          height: 34px;
-          border-radius: 10px;
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        .visualSidebarItem.active {
-          background: rgba(255, 255, 255, 0.18);
-        }
-
-        .visualMain {
-          flex: 1;
-          padding: 18px;
-        }
-
-        .visualHeader {
-          height: 52px;
-          border-radius: 14px;
-          background: rgba(255, 255, 255, 0.08);
-          margin-bottom: 16px;
-        }
-
-        .visualGrid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 14px;
-        }
-
-        .visualBox {
-          height: 88px;
-          border-radius: 14px;
-          background: rgba(255, 255, 255, 0.06);
-        }
-
-        .visualBox.large {
-          grid-column: span 2;
-          height: 124px;
-        }
-
-        .sectionBlock {
-          margin-top: 28px;
-          border-radius: 24px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.035) 0%,
-            rgba(255, 255, 255, 0.02) 100%
-          );
-          padding: 28px;
-          box-shadow: 0 16px 44px rgba(0, 0, 0, 0.22);
-        }
-
-        .sectionHeader {
-          margin-bottom: 22px;
-        }
-
-        .sectionTitle {
-          margin: 0 0 10px;
-          color: #ffffff;
-          font-size: 1.45rem;
-          font-weight: 850;
-        }
-
-        .sectionText {
-          margin: 0;
-          color: rgba(255, 255, 255, 0.72);
-          line-height: 1.7;
-        }
-
-        .cardGrid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 18px;
-        }
-
-        .topicCard {
-          display: block;
-          padding: 22px;
-          border-radius: 18px;
-          text-decoration: none;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          background: rgba(255, 255, 255, 0.03);
-          transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-        }
-
-        .topicCard:hover {
-          transform: translateY(-2px);
-          background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.14);
-        }
-
-        .topicLabel {
-          color: rgba(255, 255, 255, 0.54);
-          font-size: 0.74rem;
-          font-weight: 800;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          margin-bottom: 12px;
-        }
-
-        .topicTitle {
-          margin: 0 0 10px;
-          color: #ffffff;
-          font-size: 1.2rem;
-          font-weight: 800;
-        }
-
-        .topicText {
-          margin: 0;
-          color: rgba(255, 255, 255, 0.72);
-          line-height: 1.7;
-        }
-
-        .infoPanel {
-          display: grid;
-          gap: 18px;
-        }
-
-        .infoRow {
-          display: grid;
-          grid-template-columns: 72px 1fr;
-          gap: 18px;
-          align-items: start;
-          padding: 18px;
-          border-radius: 18px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .infoNumber {
-          width: 54px;
-          height: 54px;
-          border-radius: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.08);
-          font-size: 1rem;
+        .arrow {
+          font-size: 110px;
+          color: #f59e0b;
           font-weight: 900;
-          letter-spacing: 0.06em;
+          flex-shrink: 0;
         }
 
-        .infoTitle {
-          margin: 0 0 8px;
-          color: #ffffff;
-          font-size: 1.05rem;
-          font-weight: 800;
+        .navigationCallout h2 {
+          margin: 0 0 18px;
+          font-size: 42px;
+          color: #f59e0b;
         }
 
-        .infoText {
-          margin: 0;
-          color: rgba(255, 255, 255, 0.72);
+        .navigationCallout p {
+          margin: 0 0 18px;
+          font-size: 20px;
+          line-height: 1.8;
+          color: rgba(255, 255, 255, 0.82);
+        }
+
+        .callout,
+        .completionBox {
+          margin-top: 28px;
+          padding: 24px;
+          border-radius: 20px;
+          background: rgba(15, 23, 42, 0.82);
+          border: 1px solid rgba(245, 158, 11, 0.24);
+          color: rgba(255, 255, 255, 0.78);
           line-height: 1.7;
         }
 
-        @media (max-width: 1200px) {
-          .heroPanel {
-            grid-template-columns: 1fr;
-          }
+        .callout strong {
+          color: #fbbf24;
+        }
+
+        .completionBox h2 {
+          margin: 0 0 12px;
+          color: #f59e0b;
+          font-size: 1.7rem;
+        }
+
+        .completionBox p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.76);
+          line-height: 1.7;
         }
 
         @media (max-width: 900px) {
@@ -520,20 +237,23 @@ export default function RhinoTrainingPage() {
           .contentInner {
             padding: 24px 18px 46px;
           }
-        }
 
-        @media (max-width: 700px) {
-          .cardGrid {
-            grid-template-columns: 1fr;
+          .navigationCallout {
+            flex-direction: column;
+            text-align: center;
+            padding: 30px;
           }
 
-          .infoRow {
-            grid-template-columns: 1fr;
+          .arrow {
+            font-size: 72px;
           }
 
-          .infoNumber {
-            width: 48px;
-            height: 48px;
+          .navigationCallout h2 {
+            font-size: 32px;
+          }
+
+          .navigationCallout p {
+            font-size: 18px;
           }
         }
       `}</style>

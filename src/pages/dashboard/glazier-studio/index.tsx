@@ -60,10 +60,15 @@ export default function GlazierStudioHomePage() {
     </p>
 
     <p>
-      If you're new to Glazier Studio or PartnerPak, start with the
-      <strong> Introductory Software Training</strong> before exploring the
-      knowledge base.
-    </p>
+  If you're new to Glazier Studio or PartnerPak, start with{" "}
+  <Link
+    href="/dashboard/introductory-software-training"
+    className="introLink"
+  >
+    Introductory Software Training
+  </Link>{" "}
+  before exploring the knowledge base.
+</p>
 
     <p>
       Keep Glazier Studio or PartnerPak open while you work and use this site
@@ -142,6 +147,17 @@ export default function GlazierStudioHomePage() {
   color: #fbbf24;
 }
 
+.introLink {
+  color: #f59e0b;
+  font-weight: 900;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.introLink:hover {
+  color: #fbbf24;
+  text-decoration: underline;
+}
 @media (max-width:760px) {
   .navigationCallout {
     flex-direction: column;
