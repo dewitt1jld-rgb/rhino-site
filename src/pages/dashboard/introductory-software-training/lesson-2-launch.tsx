@@ -87,7 +87,7 @@ export default function LessonTwoLaunchPage() {
           </div>
 
           <div className="sectionBox">
-            <h3>Program Walkthrough</h3>
+            <h3>Creating a shortcut</h3>
 
             <p>
               This video will cover how to create a desktop icon and pin the icon to your taskbar
@@ -106,13 +106,7 @@ export default function LessonTwoLaunchPage() {
     Your browser does not support the video tag.
   </video>
 
-  <div className="videoInfo">
-    <h4>Create a Desktop Shortcut</h4>
-    <p>
-      Learn how to locate Glazier Studio, create a desktop shortcut, and pin the
-      program to your taskbar for quicker access each day.
-    </p>
-  </div>
+  
 </div>
           </div>
 

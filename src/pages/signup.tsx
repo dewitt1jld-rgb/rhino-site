@@ -113,7 +113,7 @@ export default function SignupPage() {
                   className="input"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="Landon"
+                  placeholder="John"
                   autoComplete="given-name"
                 />
               </div>
@@ -128,7 +128,7 @@ export default function SignupPage() {
                   className="input"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Dewitt"
+                  placeholder="Doe"
                   autoComplete="family-name"
                 />
               </div>
@@ -144,7 +144,7 @@ export default function SignupPage() {
                 className="input"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Sunfire Electrical"
+                placeholder="Company Name"
                 autoComplete="organization"
               />
             </div>
