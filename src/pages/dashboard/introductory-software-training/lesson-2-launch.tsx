@@ -87,16 +87,33 @@ export default function LessonTwoLaunchPage() {
           </div>
 
           <div className="sectionBox">
-            <h3>Program Walkthrough Placeholder</h3>
+            <h3>Program Walkthrough</h3>
 
             <p>
-              This video will cover a general overview of how the program works. The next lessons will do a deep dive on each topic covered in this video. 
+              This video will cover how to create a desktop icon and pin the icon to your taskbar
             </p>
 
-            <div className="placeholderBox">
-              <span>How to create a Desktop Icon</span>
-              <p>This video will cover how to launch the programs and make a desktop icon.</p>
-            </div>
+           <div className="videoCard">
+  <video
+    controls
+    preload="metadata"
+    poster="https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/intro-to-glazier-studios/lesson-2/thumbnails/pin-to-taskbar-thumb.png"
+  >
+    <source
+      src="https://rhino-training-cdn.b-cdn.net/Tutorial%20Videos/intro-to-glazier-studios/lesson-2/pin%20to%20taskbar.mp4"
+      type="video/mp4"
+    />
+    Your browser does not support the video tag.
+  </video>
+
+  <div className="videoInfo">
+    <h4>Create a Desktop Shortcut</h4>
+    <p>
+      Learn how to locate Glazier Studio, create a desktop shortcut, and pin the
+      program to your taskbar for quicker access each day.
+    </p>
+  </div>
+</div>
           </div>
 
           <div className="sectionBox">
@@ -279,6 +296,37 @@ function SharedStyles() {
         justify-content: center;
         padding: 48px;
       }
+        .videoCard {
+  margin-top: 22px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.videoCard video {
+  width: 100%;
+  display: block;
+  background: #000;
+}
+
+.videoInfo {
+  padding: 18px 20px;
+}
+
+.videoInfo h4 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #fbbf24;
+  font-weight: 800;
+}
+
+.videoInfo p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+  font-size: 16px;
+}
 
       .card {
         width: 100%;
