@@ -47,43 +47,30 @@ export default function GlazierStudioHomePage() {
               what you are working on, then follow the instructions step by step.
             </p>
 
-            <div className="sectionGrid">
-              <div className="miniCard">
-                <span>01</span>
-                <h3>Start with the Guided Course</h3>
-                <p>
-                  New to the software? Use Introductory Software Training first
-                  for a structured walkthrough.
-                </p>
-              </div>
+            <div className="navigationCallout">
+  <div className="arrow">⬅</div>
 
-              <div className="miniCard">
-                <span>02</span>
-                <h3>Browse the Left Menu</h3>
-                <p>
-                  Use the sidebar to find topics like Metal Groups, Metal
-                  Fabrication, Library Fab, Reports, and General Settings.
-                </p>
-              </div>
+  <div>
+    <h2>Use the Navigation Menu on the Left</h2>
 
-              <div className="miniCard">
-                <span>03</span>
-                <h3>Use Search</h3>
-                <p>
-                  Use the search button at the top of the screen to quickly find
-                  specific topics, pages, videos, or features.
-                </p>
-              </div>
+    <p>
+      Browse the categories in the left-hand navigation menu to find the
+      training page you need. Every topic has been broken down into detailed,
+      step-by-step instructions, videos, and reference material.
+    </p>
 
-              <div className="miniCard">
-                <span>04</span>
-                <h3>Follow Cross-Connected Pages</h3>
-                <p>
-                  Many pages connect to related topics so you can understand how
-                  different parts of the software work together.
-                </p>
-              </div>
-            </div>
+    <p>
+      If you're new to Glazier Studio or PartnerPak, start with the
+      <strong> Introductory Software Training</strong> before exploring the
+      knowledge base.
+    </p>
+
+    <p>
+      Keep Glazier Studio or PartnerPak open while you work and use this site
+      alongside the software whenever you have questions.
+    </p>
+  </div>
+</div>
           </section>
 
           <section className="callout info">
@@ -115,19 +102,65 @@ export default function GlazierStudioHomePage() {
             text-decoration: none;
           }
 
-          .sectionGrid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
-            margin-top: 24px;
-          }
+    .navigationCallout {
+  display: flex;
+  align-items: center;
+  gap: 36px;
 
-          .miniCard {
-            padding: 20px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.045);
-            border: 1px solid rgba(245, 158, 11, 0.24);
-          }
+  margin-top: 34px;
+
+  padding: 42px;
+
+  border-radius: 22px;
+
+  background: rgba(245, 158, 11, 0.08);
+
+  border: 2px solid rgba(245, 158, 11, 0.28);
+}
+
+.arrow {
+  font-size: 110px;
+  color: #f59e0b;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.navigationCallout h2 {
+  margin: 0 0 18px;
+  font-size: 42px;
+  color: #f59e0b;
+}
+
+.navigationCallout p {
+  margin: 0 0 18px;
+  font-size: 20px;
+  line-height: 1.8;
+  color: rgba(255,255,255,.82);
+}
+
+.navigationCallout strong {
+  color: #fbbf24;
+}
+
+@media (max-width:760px) {
+  .navigationCallout {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .arrow {
+    font-size: 72px;
+  }
+
+  .navigationCallout h2 {
+    font-size: 32px;
+  }
+
+  .navigationCallout p {
+    font-size: 18px;
+  }
+}
 
           .miniCard span {
             color: #f59e0b;
