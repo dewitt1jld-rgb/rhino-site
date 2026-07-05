@@ -141,12 +141,14 @@ const portalLabel = (
             <nav className="desktopNav">
               {!hasActiveAccess && (
                 <Link
-                  href="/"
-                  className={`navLink ${isActiveLink("/") ? "active" : ""}`}
-                  style={{ fontSize: "1.5rem", fontWeight: 950 }}
-                >
-<span>Explore</span>
-<span>Platform</span>                </Link>
+  href="/explore"
+  className={`navLink stackedNavLink ${
+    isActiveLink("/explore") ? "active" : ""
+  }`}
+>
+  <span>Explore</span>
+  <span>Platform</span>
+</Link>
               )}
 
 {!hasActiveAccess && (
@@ -530,6 +532,16 @@ const portalLabel = (
   gap: clamp(28px, 4vw, 72px);
 }
 
+.stackedNavLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  gap: 2px;
+  text-align: center;
+  white-space: normal;
+}
+
         .navLink {
           color: #ffffff;
           text-decoration: none;
@@ -691,18 +703,26 @@ const portalLabel = (
             padding: 0 16px;
           }
 
-          .brand {
-            gap: 10px;
-          }
+         .brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 340px;
+  flex-shrink: 0;
+}
 
           .brandLogoBox img {
-            width: 70px;
-            height: 70px;
-          }
+           width: 95px;
+  height: auto;
+  flex-shrink: 0;
+}
 
           .brandTitle {
-            font-size: 1rem;
-          }
+          display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  white-space: nowrap;
+}
 
           .brandSub {
             font-size: 0.68rem;
