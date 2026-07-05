@@ -145,8 +145,8 @@ const portalLabel = (
                   className={`navLink ${isActiveLink("/") ? "active" : ""}`}
                   style={{ fontSize: "1.5rem", fontWeight: 950 }}
                 >
-                  Explore Platform
-                </Link>
+<span>Explore</span>
+<span>Platform</span>                </Link>
               )}
 
 {!hasActiveAccess && (
@@ -168,8 +168,7 @@ const portalLabel = (
   style={{
     fontSize: "1.5rem",
     fontWeight: 950,
-    transform: "translateX(-30px)",
-    display: "flex",
+     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -285,8 +284,8 @@ const portalLabel = (
         <div className={`mobileMenu ${mobileOpen ? "show" : ""}`}>
           {!hasActiveAccess && (
             <Link href="/" className="mobileLink" onClick={closeMenu}>
-              Explore Platform
-            </Link>
+<span>Explore</span>
+<span>Platform</span>            </Link>
           )}
 
 {!hasActiveAccess && (
@@ -524,11 +523,12 @@ const portalLabel = (
 .navSubLine {
   color: #f59e0b;        /* bottom line gold */
 }
-        .desktopNav {
-          display: flex;
-          align-items: center;
-          gap: 38px;
-        }
+     .desktopNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 4vw, 72px);
+}
 
         .navLink {
           color: #ffffff;
