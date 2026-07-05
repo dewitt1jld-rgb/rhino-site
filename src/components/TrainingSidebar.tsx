@@ -115,45 +115,9 @@ export const RhinoTrainingMenu: SidebarItem[] = [
       },
     ],
   },
-  {
-    title: "Databases",
-    slug: "/dashboard/rhino-training/machine-setup/databases/parts-library",
-    children: [
-      {
-        title: "Parts Library",
-        slug: "/dashboard/rhino-training/machine-setup/databases/parts-library",
-      },
-      {
-        title: "Tool Library",
-        slug: "/dashboard/rhino-training/machine-setup/databases/tool-library",
-      },
-      {
-        title: "Stock Inventory",
-        slug: "/dashboard/rhino-training/machine-setup/databases/stock-inventory",
-      },
-      {
-        title: "Chuck Library",
-        slug: "/dashboard/rhino-training/machine-setup/databases/chuck-library",
-      },
-      {
-        title: "Drop Inventory",
-        slug: "/dashboard/rhino-training/machine-setup/databases/drop-inventory",
-      },
-      {
-        title: "Reports",
-        slug: "/dashboard/rhino-training/machine-setup/databases/reports",
-      },
-      {
-        title: "Racks",
-        slug: "/dashboard/rhino-training/machine-setup/databases/racks",
-      },
-      {
-        title: "Carousel Library",
-        slug: "/dashboard/rhino-training/machine-setup/databases/carousel-library",
-      },
-    ],
-  },
-  {
+
+
+    {
     title: "5600/5700 Calibration",
     slug: "/dashboard/rhino-training/5600-5700-calibration",
     children: [
@@ -195,6 +159,45 @@ export const RhinoTrainingMenu: SidebarItem[] = [
       },
     ],
   },
+  {
+    title: "Databases",
+    slug: "/dashboard/rhino-training/machine-setup/databases/parts-library",
+    children: [
+      {
+        title: "Parts Library",
+        slug: "/dashboard/rhino-training/machine-setup/databases/parts-library",
+      },
+      {
+        title: "Tool Library",
+        slug: "/dashboard/rhino-training/machine-setup/databases/tool-library",
+      },
+      {
+        title: "Stock Inventory",
+        slug: "/dashboard/rhino-training/machine-setup/databases/stock-inventory",
+      },
+      {
+        title: "Chuck Library",
+        slug: "/dashboard/rhino-training/machine-setup/databases/chuck-library",
+      },
+      {
+        title: "Drop Inventory",
+        slug: "/dashboard/rhino-training/machine-setup/databases/drop-inventory",
+      },
+      {
+        title: "Reports",
+        slug: "/dashboard/rhino-training/machine-setup/databases/reports",
+      },
+      {
+        title: "Racks",
+        slug: "/dashboard/rhino-training/machine-setup/databases/racks",
+      },
+      {
+        title: "Carousel Library",
+        slug: "/dashboard/rhino-training/machine-setup/databases/carousel-library",
+      },
+    ],
+  },
+
 
  {
 title: "Troubleshooting",

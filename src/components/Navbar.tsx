@@ -149,7 +149,7 @@ const portalLabel = (
                 </Link>
               )}
 
-             {!isLoggedIn && (
+{!hasActiveAccess && (
   <Link
     href="/pricing"
     className={`navLink ${
@@ -289,7 +289,7 @@ const portalLabel = (
             </Link>
           )}
 
-        {!isLoggedIn && (
+{!hasActiveAccess && (
   <Link href="/pricing" className="mobileLink" onClick={closeMenu}>
     Pricing
   </Link>
@@ -321,7 +321,7 @@ const portalLabel = (
           </button>
 
           <div className="mobileButtons">
-            {!loadingUser && !isLoggedIn && (
+            {!loadingUser && !hasActiveAccess && (
               <>
                 <Link
                   href="/login"
