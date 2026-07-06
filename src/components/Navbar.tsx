@@ -140,14 +140,25 @@ const portalLabel = (
           <div className="centerGroup">
             <nav className="desktopNav">
               {!hasActiveAccess && (
+
 <Link
   href="/explore"
-  className={`navLink stackedNavLink ${
+  className={`navLink ${
     isActiveLink("/explore") ? "active" : ""
   }`}
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    whiteSpace: "normal",
+    fontSize: "1.5rem",
+    fontWeight: 950,
+    lineHeight: 1.05,
+  }}
 >
-  <span>Explore</span>
-  <span>Platform</span>
+  <span style={{ display: "block" }}>Explore</span>
+  <span style={{ display: "block" }}>Platform</span>
 </Link>
               )}
 
