@@ -189,13 +189,8 @@ const portalLabel = (
     lineHeight: 1.05,
   }}
 >
-  <span style={{ display: "block", color: "#f59e0b" }}>
-    Virtual Class
-  </span>
-
-  <span style={{ display: "block", color: "#f59e0b" }}>
-    Schedule
-  </span>
+  <span style={{ display: "block" }}>Virtual Class</span>
+    <span style={{ display: "block" }}>Schedule</span>
 </Link>
 )}
 

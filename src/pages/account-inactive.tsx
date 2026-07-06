@@ -2,12 +2,21 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabase";
 
+type MemberAccess = {
+  stripe_customer_id: string | null;
+  status: string | null;
+};
+
 export default function AccountInactivePage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [justReturned, setJustReturned] = useState(false);
   const [checkingAccess, setCheckingAccess] = useState(false);
+  const [access, setAccess] = useState<MemberAccess | null>(null);
+  const [loadingAccess, setLoadingAccess] = useState(true);
+
+  const hasStripeCustomer = !!access?.stripe_customer_id;
 
   useEffect(() => {
     if (router.query.portalReturn === "1") {
@@ -15,6 +24,34 @@ export default function AccountInactivePage() {
       setCheckingAccess(true);
     }
   }, [router.query.portalReturn]);
+
+  useEffect(() => {
+    async function loadAccessRecord() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session?.user) {
+        setLoadingAccess(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("member_access")
+        .select("stripe_customer_id, status")
+        .eq("profile_id", session.user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Unable to load access record:", error);
+      }
+
+      setAccess(data);
+      setLoadingAccess(false);
+    }
+
+    loadAccessRecord();
+  }, []);
 
   useEffect(() => {
     if (!justReturned) return;
@@ -109,7 +146,9 @@ export default function AccountInactivePage() {
         <p className="text">
           {justReturned
             ? "This usually only takes a few seconds. If your payment was completed successfully, you will be redirected to your training dashboard automatically."
-            : "This may be due to a failed payment, expired subscription, or account status change. To restore access, update your billing information and complete your renewal payment."}
+            : hasStripeCustomer
+              ? "This may be due to a failed payment, expired subscription, or account status change. To restore access, update your billing information and complete your renewal payment."
+              : "Your account has been created, but training access has not been purchased yet. Complete your initial purchase to activate your account."}
         </p>
 
         {justReturned && checkingAccess && (
@@ -119,7 +158,7 @@ export default function AccountInactivePage() {
           </div>
         )}
 
-        {!justReturned && (
+        {!justReturned && !loadingAccess && hasStripeCustomer && (
           <div className="notice">
             <strong>Existing customer?</strong>
             <span>
@@ -130,8 +169,25 @@ export default function AccountInactivePage() {
           </div>
         )}
 
+        {!justReturned && !loadingAccess && !hasStripeCustomer && (
+          <div className="notice">
+            <strong>Ready to purchase?</strong>
+            <span>
+              Your account has been created, but training access has not been
+              purchased yet. Complete your initial purchase to activate your
+              account.
+            </span>
+          </div>
+        )}
+
         <div className="actions">
-          {!justReturned && (
+          {!justReturned && loadingAccess && (
+            <button type="button" disabled className="primaryButton">
+              Checking Account...
+            </button>
+          )}
+
+          {!justReturned && !loadingAccess && hasStripeCustomer && (
             <button
               type="button"
               onClick={handleRestoreAccess}
@@ -140,6 +196,12 @@ export default function AccountInactivePage() {
             >
               {loading ? "Opening Billing Portal..." : "Restore Access"}
             </button>
+          )}
+
+          {!justReturned && !loadingAccess && !hasStripeCustomer && (
+            <a href="/pricing" className="primaryButton">
+              Purchase Now
+            </a>
           )}
 
           {justReturned && (
