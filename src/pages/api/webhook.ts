@@ -318,47 +318,23 @@ export default async function handler(
       return res.status(200).json({ received: true });
     }
 
-    if (!session.payment_intent) {
-      console.error("Missing payment_intent on checkout session");
-      return res.status(200).json({ received: true });
-    }
+   // Save the customer's default payment method when one exists.
+// Free checkouts (100% discount) won't have a payment_intent, and that's okay.
+if (session.payment_intent) {
+  const paymentIntent = await stripe.paymentIntents.retrieve(
+    session.payment_intent as string
+  );
 
-    const { data: existingAccess } = await supabaseAdmin
-      .from("member_access")
-      .select("stripe_customer_id, stripe_subscription_id")
-      .eq("profile_id", profileId)
-      .maybeSingle();
+  const paymentMethodId = paymentIntent.payment_method as string | null;
 
-    if (
-      existingAccess?.stripe_customer_id ||
-      existingAccess?.stripe_subscription_id
-    ) {
-      console.log(
-        "Access already exists for this user. Skipping duplicate webhook work."
-      );
-      return res.status(200).json({ received: true });
-    }
-
-    console.log("Checkout completed:", session.id);
-    console.log("Customer:", session.customer);
-
-    try {
-      const paymentIntent = await stripe.paymentIntents.retrieve(
-        session.payment_intent as string
-      );
-
-      const paymentMethodId = paymentIntent.payment_method as string | null;
-
-      if (!paymentMethodId) {
-        console.error("Missing payment method on payment intent");
-        return res.status(200).json({ received: true });
-      }
-
-      await stripe.customers.update(session.customer as string, {
-        invoice_settings: {
-          default_payment_method: paymentMethodId,
-        },
-      });
+  if (paymentMethodId) {
+    await stripe.customers.update(session.customer as string, {
+      invoice_settings: {
+        default_payment_method: paymentMethodId,
+      },
+    });
+  }
+}
 
       const { error: initialAccessError } = await supabaseAdmin
         .from("member_access")
