@@ -140,7 +140,7 @@ const portalLabel = (
           <div className="centerGroup">
             <nav className="desktopNav">
               {!hasActiveAccess && (
-                <Link
+<Link
   href="/explore"
   className={`navLink stackedNavLink ${
     isActiveLink("/explore") ? "active" : ""
@@ -536,10 +536,13 @@ const portalLabel = (
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 1.05;
+  justify-content: center;
   gap: 2px;
+  line-height: 1.05;
   text-align: center;
   white-space: normal;
+  font-size: 1.5rem;
+  font-weight: 950;
 }
 
         .navLink {
@@ -548,6 +551,22 @@ const portalLabel = (
           transition: color 0.2s ease;
           white-space: nowrap;
         }
+          .stackedNavLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+  line-height: 1.05;
+  gap: 2px;
+  font-size: 1.5rem;
+  font-weight: 950;
+  text-align: center;
+}
+
+.stackedNavLink span {
+  display: block;
+}
 
         .navLink:hover,
         .navLink.active {
