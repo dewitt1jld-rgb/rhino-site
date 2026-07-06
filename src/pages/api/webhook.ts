@@ -317,7 +317,7 @@ export default async function handler(
       console.error("Missing Stripe customer on checkout session");
       return res.status(200).json({ received: true });
     }
-
+try {
    // Save the customer's default payment method when one exists.
 // Free checkouts (100% discount) won't have a payment_intent, and that's okay.
 if (session.payment_intent) {
