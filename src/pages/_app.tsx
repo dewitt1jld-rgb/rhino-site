@@ -24,11 +24,26 @@ export default function App({ Component, pageProps }: AppProps) {
           © {new Date().getFullYear()} The Rhino Wrangler
         </div>
 
-        <div style={{ display: "flex", gap: "15px", justifyContent: "center" }}>
-          <Link href="/terms">Terms</Link>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/contact">Contact</Link>
-        </div>
+<div
+  style={{
+    display: "flex",
+    gap: "18px",
+    justifyContent: "center",
+    flexWrap: "wrap",
+  }}
+>
+  <Link href="/terms">Terms</Link>
+
+  <Link href="/privacy">Privacy</Link>
+
+  <Link href="/contact">Contact</Link>
+
+  <a
+    href="mailto:landon@therhinowrangler.com?subject=Rhino Wrangler Feedback"
+  >
+    Send Feedback
+  </a>
+</div>
       </footer>
     </>
   );
