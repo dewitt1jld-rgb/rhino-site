@@ -142,7 +142,7 @@ const portalLabel = (
               {!hasActiveAccess && (
 
 <Link
-  href="/explore"
+  href="/"
   className={`navLink ${
     isActiveLink("/explore") ? "active" : ""
   }`}
