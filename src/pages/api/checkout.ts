@@ -74,6 +74,8 @@ export default async function handler(
       // Forces Stripe Checkout to use the logged-in account email.
       customer_email: user.email || undefined,
 
+       allow_promotion_codes: true,
+
       payment_intent_data: {
         setup_future_usage: "off_session",
 
