@@ -7,7 +7,6 @@ export default function Pricing() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [agreed, setAgreed] = useState(false);
-  const [extraReceiptEmail, setExtraReceiptEmail] = useState("");
 
   const showNewSignupMessage = router.query.newSignup === "1";
   const showNoAccessMessage = router.query.noAccess === "1";
@@ -31,60 +30,56 @@ const handleCheckout = async () => {
       return;
     }
 
-      const response = await fetch("/api/checkout", {
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
+
+    if (response.status === 409) {
+      alert(
+        "You're already set up with Rhino Wrangler.\n\n" +
+          "We'll take you to billing so you can manage or restore your access."
+      );
+
+      const portalRes = await fetch("/api/customer-portal", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({
-          extraReceiptEmail: extraReceiptEmail.trim() || null,
-        }),
       });
 
-      if (response.status === 409) {
-        alert(
-          "You're already set up with Rhino Wrangler.\n\n" +
-            "We'll take you to billing so you can manage or restore your access."
-        );
+      const portalData = await portalRes.json();
 
-        const portalRes = await fetch("/api/customer-portal", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-          },
-        });
-
-        const portalData = await portalRes.json();
-
-        if (portalData.url) {
-          window.location.href = portalData.url;
-          return;
-        }
-
-        alert(
-          portalData.error ||
-            "Unable to open billing portal. Please contact support."
-        );
-
+      if (portalData.url) {
+        window.location.href = portalData.url;
         return;
       }
 
-      const data = await response.json();
+      alert(
+        portalData.error ||
+          "Unable to open billing portal. Please contact support."
+      );
 
-      if (data.url) {
-        window.location.href = data.url;
-        return;
-      }
-
-      alert(data.error || "Checkout could not be started. Please try again.");
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    const data = await response.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+      return;
+    }
+
+    alert(data.error || "Checkout could not be started. Please try again.");
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -163,16 +158,7 @@ const handleCheckout = async () => {
 
              
 
-              <label className="receiptField">
-                <span>Additional email for reciept (optional)</span>
-                <input
-                  type="email"
-                  value={extraReceiptEmail}
-                  onChange={(e) => setExtraReceiptEmail(e.target.value)}
-                  placeholder="billing@example.com"
-                />
-              </label>
-
+           
               <label className="termsCheck">
                 <input
                   type="checkbox"
@@ -370,26 +356,6 @@ const handleCheckout = async () => {
           color: #fbbf24;
         }
 
-        .receiptField {
-          display: grid;
-          gap: 8px;
-          margin-top: 18px;
-          color: rgba(255, 255, 255, 0.78);
-          font-weight: 800;
-        }
-
-        .receiptField input {
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-radius: 12px;
-          padding: 12px 14px;
-          background: rgba(255, 255, 255, 0.08);
-          color: #ffffff;
-          font-size: 1rem;
-        }
-
-        .receiptField input::placeholder {
-          color: rgba(255, 255, 255, 0.45);
-        }
 
         .termsCheck {
           display: flex;

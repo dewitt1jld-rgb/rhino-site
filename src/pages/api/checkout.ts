@@ -33,8 +33,7 @@ export default async function handler(
       return res.status(401).json({ error: "User not found" });
     }
 
-    const { extraReceiptEmail } = req.body || {};
-
+  
     const { data: existingAccess, error: accessCheckError } =
       await supabaseAdmin
         .from("member_access")
@@ -60,11 +59,10 @@ export default async function handler(
     const baseUrl =
       process.env.NEXT_PUBLIC_SITE_URL || req.headers.origin || "http://localhost:3000";
 
-    const metadata = {
-      profile_id: user.id,
-      email: user.email || "",
-      extra_receipt_email: extraReceiptEmail || "",
-    };
+const metadata = {
+  profile_id: user.id,
+  email: user.email || "",
+};
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
