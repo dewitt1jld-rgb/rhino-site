@@ -12,7 +12,7 @@ const lessons = [
   },
   {
     number: "02",
-    title: "Start Your First Frame",
+    title: "Understand The Layout",
     time: "15 min",
 status: "Available",
     description:
