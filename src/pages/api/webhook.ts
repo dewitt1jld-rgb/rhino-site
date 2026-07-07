@@ -336,23 +336,34 @@ if (session.payment_intent) {
   }
 }
 
-      const { error: initialAccessError } = await supabaseAdmin
-        .from("member_access")
-        .upsert(
-          {
-            profile_id: profileId,
-            status: "active",
-            stripe_customer_id: session.customer as string,
-          },
-          {
-            onConflict: "profile_id",
-          }
-        );
+const { data: updatedRows, error: updateError } = await supabaseAdmin
+  .from("member_access")
+  .update({
+    status: "active",
+    stripe_customer_id: session.customer as string,
+  })
+  .eq("profile_id", profileId)
+  .select("profile_id");
 
-      if (initialAccessError) {
-        console.error("Failed to activate member access:", initialAccessError);
-        return res.status(200).json({ received: true });
-      }
+if (updateError) {
+  console.error("Failed to update member access:", updateError);
+  return res.status(200).json({ received: true });
+}
+
+if (!updatedRows || updatedRows.length === 0) {
+  const { error: insertError } = await supabaseAdmin
+    .from("member_access")
+    .insert({
+      profile_id: profileId,
+      status: "active",
+      stripe_customer_id: session.customer as string,
+    });
+
+  if (insertError) {
+    console.error("Failed to insert member access:", insertError);
+    return res.status(200).json({ received: true });
+  }
+}
 
       if (userEmail) {
         await sendEmail({
