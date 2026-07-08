@@ -364,6 +364,7 @@ if (!updatedRows || updatedRows.length === 0) {
     return res.status(200).json({ received: true });
   }
 }
+console.log("Sending purchase welcome email to:", userEmail);
 
       if (userEmail) {
         await sendEmail({
@@ -372,6 +373,8 @@ if (!updatedRows || updatedRows.length === 0) {
           html: buildWelcomeEmail(userEmail),
         });
       }
+
+      console.log("Purchase welcome email function completed.");
 
       if (extraReceiptEmail) {
         await sendEmail({
