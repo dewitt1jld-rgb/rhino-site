@@ -41,34 +41,63 @@ async function sendAdminSitePurchaseEmail({
   extraReceiptEmail,
   amount,
   stripeSessionId,
+  firstName,
+  lastName,
+  companyName,
+  stripeCustomerId,
 }: {
-  userEmail: string | undefined;
-  extraReceiptEmail: string | undefined;
-  amount: string;
-  stripeSessionId: string;
+  userEmail?: string | null;
+  extraReceiptEmail?: string | null;
+  amount?: string;
+  stripeSessionId?: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  companyName?: string | null;
+  stripeCustomerId?: string | null;
 }) {
   const adminEmails =
-    process.env.ADMIN_NOTIFICATION_EMAILS ||
-    process.env.ADMIN_EMAILS ||
-    "dewittjld@gmail.com,landon@therhinowrangler.com";
+    process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "";
+
+  if (!adminEmails) return;
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.therhinowrangler.com";
+
+  const environment = siteUrl.includes("testing")
+    ? "Testing"
+    : "Production";
 
   await sendEmail({
     to: adminEmails,
     subject: "New Rhino Wrangler Site Purchase",
     html: `
       <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6;">
-        <h1>New Site Access Purchase</h1>
+        <h1>New Lifetime Access Purchase</h1>
 
         <p>A customer just purchased lifetime access to The Rhino Wrangler.</p>
 
+        <h2>Customer Information</h2>
         <p>
-          <strong>Customer Email:</strong> ${userEmail || "Unknown"}<br />
-          <strong>Extra Receipt Email:</strong> ${extraReceiptEmail || "None"}<br />
-          <strong>Amount:</strong> ${amount}<br />
-          <strong>Stripe Session:</strong> ${stripeSessionId}
+          <strong>First Name:</strong> ${firstName || "Unknown"}<br />
+          <strong>Last Name:</strong> ${lastName || "Unknown"}<br />
+          <strong>Company:</strong> ${companyName || "Unknown"}<br />
+          <strong>Login Email:</strong> ${userEmail || "Unknown"}<br />
+          <strong>Extra Receipt Email:</strong> ${
+            extraReceiptEmail || "None"
+          }
         </p>
 
-        <p>Member access should now be active.</p>
+        <h2>Purchase Information</h2>
+        <p>
+          <strong>Amount:</strong> ${amount || "Unknown"}<br />
+          <strong>Environment:</strong> ${environment}<br />
+          <strong>Stripe Customer ID:</strong> ${
+            stripeCustomerId || "Unknown"
+          }<br />
+          <strong>Stripe Session:</strong> ${stripeSessionId || "Unknown"}
+        </p>
+
+        <p><strong>Status:</strong> Member access should now be active.</p>
       </div>
     `,
   });
@@ -303,9 +332,18 @@ export default async function handler(
       return res.status(200).json({ received: true });
     }
 
-    const profileId = session.metadata?.profile_id;
-    const userEmail = session.metadata?.email;
-    const extraReceiptEmail = session.metadata?.extra_receipt_email;
+    const metadata = (session.metadata ?? {}) as {
+  profile_id?: string;
+  email?: string;
+  extra_receipt_email?: string;
+  first_name?: string;
+  last_name?: string;
+  company_name?: string;
+};
+
+ const profileId = metadata.profile_id;
+const userEmail = metadata.email;
+const extraReceiptEmail = metadata.extra_receipt_email;
     const amount = formatAmount(session.amount_total, session.currency);
 
     if (!profileId) {
@@ -364,6 +402,7 @@ if (!updatedRows || updatedRows.length === 0) {
     return res.status(200).json({ received: true });
   }
 }
+console.log("Sending purchase welcome email to:", userEmail);
 
       if (userEmail) {
         await sendEmail({
@@ -372,6 +411,8 @@ if (!updatedRows || updatedRows.length === 0) {
           html: buildWelcomeEmail(userEmail),
         });
       }
+
+      console.log("Purchase welcome email function completed.");
 
       if (extraReceiptEmail) {
         await sendEmail({
@@ -387,13 +428,17 @@ if (!updatedRows || updatedRows.length === 0) {
         });
       }
 
-      await sendAdminSitePurchaseEmail({
-        userEmail,
-        extraReceiptEmail,
-        amount,
-        stripeSessionId: session.id,
-      });
-
+await sendAdminSitePurchaseEmail({
+  userEmail,
+  extraReceiptEmail,
+  amount,
+  stripeSessionId: session.id,
+  firstName: metadata.first_name,
+  lastName: metadata.last_name,
+  companyName: metadata.company_name,
+  stripeCustomerId:
+    typeof session.customer === "string" ? session.customer : session.customer?.id,
+});
       console.log("Member access activated:", profileId);
     } catch (error) {
       console.error("Failed during checkout completion handling:", error);

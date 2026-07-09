@@ -13,6 +13,12 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
   const from =
     process.env.FROM_EMAIL || "The Rhino Wrangler <onboarding@resend.dev>";
 
+  console.log("Sending email:", {
+    from,
+    to,
+    subject,
+  });
+
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -27,8 +33,12 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
     }),
   });
 
+  const responseText = await response.text();
+
   if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Email send failed:", errorText);
+    console.error("Email send failed:", response.status, responseText);
+    return;
   }
+
+  console.log("Email sent successfully:", responseText);
 }

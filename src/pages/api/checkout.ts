@@ -62,6 +62,9 @@ export default async function handler(
 const metadata = {
   profile_id: user.id,
   email: user.email || "",
+  first_name: user.user_metadata?.first_name || "",
+  last_name: user.user_metadata?.last_name || "",
+  company_name: user.user_metadata?.company_name || "",
 };
 
     const session = await stripe.checkout.sessions.create({

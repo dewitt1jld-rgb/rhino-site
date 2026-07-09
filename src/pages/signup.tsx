@@ -74,6 +74,7 @@ export default function SignupPage() {
       return;
     }
 
+
     setSuccessMessage(
       "Account created successfully. A subscription is still required before training access is unlocked. Redirecting you to pricing now..."
     );
