@@ -1,5 +1,5 @@
 type SendEmailParams = {
-  to: string;
+  to: string | string[];
   subject: string;
   html: string;
 };
@@ -19,6 +19,13 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
     subject,
   });
 
+
+  const normalizedTo =
+  typeof to === "string"
+    ? to.split(",").map((email) => email.trim()).filter(Boolean)
+    : to;
+
+    
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -27,7 +34,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
     },
     body: JSON.stringify({
       from,
-      to,
+      to: normalizedTo,
       subject,
       html,
     }),
