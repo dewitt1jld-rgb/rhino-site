@@ -73,21 +73,7 @@ export default function SignupPage() {
       setErrorMessage(error.message);
       return;
     }
-    try {
-  await fetch("/api/signup-welcome", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: email.trim(),
-      firstName: firstName.trim(),
-      companyName: companyName.trim(),
-    }),
-  });
-} catch (emailError) {
-  console.error("Signup welcome email request failed:", emailError);
-}
+
 
     setSuccessMessage(
       "Account created successfully. A subscription is still required before training access is unlocked. Redirecting you to pricing now..."
