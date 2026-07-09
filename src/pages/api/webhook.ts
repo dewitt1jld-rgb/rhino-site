@@ -58,7 +58,12 @@ async function sendAdminSitePurchaseEmail({
   const adminEmails =
     process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "";
 
-  if (!adminEmails) return;
+  if (!adminEmails) {
+  console.error(
+    "Admin purchase email skipped: ADMIN_EMAILS / ADMIN_EMAIL is missing."
+  );
+  return;
+}
 
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://www.therhinowrangler.com";
@@ -427,6 +432,13 @@ console.log("Sending purchase welcome email to:", userEmail);
           `,
         });
       }
+console.log("About to send admin purchase email:", {
+  userEmail,
+  firstName: metadata.first_name,
+  lastName: metadata.last_name,
+  companyName: metadata.company_name,
+  amount,
+});
 
 await sendAdminSitePurchaseEmail({
   userEmail,
