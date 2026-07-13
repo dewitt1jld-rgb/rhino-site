@@ -333,15 +333,16 @@ export default function ClassesPage() {
             href={`mailto:${CONTACT_EMAIL}?subject=Rhino Wrangler Training Request`}
             style={styles.contactPrimaryButton}
           >
-            Email Landon
+            Email Us
           </a>
 
-          <Link href="/contact" style={styles.contactSecondaryButton}>
-            Use the Contact Form
-          </Link>
+          <p style={styles.contactSecondaryButton}>
+            480-340-1653
+          </p>
         </div>
 
         <p style={styles.contactEmail}>{CONTACT_EMAIL}</p>
+
       </section>
 
       <section style={styles.faqSection}>
@@ -362,8 +363,7 @@ export default function ClassesPage() {
           <article style={styles.faqItem}>
             <h3 style={styles.faqTitle}>How long are the sessions?</h3>
             <p style={styles.faqText}>
-              Sessions can be structured as focused short meetings, half-day
-              training, full-day training, or multi-day programs depending on
+              Sessions can be structured as full-day trainings, or multi-day programs depending on
               your goals.
             </p>
           </article>
@@ -383,7 +383,7 @@ export default function ClassesPage() {
               Can training cover a specific problem?
             </h3>
             <p style={styles.faqText}>
-              Yes. Training can focus on one machine issue, software workflow,
+              Yes. Training can focus on machine issue, software workflow,
               recurring production problem, or troubleshooting topic.
             </p>
           </article>
