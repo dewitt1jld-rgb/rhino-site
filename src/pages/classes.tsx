@@ -1,129 +1,41 @@
 import Link from "next/link";
-import type { GetServerSideProps } from "next";
-import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
 
-const MASTERCLASS_IMAGE_URL = "https://rhino-training-cdn.b-cdn.net/logo-content-media/images/RHINO%20WRANGLER%20MASTERCLASS%20CERTIFICATION.png";
+const MASTERCLASS_IMAGE_URL =
+  "https://rhino-training-cdn.b-cdn.net/logo-content-media/images/RHINO%20WRANGLER%20MASTERCLASS%20CERTIFICATION.png";
 
-type TrainingClass = {
-  id: string;
-  title: string;
-  start_date: string;
-  end_date: string;
-  days: string | null;
-  daily_time: string | null;
-  timezone: string | null;
-  instructor: string | null;
-  price_cents: number | null;
-  seat_limit: number | null;
-  status: string | null;
-  seats_taken: number;
-  seats_remaining: number;
-  start_time: string | null;
-  end_time: string | null;
-};
+const CONTACT_EMAIL = "landon@therhinowrangler.com";
 
-type ClassesPageProps = {
-  classes: TrainingClass[];
-};
-
-export default function ClassesPage({ classes }: ClassesPageProps) {
-  const [selectedClassId, setSelectedClassId] = useState(
-    classes[0]?.id || ""
-  );
-  const [classPaymentStatus, setClassPaymentStatus] = useState<string | null>(
-  null
-);
-
-useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  setClassPaymentStatus(params.get("classPayment"));
-}, []);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const selectedClass = classes.find((item) => item.id === selectedClassId);
-
-  async function handleReserveSeat() {
-    if (!selectedClassId) {
-      alert("Please select a class.");
-      return;
-    }
-
-    if (!name.trim() || !email.trim() || !companyName.trim()) {
-      alert("Please enter your name, email, and company name.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch("/api/class-checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          companyName: companyName.trim(),
-          classId: selectedClassId,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.error || "Checkout failed.");
-        setLoading(false);
-        return;
-      }
-
-      window.location.href = data.url;
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong starting checkout.");
-      setLoading(false);
-    }
-  }
-
+export default function ClassesPage() {
   return (
     <main style={styles.page}>
-{classPaymentStatus === "success" && (
-  <div style={styles.successBox}>
-    <strong>Seat Reserved!</strong>
-    <p>
-      Your payment was successful and your class reservation has been received.
-      A confirmation email will be sent shortly.
-    </p>
-  </div>
-)}
       <section style={styles.hero}>
         <img
           src={MASTERCLASS_IMAGE_URL}
-          alt="Rhino Wrangler Certified Masterclass"
+          alt="The Rhino Wrangler live online training"
           style={styles.masterclassImage}
         />
 
-        <p style={styles.badge}>Virtual Live Training</p>
+        <p style={styles.badge}>Custom Live Online Training</p>
 
         <h1 style={styles.title}>
-          Rhino Wrangler Certified:
+          Live Training Built
           <br />
-          Complete Software Masterclass
+          Around Your Shop
         </h1>
 
         <p style={styles.subtitle}>
-          The deepest Rhino Wrangler training experience available — built to
-          take users from beginner-level navigation to confident, advanced
-          software operation.
+          Every fabrication shop operates differently. Rather than requiring
+          your team to attend a fixed public class, Rhino Wrangler training can
+          be scheduled around your employees, equipment, software, production
+          schedule, and specific training needs.
         </p>
 
         <div style={styles.heroActions}>
-          <a href="#upcoming" style={styles.primaryButton}>
-            View Upcoming Classes
+          <a
+            href={`mailto:${CONTACT_EMAIL}?subject=Rhino Wrangler Training Request`}
+            style={styles.primaryButton}
+          >
+            Request Training
           </a>
 
           <Link href="/pricing" style={styles.secondaryButton}>
@@ -133,362 +45,382 @@ useEffect(() => {
       </section>
 
       <section style={styles.section}>
-        <h2 style={styles.sectionTitle}>What This Class Includes</h2>
+        <p style={styles.eyebrow}>Training Services</p>
+
+        <h2 style={styles.sectionTitle}>
+          Training for Your Software, Machines, and Team
+        </h2>
+
+        <p style={styles.sectionIntro}>
+          Sessions can focus on a specific problem, provide complete software
+          training, help onboard new employees, or improve the workflows your
+          shop already uses.
+        </p>
 
         <div style={styles.grid}>
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>3-Day Live Training</h3>
+          <article style={styles.card}>
+            <h3 style={styles.cardTitle}>RhinoFab Training</h3>
             <p style={styles.cardText}>
-              A complete training experience taught live over four
-              days. Training will include PartnerPak, Glazier Studio and RhinoFab 
-              Software. 
+              Learn machine operation, RhinoFab workflows, fabrication setup,
+              maintenance procedures, calibration, troubleshooting, and
+              production best practices.
             </p>
+          </article>
+
+          <article style={styles.card}>
+            <h3 style={styles.cardTitle}>Glazier Studio Training</h3>
+            <p style={styles.cardText}>
+              Improve estimating, frame building, fabrication setup, catalog
+              management, reports, drawings, and the day-to-day workflows your
+              team uses.
+            </p>
+          </article>
+
+          <article style={styles.card}>
+            <h3 style={styles.cardTitle}>PartnerPak Training</h3>
+            <p style={styles.cardText}>
+              Get help with software configuration, databases, production
+              workflows, fabrication information, job setup, and efficient
+              program use.
+            </p>
+          </article>
+
+          <article style={styles.card}>
+            <h3 style={styles.cardTitle}>New Employee Onboarding</h3>
+            <p style={styles.cardText}>
+              Give new operators, estimators, programmers, and managers a
+              structured introduction to the software and processes they need
+              to perform their jobs.
+            </p>
+          </article>
+
+          <article style={styles.card}>
+            <h3 style={styles.cardTitle}>Troubleshooting Sessions</h3>
+            <p style={styles.cardText}>
+              Schedule focused training around a recurring machine issue,
+              software problem, fabrication error, production bottleneck, or
+              workflow that your team needs help solving.
+            </p>
+          </article>
+
+          <article style={styles.card}>
+            <h3 style={styles.cardTitle}>Advanced Workflow Training</h3>
+            <p style={styles.cardText}>
+              Help experienced employees deepen their understanding, improve
+              efficiency, standardize procedures, and get more value from the
+              software and equipment already in use.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section style={styles.darkSection}>
+        <div style={styles.darkSectionHeader}>
+          <p style={styles.darkEyebrow}>Flexible Formats</p>
+
+          <h2 style={styles.darkSectionTitle}>
+            Choose the Training Format That Fits Your Company
+          </h2>
+
+          <p style={styles.darkSectionIntro}>
+            Training does not have to follow a preset schedule. Sessions can be
+            built around the size of your team, your production demands, and
+            the amount of material you want to cover.
+          </p>
+        </div>
+
+        <div style={styles.darkGrid}>
+          <article style={styles.darkCard}>
+            <p style={styles.cardNumber}>01</p>
+            <h3 style={styles.darkCardTitle}>One-on-One Training</h3>
+            <p style={styles.darkCardText}>
+              Personalized instruction for an individual operator, estimator,
+              programmer, manager, or technician.
+            </p>
+          </article>
+
+          <article style={styles.darkCard}>
+            <p style={styles.cardNumber}>02</p>
+            <h3 style={styles.darkCardTitle}>Small Team Sessions</h3>
+            <p style={styles.darkCardText}>
+              Interactive training for a department or small group of employees
+              who share similar responsibilities.
+            </p>
+          </article>
+
+          <article style={styles.darkCard}>
+            <p style={styles.cardNumber}>03</p>
+            <h3 style={styles.darkCardTitle}>Company-Wide Training</h3>
+            <p style={styles.darkCardText}>
+              Bring multiple departments together to improve communication,
+              standardize processes, and build shared knowledge.
+            </p>
+          </article>
+
+          <article style={styles.darkCard}>
+            <p style={styles.cardNumber}>04</p>
+            <h3 style={styles.darkCardTitle}>Multi-Day Training</h3>
+            <p style={styles.darkCardText}>
+              Complete training programs can be divided across multiple days or
+              shorter sessions to reduce interruptions to production.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section style={styles.section}>
+        <p style={styles.eyebrow}>The Process</p>
+
+        <h2 style={styles.sectionTitle}>How Scheduling Works</h2>
+
+        <p style={styles.sectionIntro}>
+          The first step is a simple conversation about your company, your
+          employees, and what you want the training to accomplish.
+        </p>
+
+        <div style={styles.processList}>
+          <article style={styles.processItem}>
+            <div style={styles.processNumber}>1</div>
+
+            <div>
+              <h3 style={styles.processTitle}>Contact The Rhino Wrangler</h3>
+              <p style={styles.processText}>
+                Send an email or use the contact form to describe your company
+                and the training you are interested in.
+              </p>
+            </div>
+          </article>
+
+          <article style={styles.processItem}>
+            <div style={styles.processNumber}>2</div>
+
+            <div>
+              <h3 style={styles.processTitle}>Discuss Your Needs</h3>
+              <p style={styles.processText}>
+                We will discuss your software, machines, team experience,
+                current challenges, goals, and preferred training format.
+              </p>
+            </div>
+          </article>
+
+          <article style={styles.processItem}>
+            <div style={styles.processNumber}>3</div>
+
+            <div>
+              <h3 style={styles.processTitle}>Build a Training Plan</h3>
+              <p style={styles.processText}>
+                I will recommend the topics, format, session length, and number
+                of sessions that best fit your needs.
+              </p>
+            </div>
+          </article>
+
+          <article style={styles.processItem}>
+            <div style={styles.processNumber}>4</div>
+
+            <div>
+              <h3 style={styles.processTitle}>Choose Dates and Times</h3>
+              <p style={styles.processText}>
+                Training is scheduled around your availability and production
+                schedule instead of requiring your company to attend a preset
+                public class.
+              </p>
+            </div>
+          </article>
+
+          <article style={styles.processItem}>
+            <div style={styles.processNumber}>5</div>
+
+            <div>
+              <h3 style={styles.processTitle}>Attend Live Online Training</h3>
+              <p style={styles.processText}>
+                Your team attends an interactive online session with guided
+                demonstrations, explanations, questions, and real-world
+                examples.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section style={styles.benefitSection}>
+        <div style={styles.benefitCopy}>
+          <p style={styles.eyebrow}>Why Custom Training?</p>
+
+          <h2 style={styles.sectionTitle}>
+            Spend Time on What Your Employees Actually Need
+          </h2>
+
+          <p style={styles.sectionIntro}>
+            Custom training avoids spending hours on unrelated material. Your
+            sessions can focus on the software, equipment, employees, and
+            production issues that matter most to your shop.
+          </p>
+        </div>
+
+        <div style={styles.benefitGrid}>
+          <div style={styles.benefitItem}>
+            <span style={styles.checkmark}>✓</span>
+            <span>Focus on your specific software and equipment.</span>
           </div>
 
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>Beginner to Advanced</h3>
-            <p style={styles.cardText}>
-              Built for all skill levels — from first-time users to experienced
-              operators who want deeper mastery and understanding of the programs.
-            </p>
+          <div style={styles.benefitItem}>
+            <span style={styles.checkmark}>✓</span>
+            <span>Ask questions throughout the entire session.</span>
           </div>
 
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>Guided Walkthroughs</h3>
-            <p style={styles.cardText}>
-              Includes follow along screens, workflows,
-              troubleshooting, and real-world training examples.
-            </p>
+          <div style={styles.benefitItem}>
+            <span style={styles.checkmark}>✓</span>
+            <span>Use examples based on your shop and workflows.</span>
           </div>
 
-          <div style={styles.card}>
-            <h3 style={styles.cardTitle}>Certification Path</h3>
-            <p style={styles.cardText}>
-              Completion of this masterclass is the training path toward becoming
-              RHINO WRANGLER CERTIFIED.
-            </p>
+          <div style={styles.benefitItem}>
+            <span style={styles.checkmark}>✓</span>
+            <span>Train beginners and experienced employees.</span>
+          </div>
+
+          <div style={styles.benefitItem}>
+            <span style={styles.checkmark}>✓</span>
+            <span>Schedule sessions around production demands.</span>
+          </div>
+
+          <div style={styles.benefitItem}>
+            <span style={styles.checkmark}>✓</span>
+            <span>Receive live instruction without travel expenses.</span>
           </div>
         </div>
       </section>
 
-      <section id="upcoming" style={styles.section}>
-        <h2 style={styles.sectionTitle}>Upcoming Classes</h2>
+      <section style={styles.prepareSection}>
+        <p style={styles.eyebrow}>Before You Contact Me</p>
+
+        <h2 style={styles.sectionTitle}>Information That Helps Me Plan</h2>
+
         <p style={styles.sectionIntro}>
-          Each class is limited to 10 seats to keep training personal and
-          interactive.
+          You do not need to have everything figured out before reaching out.
+          However, including the following information helps me understand your
+          needs and recommend the right training plan.
         </p>
 
-        {classes.length === 0 ? (
-          <div style={styles.emptyBox}>
-            <h3>No upcoming classes are currently available.</h3>
-            <p>Please check back soon or contact The Rhino Wrangler.</p>
-          </div>
-        ) : (
-          <div style={styles.classLayout}>
-            <div style={styles.classList}>
-              {classes.map((trainingClass) => {
-                const isSelected = trainingClass.id === selectedClassId;
-                const isSoldOut = trainingClass.seats_remaining <= 0;
-
-                return (
-                  <button
-                    key={trainingClass.id}
-                    type="button"
-                    onClick={() => setSelectedClassId(trainingClass.id)}
-                    style={{
-                      ...styles.classOption,
-                      ...(isSelected ? styles.classOptionSelected : {}),
-                    }}
-                  >
-                    <div>
-                      <p style={styles.classBadge}>
-                        {isSoldOut ? "Sold Out" : "Open Registration"}
-                      </p>
-                      <h3 style={styles.classTitle}>
-                        {trainingClass.title}
-                      </h3>
-                      <p style={styles.classDate}>
-                        {formatDate(trainingClass.start_date)} –{" "}
-                        {formatDate(trainingClass.end_date)}
-                      </p>
-                    </div>
-
-                 <div
-  style={{
-    ...styles.seatPill,
-    ...(getSeatStatus(trainingClass.seats_remaining).style || {}),
-  }}
->
-  {getSeatStatus(trainingClass.seats_remaining).text} ({trainingClass.seats_remaining})
-</div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div style={styles.priceBox}>
-              <p style={styles.priceLabel}>Selected Class</p>
-
-              {selectedClass && (
-                <>
-                  <h3 style={styles.selectedTitle}>
-                    {selectedClass.title}
-                  </h3>
-
-                  <div style={styles.detailsGrid}>
-                    <p>
-                      <strong>Dates:</strong>{" "}
-                      {formatDate(selectedClass.start_date)} –{" "}
-                      {formatDate(selectedClass.end_date)}
-                    </p>
-                    <p>
-                      <strong>Schedule:</strong>{" "}
-                      {selectedClass.days || "TBD"}
-                    </p>
-                    <p>
-  <strong>Daily Length:</strong>{" "}
-  {selectedClass.daily_time || "6 hours per day"}
-</p>
-
-<p>
-  <strong>Class Time:</strong>{" "}
-  {selectedClass.start_time || "8:00 AM"} –{" "}
-  {selectedClass.end_time || "3:00 PM"}
-</p>
-
-<p>
-  <strong>Time Zone:</strong>{" "}
-  {selectedClass.timezone || "Eastern Time"}
-</p>
-                    <p>
-                      <strong>Instructor:</strong>{" "}
-                      {selectedClass.instructor || "Landon Dewitt"}
-                    </p>
-                    <p>
-                      <strong>Seats Remaining:</strong>{" "}
-                      {selectedClass.seats_remaining} of{" "}
-                      {selectedClass.seat_limit || 10}
-                    </p>
-                  </div>
-
-                  <p style={styles.price}>
-                    {formatPrice(selectedClass.price_cents || 200000)}
-                  </p>
-
-                  <div style={styles.form}>
-                    <div style={styles.fieldGroup}>
-                      <label style={styles.label}>Full Name</label>
-                      <input
-                        style={styles.input}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Example: John Smith"
-                      />
-                    </div>
-
-                    <div style={styles.fieldGroup}>
-                      <label style={styles.label}>Email Address</label>
-                      <input
-                        style={styles.input}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Example: john@company.com"
-                        type="email"
-                      />
-                    </div>
-
-                    <div style={styles.fieldGroup}>
-                      <label style={styles.label}>Company Name</label>
-                      <input
-                        style={styles.input}
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                        placeholder="Example: Rhino Glass"
-                      />
-                    </div>
-
-                    <button
-                      style={{
-                        ...styles.reserveButton,
-                        opacity:
-                          loading || selectedClass.seats_remaining <= 0
-                            ? 0.7
-                            : 1,
-                        cursor:
-                          loading || selectedClass.seats_remaining <= 0
-                            ? "not-allowed"
-                            : "pointer",
-                      }}
-                      onClick={handleReserveSeat}
-                      disabled={
-                        loading || selectedClass.seats_remaining <= 0
-                      }
-                    >
-                      {selectedClass.seats_remaining <= 0
-                        ? "Class Sold Out"
-                        : loading
-                        ? "Opening Checkout..."
-                        : "Reserve My Seat"}
-                    </button>
-                  </div>
-
-                  <p style={styles.note}>
-                    Your seat is not reserved until payment is completed.
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+        <div style={styles.prepareGrid}>
+          <div style={styles.prepareItem}>Company name and location</div>
+          <div style={styles.prepareItem}>Software your team currently uses</div>
+          <div style={styles.prepareItem}>RhinoFab machine models</div>
+          <div style={styles.prepareItem}>Number of employees attending</div>
+          <div style={styles.prepareItem}>Employee experience levels</div>
+          <div style={styles.prepareItem}>Topics or problems to cover</div>
+          <div style={styles.prepareItem}>Preferred dates or timeframe</div>
+          <div style={styles.prepareItem}>Desired session length</div>
+        </div>
       </section>
 
-      <section style={styles.policySection}>
-        <h2 style={styles.sectionTitle}>Cancellation & Reschedule Policy</h2>
+      <section style={styles.contactSection}>
+        <p style={styles.contactEyebrow}>Request Training</p>
 
-        <p style={styles.policyText}>
-          Customers may cancel or reschedule their reservation up to two weeks
-          before class begins. If the class starts within two weeks, Customers
-          must contact The Rhino Wrangler directly for reschedule options.
+        <h2 style={styles.contactTitle}>
+          Ready to Discuss Training for Your Team?
+        </h2>
+
+        <p style={styles.contactText}>
+          Email is the fastest way to get started. Send a brief description of
+          your company, software, equipment, employees, and the topics you would
+          like to cover. I will respond so we can discuss the best training
+          format and scheduling options.
         </p>
 
-        <p style={styles.policyText}>
-          No refunds will be given inside the two-week cutoff window. Reschedule
-          availability will depend on future class openings.
-        </p>
+        <div style={styles.contactActions}>
+          <a
+            href={`mailto:${CONTACT_EMAIL}?subject=Rhino Wrangler Training Request`}
+            style={styles.contactPrimaryButton}
+          >
+            Email Landon
+          </a>
+
+          <Link href="/contact" style={styles.contactSecondaryButton}>
+            Use the Contact Form
+          </Link>
+        </div>
+
+        <p style={styles.contactEmail}>{CONTACT_EMAIL}</p>
+      </section>
+
+      <section style={styles.faqSection}>
+        <p style={styles.eyebrow}>Frequently Asked Questions</p>
+
+        <h2 style={styles.sectionTitle}>Common Training Questions</h2>
+
+        <div style={styles.faqGrid}>
+          <article style={styles.faqItem}>
+            <h3 style={styles.faqTitle}>How much does training cost?</h3>
+            <p style={styles.faqText}>
+              Pricing depends on the topics, number of employees, session
+              length, preparation required, and whether training is completed
+              in one session or across multiple days.
+            </p>
+          </article>
+
+          <article style={styles.faqItem}>
+            <h3 style={styles.faqTitle}>How long are the sessions?</h3>
+            <p style={styles.faqText}>
+              Sessions can be structured as focused short meetings, half-day
+              training, full-day training, or multi-day programs depending on
+              your goals.
+            </p>
+          </article>
+
+          <article style={styles.faqItem}>
+            <h3 style={styles.faqTitle}>
+              Can several employees attend together?
+            </h3>
+            <p style={styles.faqText}>
+              Yes. Training can be provided to one person, a department, or a
+              larger company group.
+            </p>
+          </article>
+
+          <article style={styles.faqItem}>
+            <h3 style={styles.faqTitle}>
+              Can training cover a specific problem?
+            </h3>
+            <p style={styles.faqText}>
+              Yes. Training can focus on one machine issue, software workflow,
+              recurring production problem, or troubleshooting topic.
+            </p>
+          </article>
+
+          <article style={styles.faqItem}>
+            <h3 style={styles.faqTitle}>
+              Can training be divided across multiple days?
+            </h3>
+            <p style={styles.faqText}>
+              Yes. Larger training programs can be divided into shorter
+              sessions to reduce production interruptions and give employees
+              time to practice.
+            </p>
+          </article>
+
+          <article style={styles.faqItem}>
+            <h3 style={styles.faqTitle}>What platform is used?</h3>
+            <p style={styles.faqText}>
+              Live sessions can be conducted using a suitable online meeting
+              platform with screen sharing, demonstrations, discussion, and
+              questions.
+            </p>
+          </article>
+        </div>
       </section>
 
       <section style={styles.disclaimer}>
         <p>
-          The Rhino Wrangler is an independent training program. It is not
-          affiliated with, sponsored by, or endorsed by DeMichele Group. Payments
-          to The Rhino Wrangler do not replace or apply toward DeMichele
-          software, machine, service, licensing, or subscription fees.
+          The Rhino Wrangler is an independent training and consulting
+          platform. It is not affiliated with, sponsored by, operated by, or
+          endorsed by DeMichele Group. Payments to The Rhino Wrangler do not
+          replace or apply toward software, machine, service, licensing, or
+          subscription fees charged by other companies.
         </p>
       </section>
     </main>
   );
-}
-
-export const getServerSideProps: GetServerSideProps<
-  ClassesPageProps
-> = async () => {
-  const supabaseAdmin = createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-
-  const today = new Date().toISOString().slice(0, 10);
-
-  const { data: classes, error: classesError } = await supabaseAdmin
-    .from("training_classes")
-    .select("*")
-    .eq("status", "open")
-    .gte("end_date", today)
-    .order("start_date", { ascending: true });
-
-  if (classesError) {
-    console.error("Error loading training classes:", classesError);
-    return {
-      props: {
-        classes: [],
-      },
-    };
-  }
-
-  const classIds = (classes || []).map((item) => item.id);
-
-  let reservations: { class_id: string | null }[] = [];
-
-  if (classIds.length > 0) {
-    const { data, error } = await supabaseAdmin
-      .from("class_reservations")
-      .select("class_id")
-      .in("class_id", classIds)
-      .eq("status", "paid");
-
-    if (error) {
-      console.error("Error loading reservations:", error);
-    } else {
-      reservations = data || [];
-    }
-  }
-
-  const seatCounts = reservations.reduce<Record<string, number>>(
-    (acc, reservation) => {
-      if (!reservation.class_id) return acc;
-      acc[reservation.class_id] = (acc[reservation.class_id] || 0) + 1;
-      return acc;
-    },
-    {}
-  );
-
-  const classesWithSeats = (classes || []).map((trainingClass) => {
-    const seatsTaken = seatCounts[trainingClass.id] || 0;
-    const seatLimit = trainingClass.seat_limit || 10;
-
-    return {
-      ...trainingClass,
-      seats_taken: seatsTaken,
-      seats_remaining: Math.max(seatLimit - seatsTaken, 0),
-    };
-  });
-
-  return {
-    props: {
-      classes: classesWithSeats,
-    },
-  };
-};
-
-function formatDate(dateString: string) {
-  return new Date(`${dateString}T12:00:00`).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function formatPrice(priceCents: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(priceCents / 100);
-}
-function getSeatStatus(seatsRemaining: number) {
-  if (seatsRemaining <= 0) {
-    return {
-      text: "Sold Out",
-      style: {
-        background: "#dc2626",
-      },
-    };
-  }
-
-  if (seatsRemaining <= 2) {
-    return {
-      text: "Almost Full",
-      style: {
-        background: "#ea580c",
-      },
-    };
-  }
-
-  if (seatsRemaining <= 5) {
-    return {
-      text: "Filling Fast",
-      style: {
-        background: "#d97706",
-      },
-    };
-  }
-
-  return {
-    text: "Seats Available",
-    style: {
-      background: "#111827",
-    },
-  };
 }
 
 const styles: { [key: string]: React.CSSProperties } = {
@@ -527,25 +459,27 @@ const styles: { [key: string]: React.CSSProperties } = {
     margin: "0 0 18px",
     padding: "8px 14px",
     borderRadius: "999px",
-    background: "rgba(255, 255, 255, 0.12)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
+    background: "rgba(245, 158, 11, 0.16)",
+    border: "1px solid rgba(245, 158, 11, 0.46)",
+    color: "#fbbf24",
     fontSize: "14px",
+    fontWeight: 800,
     letterSpacing: "0.08em",
     textTransform: "uppercase",
   },
 
   title: {
     margin: 0,
-    fontSize: "clamp(36px, 6vw, 68px)",
+    fontSize: "clamp(38px, 6vw, 68px)",
     lineHeight: 1.03,
     letterSpacing: "-0.05em",
   },
 
   subtitle: {
-    maxWidth: "760px",
+    maxWidth: "790px",
     margin: "24px auto 0",
     fontSize: "20px",
-    lineHeight: 1.6,
+    lineHeight: 1.65,
     color: "rgba(255, 255, 255, 0.82)",
   },
 
@@ -558,24 +492,13 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
 
   primaryButton: {
-    padding: "14px 22px",
+    padding: "15px 24px",
     borderRadius: "14px",
-    background: "white",
+    background: "#f59e0b",
     color: "#111827",
-    fontWeight: 800,
+    fontWeight: 900,
     textDecoration: "none",
   },
-  successBox: {
-  maxWidth: "1100px",
-  margin: "0 auto 28px",
-  padding: "18px 22px",
-  borderRadius: "18px",
-  background: "#ecfdf5",
-  border: "1px solid #a7f3d0",
-  color: "#065f46",
-  fontSize: "16px",
-  lineHeight: 1.6,
-},
 
   secondaryButton: {
     padding: "14px 22px",
@@ -589,26 +512,36 @@ const styles: { [key: string]: React.CSSProperties } = {
 
   section: {
     maxWidth: "1100px",
-    margin: "56px auto 0",
+    margin: "64px auto 0",
+  },
+
+  eyebrow: {
+    margin: "0 0 10px",
+    color: "#d97706",
+    fontSize: "13px",
+    fontWeight: 900,
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
   },
 
   sectionTitle: {
-    fontSize: "34px",
+    fontSize: "clamp(30px, 4vw, 42px)",
     margin: "0 0 14px",
-    letterSpacing: "-0.03em",
+    letterSpacing: "-0.035em",
+    lineHeight: 1.1,
   },
 
   sectionIntro: {
-    maxWidth: "760px",
+    maxWidth: "790px",
     fontSize: "18px",
-    lineHeight: 1.7,
+    lineHeight: 1.75,
     color: "#4b5563",
-    marginBottom: "26px",
+    margin: "0 0 30px",
   },
 
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
     gap: "18px",
   },
 
@@ -616,186 +549,285 @@ const styles: { [key: string]: React.CSSProperties } = {
     background: "white",
     border: "1px solid #e5e7eb",
     borderRadius: "22px",
-    padding: "24px",
+    padding: "26px",
     boxShadow: "0 14px 40px rgba(15, 23, 42, 0.06)",
   },
 
   cardTitle: {
-    margin: "0 0 10px",
-    fontSize: "20px",
+    margin: "0 0 11px",
+    fontSize: "21px",
+    letterSpacing: "-0.025em",
   },
 
   cardText: {
     margin: 0,
     color: "#4b5563",
+    lineHeight: 1.7,
+  },
+
+  darkSection: {
+    maxWidth: "1100px",
+    margin: "64px auto 0",
+    padding: "38px",
+    borderRadius: "28px",
+    background:
+      "linear-gradient(135deg, #111827 0%, #1f2937 55%, #111827 100%)",
+    boxShadow: "0 22px 60px rgba(15, 23, 42, 0.2)",
+  },
+
+  darkSectionHeader: {
+    maxWidth: "790px",
+    marginBottom: "28px",
+  },
+
+  darkEyebrow: {
+    margin: "0 0 10px",
+    color: "#f59e0b",
+    fontSize: "13px",
+    fontWeight: 900,
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+  },
+
+  darkSectionTitle: {
+    margin: "0 0 14px",
+    color: "white",
+    fontSize: "clamp(30px, 4vw, 42px)",
+    lineHeight: 1.1,
+    letterSpacing: "-0.035em",
+  },
+
+  darkSectionIntro: {
+    margin: 0,
+    color: "#d1d5db",
+    fontSize: "18px",
+    lineHeight: 1.7,
+  },
+
+  darkGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
+    gap: "16px",
+  },
+
+  darkCard: {
+    background: "rgba(255, 255, 255, 0.06)",
+    border: "1px solid rgba(255, 255, 255, 0.12)",
+    borderRadius: "20px",
+    padding: "23px",
+  },
+
+  cardNumber: {
+    margin: "0 0 14px",
+    color: "#f59e0b",
+    fontSize: "14px",
+    fontWeight: 900,
+  },
+
+  darkCardTitle: {
+    margin: "0 0 10px",
+    color: "white",
+    fontSize: "20px",
+  },
+
+  darkCardText: {
+    margin: 0,
+    color: "#d1d5db",
     lineHeight: 1.65,
   },
 
-  classLayout: {
-    display: "grid",
-    gridTemplateColumns: "1.2fr 0.8fr",
-    gap: "24px",
-  },
-
-  classList: {
+  processList: {
     display: "grid",
     gap: "16px",
   },
 
-  classOption: {
-    width: "100%",
-    textAlign: "left",
+  processItem: {
     display: "flex",
-    justifyContent: "space-between",
-    gap: "18px",
-    alignItems: "center",
+    gap: "20px",
+    alignItems: "flex-start",
     background: "white",
     border: "1px solid #e5e7eb",
-    borderRadius: "22px",
-    padding: "22px",
-    boxShadow: "0 14px 40px rgba(15, 23, 42, 0.06)",
-    cursor: "pointer",
+    borderRadius: "20px",
+    padding: "23px",
+    boxShadow: "0 12px 34px rgba(15, 23, 42, 0.05)",
   },
 
-  classOptionSelected: {
-    border: "2px solid #111827",
-    boxShadow: "0 18px 50px rgba(15, 23, 42, 0.12)",
+  processNumber: {
+    flex: "0 0 44px",
+    height: "44px",
+    borderRadius: "14px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#f59e0b",
+    color: "#111827",
+    fontWeight: 900,
+    fontSize: "18px",
   },
 
-  classBadge: {
-    display: "inline-block",
-    margin: "0 0 10px",
-    padding: "7px 12px",
-    borderRadius: "999px",
-    background: "#eef2ff",
-    color: "#3730a3",
-    fontWeight: 800,
-    fontSize: "13px",
+  processTitle: {
+    margin: "1px 0 8px",
+    fontSize: "20px",
   },
 
-  classTitle: {
-    margin: "0 0 8px",
-    fontSize: "22px",
-    letterSpacing: "-0.03em",
-  },
-
-  classDate: {
+  processText: {
     margin: 0,
     color: "#4b5563",
-    fontWeight: 700,
+    lineHeight: 1.7,
   },
 
-  seatPill: {
-    whiteSpace: "nowrap",
-    borderRadius: "999px",
-    padding: "9px 12px",
-    background: "#111827",
-    color: "white",
-    fontSize: "13px",
-    fontWeight: 900,
+  benefitSection: {
+    maxWidth: "1100px",
+    margin: "64px auto 0",
+    padding: "34px",
+    borderRadius: "26px",
+    background: "#fffbeb",
+    border: "1px solid #fde68a",
   },
 
-  priceBox: {
-    borderRadius: "22px",
-    background: "#f9fafb",
-    border: "1px solid #e5e7eb",
-    padding: "24px",
-    alignSelf: "start",
-    position: "sticky",
-    top: "20px",
+  benefitCopy: {
+    maxWidth: "790px",
   },
 
-  priceLabel: {
-    margin: 0,
-    color: "#6b7280",
-    fontWeight: 700,
-  },
-
-  selectedTitle: {
-    margin: "8px 0 16px",
-    fontSize: "22px",
-    letterSpacing: "-0.03em",
-  },
-
-  detailsGrid: {
+  benefitGrid: {
     display: "grid",
-    gap: "4px",
-    color: "#374151",
-    lineHeight: 1.5,
-    fontSize: "14px",
-  },
-
-  price: {
-    margin: "18px 0",
-    fontSize: "44px",
-    fontWeight: 900,
-    letterSpacing: "-0.05em",
-  },
-
-  form: {
-    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
     gap: "14px",
   },
 
-  fieldGroup: {
-    display: "grid",
-    gap: "6px",
-  },
-
-  label: {
-    fontSize: "13px",
-    fontWeight: 800,
+  benefitItem: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "12px",
+    padding: "16px",
+    background: "rgba(255, 255, 255, 0.72)",
+    borderRadius: "16px",
     color: "#374151",
+    fontWeight: 700,
+    lineHeight: 1.55,
   },
 
-  input: {
-    width: "100%",
-    border: "1px solid #d1d5db",
-    borderRadius: "12px",
-    padding: "13px 14px",
-    fontSize: "15px",
-    outline: "none",
+  checkmark: {
+    color: "#d97706",
+    fontWeight: 900,
   },
 
-  reserveButton: {
-    width: "100%",
-    border: "none",
+  prepareSection: {
+    maxWidth: "1100px",
+    margin: "64px auto 0",
+  },
+
+  prepareGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gap: "13px",
+  },
+
+  prepareItem: {
+    padding: "17px 18px",
+    borderRadius: "16px",
+    background: "white",
+    border: "1px solid #e5e7eb",
+    color: "#374151",
+    fontWeight: 750,
+    boxShadow: "0 10px 26px rgba(15, 23, 42, 0.04)",
+  },
+
+  contactSection: {
+    maxWidth: "1100px",
+    margin: "64px auto 0",
+    padding: "44px 28px",
+    borderRadius: "28px",
+    textAlign: "center",
+    background:
+      "linear-gradient(135deg, #f59e0b 0%, #fbbf24 55%, #f59e0b 100%)",
+    color: "#111827",
+    boxShadow: "0 20px 55px rgba(217, 119, 6, 0.22)",
+  },
+
+  contactEyebrow: {
+    margin: "0 0 10px",
+    fontSize: "13px",
+    fontWeight: 900,
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+  },
+
+  contactTitle: {
+    maxWidth: "760px",
+    margin: "0 auto",
+    fontSize: "clamp(32px, 5vw, 48px)",
+    lineHeight: 1.08,
+    letterSpacing: "-0.04em",
+  },
+
+  contactText: {
+    maxWidth: "770px",
+    margin: "20px auto 0",
+    fontSize: "18px",
+    lineHeight: 1.7,
+  },
+
+  contactActions: {
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: "14px",
+    marginTop: "28px",
+  },
+
+  contactPrimaryButton: {
+    padding: "15px 24px",
     borderRadius: "14px",
-    padding: "15px 18px",
     background: "#111827",
     color: "white",
     fontWeight: 900,
-    fontSize: "16px",
+    textDecoration: "none",
   },
 
-  note: {
-    margin: "12px 0 0",
-    fontSize: "13px",
-    color: "#6b7280",
-    lineHeight: 1.5,
+  contactSecondaryButton: {
+    padding: "14px 22px",
+    borderRadius: "14px",
+    background: "rgba(255, 255, 255, 0.58)",
+    color: "#111827",
+    fontWeight: 900,
+    textDecoration: "none",
+    border: "1px solid rgba(17, 24, 39, 0.18)",
   },
 
-  emptyBox: {
+  contactEmail: {
+    margin: "20px 0 0",
+    fontWeight: 900,
+  },
+
+  faqSection: {
+    maxWidth: "1100px",
+    margin: "64px auto 0",
+  },
+
+  faqGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "16px",
+  },
+
+  faqItem: {
+    padding: "23px",
+    borderRadius: "20px",
     background: "white",
     border: "1px solid #e5e7eb",
-    borderRadius: "22px",
-    padding: "28px",
-    boxShadow: "0 14px 40px rgba(15, 23, 42, 0.06)",
+    boxShadow: "0 12px 34px rgba(15, 23, 42, 0.05)",
   },
 
-  policySection: {
-    maxWidth: "1100px",
-    margin: "56px auto 0",
-    background: "#fff7ed",
-    border: "1px solid #fed7aa",
-    borderRadius: "26px",
-    padding: "28px",
+  faqTitle: {
+    margin: "0 0 10px",
+    fontSize: "19px",
   },
 
-  policyText: {
-    fontSize: "17px",
+  faqText: {
+    margin: 0,
+    color: "#4b5563",
     lineHeight: 1.7,
-    color: "#7c2d12",
   },
 
   disclaimer: {
