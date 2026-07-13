@@ -189,8 +189,8 @@ const portalLabel = (
     lineHeight: 1.05,
   }}
 >
-  <span style={{ display: "block" }}>Virtual Class</span>
-    <span style={{ display: "block" }}>Schedule</span>
+  <span style={{ display: "block" }}>Request</span>
+    <span style={{ display: "block" }}>Online Training</span>
 </Link>
 )}
 
@@ -304,12 +304,12 @@ const portalLabel = (
 
 {isLoggedIn && (
   <Link href="/classes" className="mobileLink" onClick={closeMenu}>
-    Virtual Classes
+    Request Online Training
   </Link>
 )}
 
           <Link href="/dashboard" className="mobileLink" onClick={closeMenu}>
-            Digital Training
+            Training Pages
           </Link>
 
       <Link href="/contact">

@@ -75,7 +75,7 @@ export default function Home() {
       transform: "translate(-150px, 20px)",
     }}
   >
-    View Virtual Training Class Schedule
+    Request Online Training
   </Link>
 </div>
         </div>
