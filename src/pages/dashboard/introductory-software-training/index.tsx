@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Link from "next/link";
 
 type Lesson = {
@@ -359,6 +360,13 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
 }
 
 export default function IntroductorySoftwareTrainingPage() {
+  const [openModule, setOpenModule] = useState("02");
+
+  const toggleModule = (moduleNumber: string) => {
+    setOpenModule((currentModule) =>
+      currentModule === moduleNumber ? "" : moduleNumber
+    );
+  };
   const lessonCount = courseModules.reduce(
     (total, module) => total + module.lessons.length,
     0
@@ -408,31 +416,67 @@ export default function IntroductorySoftwareTrainingPage() {
         </Link>
       </section>
 
-      <section className="moduleList">
-        {courseModules.map((module) => (
-          <section className="courseModule" key={module.number}>
-            <header className="moduleHeader">
-              <div className="moduleNumber">Module {module.number}</div>
+  <section className="moduleList">
+  {courseModules.map((module) => {
+    const isOpen = openModule === module.number;
 
-              <div className="moduleHeading">
-                <h2>{module.title}</h2>
-                <p>{module.description}</p>
-              </div>
+    const availableInModule = module.lessons.filter(
+      (lesson) => lesson.status === "Available"
+    ).length;
 
-              <div className="moduleCount">
+    return (
+      <section
+        className={`courseModule ${isOpen ? "moduleOpen" : ""}`}
+        key={module.number}
+      >
+        <button
+          type="button"
+          className="moduleHeader"
+          onClick={() => toggleModule(module.number)}
+          aria-expanded={isOpen}
+          aria-controls={`module-lessons-${module.number}`}
+        >
+          <div className="moduleNumber">Module {module.number}</div>
+
+          <div className="moduleHeading">
+            <h2>{module.title}</h2>
+            <p>{module.description}</p>
+          </div>
+
+          <div className="moduleDetails">
+            <div className="moduleCount">
+              <span>
                 {module.lessons.length}{" "}
                 {module.lessons.length === 1 ? "Lesson" : "Lessons"}
-              </div>
-            </header>
+              </span>
 
-            <div className="lessonList">
-              {module.lessons.map((lesson) => (
-                <LessonCard key={lesson.number} lesson={lesson} />
-              ))}
+              {availableInModule > 0 && (
+                <span className="moduleAvailable">
+                  {availableInModule} Available
+                </span>
+              )}
             </div>
-          </section>
-        ))}
+
+            <span className={`moduleArrow ${isOpen ? "open" : ""}`}>
+              ↓
+            </span>
+          </div>
+        </button>
+
+        <div
+          id={`module-lessons-${module.number}`}
+          className={`moduleContent ${isOpen ? "open" : ""}`}
+        >
+          <div className="lessonList">
+            {module.lessons.map((lesson) => (
+              <LessonCard key={lesson.number} lesson={lesson} />
+            ))}
+          </div>
+        </div>
       </section>
+    );
+  })}
+</section>
 
       <section className="courseNotice">
         <div className="noticeIcon">RW</div>
@@ -565,57 +609,156 @@ export default function IntroductorySoftwareTrainingPage() {
           gap: 34px;
         }
 
-        .courseModule {
-          scroll-margin-top: 120px;
-        }
+.courseModule {
+  scroll-margin-top: 120px;
+  border: 1px solid rgba(245, 158, 11, 0.12);
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.4);
+  overflow: hidden;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
 
-        .moduleHeader {
-          display: grid;
-          grid-template-columns: auto minmax(0, 1fr) auto;
-          gap: 20px;
-          align-items: center;
-          margin-bottom: 16px;
-          padding: 22px 24px;
-          border: 1px solid rgba(245, 158, 11, 0.18);
-          border-radius: 20px;
-          background:
-            linear-gradient(
-              110deg,
-              rgba(245, 158, 11, 0.11),
-              rgba(15, 23, 42, 0.85) 35%
-            );
-        }
+.courseModule.moduleOpen {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(15, 23, 42, 0.66);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.24),
+    0 0 30px rgba(245, 158, 11, 0.05);
+}
 
-        .moduleNumber {
-          padding: 8px 12px;
-          border: 1px solid rgba(245, 158, 11, 0.35);
-          border-radius: 999px;
-          background: rgba(245, 158, 11, 0.12);
-          color: #fbbf24;
-          font-size: 0.78rem;
-          font-weight: 900;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          white-space: nowrap;
-        }
+.moduleHeader {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  border: 0;
+  background:
+    linear-gradient(
+      110deg,
+      rgba(245, 158, 11, 0.1),
+      rgba(15, 23, 42, 0.76) 38%
+    );
+  color: white;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
 
-        .moduleHeading h2 {
-          margin: 0 0 5px;
-          font-size: 24px;
-        }
+.moduleHeader:hover {
+  background:
+    linear-gradient(
+      110deg,
+      rgba(245, 158, 11, 0.16),
+      rgba(15, 23, 42, 0.9) 40%
+    );
+}
 
-        .moduleHeading p {
-          margin: 0;
-          color: rgba(255, 255, 255, 0.64);
-          line-height: 1.55;
-        }
+.moduleHeader:focus-visible {
+  outline: 3px solid rgba(245, 158, 11, 0.72);
+  outline-offset: -3px;
+}
 
-        .moduleCount {
-          color: rgba(255, 255, 255, 0.55);
-          font-size: 0.86rem;
-          font-weight: 800;
-          white-space: nowrap;
-        }
+.moduleNumber {
+  padding: 8px 12px;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.moduleHeading h2 {
+  margin: 0 0 5px;
+  font-size: 24px;
+}
+
+.moduleHeading p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.64);
+  line-height: 1.55;
+}
+
+.moduleDetails {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.moduleCount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.86rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.moduleAvailable {
+  color: #86efac;
+  font-size: 0.78rem;
+}
+
+.moduleArrow {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(245, 158, 11, 0.26);
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.08);
+  color: #fbbf24;
+  font-size: 20px;
+  font-weight: 900;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.moduleArrow.open {
+  transform: rotate(180deg);
+  background: rgba(245, 158, 11, 0.16);
+}
+
+.moduleContent {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.3s ease,
+    opacity 0.25s ease,
+    visibility 0.25s ease;
+}
+
+.moduleContent.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+}
+
+.moduleContent > .lessonList {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.moduleContent.open > .lessonList {
+  padding: 0 18px 18px;
+}
 
         .lessonList {
           display: flex;
@@ -803,15 +946,25 @@ export default function IntroductorySoftwareTrainingPage() {
             flex-direction: column;
             align-items: flex-start;
           }
+.moduleHeader {
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding: 21px;
+}
 
-          .moduleHeader {
-            grid-template-columns: 1fr;
-          }
+.moduleDetails {
+  width: 100%;
+  justify-content: space-between;
+}
 
-          .moduleCount {
-            white-space: normal;
-          }
+.moduleCount {
+  align-items: flex-start;
+  white-space: normal;
+}
 
+.moduleContent.open > .lessonList {
+  padding: 0 12px 12px;
+}
           .lessonCard {
             grid-template-columns: 1fr;
             gap: 18px;
