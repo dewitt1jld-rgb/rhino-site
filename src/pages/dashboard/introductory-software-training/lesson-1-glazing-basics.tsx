@@ -1221,6 +1221,7 @@ export default function LessonOneGlazingBasicsPage() {
             padding: 23px;
           }
 
+          
           .lessonSection,
           .vocabularySection,
           .keyTakeaways,

@@ -51,6 +51,7 @@ const courseModules: CourseModule[] = [
       },
     ],
   },
+  
   {
     number: "02",
     title: "Software Foundations",
