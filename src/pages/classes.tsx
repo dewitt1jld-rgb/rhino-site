@@ -324,8 +324,8 @@ export default function ClassesPage() {
         <p style={styles.contactText}>
           Email is the fastest way to get started. Send a brief description of
           your company, software, equipment, employees, and the topics you would
-          like to cover. I will respond so we can discuss the best training
-          format and scheduling options.
+          like to cover. Please also provide 2 potential dates for when you would like trainging to take place. 
+          If you have any questions feel free to call me at the number listed below.  
         </p>
 
         <div style={styles.contactActions}>

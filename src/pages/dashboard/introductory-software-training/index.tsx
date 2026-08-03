@@ -24,14 +24,15 @@ const courseModules: CourseModule[] = [
     description:
       "Learn the terminology, materials, people, and processes that make up the commercial glass industry.",
     lessons: [
-      {
-        number: "01",
-        title: "Welcome to the Glass Industry",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how commercial glass companies operate, the different roles within a glass shop, and where Glazier Studio and PartnerPak fit into the industry.",
-      },
+{
+  number: "01",
+  title: "Welcome to the Glass Industry",
+  time: "30–45 min",
+  status: "Available",
+  description:
+    "Learn the fundamental storefront framing terminology, recognize common components, and begin understanding how completed frames relate to Glazier Studio and CAD drawings.",
+  href: "/dashboard/introductory-software-training/lesson-1-glazing-basics",
+},
       {
         number: "02",
         title: "Glass, Aluminum & Industry Terminology",
