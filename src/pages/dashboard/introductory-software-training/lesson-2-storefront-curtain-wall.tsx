@@ -610,22 +610,22 @@ export default function StorefrontCurtainWallLessonPage() {
               marginTop: "30px",
             }}
           >
-            <figure
-              style={{
-                flex: "1 1 300px",
-                maxWidth: "420px",
-                minWidth: "280px",
-                margin: 0,
-                textAlign: "center",
-              }}
-            >
+          <figure
+  style={{
+    flex: "1 1 440px",
+    maxWidth: "520px",
+    minWidth: "320px",
+    margin: 0,
+    textAlign: "center",
+  }}
+>
               <img
                 src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/shearblock_labeled.png"
                 alt="Labeled shear-block curtain wall assembly"
                 loading="lazy"
                 style={{
                   width: "100%",
-                  height: "240px",
+                  height: "320px",
                   objectFit: "contain",
                   background: "#ffffff",
                   borderRadius: "16px",
