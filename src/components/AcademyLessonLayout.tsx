@@ -14,6 +14,11 @@ type AcademyLessonLayoutProps = {
   currentStep: number;
   steps: Step[];
   children: ReactNode;
+
+  previousHref?: string;
+  previousLabel?: string;
+  nextHref?: string;
+  nextLabel?: string;
 };
 
 export default function AcademyLessonLayout({
@@ -23,7 +28,13 @@ export default function AcademyLessonLayout({
   currentStep,
   steps,
   children,
+  previousHref,
+  previousLabel = "← Previous",
+  nextHref,
+  nextLabel = "Continue →",
 }: AcademyLessonLayoutProps) {
+  const showBottomNavigation = Boolean(previousHref || nextHref);
+
   return (
     <main className="academyPage">
       <aside className="academySidebar">
@@ -36,6 +47,7 @@ export default function AcademyLessonLayout({
 
         <p className="academyEyebrow">Lesson {lessonNumber}</p>
         <h1>{lessonTitle}</h1>
+
         <p className="academyDescription">{lessonDescription}</p>
 
         <div className="academyStepList">
@@ -58,7 +70,29 @@ export default function AcademyLessonLayout({
       </aside>
 
       <section className="academyStage">
-        <article className="academyCard">{children}</article>
+        <article className="academyCard">
+          {children}
+
+          {showBottomNavigation && (
+            <div className="academyBottomNavigation">
+              <div className="academyPreviousArea">
+                {previousHref && (
+                  <Link href={previousHref} className="secondary">
+                    {previousLabel}
+                  </Link>
+                )}
+              </div>
+
+              <div className="academyNextArea">
+                {nextHref && (
+                  <Link href={nextHref} className="primary">
+                    {nextLabel}
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
+        </article>
       </section>
 
       <style jsx global>{`
@@ -76,7 +110,12 @@ export default function AcademyLessonLayout({
               rgba(245, 158, 11, 0.1),
               transparent 34%
             ),
-            linear-gradient(135deg, #05070b 0%, #0d1118 45%, #05070b 100%);
+            linear-gradient(
+              135deg,
+              #05070b 0%,
+              #0d1118 45%,
+              #05070b 100%
+            );
           color: white;
         }
 
@@ -93,6 +132,10 @@ export default function AcademyLessonLayout({
           color: #f59e0b;
           font-weight: 900;
           text-decoration: none;
+        }
+
+        .academyBack:hover {
+          color: #fbbf24;
         }
 
         .academyEyebrow,
@@ -130,12 +173,26 @@ export default function AcademyLessonLayout({
           color: white;
           font-weight: 900;
           text-decoration: none;
+          transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+        }
+
+        .academyStep:hover {
+          border-color: rgba(245, 158, 11, 0.35);
+          background: rgba(245, 158, 11, 0.08);
+          transform: translateX(3px);
         }
 
         .academyStep.active {
           border-color: rgba(245, 158, 11, 0.5);
           background: rgba(245, 158, 11, 0.14);
           color: #fbbf24;
+        }
+
+        .academyStep.active:hover {
+          transform: none;
         }
 
         .academyStage {
@@ -259,20 +316,44 @@ export default function AcademyLessonLayout({
           line-height: 1.4;
         }
 
-        .navButtons {
+        .navButtons,
+        .academyBottomNavigation {
           display: flex;
           justify-content: space-between;
+          align-items: center;
           gap: 16px;
           margin-top: 42px;
         }
 
+        .academyBottomNavigation {
+          padding-top: 30px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .academyPreviousArea,
+        .academyNextArea {
+          display: flex;
+        }
+
+        .academyNextArea {
+          justify-content: flex-end;
+          margin-left: auto;
+        }
+
         .primary,
         .secondary {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 48px;
           padding: 14px 22px;
           border-radius: 12px;
           font-weight: 900;
           text-align: center;
           text-decoration: none;
+          transition:
+            transform 0.2s ease,
+            background 0.2s ease;
         }
 
         .primary {
@@ -280,9 +361,19 @@ export default function AcademyLessonLayout({
           color: #111827;
         }
 
+        .primary:hover {
+          background: #fbbf24;
+          transform: translateY(-2px);
+        }
+
         .secondary {
           background: rgba(255, 255, 255, 0.1);
           color: white;
+        }
+
+        .secondary:hover {
+          background: rgba(255, 255, 255, 0.16);
+          transform: translateY(-2px);
         }
 
         @media (max-width: 900px) {
@@ -311,8 +402,24 @@ export default function AcademyLessonLayout({
         }
 
         @media (max-width: 560px) {
-          .navButtons {
+          .navButtons,
+          .academyBottomNavigation {
             flex-direction: column;
+            align-items: stretch;
+          }
+
+          .academyPreviousArea,
+          .academyNextArea {
+            width: 100%;
+          }
+
+          .academyNextArea {
+            margin-left: 0;
+          }
+
+          .academyPreviousArea a,
+          .academyNextArea a {
+            width: 100%;
           }
         }
       `}</style>

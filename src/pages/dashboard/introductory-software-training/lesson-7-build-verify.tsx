@@ -1,4 +1,3 @@
-import Link from "next/link";
 import AcademyLessonLayout from "../../../components/AcademyLessonLayout";
 
 const steps = [
@@ -16,13 +15,17 @@ const img = {
 
 export default function LessonSevenBuildVerifyPage() {
   return (
-    <AcademyLessonLayout
-      lessonNumber="07"
-      lessonTitle="Building Your First Frame"
-      lessonDescription="Create a guided training project and build your first storefront frame using the same settings shown throughout the lesson."
-      currentStep={3}
-      steps={steps}
-    >
+<AcademyLessonLayout
+  lessonNumber="07"
+  lessonTitle="Building Your First Frame"
+  lessonDescription="Create a guided training project and build your first storefront frame using the same settings shown throughout the lesson."
+  currentStep={3}
+  steps={steps}
+  previousHref="/dashboard/introductory-software-training/lesson-7-frame-settings"
+  previousLabel="← Previous: Enter Frame Settings"
+  nextHref="/dashboard/introductory-software-training/lesson-8-add-door"
+  nextLabel="Lesson 8: Add a Door →"
+>
       <p className="academyEyebrow">Step 3 of 3</p>
       <h2>Build and Verify the Frame</h2>
 
@@ -344,14 +347,11 @@ export default function LessonSevenBuildVerifyPage() {
 
     <div className="lessonText">
       <p>
-        This icon is intended to provide help information, but it may not work
-        reliably in the current software.
+        This icon doesn't work...
       </p>
 
       <p>
-        That limitation is one of the reasons the Rhino Wrangler training
-        platform was created: to provide clear, practical guidance when the
-        built-in help tools are unavailable or incomplete.
+        This is exactly why I built the Rhino Wrangler Academy
       </p>
     </div>
   </section>
@@ -379,14 +379,7 @@ export default function LessonSevenBuildVerifyPage() {
         </div>
       </div>
 
-      <div className="navButtons">
-        <Link href="/dashboard/introductory-software-training/lesson-7-frame-settings" className="secondary">
-          ← Previous
-        </Link>
-        <Link href="/dashboard/introductory-software-training" className="primary">
-          Return to Curriculum
-        </Link>
-      </div>
+
     </AcademyLessonLayout>
   );
 }
