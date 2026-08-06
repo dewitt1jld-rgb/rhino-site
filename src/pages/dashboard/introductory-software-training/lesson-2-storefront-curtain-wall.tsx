@@ -219,33 +219,56 @@ export default function StorefrontCurtainWallLessonPage() {
           </p>
         </ImageSection>
 
-<ImageSection
-  label="Storefront Assembly"
-  title="Recognizing Screw-Spline Members"
-  imageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_holes.png"
-  imageAlt="Screw-spline holes and internal screw races in storefront aluminum"
-  caption="Screw-spline holes used to fasten horizontal members to vertical members."
-  secondImageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_together.png"
-  secondImageAlt="Storefront screw-spline members assembled together"
-  secondCaption="Screw-spline storefront members assembled together."
->
-  <p>
-    Screw-spline construction is commonly found in storefront systems.
-    One of the easiest ways to recognize it is by looking for the{" "}
-    <strong>screw races</strong> formed into the aluminum.
-  </p>
+<section className="lessonSection">
+  <div className="sectionHeading">
+    <p className="sectionLabel">Storefront Assembly</p>
+    <h2>Recognizing Screw-Spline Members</h2>
+  </div>
 
-  <p>
-    Screw-spline sill, horizontal, and head members contain internal
-    races that allow screws to pass through the vertical member and
-    fasten directly into the end of the horizontal member.
-  </p>
+  <div className="lessonText">
+    <p>
+      Screw-spline construction is commonly found in storefront systems. One
+      of the easiest ways to recognize it is by looking for the{" "}
+      <strong>screw races</strong> formed into the aluminum.
+    </p>
 
-  <p>
-    Hole patterns may vary depending on the framing profile, but the
-    basic shape and assembly method remain similar.
-  </p>
-</ImageSection>
+    <p>
+      Screw-spline sill, horizontal, and head members contain internal races
+      that allow screws to pass through the vertical member and fasten directly
+      into the end of the horizontal member.
+    </p>
+
+    <p>
+      Hole patterns may vary depending on the framing profile, but the basic
+      shape and assembly method remain similar.
+    </p>
+  </div>
+
+  <div className="twoImageGrid">
+    <figure className="gridMedia">
+      <img
+        src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_holes.png"
+        alt="Screw-spline holes and internal screw races in storefront aluminum"
+        loading="lazy"
+      />
+      <figcaption>
+        Screw-spline holes used to fasten horizontal members to vertical
+        members.
+      </figcaption>
+    </figure>
+
+    <figure className="gridMedia">
+      <img
+        src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_together.png"
+        alt="Storefront screw-spline members assembled together"
+        loading="lazy"
+      />
+      <figcaption>
+        Screw-spline storefront members assembled together.
+      </figcaption>
+    </figure>
+  </div>
+</section>
 
         <section className="lessonSection">
           <div className="sectionHeading">
@@ -902,6 +925,42 @@ export default function StorefrontCurtainWallLessonPage() {
   text-align: center;
 }
 
+.twoImageGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+  margin-top: 28px;
+}
+
+.gridMedia {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.gridMedia img {
+  display: block;
+  width: 100%;
+  height: 420px;
+  object-fit: contain;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+}
+
+.gridMedia figcaption {
+  margin-top: 11px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
         .learningObjectives h2 {
           margin-bottom: 15px;
           font-size: 27px;
@@ -1051,6 +1110,7 @@ export default function StorefrontCurtainWallLessonPage() {
 .gridMedia img {
   height: auto;
 }
+
 
         .warningCallout {
           margin-top: 25px;
