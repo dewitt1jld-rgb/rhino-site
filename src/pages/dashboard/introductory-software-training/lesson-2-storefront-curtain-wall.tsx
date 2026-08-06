@@ -23,8 +23,6 @@ function ImageSection({
   secondImageAlt,
   secondCaption,
 }: ImageSectionProps) {
-  const hasTwoImages = Boolean(secondImageUrl);
-
   return (
     <section className="lessonSection">
       <div className="sectionHeading">
@@ -34,14 +32,14 @@ function ImageSection({
 
       <div className="lessonText">{children}</div>
 
-      <div className={hasTwoImages ? "mediaGrid" : ""}>
-        <figure className="fullWidthMedia">
-          <img src={imageUrl} alt={imageAlt} loading="lazy" />
-          {caption && <figcaption>{caption}</figcaption>}
-        </figure>
+      {secondImageUrl ? (
+        <div className="twoImageGrid">
+          <figure className="gridMedia">
+            <img src={imageUrl} alt={imageAlt} loading="lazy" />
+            {caption && <figcaption>{caption}</figcaption>}
+          </figure>
 
-        {secondImageUrl && (
-          <figure className="fullWidthMedia">
+          <figure className="gridMedia">
             <img
               src={secondImageUrl}
               alt={secondImageAlt || ""}
@@ -49,8 +47,13 @@ function ImageSection({
             />
             {secondCaption && <figcaption>{secondCaption}</figcaption>}
           </figure>
-        )}
-      </div>
+        </div>
+      ) : (
+        <figure className="fullWidthMedia">
+          <img src={imageUrl} alt={imageAlt} loading="lazy" />
+          {caption && <figcaption>{caption}</figcaption>}
+        </figure>
+      )}
     </section>
   );
 }
@@ -865,6 +868,40 @@ export default function StorefrontCurtainWallLessonPage() {
           color: #ffffff;
         }
 
+        .twoImageGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  margin-top: 28px;
+}
+
+.gridMedia {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.gridMedia img {
+  display: block;
+  width: 100%;
+  height: 420px;
+  object-fit: contain;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+}
+
+.gridMedia figcaption {
+  margin-top: 11px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
         .learningObjectives h2 {
           margin-bottom: 15px;
           font-size: 27px;
@@ -1005,6 +1042,14 @@ export default function StorefrontCurtainWallLessonPage() {
 
 .mediaGrid .fullWidthMedia {
   margin-top: 0;
+}
+
+.twoImageGrid {
+  grid-template-columns: 1fr;
+}
+
+.gridMedia img {
+  height: auto;
 }
 
         .warningCallout {
