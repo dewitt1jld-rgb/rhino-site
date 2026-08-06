@@ -94,14 +94,15 @@ const courseModules: CourseModule[] = [
     description:
       "Create projects, build storefront frames, modify members, and work with increasingly complex openings.",
     lessons: [
-      {
-        number: "07",
-        title: "Building Your First Frame",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Create a project and build a basic storefront frame while learning the core frame-building workflow.",
-      },
+ {
+  number: "07",
+  title: "Building Your First Frame",
+  time: "30–45 min",
+  status: "Available",
+  description:
+    "Create a guided training project, enter exact frame settings, build a basic storefront frame, and practice selecting openings and framing members.",
+  href: "/dashboard/introductory-software-training/lesson-7-create-project",
+},
       {
         number: "08",
         title: "Modifying Frames & Members",

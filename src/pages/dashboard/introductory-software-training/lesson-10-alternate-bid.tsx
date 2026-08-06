@@ -1,0 +1,187 @@
+import Link from "next/link";
+import AcademyLessonLayout from "../../../components/AcademyLessonLayout";
+
+const steps = [
+  {
+    number: 1,
+    title: "Splices, Tools & Shortcuts",
+    href: "/dashboard/introductory-software-training/lesson-10-splices-tools",
+  },
+  {
+    number: 2,
+    title: "Create an Alternate Bid",
+    href: "/dashboard/introductory-software-training/lesson-10-alternate-bid",
+  },
+  {
+    number: 3,
+    title: "Apply, Process & Verify",
+    href: "/dashboard/introductory-software-training/lesson-10-verify-alternate",
+  },
+];
+
+const image01 =
+  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-01-main.png";
+
+const image02 =
+  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-02-job-selection.png";
+
+const image03 =
+  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-03-main-alt-screen.png";
+
+export default function LessonTenAlternateBidPage() {
+  return (
+    <AcademyLessonLayout
+      lessonNumber="10"
+      lessonTitle="Mastering the Frame Builder"
+      lessonDescription="Use advanced frame tools, set splice locations, review shortcuts, and create an alternate bid from the training project."
+      currentStep={2}
+      steps={steps}
+    >
+      <p className="academyEyebrow">Step 2 of 3</p>
+      <h2>Create an Alternate Bid</h2>
+
+      <div className="goalBox">
+        <strong>Goal:</strong> Duplicate the Lesson 7 Training Project into a
+        second project so its vendor or metal group can be changed without
+        rebuilding the frames.
+      </div>
+
+      <h3>What the Alternate Bid Tool Does</h3>
+
+      <div className="lessonText">
+        <p>
+          Alternate Bid quickly duplicates a project into another vendor or
+          metal group. This allows pricing and system options to be compared
+          without rebuilding the job from the beginning.
+        </p>
+
+        <p>
+          The tool is also useful when a project was originally created with
+          the wrong metal group and needs to be copied into the correct system.
+        </p>
+      </div>
+
+      <figure style={{ maxWidth: "720px", margin: "28px auto 0", textAlign: "center" }}>
+        <img src={image01} alt="Alternate Bid menu location" style={{ width: "100%", borderRadius: "16px" }} />
+        <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
+          Alternate Bid is located beneath the All Projects area.
+        </figcaption>
+      </figure>
+
+      <h3>Select the Training Project</h3>
+
+      <div className="lessonText">
+        <p>
+          Return to the All Projects screen and select{" "}
+          <strong>Lesson 7 Training Project</strong>.
+        </p>
+
+        <p>
+          Once the project is highlighted, select <strong>Alternate Bid</strong>.
+          Enter the new project name shown below.
+        </p>
+      </div>
+
+      <div className="sectionBox">
+        <p className="sectionLabel">Alternate Project Name</p>
+        <h3 style={{ marginTop: 0 }}>Lesson 10 Alternate Bid</h3>
+      </div>
+
+      <h3>Select the Frame Correctly</h3>
+
+      <div className="lessonText">
+        <p>
+          In the project tree, click directly on the first frame name. A checked
+          box does not automatically mean the frame is selected.
+        </p>
+
+        <p>
+          The frame name itself should highlight blue and the frame should
+          appear in the preview window.
+        </p>
+      </div>
+
+      <div className="calloutBox">
+        <strong>The frame name must highlight blue.</strong>
+        <p>
+          Do not continue until the frame itself is selected and visible in the
+          preview.
+        </p>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "24px",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          marginTop: "28px",
+        }}
+      >
+        <figure style={{ flex: "0 1 360px", margin: 0, textAlign: "center" }}>
+          <img src={image02} alt="Alternate Bid frame selection tree" style={{ width: "100%", maxWidth: "340px", borderRadius: "16px" }} />
+          <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
+            Click directly on the frame name.
+          </figcaption>
+        </figure>
+
+        <figure style={{ flex: "1 1 520px", maxWidth: "720px", margin: 0, textAlign: "center" }}>
+          <img src={image03} alt="Alternate Bid editor screen" style={{ width: "100%", borderRadius: "16px" }} />
+          <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
+            The selected frame appears in the Alternate Bid editor.
+          </figcaption>
+        </figure>
+      </div>
+
+      <h3>Choose the Alternate System</h3>
+
+      <div className="lessonText">
+        <p>
+          Use the editor on the right to change the vendor and metal group.
+          Leave the frame size and geometry unchanged.
+        </p>
+
+        <p>
+          Choose an alternate vendor and metal group that are installed in your
+          database. Because available catalogs vary by company, the exact
+          alternate system may differ between students.
+        </p>
+      </div>
+
+      <div className="calloutBox">
+        <strong>Only change Vendor and Metal Group.</strong>
+        <p>
+          If frame dimensions or geometry need to change, make those edits in
+          the Frame Editor rather than Alternate Bid.
+        </p>
+      </div>
+
+      <div className="takeawayBox">
+        <p className="sectionLabel">Checkpoint</p>
+        <div className="takeawayGrid">
+          <label><input type="checkbox" /> I selected Lesson 7 Training Project.</label>
+          <label><input type="checkbox" /> I named the copy Lesson 10 Alternate Bid.</label>
+          <label><input type="checkbox" /> The frame name is highlighted blue.</label>
+          <label><input type="checkbox" /> I changed only the vendor and metal group.</label>
+        </div>
+      </div>
+
+      <div className="navButtons">
+        <Link
+          href="/dashboard/introductory-software-training/lesson-10-splices-tools"
+          className="secondary"
+        >
+          ← Previous
+        </Link>
+
+        <Link
+          href="/dashboard/introductory-software-training/lesson-10-verify-alternate"
+          className="primary"
+        >
+          Next: Process & Verify →
+        </Link>
+      </div>
+    </AcademyLessonLayout>
+  );
+}
