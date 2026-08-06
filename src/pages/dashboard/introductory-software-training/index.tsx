@@ -103,30 +103,33 @@ const courseModules: CourseModule[] = [
     "Create a guided training project, enter exact frame settings, build a basic storefront frame, and practice selecting openings and framing members.",
   href: "/dashboard/introductory-software-training/lesson-7-create-project",
 },
-      {
-        number: "08",
-        title: "Modifying Frames & Members",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Modify frame dimensions, replace members, add horizontals and verticals, and make common project changes.",
-      },
-      {
-        number: "09",
-        title: "Advanced Frames & Out-of-Square Openings",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Build angled, sloped, stepped, and out-of-square frames using advanced frame-building tools.",
-      },
-      {
-        number: "10",
-        title: "Mastering the Frame Builder",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Explore the Frame Builder menus, dropdowns, shortcuts, settings, and tools used to handle more complicated projects.",
-      },
+{
+  number: "08",
+  title: "Modifying Frames & Members",
+  time: "35–50 min",
+  status: "Available",
+  description:
+    "Continue working in the Lesson 7 training project by adding a door, changing DLO sizes, moving members, and inserting or deleting sticks.",
+  href: "/dashboard/introductory-software-training/lesson-8-add-door",
+},
+{
+  number: "09",
+  title: "Advanced Frame Edits",
+  time: "35–50 min",
+  status: "Available",
+  description:
+    "Practice reverse joinery, align horizontals, create knee-wall conditions, and build a crippled door header.",
+  href: "/dashboard/introductory-software-training/lesson-9-reverse-joinery",
+},
+{
+  number: "10",
+  title: "Mastering the Frame Builder",
+  time: "35–50 min",
+  status: "Available",
+  description:
+    "Use splice tools, editor shortcuts, catalog-controlled settings, and the Alternate Bid tool to duplicate and verify the training project.",
+  href: "/dashboard/introductory-software-training/lesson-10-splices-tools",
+},
     ],
   },
   {
