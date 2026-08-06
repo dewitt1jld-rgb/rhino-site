@@ -1,5 +1,5 @@
 import Link from "next/link";
-import AcademyLessonLayout from "./AcademyLessonLayout";
+import AcademyLessonLayout from "../../../components/AcademyLessonLayout";
 
 const steps = [
   {
