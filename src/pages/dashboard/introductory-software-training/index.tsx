@@ -42,14 +42,15 @@ const courseModules: CourseModule[] = [
     "Understand the basic differences between storefront and curtain wall systems, recognize their primary components, and learn how screw-spline and shear-block assemblies fit together.",
   href: "/dashboard/introductory-software-training/lesson-2-storefront-curtain-wall",
 },
-      {
-        number: "03",
-        title: "From Estimate to Installation",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Follow a typical project from estimating and ordering through fabrication, delivery, and final installation.",
-      },
+ {
+  number: "03",
+  title: "From Estimate to Installation",
+  time: "10–15 min",
+  status: "Available",
+  description:
+    "Follow a commercial glazing project from the initial bid request through estimating, field measurement, RhinoFab fabrication, assembly, and final installation.",
+  href: "/dashboard/introductory-software-training/lesson-3-estimate-to-install",
+},
     ],
   },
   

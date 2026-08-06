@@ -996,7 +996,7 @@ export default function StorefrontCurtainWallLessonPage() {
 
           <div className="downloadContent">
             <p className="sectionLabel">Optional Reference Material</p>
-            <h2>Kawneer 451 / 451T Installation Details</h2>
+            <h2>Kawneer 451 / 451T component Details</h2>
 
             <p>
               Review this reference PDF for additional examples of common
@@ -1090,12 +1090,12 @@ export default function StorefrontCurtainWallLessonPage() {
               ← Previous Lesson
             </Link>
 
-            <Link
-              href="/dashboard/introductory-software-training"
-              className="primaryButton"
-            >
-              Return to Curriculum
-            </Link>
+  <Link
+  href="/dashboard/introductory-software-training/lesson-3-estimate-to-install"
+  className="primaryButton"
+>
+  Continue to Lesson 3 →
+</Link>
           </div>
         </section>
       </article>
