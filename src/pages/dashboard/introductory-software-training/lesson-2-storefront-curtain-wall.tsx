@@ -244,26 +244,113 @@ export default function StorefrontCurtainWallLessonPage() {
     </p>
   </div>
 
-  <div className="twoImageGrid">
-    <figure className="gridMedia">
-      <img
-        src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_holes.png"
-        alt="Screw-spline holes and internal screw races in storefront aluminum"
-        loading="lazy"
-      />
-      <figcaption>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "stretch",
+      gap: "20px",
+      width: "100%",
+      marginTop: "28px",
+    }}
+  >
+    <figure
+      style={{
+        flex: "1 1 0",
+        width: "50%",
+        minWidth: 0,
+        margin: 0,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          height: "420px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
+          borderRadius: "20px",
+          background: "#ffffff",
+          boxShadow: "0 18px 44px rgba(0, 0, 0, 0.34)",
+        }}
+      >
+        <img
+          src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_holes.png"
+          alt="Screw-spline holes and internal screw races in storefront aluminum"
+          loading="lazy"
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
+        />
+      </div>
+
+      <figcaption
+        style={{
+          marginTop: "11px",
+          color: "rgba(255, 255, 255, 0.48)",
+          fontSize: "0.88rem",
+          lineHeight: 1.5,
+          textAlign: "center",
+        }}
+      >
         Screw-spline holes used to fasten horizontal members to vertical
         members.
       </figcaption>
     </figure>
 
-    <figure className="gridMedia">
-      <img
-        src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_together.png"
-        alt="Storefront screw-spline members assembled together"
-        loading="lazy"
-      />
-      <figcaption>
+    <figure
+      style={{
+        flex: "1 1 0",
+        width: "50%",
+        minWidth: 0,
+        margin: 0,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          height: "420px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
+          borderRadius: "20px",
+          background: "#ffffff",
+          boxShadow: "0 18px 44px rgba(0, 0, 0, 0.34)",
+        }}
+      >
+        <img
+          src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_together.png"
+          alt="Storefront screw-spline framing members assembled together"
+          loading="lazy"
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
+        />
+      </div>
+
+      <figcaption
+        style={{
+          marginTop: "11px",
+          color: "rgba(255, 255, 255, 0.48)",
+          fontSize: "0.88rem",
+          lineHeight: 1.5,
+          textAlign: "center",
+        }}
+      >
         Screw-spline storefront members assembled together.
       </figcaption>
     </figure>
