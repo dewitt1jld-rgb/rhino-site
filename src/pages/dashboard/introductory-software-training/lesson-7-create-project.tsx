@@ -9,12 +9,12 @@ const steps = [
 
 const img = {
   mainScreen: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-02-main-screen.png",
-  frameBuilder: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-03-frames-builder.png",
+  frameBuilder: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_7/oldcastle_create_project.png",
   notInstalled: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-01-not-installed.png",
 };
 
 const vendorVideo =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/videos/frame-video-01-vendor.mp4";
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/selecting_a_vendor.mp4";
 
 export default function LessonSevenCreateProjectPage() {
   return (
@@ -46,7 +46,7 @@ export default function LessonSevenCreateProjectPage() {
         <p>
           Normally, before building frames, I would configure a metal group so
           that the frame contains all of the components required for the project.
-          Because this is training and metal-group configuration is a more
+          Because this is a training and metal-group configuration is more of an
           advanced topic, we will skip that process for now and move directly
           into building a frame.
         </p>
@@ -59,8 +59,10 @@ export default function LessonSevenCreateProjectPage() {
       <h3>Open Glazier Studio</h3>
       <div className="lessonText">
         <p>
-          Launch Glazier Studio and wait for the main screen to load. The left
-          side moves between software areas, the center displays projects and
+          Launch Glazier Studio and wait for the main screen to load.
+          </p>
+          <p>
+           The left side of the screen navigates between software tabs and screens, the center displays projects and
           frames, and the right side contains project and frame settings.
         </p>
       </div>
@@ -70,7 +72,7 @@ export default function LessonSevenCreateProjectPage() {
         <figcaption>The main Glazier Studio project screen.</figcaption>
       </figure>
 
-      <h3>Select the Training Catalog</h3>
+      <h3>Select the Catalog</h3>
       <div className="lessonText">
         <p>
           Locate the <strong>Catalog</strong> dropdown near the top-right corner
@@ -103,8 +105,9 @@ export default function LessonSevenCreateProjectPage() {
       <div className="calloutBox">
         <strong>Catalog error?</strong>
         <p>
-          If Oldcastle produces a catalog-not-installed message, contact
-          DeMichele Group support or your company administrator before continuing.
+          Some vendors do not come installed with Glazier Studio. OldCastle should work, but if oyu were to click 
+          on Coral, you may get a message that looks like the one below. To use one of these vendors, simply call 
+          the Demichele Group at 480-485-4926 and ask them to provide access to that specific vendor. 
         </p>
       </div>
 
@@ -147,7 +150,7 @@ export default function LessonSevenCreateProjectPage() {
         <div className="takeawayGrid">
           <label><input type="checkbox" /> Glazier Studio is open.</label>
           <label><input type="checkbox" /> The selected catalog is Oldcastle.</label>
-          <label><input type="checkbox" /> The project is named Lesson 7 Training Project.</label>
+          <label><input type="checkbox" /> The project is named TEST PROJECT DELETE AFTER.</label>
           <label><input type="checkbox" /> The project has been created successfully.</label>
         </div>
       </div>
