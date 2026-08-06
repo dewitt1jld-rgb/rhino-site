@@ -364,7 +364,7 @@ function LessonCard({ lesson }: { lesson: Lesson }) {
 }
 
 export default function IntroductorySoftwareTrainingPage() {
-  const [openModule, setOpenModule] = useState("02");
+  const [openModule, setOpenModule] = useState("");
 
   const toggleModule = (moduleNumber: string) => {
     setOpenModule((currentModule) =>

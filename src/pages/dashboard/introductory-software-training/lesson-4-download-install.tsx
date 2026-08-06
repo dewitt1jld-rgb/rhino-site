@@ -42,6 +42,38 @@ export default function DownloadInstallPage() {
             required videos below before moving forward.
           </p>
 
+
+          <div className="tipBox" style={{ marginBottom: "28px" }}>
+  <h3>Which Program Do I Need?</h3>
+
+  <p>
+    <strong>Glazier Studio</strong> and <strong>PartnerPak</strong> are
+    functionally the same software. They share nearly all of the same tools,
+    workflows, and features.
+  </p>
+
+  <p>
+    The primary difference is the metal systems they support.
+  </p>
+
+  <ul>
+    <li>
+      <strong>Glazier Studio</strong> supports virtually every major storefront
+      and curtain wall vendor except Kawneer (There is a way to get kawneer in GS. I will walk you through this later.)
+    </li>
+    <li>
+      <strong>PartnerPak</strong> is designed specifically for
+      <strong> Kawneer</strong> metal systems.
+    </li>
+  </ul>
+
+  <p>
+    <strong>If your company does not fabricate Kawneer systems, you most
+    likely do not need to install PartnerPak.</strong> Glazier Studio alone
+    will provide everything you need for the vast majority of projects.
+  </p>
+</div>
+
           <h3 className="sectionTitle">Required Videos</h3>
 
           <div className="videoGrid">

@@ -171,7 +171,7 @@ export default function LessonTwoWorkflowPage() {
           </div>
 
           <div className="completeBox">
-            <h3>Lesson 2 Complete</h3>
+            <h3>Lesson 6 Complete</h3>
             <p>
               You now have a basic understanding of what Glazier Studio and
               PartnerPak are used for. In Lesson 3, we will begin creating your

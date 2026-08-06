@@ -72,9 +72,10 @@ export default function LessonTwoOverviewPage() {
   <div className="videoInfo">
     <h4>General Program Overview</h4>
     <p>
-      Learn how Glazier Studio and PartnerPak fit together, where the major
-      screens are located, and how information flows from estimating through
-      fabrication.
+      Please do not try to follow along with this video. 
+      The next lessons will begin an interactive guide for you to learn each of the steps mentioned in this video. 
+      For now try to understand the general flow of the program as by the end of theses lessons you will be able to 
+      navigate the entire program and understand what each button does.
     </p>
   </div>
 </div>
@@ -83,7 +84,7 @@ export default function LessonTwoOverviewPage() {
           <div className="sectionBox">
             <h3>What Glazier Studio & PartnerPak Are For</h3>
             <p>
-              Glazier Studio / PartnerPak were originally designed as estimating software. they now do much more then that. 
+              Glazier Studio / PartnerPak were originally designed as estimating software. They now do much more then that. 
               While still being great estimating tools they also work as the interface to send frames, doors and material 
               to RhinoFab equipment to be cut and fabricated. 
             </p>
