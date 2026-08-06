@@ -1,63 +1,5 @@
 import Link from "next/link";
 
-type ImageSectionProps = {
-  label?: string;
-  title: string;
-  children: React.ReactNode;
-  imageUrl: string;
-  imageAlt: string;
-  caption?: string;
-  secondImageUrl?: string;
-  secondImageAlt?: string;
-  secondCaption?: string;
-};
-
-function ImageSection({
-  label = "System Component",
-  title,
-  children,
-  imageUrl,
-  imageAlt,
-  caption,
-  secondImageUrl,
-  secondImageAlt,
-  secondCaption,
-}: ImageSectionProps) {
-  return (
-    <section className="lessonSection">
-      <div className="sectionHeading">
-        <p className="sectionLabel">{label}</p>
-        <h2>{title}</h2>
-      </div>
-
-      <div className="lessonText">{children}</div>
-
-      {secondImageUrl ? (
-        <div className="twoImageGrid">
-          <figure className="gridMedia">
-            <img src={imageUrl} alt={imageAlt} loading="lazy" />
-            {caption && <figcaption>{caption}</figcaption>}
-          </figure>
-
-          <figure className="gridMedia">
-            <img
-              src={secondImageUrl}
-              alt={secondImageAlt || ""}
-              loading="lazy"
-            />
-            {secondCaption && <figcaption>{secondCaption}</figcaption>}
-          </figure>
-        </div>
-      ) : (
-        <figure className="fullWidthMedia">
-          <img src={imageUrl} alt={imageAlt} loading="lazy" />
-          {caption && <figcaption>{caption}</figcaption>}
-        </figure>
-      )}
-    </section>
-  );
-}
-
 export default function StorefrontCurtainWallLessonPage() {
   return (
     <main className="page">
@@ -103,7 +45,7 @@ export default function StorefrontCurtainWallLessonPage() {
 
             <ul>
               <li>
-                Understand the basic difference between storefront and curtain
+                Understand the basic differences between storefront and curtain
                 wall systems.
               </li>
               <li>
@@ -118,8 +60,8 @@ export default function StorefrontCurtainWallLessonPage() {
                 pressure plates, gaskets, and face caps.
               </li>
               <li>
-                Understand where to locate manufacturer installation
-                instructions for additional system-specific training.
+                Understand where to find manufacturer installation instructions
+                for additional system-specific information.
               </li>
             </ul>
           </div>
@@ -137,8 +79,8 @@ export default function StorefrontCurtainWallLessonPage() {
               lower levels of commercial buildings, especially around
               entrances, offices, schools, and retail spaces. They are generally
               shallower, less expensive, and designed for smaller openings.
-              Storefront framing is normally installed between floors and is
-              not intended to span multiple stories.
+              Storefront framing is usually installed between floors and is not
+              intended to span multiple stories.
             </p>
 
             <p>
@@ -162,10 +104,11 @@ export default function StorefrontCurtainWallLessonPage() {
             <div className="comparisonCard">
               <span>Storefront</span>
               <h3>Smaller, lower-level openings</h3>
+
               <ul>
                 <li>Common around entrances and retail spaces</li>
                 <li>Usually installed between floors</li>
-                <li>Typically shallower framing</li>
+                <li>Typically uses shallower framing</li>
                 <li>Commonly uses screw-spline assembly</li>
                 <li>Usually more economical</li>
               </ul>
@@ -174,10 +117,11 @@ export default function StorefrontCurtainWallLessonPage() {
             <div className="comparisonCard">
               <span>Curtain Wall</span>
               <h3>Larger, multi-story façades</h3>
+
               <ul>
                 <li>Common on large exterior glass walls</li>
                 <li>May span multiple floors</li>
-                <li>Typically deeper and stronger</li>
+                <li>Typically uses deeper and stronger framing</li>
                 <li>Commonly uses shear-block assembly</li>
                 <li>Designed for greater structural performance</li>
               </ul>
@@ -188,7 +132,7 @@ export default function StorefrontCurtainWallLessonPage() {
             <p>
               Although the components and assembly methods differ, both systems
               provide structure for the glass, manage water, and must be
-              installed according to very specific manufacturer instructions.
+              installed according to specific manufacturer instructions.
             </p>
 
             <p>
@@ -198,164 +142,146 @@ export default function StorefrontCurtainWallLessonPage() {
           </div>
         </section>
 
-        <ImageSection
-          label="Storefront Assembly"
-          title="Screw-Spline vs. Shear-Block Construction"
-          imageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/storefront_screwspline_vs_sheerblock.png"
-          imageAlt="Comparison of storefront screw-spline and shear-block assembly methods"
-          caption="A comparison of screw-spline and shear-block frame assembly."
-        >
-          <p>
-            This image shows how storefront framing components fit together. It
-            also compares a <strong>screw-spline configuration</strong> with a{" "}
-            <strong>shear-block configuration</strong>.
-          </p>
+        <section className="lessonSection">
+          <div className="sectionHeading">
+            <p className="sectionLabel">Storefront Assembly</p>
+            <h2>Screw-Spline vs. Shear-Block Construction</h2>
+          </div>
 
-          <p>
-            Storefront material commonly uses screw-spline construction, while
-            curtain wall systems commonly use shear blocks. These are not
-            universal rules, but they are useful general guidelines when first
-            learning to recognize the systems.
-          </p>
-        </ImageSection>
+          <div className="lessonText">
+            <p>
+              This image shows how storefront framing components fit together.
+              It also compares a <strong>screw-spline configuration</strong>{" "}
+              with a <strong>shear-block configuration</strong>.
+            </p>
 
-<section className="lessonSection">
-  <div className="sectionHeading">
-    <p className="sectionLabel">Storefront Assembly</p>
-    <h2>Recognizing Screw-Spline Members</h2>
-  </div>
+            <p>
+              Storefront material commonly uses screw-spline construction,
+              while curtain wall systems commonly use shear blocks. These are
+              not universal rules, but they are useful guidelines when first
+              learning how to recognize each system.
+            </p>
+          </div>
 
-  <div className="lessonText">
-    <p>
-      Screw-spline construction is commonly found in storefront systems. One
-      of the easiest ways to recognize it is by looking for the{" "}
-      <strong>screw races</strong> formed into the aluminum.
-    </p>
+          <figure className="fullWidthMedia">
+            <img
+              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/storefront_screwspline_vs_sheerblock.png"
+              alt="Comparison of storefront screw-spline and shear-block assembly methods"
+            />
 
-    <p>
-      Screw-spline sill, horizontal, and head members contain internal races
-      that allow screws to pass through the vertical member and fasten directly
-      into the end of the horizontal member.
-    </p>
+            <figcaption>
+              Comparison of screw-spline and shear-block frame assembly.
+            </figcaption>
+          </figure>
+        </section>
 
-    <p>
-      Hole patterns may vary depending on the framing profile, but the basic
-      shape and assembly method remain similar.
-    </p>
-  </div>
+        <section className="lessonSection">
+          <div className="sectionHeading">
+            <p className="sectionLabel">Storefront Assembly</p>
+            <h2>Recognizing Screw-Spline Members</h2>
+          </div>
 
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "stretch",
-      gap: "20px",
-      width: "100%",
-      marginTop: "28px",
-    }}
-  >
-    <figure
-      style={{
-        flex: "1 1 0",
-        width: "50%",
-        minWidth: 0,
-        margin: 0,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          height: "420px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-          border: "1px solid rgba(255, 255, 255, 0.12)",
-          borderRadius: "20px",
-          background: "#ffffff",
-          boxShadow: "0 18px 44px rgba(0, 0, 0, 0.34)",
-        }}
-      >
-        <img
-          src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_holes.png"
-          alt="Screw-spline holes and internal screw races in storefront aluminum"
-          loading="lazy"
-          style={{
-            display: "block",
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-          }}
-        />
-      </div>
+          <div className="lessonText">
+            <p>
+              Screw-spline construction is commonly found in storefront
+              systems. One of the easiest ways to recognize it is by looking
+              for the <strong>screw races</strong> formed into the aluminum.
+            </p>
 
-      <figcaption
-        style={{
-          marginTop: "11px",
-          color: "rgba(255, 255, 255, 0.48)",
-          fontSize: "0.88rem",
-          lineHeight: 1.5,
-          textAlign: "center",
-        }}
-      >
-        Screw-spline holes used to fasten horizontal members to vertical
-        members.
-      </figcaption>
-    </figure>
+            <p>
+              Screw-spline sill, horizontal, and head members contain internal
+              races that allow screws to pass through the vertical member and
+              fasten directly into the end of the horizontal member.
+            </p>
 
-    <figure
-      style={{
-        flex: "1 1 0",
-        width: "50%",
-        minWidth: 0,
-        margin: 0,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          height: "420px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-          border: "1px solid rgba(255, 255, 255, 0.12)",
-          borderRadius: "20px",
-          background: "#ffffff",
-          boxShadow: "0 18px 44px rgba(0, 0, 0, 0.34)",
-        }}
-      >
-        <img
-          src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_together.png"
-          alt="Storefront screw-spline framing members assembled together"
-          loading="lazy"
-          style={{
-            display: "block",
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-          }}
-        />
-      </div>
+            <p>
+              Hole patterns may vary depending on the framing profile, but the
+              basic shape and assembly method remain similar.
+            </p>
+          </div>
 
-      <figcaption
-        style={{
-          marginTop: "11px",
-          color: "rgba(255, 255, 255, 0.48)",
-          fontSize: "0.88rem",
-          lineHeight: 1.5,
-          textAlign: "center",
-        }}
-      >
-        Screw-spline storefront members assembled together.
-      </figcaption>
-    </figure>
-  </div>
-</section>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "stretch",
+              gap: "20px",
+              width: "100%",
+              marginTop: "28px",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            <figure
+              style={{
+                flex: "1 1 360px",
+                maxWidth: "470px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_holes.png"
+                alt="Screw-spline holes and internal screw races in storefront aluminum"
+                loading="lazy"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  height: "330px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
+
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Screw-spline holes used to fasten horizontal members to
+                vertical members.
+              </figcaption>
+            </figure>
+
+            <figure
+              style={{
+                flex: "1 1 360px",
+                maxWidth: "470px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_together.png"
+                alt="Storefront screw-spline framing members assembled together"
+                loading="lazy"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  height: "330px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
+
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Screw-spline storefront members assembled together.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
 
         <section className="lessonSection">
           <div className="sectionHeading">
@@ -366,8 +292,8 @@ export default function StorefrontCurtainWallLessonPage() {
           <div className="lessonText">
             <p>
               The following images show several common storefront framing
-              profiles. These would generally be considered primary framing
-              members because they create the main structure of the frame.
+              profiles. These are generally considered primary framing members
+              because they create the main structure of the frame.
             </p>
 
             <p>
@@ -376,48 +302,135 @@ export default function StorefrontCurtainWallLessonPage() {
             </p>
           </div>
 
-          <figure className="fullWidthMedia">
-            <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/storefront_1.png"
-              alt="Example of a storefront aluminum framing profile"
-              loading="lazy"
-            />
-            <figcaption>
-              Example of a primary storefront framing member.
-            </figcaption>
-          </figure>
+          <div
+            style={{
+              display: "flex",
+              gap: "24px",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              marginTop: "30px",
+              flexWrap: "wrap",
+            }}
+          >
+            <figure
+              style={{
+                flex: "1 1 320px",
+                maxWidth: "420px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/storefront_1.png"
+                alt="Example of a storefront aluminum framing profile"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
 
-          <figure className="fullWidthMedia">
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Example of a primary storefront framing member.
+              </figcaption>
+            </figure>
+
+            <figure
+              style={{
+                flex: "1 1 320px",
+                maxWidth: "420px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/storefront_2.png"
+                alt="Second example of a storefront aluminum framing profile"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
+
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Another example of a storefront framing profile.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section className="lessonSection">
+          <div className="sectionHeading">
+            <p className="sectionLabel">Storefront Component</p>
+            <h2>Glass Stops</h2>
+          </div>
+
+          <div className="lessonText">
+            <p>
+              This component is called a <strong>glass stop</strong>. The name
+              is very literal: it snaps into the framing member in front of the
+              glass and helps prevent the glass from moving out of the frame.
+            </p>
+
+            <p>
+              Glass stops are typically removable so that the glass can be
+              installed, replaced, or serviced after the main frame has been
+              assembled.
+            </p>
+          </div>
+
+          <figure
+            style={{
+              maxWidth: "420px",
+              margin: "30px auto 0",
+              textAlign: "center",
+            }}
+          >
             <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/storefront_2.png"
-              alt="Second example of a storefront aluminum framing profile"
+              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/glass_stop.png"
+              alt="Storefront glass stop profile"
               loading="lazy"
+              style={{
+                width: "100%",
+                height: "220px",
+                objectFit: "contain",
+                background: "#ffffff",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,.1)",
+              }}
             />
-            <figcaption>
-              Another example of a storefront framing profile.
+
+            <figcaption
+              style={{
+                marginTop: "10px",
+                color: "rgba(255,255,255,.6)",
+              }}
+            >
+              A removable glass stop used to retain glass inside the frame.
             </figcaption>
           </figure>
         </section>
-
-        <ImageSection
-          label="Storefront Component"
-          title="Glass Stops"
-          imageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/glass_stop.png"
-          imageAlt="Storefront glass stop profile"
-          caption="A removable glass stop used to retain glass inside the frame."
-        >
-          <p>
-            This component is called a <strong>glass stop</strong>. The name is
-            very literal: it snaps into the framing member in front of the glass
-            and helps prevent the glass from moving out of the frame.
-          </p>
-
-          <p>
-            Glass stops are typically removable so that the glass can be
-            installed, replaced, or serviced after the main frame has been
-            assembled.
-          </p>
-        </ImageSection>
 
         <section className="lessonSection">
           <div className="sectionHeading">
@@ -428,8 +441,8 @@ export default function StorefrontCurtainWallLessonPage() {
           <div className="lessonText">
             <p>
               Some aluminum members contain an open pocket on one side. This
-              pocket allows different components to be snapped into the
-              framing member depending on how that member is being used.
+              pocket allows different components to be snapped into the framing
+              member depending on how that member is being used.
             </p>
 
             <p>
@@ -441,49 +454,136 @@ export default function StorefrontCurtainWallLessonPage() {
             </p>
           </div>
 
-          <figure className="fullWidthMedia">
-            <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/pocket_filler_with_glass_stop.png"
-              alt="Pocket filler containing a glass channel and glass stop"
-              loading="lazy"
-            />
-            <figcaption>
-              A pocket filler configured to receive glass.
-            </figcaption>
-          </figure>
+          <div
+            style={{
+              display: "flex",
+              gap: "24px",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              marginTop: "30px",
+              flexWrap: "wrap",
+            }}
+          >
+            <figure
+              style={{
+                flex: "1 1 300px",
+                maxWidth: "400px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/pocket_filler_with_glass_stop.png"
+                alt="Pocket filler containing a glass channel and glass stop"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
 
-          <figure className="fullWidthMedia">
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Pocket filler with an integrated glass channel.
+              </figcaption>
+            </figure>
+
+            <figure
+              style={{
+                flex: "1 1 300px",
+                maxWidth: "400px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/pocket_filler.png"
+                alt="Flat storefront pocket filler"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
+
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Flat pocket filler used to close an unused framing pocket.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section className="lessonSection">
+          <div className="sectionHeading">
+            <p className="sectionLabel">Curtain Wall Assembly</p>
+            <h2>Shear Blocks</h2>
+          </div>
+
+          <div className="lessonText">
+            <p>
+              Another common method of connecting framing members is the{" "}
+              <strong>shear-block system</strong>. This method is commonly found
+              in curtain wall systems and adds a separate connection component
+              between the vertical and horizontal members.
+            </p>
+
+            <p>
+              The shear block is attached to the main vertical member. The
+              horizontal member then fits over or around the shear block and is
+              secured in place.
+            </p>
+          </div>
+
+          <figure
+            style={{
+              maxWidth: "420px",
+              margin: "30px auto 0",
+              textAlign: "center",
+            }}
+          >
             <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/pocket_filler.png"
-              alt="Flat storefront pocket filler"
+              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/shearblock_alone.png"
+              alt="Individual aluminum shear block"
               loading="lazy"
+              style={{
+                width: "100%",
+                height: "220px",
+                objectFit: "contain",
+                background: "#ffffff",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,.1)",
+              }}
             />
-            <figcaption>
-              A flat pocket filler used to close an unused framing pocket.
+
+            <figcaption
+              style={{
+                marginTop: "10px",
+                color: "rgba(255,255,255,.6)",
+              }}
+            >
+              An individual shear block used to connect framing members.
             </figcaption>
           </figure>
         </section>
-
-        <ImageSection
-          label="Curtain Wall Assembly"
-          title="Shear Blocks"
-          imageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/shearblock_alone.png"
-          imageAlt="Individual aluminum shear block"
-          caption="An individual shear block used to connect framing members."
-        >
-          <p>
-            Another common method of connecting framing members is the{" "}
-            <strong>shear-block system</strong>. This method is commonly found
-            in curtain wall systems and adds a separate connection component
-            between the vertical and horizontal members.
-          </p>
-
-          <p>
-            The shear block is attached to the main vertical member. The
-            horizontal member then fits over or around the shear block and is
-            secured in place.
-          </p>
-        </ImageSection>
 
         <section className="lessonSection">
           <div className="sectionHeading">
@@ -500,50 +600,136 @@ export default function StorefrontCurtainWallLessonPage() {
             </p>
           </div>
 
-          <figure className="fullWidthMedia">
-            <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/shearblock_labeled.png"
-              alt="Labeled shear-block curtain wall assembly"
-              loading="lazy"
-            />
-            <figcaption>
-              A labeled shear-block assembly showing the relationship between
-              the main framing members.
-            </figcaption>
-          </figure>
+          <div
+            style={{
+              display: "flex",
+              gap: "24px",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              flexWrap: "wrap",
+              marginTop: "30px",
+            }}
+          >
+            <figure
+              style={{
+                flex: "1 1 300px",
+                maxWidth: "420px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/shearblock_labeled.png"
+                alt="Labeled shear-block curtain wall assembly"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "240px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
 
-          <figure className="fullWidthMedia">
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Labeled shear-block assembly.
+              </figcaption>
+            </figure>
+
+            <figure
+              style={{
+                flex: "1 1 300px",
+                maxWidth: "420px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/curtain_wall_exploded.png"
+                alt="Exploded curtain wall assembly"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "240px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
+
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Exploded curtain wall assembly.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section className="lessonSection">
+          <div className="sectionHeading">
+            <p className="sectionLabel">Curtain Wall Component</p>
+            <h2>The Main Mullion</h2>
+          </div>
+
+          <div className="lessonText">
+            <p>
+              This profile is an example of a curtain wall{" "}
+              <strong>main member</strong>, often called a{" "}
+              <strong>mullion</strong>.
+            </p>
+
+            <p>
+              It is considered a main member because it forms the primary
+              structural portion of the curtain wall. Shear blocks, horizontal
+              members, pressure plates, gaskets, and face caps are connected to
+              or supported by this member.
+            </p>
+          </div>
+
+          <figure
+            style={{
+              maxWidth: "420px",
+              margin: "30px auto 0",
+              textAlign: "center",
+            }}
+          >
             <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/curtain_wall_exploded.png"
-              alt="Exploded view of a curtain wall system"
+              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/curtain_wall_mullion.png"
+              alt="Curtain wall mullion profile"
               loading="lazy"
+              style={{
+                width: "100%",
+                height: "240px",
+                objectFit: "contain",
+                background: "#ffffff",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,.1)",
+              }}
             />
-            <figcaption>
-              An exploded view showing multiple curtain wall components.
+
+            <figcaption
+              style={{
+                marginTop: "10px",
+                color: "rgba(255,255,255,.6)",
+              }}
+            >
+              A primary curtain wall mullion.
             </figcaption>
           </figure>
         </section>
-
-        <ImageSection
-          label="Curtain Wall Component"
-          title="The Main Mullion"
-          imageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/curtain_wall_mullion.png"
-          imageAlt="Curtain wall mullion profile"
-          caption="A primary curtain wall mullion."
-        >
-          <p>
-            This profile is an example of a curtain wall{" "}
-            <strong>main member</strong>, often called a{" "}
-            <strong>mullion</strong>.
-          </p>
-
-          <p>
-            It is considered a main member because it forms the primary
-            structural portion of the curtain wall. Shear blocks, horizontal
-            members, pressure plates, gaskets, and face caps are connected to
-            or supported by this member.
-          </p>
-        </ImageSection>
 
         <section className="lessonSection">
           <div className="sectionHeading">
@@ -573,6 +759,7 @@ export default function StorefrontCurtainWallLessonPage() {
 
           <div className="warningCallout">
             <strong>Glass should not be pinched directly between metal.</strong>
+
             <p>
               A compatible glazing gasket should separate the glass from the
               metal components. Gasket types and applications vary by
@@ -601,48 +788,135 @@ export default function StorefrontCurtainWallLessonPage() {
             </p>
           </div>
 
-          <figure className="fullWidthMedia">
-            <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/perimeter_pressure_plate.png"
-              alt="Perimeter curtain wall pressure plate"
-              loading="lazy"
-            />
-            <figcaption>
-              A perimeter pressure plate with a taller exterior leg.
-            </figcaption>
-          </figure>
+          <div
+            style={{
+              display: "flex",
+              gap: "24px",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              marginTop: "30px",
+              flexWrap: "wrap",
+            }}
+          >
+            <figure
+              style={{
+                flex: "1 1 300px",
+                maxWidth: "400px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/perimeter_pressure_plate.png"
+                alt="Perimeter curtain wall pressure plate"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
 
-          <figure className="fullWidthMedia">
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Perimeter pressure plate with a taller exterior leg.
+              </figcaption>
+            </figure>
+
+            <figure
+              style={{
+                flex: "1 1 300px",
+                maxWidth: "400px",
+                minWidth: "280px",
+                margin: 0,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/pressure_plate.png"
+                alt="Standard curtain wall pressure plate"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "contain",
+                  background: "#ffffff",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,.1)",
+                }}
+              />
+
+              <figcaption
+                style={{
+                  marginTop: "10px",
+                  color: "rgba(255,255,255,.6)",
+                }}
+              >
+                Standard pressure plate used on interior vertical and
+                horizontal members.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section className="lessonSection">
+          <div className="sectionHeading">
+            <p className="sectionLabel">Curtain Wall Component</p>
+            <h2>Face Caps or Beauty Caps</h2>
+          </div>
+
+          <div className="lessonText">
+            <p>
+              After the glass and pressure plates have been installed, an
+              exterior cap is snapped over the pressure plate.
+            </p>
+
+            <p>
+              This component hides the screws, pressure plate, and gaskets,
+              creating a cleaner finished appearance. It is commonly called a{" "}
+              <strong>face cap</strong> or <strong>beauty cap</strong>.
+            </p>
+          </div>
+
+          <figure
+            style={{
+              maxWidth: "420px",
+              margin: "30px auto 0",
+              textAlign: "center",
+            }}
+          >
             <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/pressure_plate.png"
-              alt="Standard curtain wall pressure plate"
+              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/face_cap.png"
+              alt="Curtain wall face cap profile"
               loading="lazy"
+              style={{
+                width: "100%",
+                height: "220px",
+                objectFit: "contain",
+                background: "#ffffff",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,.1)",
+              }}
             />
-            <figcaption>
-              A standard pressure plate used on curtain wall verticals and
-              horizontals.
+
+            <figcaption
+              style={{
+                marginTop: "10px",
+                color: "rgba(255,255,255,.6)",
+              }}
+            >
+              A curtain wall face cap used to cover the pressure plate.
             </figcaption>
           </figure>
         </section>
-
-        <ImageSection
-          label="Curtain Wall Component"
-          title="Face Caps or Beauty Caps"
-          imageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/face_cap.png"
-          imageAlt="Curtain wall face cap profile"
-          caption="A curtain wall face cap used to cover the pressure plate."
-        >
-          <p>
-            After the glass and pressure plates have been installed, an
-            exterior cap is snapped over the pressure plate.
-          </p>
-
-          <p>
-            This component hides the screws, pressure plate, and gaskets,
-            creating a cleaner finished appearance. It is commonly called a{" "}
-            <strong>face cap</strong> or <strong>beauty cap</strong>.
-          </p>
-        </ImageSection>
 
         <section className="lessonSection">
           <div className="sectionHeading">
@@ -723,6 +997,7 @@ export default function StorefrontCurtainWallLessonPage() {
           <div className="downloadContent">
             <p className="sectionLabel">Optional Reference Material</p>
             <h2>Kawneer 451 / 451T Installation Details</h2>
+
             <p>
               Review this reference PDF for additional examples of common
               storefront components and how they fit together.
@@ -798,6 +1073,7 @@ export default function StorefrontCurtainWallLessonPage() {
           <div>
             <p className="sectionLabel">Lesson 02 Complete</p>
             <h2>You now know the basic system differences</h2>
+
             <p>
               Review the component names and assembly methods before
               continuing. You do not need to memorize every profile, but you
@@ -978,76 +1254,6 @@ export default function StorefrontCurtainWallLessonPage() {
           color: #ffffff;
         }
 
-        .twoImageGrid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
-  margin-top: 28px;
-}
-
-.gridMedia {
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-}
-
-.gridMedia img {
-  display: block;
-  width: 100%;
-  height: 420px;
-  object-fit: contain;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  background: #ffffff;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
-}
-
-.gridMedia figcaption {
-  margin-top: 11px;
-  color: rgba(255, 255, 255, 0.48);
-  font-size: 0.88rem;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.twoImageGrid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-  align-items: stretch;
-  margin-top: 28px;
-}
-
-.gridMedia {
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.gridMedia img {
-  display: block;
-  width: 100%;
-  height: 420px;
-  object-fit: contain;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  background: #ffffff;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
-}
-
-.gridMedia figcaption {
-  margin-top: 11px;
-  color: rgba(255, 255, 255, 0.48);
-  font-size: 0.88rem;
-  line-height: 1.5;
-  text-align: center;
-}
-
         .learningObjectives h2 {
           margin-bottom: 15px;
           font-size: 27px;
@@ -1166,7 +1372,7 @@ export default function StorefrontCurtainWallLessonPage() {
           object-fit: contain;
           border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 20px;
-          background: #05070b;
+          background: #ffffff;
           box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
         }
 
@@ -1177,27 +1383,6 @@ export default function StorefrontCurtainWallLessonPage() {
           line-height: 1.5;
           text-align: center;
         }
-
-        .mediaGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  align-items: start;
-  margin-top: 28px;
-}
-
-.mediaGrid .fullWidthMedia {
-  margin-top: 0;
-}
-
-.twoImageGrid {
-  grid-template-columns: 1fr;
-}
-
-.gridMedia img {
-  height: auto;
-}
-
 
         .warningCallout {
           margin-top: 25px;
@@ -1434,11 +1619,6 @@ export default function StorefrontCurtainWallLessonPage() {
             width: 100%;
           }
         }
-
-        
-.mediaGrid {
-  grid-template-columns: 1fr;
-}
 
         @media (max-width: 520px) {
           .lessonNavigation {
