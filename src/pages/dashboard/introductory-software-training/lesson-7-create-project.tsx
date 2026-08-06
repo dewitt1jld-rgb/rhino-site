@@ -9,7 +9,7 @@ const steps = [
 
 const img = {
   mainScreen: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-02-main-screen.png",
-  frameBuilder: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_7/oldcastle_create_project.png",
+  frameBuilder: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_7/oldcastle_create_project_2.png",
   notInstalled: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-01-not-installed.png",
 };
 
@@ -105,7 +105,7 @@ export default function LessonSevenCreateProjectPage() {
       <div className="calloutBox">
         <strong>Catalog error?</strong>
         <p>
-          Some vendors do not come installed with Glazier Studio. OldCastle should work, but if oyu were to click 
+          Some vendors do not come installed with Glazier Studio. OldCastle should work, but if you were to click 
           on Coral, you may get a message that looks like the one below. To use one of these vendors, simply call 
           the Demichele Group at 480-485-4926 and ask them to provide access to that specific vendor. 
         </p>
@@ -131,19 +131,41 @@ export default function LessonSevenCreateProjectPage() {
 
       <div className="sectionBox">
         <p className="sectionLabel">Project Name</p>
-        <h3 style={{ marginTop: 0 }}>Lesson 7 Training Project</h3>
+        <h3 style={{ marginTop: 0 }}>TEST PROJECT DELETE AFTER</h3>
         <p className="bodyText">
           Additional fields may be completed if your company requires them, but
           the project name is the only field required for this exercise.
         </p>
       </div>
 
-      <figure className="fullWidthMedia">
-        <img src={img.frameBuilder} alt="Glazier Studio project builder" />
-        <figcaption>
-          Enter the project name, then select the green Create Project button.
-        </figcaption>
-      </figure>
+   <figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src={img.frameBuilder}
+    alt="Glazier Studio project builder"
+    style={{
+      width: "650px",      // <-- Adjust this to whatever size you want
+      maxWidth: "100%",
+      height: "auto",
+      borderRadius: "16px",
+      display: "block",
+      margin: "0 auto",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.55)",
+    }}
+  >
+    Enter the project name, then select the green Create Project button.
+  </figcaption>
+</figure>
 
       <div className="takeawayBox">
         <p className="sectionLabel">Checkpoint</p>
