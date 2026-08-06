@@ -7,6 +7,9 @@ type ImageSectionProps = {
   imageUrl: string;
   imageAlt: string;
   caption?: string;
+  secondImageUrl?: string;
+  secondImageAlt?: string;
+  secondCaption?: string;
 };
 
 function ImageSection({
@@ -16,7 +19,12 @@ function ImageSection({
   imageUrl,
   imageAlt,
   caption,
+  secondImageUrl,
+  secondImageAlt,
+  secondCaption,
 }: ImageSectionProps) {
+  const hasTwoImages = Boolean(secondImageUrl);
+
   return (
     <section className="lessonSection">
       <div className="sectionHeading">
@@ -26,10 +34,23 @@ function ImageSection({
 
       <div className="lessonText">{children}</div>
 
-      <figure className="fullWidthMedia">
-        <img src={imageUrl} alt={imageAlt} loading="lazy" />
-        {caption && <figcaption>{caption}</figcaption>}
-      </figure>
+      <div className={hasTwoImages ? "mediaGrid" : ""}>
+        <figure className="fullWidthMedia">
+          <img src={imageUrl} alt={imageAlt} loading="lazy" />
+          {caption && <figcaption>{caption}</figcaption>}
+        </figure>
+
+        {secondImageUrl && (
+          <figure className="fullWidthMedia">
+            <img
+              src={secondImageUrl}
+              alt={secondImageAlt || ""}
+              loading="lazy"
+            />
+            {secondCaption && <figcaption>{secondCaption}</figcaption>}
+          </figure>
+        )}
+      </div>
     </section>
   );
 }
@@ -195,30 +216,33 @@ export default function StorefrontCurtainWallLessonPage() {
           </p>
         </ImageSection>
 
-        <ImageSection
-          label="Storefront Assembly"
-          title="Recognizing Screw-Spline Members"
-          imageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_holes.png"
-          imageAlt="Screw-spline holes and internal screw races in storefront aluminum"
-          caption="Screw-spline holes used to fasten horizontal members to vertical members."
-        >
-          <p>
-            Screw-spline construction is commonly found in storefront systems.
-            One of the easiest ways to recognize it is by looking for the{" "}
-            <strong>screw races</strong> formed into the aluminum.
-          </p>
+<ImageSection
+  label="Storefront Assembly"
+  title="Recognizing Screw-Spline Members"
+  imageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_holes.png"
+  imageAlt="Screw-spline holes and internal screw races in storefront aluminum"
+  caption="Screw-spline holes used to fasten horizontal members to vertical members."
+  secondImageUrl="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_together.png"
+  secondImageAlt="Storefront screw-spline members assembled together"
+  secondCaption="Screw-spline storefront members assembled together."
+>
+  <p>
+    Screw-spline construction is commonly found in storefront systems.
+    One of the easiest ways to recognize it is by looking for the{" "}
+    <strong>screw races</strong> formed into the aluminum.
+  </p>
 
-          <p>
-            Screw-spline sill, horizontal, and head members contain internal
-            races that allow screws to pass through the vertical member and
-            fasten directly into the end of the horizontal member.
-          </p>
+  <p>
+    Screw-spline sill, horizontal, and head members contain internal
+    races that allow screws to pass through the vertical member and
+    fasten directly into the end of the horizontal member.
+  </p>
 
-          <p>
-            Hole patterns may vary depending on the framing profile, but the
-            basic shape and assembly method remain similar.
-          </p>
-        </ImageSection>
+  <p>
+    Hole patterns may vary depending on the framing profile, but the
+    basic shape and assembly method remain similar.
+  </p>
+</ImageSection>
 
         <section className="lessonSection">
           <div className="sectionHeading">
@@ -238,17 +262,6 @@ export default function StorefrontCurtainWallLessonPage() {
               between manufacturers and metal systems.
             </p>
           </div>
-
-          <figure className="fullWidthMedia">
-            <img
-              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_2/screwspline_together.png"
-              alt="Storefront screw-spline members assembled together"
-              loading="lazy"
-            />
-            <figcaption>
-              Storefront screw-spline members assembled together.
-            </figcaption>
-          </figure>
 
           <figure className="fullWidthMedia">
             <img
@@ -982,6 +995,18 @@ export default function StorefrontCurtainWallLessonPage() {
           text-align: center;
         }
 
+        .mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+  margin-top: 28px;
+}
+
+.mediaGrid .fullWidthMedia {
+  margin-top: 0;
+}
+
         .warningCallout {
           margin-top: 25px;
           padding: 22px;
@@ -1217,6 +1242,11 @@ export default function StorefrontCurtainWallLessonPage() {
             width: 100%;
           }
         }
+
+        
+.mediaGrid {
+  grid-template-columns: 1fr;
+}
 
         @media (max-width: 520px) {
           .lessonNavigation {
