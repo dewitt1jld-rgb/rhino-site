@@ -149,14 +149,7 @@ export default function LessonSevenFrameSettingsPage() {
         </p>
       </div>
 
-      <div className="calloutBox">
-        <strong>Leave the glazing options as they are.</strong>
-        <p>
-          The glass records available on your computer may differ slightly from
-          the examples because company databases are not always identical.
-        </p>
-      </div>
-
+      
       <h3>Frame Parameters</h3>
 
       <div className="lessonText">
