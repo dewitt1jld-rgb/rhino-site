@@ -282,7 +282,8 @@ export default function LessonOneGlazingBasicsPage() {
               They mean that the applicable piece of aluminum needs to be cut
               to a length of 36 inches. Although every member has a specific
               part number and technical name, <em>stick</em> is the generalized
-              industry term.
+              industry term. "Sticks" from the manufacturer usually come in a finished size of 289 inches or about 24 feet. 
+              This new uncut section is refered to as a <em>stock length</em>. 
             </p>
           </div>
         </section>

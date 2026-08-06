@@ -33,14 +33,15 @@ const courseModules: CourseModule[] = [
     "Learn the fundamental storefront framing terminology, recognize common components, and begin understanding how completed frames relate to Glazier Studio and CAD drawings.",
   href: "/dashboard/introductory-software-training/lesson-1-glazing-basics",
 },
-      {
-        number: "02",
-        title: "Glass, Aluminum & Industry Terminology",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn the common glass, aluminum, hardware, fabrication, and installation terms used throughout the course.",
-      },
+{
+  number: "02",
+  title: "Storefront vs. Curtain Wall",
+  time: "30–45 min",
+  status: "Available",
+  description:
+    "Understand the basic differences between storefront and curtain wall systems, recognize their primary components, and learn how screw-spline and shear-block assemblies fit together.",
+  href: "/dashboard/introductory-software-training/lesson-2-storefront-curtain-wall",
+},
       {
         number: "03",
         title: "From Estimate to Installation",
