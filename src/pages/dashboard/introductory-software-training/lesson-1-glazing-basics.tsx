@@ -740,7 +740,12 @@ export default function LessonOneGlazingBasicsPage() {
               Return to Curriculum
             </Link>
 
-            <span className="disabledButton">Section 2 In Production</span>
+            <Link
+  href="/dashboard/introductory-software-training/lesson-2-storefront-curtain-wall"
+  className="primaryButton"
+>
+  Continue to Lesson 2 →
+</Link>
           </div>
         </section>
       </article>
