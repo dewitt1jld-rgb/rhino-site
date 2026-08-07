@@ -92,7 +92,7 @@ export default function LessonEightAddDoorPage() {
           src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/hinge_right_door.png"
           alt="Training door location"
           style={{
-            width: "400px",
+            width: "700px",
             maxWidth: "100%",
             height: "auto",
             display: "block",
@@ -291,6 +291,100 @@ export default function LessonEightAddDoorPage() {
         </p>
       </div>
 
+<h3>Door Handing Reference</h3>
+
+<div className="calloutBox">
+  <strong>Correction from the video:</strong>
+
+  <p>
+    I made a mistake in the video while explaining door handing. Use the table
+    below as the correct reference for what each acronym stands for.
+  </p>
+</div>
+
+<div
+  style={{
+    overflowX: "auto",
+    marginTop: "24px",
+  }}
+>
+  <table
+    style={{
+      width: "100%",
+      borderCollapse: "collapse",
+      border: "1px solid rgba(255,255,255,.12)",
+      borderRadius: "14px",
+      overflow: "hidden",
+      background: "rgba(255,255,255,.035)",
+    }}
+  >
+    <thead>
+      <tr
+        style={{
+          background: "rgba(245,158,11,.12)",
+        }}
+      >
+        <th
+          style={{
+            padding: "14px 16px",
+            textAlign: "left",
+            color: "#fbbf24",
+            borderBottom: "1px solid rgba(255,255,255,.12)",
+          }}
+        >
+          Acronym
+        </th>
+
+        <th
+          style={{
+            padding: "14px 16px",
+            textAlign: "left",
+            color: "#fbbf24",
+            borderBottom: "1px solid rgba(255,255,255,.12)",
+          }}
+        >
+          Meaning
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {[
+        ["HRSO", "Hinge Right Swing Out"],
+        ["HLSO", "Hinge Left Swing Out"],
+        ["HRSI", "Hinge Right Swing In"],
+        ["HLSI", "Hinge Left Swing In"],
+        ["HRCHDA", "Hinge Right Center Hung Double Acting"],
+        ["HLCHDA", "Hinge Left Center Hung Double Acting"],
+      ].map(([acronym, meaning]) => (
+        <tr key={acronym}>
+          <td
+            style={{
+              padding: "14px 16px",
+              fontWeight: 900,
+              color: "#ffffff",
+              borderBottom: "1px solid rgba(255,255,255,.08)",
+            }}
+          >
+            {acronym}
+          </td>
+
+          <td
+            style={{
+              padding: "14px 16px",
+              color: "rgba(255,255,255,.76)",
+              borderBottom: "1px solid rgba(255,255,255,.08)",
+            }}
+          >
+            {meaning}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+
       <h3>What You Should Recognize</h3>
 
       <div className="lessonText">
@@ -315,10 +409,6 @@ export default function LessonEightAddDoorPage() {
           <li>Door information and basic door settings</li>
           <li>Door size and configuration</li>
           <li>Door handing</li>
-          <li>Glass and glazing options</li>
-          <li>Door hardware</li>
-          <li>Library fabrications</li>
-          <li>Door fabrication options</li>
           <li>Additional door-related settings and screens</li>
         </ul>
       </div>
@@ -327,15 +417,11 @@ export default function LessonEightAddDoorPage() {
         <strong>Do not configure door hardware yet.</strong>
 
         <p>
-          Door hardware, library fabrications, door preparations, and complete
-          door packages will be covered later in the course.
+          Door hardware, library fabrications, door preparations, and door frame preps 
+          will be covered later in the course and in a completly diffrent screen.
         </p>
 
-        <p>
-          For now, follow the video and create the basic training door without
-          adding advanced hardware or custom fabrication.
-        </p>
-      </div>
+       </div>
 
       <h3>Return to the Frame</h3>
 
