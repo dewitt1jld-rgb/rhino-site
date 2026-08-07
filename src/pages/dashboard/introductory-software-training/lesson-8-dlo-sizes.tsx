@@ -21,7 +21,7 @@ const steps = [
 
 const img = {
   dloWidth:
-    "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-09-dlo-width.png",
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/dlo_bottom_right.png",
   dloHeight:
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-10-dlo-height.png",
 };
