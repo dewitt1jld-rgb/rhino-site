@@ -26,6 +26,9 @@ const img = {
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-08-add-door-right.png",
 };
 
+const doorEditorVideo =
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/door%20fabrication%20screen.mp4";
+
 export default function LessonEightAddDoorPage() {
   return (
     <AcademyLessonLayout
@@ -36,15 +39,18 @@ export default function LessonEightAddDoorPage() {
       steps={steps}
     >
       <p className="academyEyebrow">Step 1 of 3</p>
+
       <h2>Add a Door</h2>
 
       <div className="goalBox">
-        <strong>Goal:</strong> Open the frame from Lesson 7 and add a door to
-        the correct glass opening before making other frame changes.
+        <strong>Goal:</strong> Open the frame from Lesson 7, add a door to the
+        correct opening, and become familiar with the Door Editor before making
+        additional frame changes.
       </div>
 
       <div className="calloutBox">
         <strong>Continue using your Lesson 7 Training Project.</strong>
+
         <p>
           Open the same project and frame you created in Lesson 7. Do not start
           a new project for this lesson.
@@ -70,22 +76,64 @@ export default function LessonEightAddDoorPage() {
 
       <div className="lessonText">
         <p>
-          In the frame editor, locate the <strong>second lower glass opening
-          from the left</strong>. This is where the training door will be
-          placed.
+          In the frame editor, locate the{" "}
+          <strong>second lower glass opening from the left</strong>. This is
+          where the training door will be placed.
         </p>
+      </div>
 
+      <figure
+        style={{
+          textAlign: "center",
+          margin: "32px 0",
+        }}
+      >
+        <img
+          src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/hinge_right_door.png"
+          alt="Training door location"
+          style={{
+            width: "400px",
+            maxWidth: "100%",
+            height: "auto",
+            display: "block",
+            margin: "0 auto",
+            borderRadius: "16px",
+            border: "1px solid rgba(255,255,255,.12)",
+          }}
+        />
+
+        <figcaption
+          style={{
+            marginTop: "10px",
+            color: "rgba(255,255,255,.6)",
+          }}
+        >
+          Select the lower row, second opening from the left.
+        </figcaption>
+      </figure>
+
+      <div className="lessonText">
         <p>
           Click the opening once so it is selected. Then right-click inside the
           same opening to display the available frame-editing commands.
+        </p>
+
+        <p>
+          You can also use the door options on the left side of the screen to
+          insert a double door, hinge-left door, or hinge-right door.
         </p>
       </div>
 
       <div className="sectionBox">
         <p className="sectionLabel">Training Door Location</p>
-        <h3 style={{ marginTop: 0 }}>Lower row — second opening from the left</h3>
+
+        <h3 style={{ marginTop: 0 }}>
+          Lower row — second opening from the left
+        </h3>
+
         <p className="bodyText">
-          Confirm the correct opening is selected before choosing a door type.
+          Confirm that the correct opening is selected before choosing a door
+          type.
         </p>
       </div>
 
@@ -116,13 +164,14 @@ export default function LessonEightAddDoorPage() {
               borderRadius: "16px",
             }}
           />
+
           <figcaption
             style={{
               marginTop: "10px",
-              color: "rgba(255,255,255,.55)",
+              color: "rgba(255,255,255,.6)",
             }}
           >
-            Select the target opening and open the door tools.
+            Door options available from the left-side tools.
           </figcaption>
         </figure>
 
@@ -143,13 +192,14 @@ export default function LessonEightAddDoorPage() {
               borderRadius: "16px",
             }}
           />
+
           <figcaption
             style={{
               marginTop: "10px",
-              color: "rgba(255,255,255,.55)",
+              color: "rgba(255,255,255,.6)",
             }}
           >
-            Choose the required door from the insert-door menu.
+            Door options available from the right-click menu.
           </figcaption>
         </figure>
       </div>
@@ -158,22 +208,146 @@ export default function LessonEightAddDoorPage() {
 
       <div className="lessonText">
         <p>
-          From the right-click menu, choose the standard single-door option
-          available in your software database.
+          From the right-click menu, choose the{" "}
+          <strong>Hinge Left Door</strong>. This will open the Door Editor
+          screen.
+        </p>
+      </div>
+
+      <h3>Understanding the Door Editor</h3>
+
+      <div className="lessonText">
+        <p>
+          After selecting <strong>Hinge Left Door</strong>, the Door Editor
+          opens. This is where the major settings related to the door are
+          configured.
         </p>
 
         <p>
-          Door names may vary slightly between company databases. For this
-          lesson, use a basic single door without adding custom hardware or
-          advanced door-package settings.
+          At first glance, the Door Editor can feel overwhelming because it
+          contains many different options and screens. Do not worry about
+          memorizing every setting right now.
         </p>
+
+        <p>
+          The goal of this section is simply to become familiar with the layout,
+          understand where the major settings are located, and successfully add
+          the training door to the frame.
+        </p>
+
+        <p>
+          Later in this course, we will return to the Door Editor and spend much
+          more time on hardware, library fabrications, door preparations,
+          custom preps, and complete door packages.
+        </p>
+      </div>
+
+      <div className="goalBox">
+        <strong>Door Editor Goal:</strong> Learn where the major Door Editor
+        sections are located and successfully create the training door. You are
+        not expected to understand every option yet.
+      </div>
+
+      <h3>Watch the Door Editor Overview</h3>
+
+      <div className="lessonText">
+        <p>
+          Keep the Door Editor open on your own computer while watching the
+          video below.
+        </p>
+
+        <p>
+          Pause the video whenever necessary and click through the different
+          screens yourself. The more comfortable you become navigating the Door
+          Editor, the easier the later door-fabrication lessons will be.
+        </p>
+      </div>
+
+      <video
+        controls
+        preload="metadata"
+        style={{
+          width: "100%",
+          maxWidth: "900px",
+          display: "block",
+          margin: "28px auto",
+          borderRadius: "18px",
+          border: "1px solid rgba(255,255,255,.12)",
+          background: "#000",
+        }}
+      >
+        <source src={doorEditorVideo} type="video/mp4" />
+
+        Your browser does not support the video element.
+      </video>
+
+      <div className="calloutBox">
+        <strong>Practice along with the video.</strong>
+
+        <p>
+          As each Door Editor screen is discussed, open that same section in
+          your own program. The objective is to learn where the settings live,
+          not to memorize every possible option.
+        </p>
+      </div>
+
+      <h3>What You Should Recognize</h3>
+
+      <div className="lessonText">
+        <p>
+          By the end of this section, you should at least recognize the major
+          areas of the Door Editor and know that these settings are available
+          when you need them.
+        </p>
+      </div>
+
+      <div className="sectionBox">
+        <p className="sectionLabel">Door Editor Overview</p>
+
+        <ul
+          style={{
+            margin: "12px 0 0",
+            paddingLeft: "22px",
+            color: "rgba(255,255,255,.78)",
+            lineHeight: "1.8",
+          }}
+        >
+          <li>Door information and basic door settings</li>
+          <li>Door size and configuration</li>
+          <li>Door handing</li>
+          <li>Glass and glazing options</li>
+          <li>Door hardware</li>
+          <li>Library fabrications</li>
+          <li>Door fabrication options</li>
+          <li>Additional door-related settings and screens</li>
+        </ul>
       </div>
 
       <div className="calloutBox">
         <strong>Do not configure door hardware yet.</strong>
+
         <p>
           Door hardware, library fabrications, door preparations, and complete
           door packages will be covered later in the course.
+        </p>
+
+        <p>
+          For now, follow the video and create the basic training door without
+          adding advanced hardware or custom fabrication.
+        </p>
+      </div>
+
+      <h3>Return to the Frame</h3>
+
+      <div className="lessonText">
+        <p>
+          Once the basic door settings have been entered, finish the Door Editor
+          process and return to the frame.
+        </p>
+
+        <p>
+          The original glass opening should now be replaced by a door package
+          containing the door and the required surrounding framing members.
         </p>
       </div>
 
@@ -191,12 +365,20 @@ export default function LessonEightAddDoorPage() {
           </label>
 
           <label>
-            <input type="checkbox" /> I inserted a basic single door.
+            <input type="checkbox" /> I selected Hinge Left Door.
           </label>
 
           <label>
-            <input type="checkbox" /> The frame now shows door jambs and a door
-            header.
+            <input type="checkbox" /> I opened and reviewed the Door Editor.
+          </label>
+
+          <label>
+            <input type="checkbox" /> I understand that doors are confusing and not to stress about it right now..
+            
+          </label>
+
+          <label>
+            <input type="checkbox" /> I understand that unless I am estimating, the most important part of a door is the size
           </label>
         </div>
       </div>
