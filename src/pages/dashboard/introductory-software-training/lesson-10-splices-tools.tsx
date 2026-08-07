@@ -25,13 +25,13 @@ const img = {
   frameInfo:
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-14-frame-info.png",
   shortcutKeys:
-    "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-23-short-cut-keys.png",
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/short_cut_keys_page.png",
   subsill:
-    "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-24-subsill.png",
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/bottom_right_settings.png",
 };
 
 const spliceVideo =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/videos/frame-video-06-set-splice-locations.mp4";
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/set_splice_locations.mp4";
 
 export default function LessonTenSplicesToolsPage() {
   return (
@@ -108,10 +108,9 @@ export default function LessonTenSplicesToolsPage() {
 </figure>
 
 <div className="calloutBox">
-  <strong>Already created your frame?</strong>
+  <strong>Have all the setting entered?</strong>
   <p>
-    If your project matches the settings shown above, you can skip this section
-    and continue directly to the splice-location exercises.
+    Press "ADD FRAME" and continue on to adding splice locations. 
   </p>
 </div>
       <h3>Set Splice Locations</h3>
@@ -144,49 +143,20 @@ export default function LessonTenSplicesToolsPage() {
           border: "1px solid rgba(245, 158, 11, 0.22)",
         }}
       />
+  <div className="calloutBox">
+        <strong>Splice Settings:</strong>
+        <p>
+          For now, Leave all of the diffrent splice settings alone, feel free to look and see what the options are but for training we do not need to make any changes.  
+        </p>
+      </div>
+
+
 
       <div className="calloutBox">
         <strong>Training note:</strong>
         <p>
-          The 115-inch frame created in Lesson 7 may not require a real splice.
-          This exercise is intended to teach where the tool is located and how
-          the selection process works.
+          Depending on the frame color, splice locations can be hard to see. By clicking on the member again you can see where the stick was split. 
         </p>
-      </div>
-
-      <h3>Editor and Frame Information Tools</h3>
-
-      <div className="lessonText">
-        <p>
-          The toolbar below the frame provides tools for moving, zooming,
-          selecting, and inspecting the frame. The information tools display
-          data for the current project, frame, opening, or selected member.
-        </p>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          gap: "24px",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          marginTop: "28px",
-        }}
-      >
-        <figure style={{ flex: "1 1 360px", maxWidth: "470px", margin: 0, textAlign: "center" }}>
-          <img src={img.editorToolbar} alt="Glazier Studio editor toolbar" style={{ width: "100%", borderRadius: "16px" }} />
-          <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
-            Frame editor toolbar.
-          </figcaption>
-        </figure>
-
-        <figure style={{ flex: "1 1 360px", maxWidth: "470px", margin: 0, textAlign: "center" }}>
-          <img src={img.frameInfo} alt="Glazier Studio frame information tools" style={{ width: "100%", borderRadius: "16px" }} />
-          <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
-            Frame information tools.
-          </figcaption>
-        </figure>
       </div>
 
       <h3>Useful Keyboard Shortcuts</h3>
@@ -199,17 +169,50 @@ export default function LessonTenSplicesToolsPage() {
         </figcaption>
       </figure>
 
-      <h3>Sill Channel Height</h3>
+      <div className="lessonText">
+  <p>
+    Watch the video below to see the most commonly used keyboard shortcuts in
+    action. These shortcuts can significantly speed up frame editing once they
+    become second nature.
+  </p>
+</div>
+
+<video
+  controls
+  preload="metadata"
+  style={{
+    display: "block",
+    width: "100%",
+    maxWidth: "760px",
+    margin: "28px auto",
+    borderRadius: "16px",
+    border: "1px solid rgba(245, 158, 11, 0.22)",
+    background: "#000",
+  }}
+>
+  <source
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/short_cut_keys.mp4"
+    type="video/mp4"
+  />
+</video>
+
+<div className="calloutBox">
+  <strong>Practice these shortcuts as you watch.</strong>
+  <p>
+    For now, ignore the short cut keys that start with an "F". We will use those in later lessons. 
+  </p>
+</div>
+
+      <h3>BOM - Bill of Materials</h3>
 
       <div className="lessonText">
         <p>
-          Sill-channel height cannot be changed directly inside the frame
-          editor. The value is controlled through the associated catalog part.
+          Another usefull button is found in the bottom right hand corner of the program. 
         </p>
 
         <p>
-          To change it, open the Catalog Parts screen, locate the sill channel,
-          and adjust the required dimension on the part itself.
+          By clicking on BOM you can see all of the components getting picked up on this frame. 
+          This is a great double check to make sure you arnt forgetting anything. 
         </p>
       </div>
 
@@ -226,7 +229,7 @@ export default function LessonTenSplicesToolsPage() {
           <label><input type="checkbox" /> I located the splice settings.</label>
           <label><input type="checkbox" /> I reviewed the editor toolbar.</label>
           <label><input type="checkbox" /> I reviewed the shortcut-key list.</label>
-          <label><input type="checkbox" /> I understand sill-channel height is controlled through Catalog Parts.</label>
+          <label><input type="checkbox" /> I looked at the BOM and material list.</label>
         </div>
       </div>
 
