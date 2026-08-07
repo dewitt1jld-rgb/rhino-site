@@ -20,10 +20,10 @@ const steps = [
 ];
 
 const horizontalVideo =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/videos/frame-video-03-horizontal-stick-align.mp4";
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_9/align_door_header.mp4";
 
 const kneeWallVideo =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/videos/frame-video-04-knee-wall.mp4";
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_9/knee_wall.mp4";
 
 export default function LessonNineAlignMembersPage() {
   return (
@@ -54,7 +54,8 @@ export default function LessonNineAlignMembersPage() {
 
         <p>
           Always select the member that is already in the correct location
-          first. Then select each member that needs to move.
+          first. Then select each member that needs to move and press <strong>Enter</strong> twice.
+          This is the third and fastest way to move horizontals into position.
         </p>
       </div>
 
@@ -120,16 +121,12 @@ export default function LessonNineAlignMembersPage() {
 
       <div className="lessonText">
         <p>
-          A knee-wall condition uses a similar alignment workflow. One member
-          is already positioned correctly, and the remaining members are moved
-          to match it.
+          A knee-wall condition requires the sill member to be raised up. 
+          Start by clicking on the required sticks and enter a bottom of horizontal location. 
+          For this practice you can set the to 25".
         </p>
 
-        <p>
-          Select the correctly positioned member first, then select the
-          members that should move. Press Enter twice to complete the command.
-        </p>
-      </div>
+       </div>
 
       <video
         controls
@@ -149,19 +146,13 @@ export default function LessonNineAlignMembersPage() {
         <p className="sectionLabel">Guided Practice</p>
         <div className="takeawayGrid">
           <label>
-            <input type="checkbox" /> I selected the reference member first.
+            <input type="checkbox" /> I aligned the horizontals with the door header
           </label>
           <label>
-            <input type="checkbox" /> I selected the members that needed to
+            <input type="checkbox" /> I raised the sill members to create a knee wall condition
             move.
           </label>
-          <label>
-            <input type="checkbox" /> I pressed Enter twice.
-          </label>
-          <label>
-            <input type="checkbox" /> I confirmed the members now share one
-            centerline.
-          </label>
+       
         </div>
       </div>
 

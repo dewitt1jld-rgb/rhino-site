@@ -23,7 +23,7 @@ const img = {
   dloWidth:
     "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/dlo_bottom_right.png",
   dloHeight:
-    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/undo.png",
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/better_image_of_undo.png",
 };
 
 const dloPractice = [
@@ -117,11 +117,10 @@ export default function LessonEightDloSizesPage() {
 </p>
 <p>
 
-          The Third and fastest way to do this is to click on the door header first then click on each of the other three horizontals and press <strong>Enter</strong> Twice. 
-        </p>
+          The Third and fastest way to do this will be taught in lesson 9
 
         <p>
-        Try practicing each of the three diffrent ways. If you get stuck or the frame breaks you can use the 
+        Try practicing each of the diffrent ways. If you get stuck or the frame breaks you can use the 
         "reset panels and rows" Icon which can be found in the top right hand corner of the program.
         </p>
 
@@ -135,7 +134,7 @@ export default function LessonEightDloSizesPage() {
       <figure className="fullWidthMedia">
         <img src={img.dloHeight} alt="DLO height setting in Glazier Studio" />
         <figcaption>
-          Enter the DLO height and press Enter to update the row.
+          When selecting UNDO press NO until you see the version you want.
         </figcaption>
       </figure>
 
@@ -184,7 +183,7 @@ export default function LessonEightDloSizesPage() {
           </label>
 
           <label>
-            <input type="checkbox" /> I made all the horizontals match the door header height
+            <input type="checkbox" /> I reset panels and rows and added the door back in 
           </label>
 
           <label>

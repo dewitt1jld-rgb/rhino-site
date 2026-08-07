@@ -20,7 +20,7 @@ const steps = [
 ];
 
 const crippleHeaderVideo =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/videos/frame-video-05-cripple-door-header.mp4";
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_9/Crippled_door_header.mp4";
 
 export default function LessonNineCrippledHeaderPage() {
   return (
@@ -115,8 +115,8 @@ export default function LessonNineCrippledHeaderPage() {
         </p>
 
         <p>
-          Also verify that the outer frame dimensions and door location remain
-          unchanged.
+          If you have a vertical stick above the door, you can select the Transom area and insert a vertical stick.
+          It should automatically center itself in the bay. 
         </p>
       </div>
 
@@ -133,8 +133,7 @@ export default function LessonNineCrippledHeaderPage() {
             <input type="checkbox" /> I deleted the verticals above the door.
           </label>
           <label>
-            <input type="checkbox" /> I verified the overall frame size did not
-            change.
+            <input type="checkbox" /> I added a vertical directly above the door. 
           </label>
         </div>
       </div>
