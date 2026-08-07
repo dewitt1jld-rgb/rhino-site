@@ -115,10 +115,11 @@ export default function LessonEightDloSizesPage() {
 
           The second way to do this would be to click on the Horizontal itself and set the horizontal location to 84" then press <strong>Enter</strong>.
 </p>
-<p>
+
+        <p>
 
           The Third and fastest way to do this will be taught in lesson 9
-
+</p>
         <p>
         Try practicing each of the diffrent ways. If you get stuck or the frame breaks you can use the 
         "reset panels and rows" Icon which can be found in the top right hand corner of the program.
