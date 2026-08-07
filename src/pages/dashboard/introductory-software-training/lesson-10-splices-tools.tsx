@@ -51,13 +51,69 @@ export default function LessonTenSplicesToolsPage() {
       </div>
 
       <div className="calloutBox">
-        <strong>Use a clean copy of the Lesson 7 Training Project.</strong>
+        <strong>For this lesson we are going to build a new frame and go over a few curtain wall tricks.</strong>
         <p>
-          If Lesson 9 changed the frame significantly, reopen or duplicate the
-          clean version you saved before the crippled-header exercise.
+          To start a new frame, save your current project and click the "new page" icon in the top right hand corner.
+</p>
+          <p>
+          OR you can press the small red X on the frame builder and return to the main frame list. 
+          From here click the new page icon and start filling out the information on the right using the image below. 
         </p>
       </div>
+<h3>Need a Refresher?</h3>
 
+<div className="lessonText">
+  <p>
+    If you need a refresher on creating a new frame, return to{" "}
+    <strong>Lesson 7 - Create the Training Project</strong> and follow the
+    same setup process before continuing.
+  </p>
+
+  <p>
+    Use the settings shown below to create your new frame. Once your frame has
+    been created, return to this lesson and continue with the curtain wall
+    exercises.
+  </p>
+</div>
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/curtain_wall_settings.png"
+    alt="Curtain wall training frame settings"
+    style={{
+      width: "700px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.6)",
+    }}
+  >
+    Use these settings to create the curtain wall training frame before
+    continuing.
+  </figcaption>
+</figure>
+
+<div className="calloutBox">
+  <strong>Already created your frame?</strong>
+  <p>
+    If your project matches the settings shown above, you can skip this section
+    and continue directly to the splice-location exercises.
+  </p>
+</div>
       <h3>Set Splice Locations</h3>
 
       <div className="lessonText">
@@ -68,9 +124,10 @@ export default function LessonTenSplicesToolsPage() {
         </p>
 
         <p>
-          Open the Curtain Wall settings, select the vertical members, and use
-          the Set Splice Location command. The software can define up to three
-          splice locations and may also include splice gaps or face-cap offsets.
+          Start by selecting the vertical members, and use
+          the Set Splice Location command. This can be found under the Curtain wall settings tab. 
+           The software can define up to three
+          splice locations on a vertical stick and may also include splice gaps or face-cap offsets.
         </p>
       </div>
 
