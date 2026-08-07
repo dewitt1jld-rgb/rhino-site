@@ -23,7 +23,7 @@ const img = {
   dloWidth:
     "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/dlo_bottom_right.png",
   dloHeight:
-    "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-10-dlo-height.png",
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/undo.png",
 };
 
 const dloPractice = [
@@ -110,7 +110,13 @@ export default function LessonEightDloSizesPage() {
         <p>
           Next, we want to make these horizontals be in line with the door header. There is 3 ways to do this.
           First, Click on a DLO and set the DLO height to 81.5" and press <strong>Enter</strong>. 
+</p>
+<p>
+
           The second way to do this would be to click on the Horizontal itself and set the horizontal location to 84" then press <strong>Enter</strong>.
+</p>
+<p>
+
           The Third and fastest way to do this is to click on the door header first then click on each of the other three horizontals and press <strong>Enter</strong> Twice. 
         </p>
 

@@ -21,7 +21,7 @@ const steps = [
 
 const img = {
   selectStick:
-    "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-11-select-a-stick.png",
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_8/select_a_vert.png",
   insertSticks:
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/building-frames/images/frame-12-insert-sticks.png",
 };
@@ -48,13 +48,13 @@ export default function LessonEightMemberEditsPage() {
 
       <div className="lessonText">
         <p>
-          Click directly on a framing member until it highlights. The right-side
+          Click directly on a framing member and it should highlight green. The right-side
           information panel should change from opening information to member
           information.
         </p>
 
         <p>
-          Practice selecting a vertical and a horizontal before changing any
+          Practice selecting a vertical, de-selecting all members, then click on a horizontal before changing any
           values.
         </p>
       </div>
@@ -81,10 +81,10 @@ export default function LessonEightMemberEditsPage() {
       </div>
 
       <div className="calloutBox">
-        <strong>Centerline dimensions locate the middle of the member.</strong>
+        <strong>Sometimes a stick will be stuck in place due to too many restraints.</strong>
         <p>
-          This is different from setting a DLO. A DLO controls an opening;
-          centerline dimensions directly locate the selected framing member.
+          To solve this issue you can select a stick, right click on the selected stick and choose
+          the option that says <strong>FREE STICK</strong>. This removes the constraints on the stick so it can then be moved. 
         </p>
       </div>
 
@@ -147,7 +147,7 @@ export default function LessonEightMemberEditsPage() {
 
       <div className="lessonText">
         <p>
-          Select the newly inserted member until it highlights. Press the{" "}
+          Select one of the sticks you inserted and it should highlight green. Press the{" "}
           <strong>Delete</strong> key on the keyboard.
         </p>
 
@@ -169,11 +169,11 @@ export default function LessonEightMemberEditsPage() {
 
         <div className="takeawayGrid">
           <label>
-            <input type="checkbox" /> Select an intermediate vertical.
+            <input type="checkbox" /> Select and move an intermediate vertical.
           </label>
 
           <label>
-            <input type="checkbox" /> Change its centerline and press Enter.
+            <input type="checkbox" /> select one stick and choose "free stick"
           </label>
 
           <label>
