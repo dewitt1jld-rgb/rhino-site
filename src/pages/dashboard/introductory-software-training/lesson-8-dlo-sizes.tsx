@@ -82,9 +82,19 @@ export default function LessonEightDloSizesPage() {
         </p>
 
         <p>
-          Enter <strong>36</strong> and press <strong>Enter</strong>. Watch the
-          surrounding vertical member move as the opening updates.
-        </p>
+          Enter <strong>36</strong> and press <strong>Enter</strong> 3 times. Once to tab down to DLO Height, 
+          another to tab to the number and then one more time and it will push your change to the frame. 
+          Its also worth noting that when you select a bay or a stick, the width or location of the stick 
+          will automatically highlight in green. You can simply just start typing your changes and do not have to click in that field.
+          Notice that the other two bays automatically adjust to be equal widths. 
+          </p>
+
+          <p>
+          For now we are just getting practice, feel free to move the widths around to whatever you want. Keep in mind that the frame <strong>MUST</strong> work mathmatically. 
+          If you have a door in bay 2 and set two of the other bays to 36" wide the 4th bay <strong>MUST</strong> then be 62" wide. If you try to force it larger or smaller
+          you will either break the frame or the program will tell you it can not do what you are asking. To make that 4th bay larger or smaller you must then increase or decrease 
+          the overall size of the frame.
+          </p>
       </div>
 
       <figure className="fullWidthMedia">
@@ -98,14 +108,21 @@ export default function LessonEightDloSizesPage() {
 
       <div className="lessonText">
         <p>
-          With the opening still selected, locate the DLO height field. Enter
-          the required height and press <strong>Enter</strong>.
+          Next, we want to make these horizontals be in line with the door header. There is 3 ways to do this.
+          First, Click on a DLO and set the DLO height to 81.5" and press <strong>Enter</strong>. 
+          The second way to do this would be to click on the Horizontal itself and set the horizontal location to 84" then press <strong>Enter</strong>.
+          The Third and fastest way to do this is to click on the door header first then click on each of the other three horizontals and press <strong>Enter</strong> Twice. 
         </p>
 
         <p>
-          For this first exercise, set the lower row to <strong>84 inches</strong>.
-          This creates a clear difference between the lower and upper openings
-          and gives you practice changing a row height.
+        Try practicing each of the three diffrent ways. If you get stuck or the frame breaks you can use the 
+        "reset panels and rows" Icon which can be found in the top right hand corner of the program.
+        </p>
+
+        <p> You may also use the UNDO button which can be found in the top left hand corner of the program (its the thrid icon from the left) 
+          This button does work programatically so keep in mind that even though you may have moved a stick in step, 
+          it may have taken the program 3-4 steps to accompish the task. Once you say undo, you will see a pop up that asks if this is the right version.
+          Continue saying NO untill you get to the version you want and then say yes. 
         </p>
       </div>
 
@@ -141,10 +158,10 @@ export default function LessonEightDloSizesPage() {
       </div>
 
       <div className="calloutBox">
-        <strong>Press Enter after every value.</strong>
+        <strong>Save Periodically.</strong>
         <p>
-          Clicking away without pressing Enter may leave the previous value in
-          place or prevent the frame from updating.
+          If you start building a complicated frame it is a good habit to save after each succsesful change. 
+          This way if the frame does break you can exit the frame builder and come back to the last clean stage without having to re-build everything.
         </p>
       </div>
 
@@ -153,21 +170,19 @@ export default function LessonEightDloSizesPage() {
 
         <div className="takeawayGrid">
           <label>
-            <input type="checkbox" /> I selected a glass opening before editing
-            its DLO.
+            <input type="checkbox" /> I selected a glass opening and changed the DLO Width and Height
           </label>
 
           <label>
-            <input type="checkbox" /> I changed the lower-left opening to 36
-            inches wide.
+            <input type="checkbox" /> I selected a Horizontal and manually moved it up or down
           </label>
 
           <label>
-            <input type="checkbox" /> I set the lower row to 84 inches high.
+            <input type="checkbox" /> I made all the horizontals match the door header height
           </label>
 
           <label>
-            <input type="checkbox" /> I pressed Enter after each change.
+            <input type="checkbox" /> I saved the frame after making a few changes 
           </label>
         </div>
       </div>
