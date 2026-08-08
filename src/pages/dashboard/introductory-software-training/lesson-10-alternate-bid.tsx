@@ -171,27 +171,74 @@ export default function LessonTenAlternateBidPage() {
         </p>
 
         <p>
-          Choose an alternate vendor and metal group that are installed in your
-          database. Because available catalogs vary by company, the exact
-          alternate system may differ between students.
+          Choose an alternate metal vendor and metal group that are installed in your
+          database. When doing alternate bids try not to mix storefront and curtain wall.
+          If you started with a curtain wall frame, use alternate bid to tansition to a 
+          diffrent curtain wall system in a diffrent vendor. 
         </p>
+
+        <p>This is why we use the Frame Set name to divide curtain wall and storefront frames.</p>
       </div>
 
       <div className="calloutBox">
-        <strong>Only change Vendor and Metal Group.</strong>
+        <strong>How to change multiple frames at once.</strong>
         <p>
-          If frame dimensions or geometry need to change, make those edits in
-          the Frame Editor rather than Alternate Bid.
+          If you make a change to a single frame and there are additional frames listed under that same frame set name,
+          you will be prompted with the question below. Say yes and the program will automatically apply your changes across all of your frames in the frame set.
+        </p>
+
+             <p>
+         Once you have changed the vendor and metal groups on the frames you wanted to change,
+         press the "Create Alternate Bid" button at the bottom of the screen. 
+        </p>
+
+                     <p>
+        It may ask you a few questions about certain framing members. 
+        Click yes to any pop ups and, when finished, you should see your new alternate bid in the main projects list. 
         </p>
       </div>
+
+      <figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/all_frames_in_frameset.png"
+    alt="Lesson 10 Alternate Bid project"
+    style={{
+      width: "700px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+
+
+ <h3>Why Change Metal Groups?</h3>
+
+      <div className="lessonText">
+        <p>
+          At this point in the lessons we have not discussed the value of metal groups so this may be a bit confusing. 
+          For now, just understand that alternate bid is a quick way to take an entire project built under Oldcastle and move it to 
+          tubelite or any other metal vendor. The value of this will be more apparent as we continue on with the lessons. 
+        </p>
+        </div>
+
+</figure>
 
       <div className="takeawayBox">
         <p className="sectionLabel">Checkpoint</p>
         <div className="takeawayGrid">
-          <label><input type="checkbox" /> I selected Lesson 7 Training Project.</label>
-          <label><input type="checkbox" /> I named the copy Lesson 10 Alternate Bid.</label>
-          <label><input type="checkbox" /> The frame name is highlighted blue.</label>
-          <label><input type="checkbox" /> I changed only the vendor and metal group.</label>
+          <label><input type="checkbox" /> I found the Alt Bid  screen.</label>
+          <label><input type="checkbox" /> I changed metal vendors .</label>
+          <label><input type="checkbox" />I changed at least 1 frame to a diffrent metal group.</label>
+          <label><input type="checkbox" /> I can see my new alt bid project in the main project screen.</label>
         </div>
       </div>
 
