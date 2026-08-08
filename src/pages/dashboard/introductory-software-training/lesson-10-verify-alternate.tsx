@@ -550,8 +550,6 @@ export default function LessonTenIndividualComponentsPage() {
 
 
 
-      <h3>Confirm the Single-Stick Result</h3>
-
 <div className="lessonText">
 
   <figure
@@ -582,6 +580,9 @@ export default function LessonTenIndividualComponentsPage() {
   >
     Always select Apply after changing the Product Code.
   </figcaption>
+
+
+  <h3>Confirm the Single-Stick Result</h3>
 </figure>
   <p>
     After changing the Male Vertical to <strong>NULL</strong>, assigning
