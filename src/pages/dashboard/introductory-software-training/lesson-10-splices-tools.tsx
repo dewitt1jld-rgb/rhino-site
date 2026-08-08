@@ -170,10 +170,14 @@ export default function LessonTenSplicesToolsPage() {
       </figure>
 
       <div className="lessonText">
+
+</div>
+
+<div className="calloutBox">
+  <strong>Practice these shortcuts as you watch.</strong>
   <p>
-    Watch the video below to see the most commonly used keyboard shortcuts in
-    action. These shortcuts can significantly speed up frame editing once they
-    become second nature.
+    For now, ignore the short cut keys that start with an "F". We will use those in later lessons. 
+    This video quickly uses all 4 short cuts. practice on your own to use each of the hot keys. 
   </p>
 </div>
 
@@ -196,13 +200,6 @@ export default function LessonTenSplicesToolsPage() {
   />
 </video>
 
-<div className="calloutBox">
-  <strong>Practice these shortcuts as you watch.</strong>
-  <p>
-    For now, ignore the short cut keys that start with an "F". We will use those in later lessons. 
-  </p>
-</div>
-
       <h3>BOM - Bill of Materials</h3>
 
       <div className="lessonText">
@@ -216,18 +213,12 @@ export default function LessonTenSplicesToolsPage() {
         </p>
       </div>
 
-      <figure style={{ maxWidth: "520px", margin: "28px auto 0", textAlign: "center" }}>
-        <img src={img.subsill} alt="Sill channel height example" style={{ width: "100%", borderRadius: "16px" }} />
-        <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
-          Example of the sill-channel setting controlled through Catalog Parts.
-        </figcaption>
-      </figure>
 
       <div className="takeawayBox">
         <p className="sectionLabel">Checkpoint</p>
         <div className="takeawayGrid">
+          <label><input type="checkbox" /> I built a new frame with correct settings.</label>
           <label><input type="checkbox" /> I located the splice settings.</label>
-          <label><input type="checkbox" /> I reviewed the editor toolbar.</label>
           <label><input type="checkbox" /> I reviewed the shortcut-key list.</label>
           <label><input type="checkbox" /> I looked at the BOM and material list.</label>
         </div>
