@@ -20,7 +20,7 @@ const steps = [
 ];
 
 const image01 =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-01-main.png";
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/alternate_bid.png";
 
 const image02 =
   "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-02-job-selection.png";
@@ -41,9 +41,8 @@ export default function LessonTenAlternateBidPage() {
       <h2>Create an Alternate Bid</h2>
 
       <div className="goalBox">
-        <strong>Goal:</strong> Duplicate the Lesson 7 Training Project into a
-        second project so its vendor or metal group can be changed without
-        rebuilding the frames.
+        <strong>Goal:</strong> Use the current training Project to create
+        a new project in oldcastle.
       </div>
 
       <h3>What the Alternate Bid Tool Does</h3>
@@ -53,12 +52,15 @@ export default function LessonTenAlternateBidPage() {
           Alternate Bid quickly duplicates a project into another vendor or
           metal group. This allows pricing and system options to be compared
           without rebuilding the job from the beginning.
+        </p>    
+        
+        <p>
+          To get the the ALT BID screen, 
+          save and close the current project and navigate back to the 
+          software home page by pressing the small red X's on the frame and project screens. 
         </p>
 
-        <p>
-          The tool is also useful when a project was originally created with
-          the wrong metal group and needs to be copied into the correct system.
-        </p>
+
       </div>
 
       <figure style={{ maxWidth: "720px", margin: "28px auto 0", textAlign: "center" }}>
@@ -72,8 +74,7 @@ export default function LessonTenAlternateBidPage() {
 
       <div className="lessonText">
         <p>
-          Return to the All Projects screen and select{" "}
-          <strong>Lesson 7 Training Project</strong>.
+          Return to the All Projects screen and select the project we created over the last few lessons. 
         </p>
 
         <p>
@@ -86,6 +87,32 @@ export default function LessonTenAlternateBidPage() {
         <p className="sectionLabel">Alternate Project Name</p>
         <h3 style={{ marginTop: 0 }}>Lesson 10 Alternate Bid</h3>
       </div>
+
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/ALT_BID_EXAMPLE.png"
+    alt="Lesson 10 Alternate Bid project"
+    style={{
+      width: "700px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+
+</figure>
+
+
 
       <h3>Select the Frame Correctly</h3>
 
