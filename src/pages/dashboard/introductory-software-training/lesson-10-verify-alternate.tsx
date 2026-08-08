@@ -567,6 +567,366 @@ export default function LessonTenIndividualComponentsPage() {
         </p>
       </div>
 
+
+      <h3>Confirm the Single-Stick Result</h3>
+
+<div className="lessonText">
+  <p>
+    After changing the Male Vertical to <strong>NULL</strong>, assigning
+    <strong> FG-3107</strong> to the Female Vertical, and clicking{" "}
+    <strong>Apply</strong>, the change should be saved to the selected member.
+  </p>
+</div>
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/apply.png"
+    alt="Apply button used to save the individual component change"
+    style={{
+      width: "550px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.6)",
+    }}
+  >
+    Always select Apply after changing the Product Code.
+  </figcaption>
+</figure>
+
+<div className="lessonText">
+  <p>
+    Once the change is complete, hover over that same intermediate vertical
+    again. You should now see only one piece displayed instead of the original
+    two-piece mullion.
+  </p>
+</div>
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/single_stick.png"
+    alt="Single framing member displayed after replacing the two-piece mullion"
+    style={{
+      width: "650px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.6)",
+    }}
+  >
+    The selected vertical now contains only the single FG-3107 member.
+  </figcaption>
+</figure>
+
+<h3>Which Members Can Be Changed?</h3>
+
+<div className="lessonText">
+  <p>
+    This same basic process applies to almost every stick in the frame. You can
+    select the member, identify its current Product Code, and replace the part
+    when needed.
+  </p>
+
+  <p>
+    There are two important exceptions: the <strong>head</strong> and the{" "}
+    <strong>sill channel</strong>. These two components cannot be manually
+    replaced using this method.
+  </p>
+
+  <p>
+    Because of that limitation, the head and sill channel need to be configured
+    correctly inside the metal group before the frame is built. We will cover
+    that process in the upcoming metal-group lessons.
+  </p>
+</div>
+
+<div className="calloutBox">
+  <strong>Head and sill channel are different.</strong>
+
+  <p>
+    Most individual frame members can be manually changed after the frame is
+    built. The head and sill channel must be established correctly through the
+    metal group.
+  </p>
+</div>
+
+<h3>Perimeter Members Cannot Be Deleted</h3>
+
+<div className="lessonText">
+  <p>
+    Another important limitation is that perimeter members cannot simply be
+    deleted from the frame.
+  </p>
+
+  <p>
+    If you attempt to delete the head, sill, left jamb, or right jamb, the
+    program will display a warning similar to the example below.
+  </p>
+</div>
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/null_delete.png"
+    alt="Warning displayed when attempting to delete a perimeter member"
+    style={{
+      width: "600px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.6)",
+    }}
+  >
+    Perimeter members cannot be removed using the standard Delete command.
+  </figcaption>
+</figure>
+
+<div className="calloutBox">
+  <strong>Use a NULL 1/32" framing member instead.</strong>
+
+  <p>
+    When a perimeter member needs to effectively disappear from the frame,
+    replace that stick with a NULL part that has a framing width of only
+    1/32". This keeps the frame structure intact while essentially removing the
+    visible member.
+  </p>
+</div>
+
+<h3>Start with a Fresh Frame</h3>
+
+<div className="lessonText">
+  <p>
+    Before continuing with this example, return the frame to its original
+    condition.
+  </p>
+
+  <p>
+    Go to the upper-right corner of the Frame Builder and select the{" "}
+    <strong>Reset Panels and Rows</strong> icon.
+  </p>
+
+  <p>
+    This resets the frame back to the condition it was in when it was initially
+    created, giving us a clean frame for the next exercise.
+  </p>
+</div>
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/reset_panels_and_rows.png"
+    alt="Reset Panels and Rows button"
+    style={{
+      width: "600px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.6)",
+    }}
+  >
+    Use Reset Panels and Rows to return the frame to its original configuration.
+  </figcaption>
+</figure>
+
+<h3>NULL Out a Perimeter Member</h3>
+
+<div className="lessonText">
+  <p>
+    For this exercise, select the perimeter stick you want to remove. After it
+    is highlighted, navigate to the left side of the program and locate the{" "}
+    <strong>Product Code</strong> dropdown.
+  </p>
+
+  <p>
+    Find and select the <strong>NULL 1/32"</strong> framing member.
+  </p>
+</div>
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/null_one_thirty_second.png"
+    alt="NULL one thirty-second framing member"
+    style={{
+      width: "650px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.6)",
+    }}
+  >
+    Select the NULL 1/32" Product Code for the perimeter member.
+  </figcaption>
+</figure>
+
+<div className="lessonText">
+  <p>
+    You will notice that there are several different NULL options available.
+    Later in the course, we will discuss how NULL parts work and how to create
+    custom NULL parts for special framing conditions.
+  </p>
+
+  <p>
+    For now, select the <strong>NULL 1/32"</strong> option and click{" "}
+    <strong>Apply</strong>.
+  </p>
+</div>
+
+<div className="calloutBox">
+  <strong>Remember to click Apply.</strong>
+
+  <p>
+    The part change is not complete until Apply is selected. Clicking away
+    before applying the change may cause the original member to remain in place.
+  </p>
+</div>
+
+<h3>Verify the Perimeter Member Is Gone</h3>
+
+<div className="lessonText">
+  <p>
+    After applying the NULL 1/32" part, the perimeter member should effectively
+    disappear while the frame itself remains structurally valid inside the
+    software.
+  </p>
+</div>
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/right_jamb_nulled.png"
+    alt="Right jamb replaced with a NULL one thirty-second framing member"
+    style={{
+      width: "700px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.6)",
+    }}
+  >
+    The right jamb has been replaced by a NULL 1/32" member.
+  </figcaption>
+</figure>
+
+<div className="sectionBox">
+  <p className="sectionLabel">Frame Builder Module Complete</p>
+
+  <h3 style={{ marginTop: 0 }}>
+    You now understand the core Frame Builder workflow
+  </h3>
+
+  <div className="lessonText">
+    <p>
+      This completes the frame-building portion of the course. You have now
+      learned how to create frames, modify openings, add doors, adjust joinery,
+      work with individual framing components, and remove perimeter conditions
+      using NULL parts.
+    </p>
+
+    <p>
+      Next, we will move into <strong>Catalog Parts and Metal Groups</strong>.
+      These lessons will explain where the parts used by the Frame Builder come
+      from and how metal-group configuration affects the frames you create.
+    </p>
+
+    <p>
+      If you have questions about anything covered in the Frame Builder module,
+      you can email me at{" "}
+      <a
+        href="mailto:Landon@therhinowrangler.com"
+        style={{
+          color: "#fbbf24",
+          fontWeight: 900,
+          textDecoration: "none",
+        }}
+      >
+        Landon@therhinowrangler.com
+      </a>
+      .
+    </p>
+  </div>
+</div>
+
       <div className="sectionBox">
         <p className="sectionLabel">Lesson 10 Complete</p>
         <h3 style={{ marginTop: 0 }}>
