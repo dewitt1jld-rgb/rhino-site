@@ -14,146 +14,585 @@ const steps = [
   },
   {
     number: 3,
-    title: "Apply, Process & Verify",
-    href: "/dashboard/introductory-software-training/lesson-10-verify-alternate",
+    title: "Changing Individual Components in a Frame",
+    href: "/dashboard/introductory-software-training/lesson-10-individual-components",
   },
 ];
 
-const image04 =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-04-save-changes.png";
-
-const image05 =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-05-create.png";
-
-export default function LessonTenVerifyAlternatePage() {
+export default function LessonTenIndividualComponentsPage() {
   return (
     <AcademyLessonLayout
       lessonNumber="10"
       lessonTitle="Mastering the Frame Builder"
-      lessonDescription="Use advanced frame tools, set splice locations, review shortcuts, and create an alternate bid from the training project."
+      lessonDescription="Use advanced frame tools, alternate bidding, and individual component changes to gain more control over how frames are built."
       currentStep={3}
       steps={steps}
     >
       <p className="academyEyebrow">Step 3 of 3</p>
-      <h2>Apply, Process & Verify</h2>
+
+      <h2>Changing Individual Components in a Frame</h2>
 
       <div className="goalBox">
-        <strong>Goal:</strong> Apply the alternate system to the frame set,
-        create the duplicated project, and verify that no dimensions or geometry
-        changed unintentionally.
-      </div>
-
-      <h3>Apply the Changes</h3>
-
-      <div className="lessonText">
-        <p>
-          After changing the vendor or metal group, the software may ask whether
-          the changes should be applied to every frame in the frame set.
-        </p>
-
-        <p>
-          Select <strong>Yes</strong> when every frame in the set should use the
-          same alternate system. Selecting No requires each frame to be changed
-          manually.
-        </p>
-      </div>
-
-      <figure style={{ maxWidth: "520px", margin: "28px auto 0", textAlign: "center" }}>
-        <img src={image04} alt="Apply changes to all frames popup" style={{ width: "100%", borderRadius: "16px" }} />
-        <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
-          Choose whether the changes should apply to the entire frame set.
-        </figcaption>
-      </figure>
-
-      <h3>Create the Alternate Bid</h3>
-
-      <div className="lessonText">
-        <p>
-          After all required changes are complete, select the green{" "}
-          <strong>Create Alternate Bid</strong> button at the bottom of the
-          screen.
-        </p>
-      </div>
-
-      <figure style={{ maxWidth: "520px", margin: "28px auto 0", textAlign: "center" }}>
-        <img src={image05} alt="Create Alternate Bid button" style={{ width: "100%", borderRadius: "16px" }} />
-        <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
-          Create the duplicated project after all settings are complete.
-        </figcaption>
-      </figure>
-
-      <h3>Allow the Project to Process</h3>
-
-      <div className="lessonText">
-        <p>
-          The screen may flash several times while the software resaves every
-          frame and applies the alternate system.
-        </p>
-
-        <p>
-          Larger projects may display multiple replacement or project-change
-          popups. Review each message before accepting it, especially if the
-          replacement part looks different from the original.
-        </p>
+        <strong>Goal:</strong> Learn how to select an individual framing member,
+        identify whether it contains one or two parts, and replace those parts
+        without rebuilding the entire frame.
       </div>
 
       <div className="calloutBox">
-        <strong>Do not interrupt the processing.</strong>
+        <strong>Return to the practice frame.</strong>
+
         <p>
-          Wait until the program returns to the project screen and the new
-          project appears in the All Projects list.
+          Open the training project you have been using throughout these lessons
+          and open frame <strong>L-29</strong>.
         </p>
       </div>
 
-      <h3>Verify the Alternate Project</h3>
+      <h3>Select an Intermediate Vertical</h3>
 
       <div className="lessonText">
         <p>
-          Open <strong>Lesson 10 Alternate Bid</strong> and compare it with the
-          original Lesson 7 Training Project.
+          Click on one of the intermediate vertical members inside frame L-29.
+          Once the stick is selected, notice how the information on the right
+          side of the screen changes.
         </p>
 
         <p>
-          Confirm that the frame width, height, panel count, row count, door
-          location, and member layout remained unchanged.
+          This area shows the properties of the selected member and is where you
+          can identify and replace the individual parts assigned to that stick.
+        </p>
+      </div>
+
+      <figure
+        style={{
+          textAlign: "center",
+          margin: "32px 0",
+        }}
+      >
+        <img
+          src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/stick_properties.png"
+          alt="Stick properties for a selected intermediate vertical"
+          style={{
+            width: "700px",
+            maxWidth: "100%",
+            height: "auto",
+            display: "block",
+            margin: "0 auto",
+            borderRadius: "16px",
+            border: "1px solid rgba(255,255,255,.12)",
+          }}
+        />
+
+        <figcaption
+          style={{
+            marginTop: "10px",
+            color: "rgba(255,255,255,.6)",
+          }}
+        >
+          The properties panel changes based on the member currently selected.
+        </figcaption>
+      </figure>
+
+      <h3>Understanding Two-Piece Mullions</h3>
+
+      <div className="lessonText">
+        <p>
+          Before changing an individual stick, make sure you have the correct
+          member selected.
+        </p>
+
+        <p>
+          Some verticals and horizontals are made from two separate aluminum
+          pieces. When this happens, the software may show both a{" "}
+          <strong>male</strong> part number and a <strong>female</strong> part
+          number for the same visible mullion.
+        </p>
+
+        <p>
+          You can also hover over the stick inside the frame. The program will
+          display a profile preview that helps you understand what parts are
+          currently assigned to that member.
+        </p>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "24px",
+          alignItems: "stretch",
+          marginTop: "30px",
+        }}
+      >
+        <figure
+          style={{
+            margin: 0,
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <img
+            src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/hover.png"
+            alt="Profile preview shown when hovering over a framing member"
+            style={{
+              width: "100%",
+              height: "100%",
+              minHeight: "420px",
+              objectFit: "contain",
+              background: "#ffffff",
+              borderRadius: "16px",
+              border: "1px solid rgba(255,255,255,.12)",
+            }}
+          />
+
+          <figcaption
+            style={{
+              marginTop: "10px",
+              color: "rgba(255,255,255,.6)",
+            }}
+          >
+            Hover over the stick to preview the profile assigned to that member.
+          </figcaption>
+        </figure>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+          }}
+        >
+          <figure
+            style={{
+              margin: 0,
+              textAlign: "center",
+            }}
+          >
+            <img
+              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/female.png"
+              alt="Female mullion component"
+              style={{
+                width: "100%",
+                height: "200px",
+                objectFit: "contain",
+                background: "#ffffff",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,.12)",
+              }}
+            />
+
+            <figcaption
+              style={{
+                marginTop: "10px",
+                color: "rgba(255,255,255,.6)",
+              }}
+            >
+              Female component.
+            </figcaption>
+          </figure>
+
+          <figure
+            style={{
+              margin: 0,
+              textAlign: "center",
+            }}
+          >
+            <img
+              src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/male.png"
+              alt="Male mullion component"
+              style={{
+                width: "100%",
+                height: "200px",
+                objectFit: "contain",
+                background: "#ffffff",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,.12)",
+              }}
+            />
+
+            <figcaption
+              style={{
+                marginTop: "10px",
+                color: "rgba(255,255,255,.6)",
+              }}
+            >
+              Male component.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <h3>Male and Female Member Positions</h3>
+
+      <div className="lessonText">
+        <p>
+          The terms male and female also describe where the individual parts are
+          stored within the selected mullion. Use the table below as a quick
+          reference.
+        </p>
+      </div>
+
+      <div
+        style={{
+          overflowX: "auto",
+          marginTop: "24px",
+        }}
+      >
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            border: "1px solid rgba(255,255,255,.12)",
+            background: "rgba(255,255,255,.035)",
+          }}
+        >
+          <thead>
+            <tr
+              style={{
+                background: "rgba(245,158,11,.12)",
+              }}
+            >
+              <th
+                style={{
+                  padding: "14px 16px",
+                  textAlign: "left",
+                  color: "#fbbf24",
+                  borderBottom: "1px solid rgba(255,255,255,.12)",
+                }}
+              >
+                Member Type
+              </th>
+
+              <th
+                style={{
+                  padding: "14px 16px",
+                  textAlign: "left",
+                  color: "#fbbf24",
+                  borderBottom: "1px solid rgba(255,255,255,.12)",
+                }}
+              >
+                Female Position
+              </th>
+
+              <th
+                style={{
+                  padding: "14px 16px",
+                  textAlign: "left",
+                  color: "#fbbf24",
+                  borderBottom: "1px solid rgba(255,255,255,.12)",
+                }}
+              >
+                Male Position
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td
+                style={{
+                  padding: "14px 16px",
+                  fontWeight: 900,
+                  borderBottom: "1px solid rgba(255,255,255,.08)",
+                }}
+              >
+                Vertical Sticks
+              </td>
+
+              <td
+                style={{
+                  padding: "14px 16px",
+                  borderBottom: "1px solid rgba(255,255,255,.08)",
+                }}
+              >
+                Right side
+              </td>
+
+              <td
+                style={{
+                  padding: "14px 16px",
+                  borderBottom: "1px solid rgba(255,255,255,.08)",
+                }}
+              >
+                Left side
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                style={{
+                  padding: "14px 16px",
+                  fontWeight: 900,
+                }}
+              >
+                Horizontal Sticks
+              </td>
+
+              <td
+                style={{
+                  padding: "14px 16px",
+                }}
+              >
+                Top
+              </td>
+
+              <td
+                style={{
+                  padding: "14px 16px",
+                }}
+              >
+                Bottom
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        style={{
+          overflowX: "auto",
+          marginTop: "24px",
+        }}
+      >
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            border: "1px solid rgba(255,255,255,.12)",
+            background: "rgba(255,255,255,.035)",
+          }}
+        >
+          <thead>
+            <tr
+              style={{
+                background: "rgba(245,158,11,.12)",
+              }}
+            >
+              <th
+                style={{
+                  padding: "14px 16px",
+                  textAlign: "left",
+                  color: "#fbbf24",
+                  borderBottom: "1px solid rgba(255,255,255,.12)",
+                }}
+              >
+                Component
+              </th>
+
+              <th
+                style={{
+                  padding: "14px 16px",
+                  textAlign: "left",
+                  color: "#fbbf24",
+                  borderBottom: "1px solid rgba(255,255,255,.12)",
+                }}
+              >
+                How Glazier Studio / PartnerPak Uses It
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td
+                style={{
+                  padding: "14px 16px",
+                  fontWeight: 900,
+                  borderBottom: "1px solid rgba(255,255,255,.08)",
+                }}
+              >
+                Female
+              </td>
+
+              <td
+                style={{
+                  padding: "14px 16px",
+                  borderBottom: "1px solid rgba(255,255,255,.08)",
+                }}
+              >
+                The female position contains the default main member.
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                style={{
+                  padding: "14px 16px",
+                  fontWeight: 900,
+                }}
+              >
+                Male
+              </td>
+
+              <td
+                style={{
+                  padding: "14px 16px",
+                }}
+              >
+                The male position is either blank or contains the part number
+                for the second member when the mullion uses two pieces.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="calloutBox">
+        <strong>Simple way to remember it:</strong>
+
+        <p>
+          The <strong>female</strong> position is your main member. The{" "}
+          <strong>male</strong> position is where the additional second member
+          appears when the mullion requires one.
+        </p>
+      </div>
+
+      <h3>Convert the Two-Piece Vertical to a Single Member</h3>
+
+      <div className="lessonText">
+        <p>
+          In our training frame, the selected intermediate vertical currently
+          contains two pieces.
+        </p>
+
+        <p>
+          We want to replace that two-piece mullion with a single stick. To do
+          that, we first need to remove the male component and then replace the
+          female component with the part we want to use.
         </p>
       </div>
 
       <div className="sectionBox">
-        <p className="sectionLabel">Required Verification</p>
-        <div className="takeawayGrid">
-          <label><input type="checkbox" /> Project name is Lesson 10 Alternate Bid.</label>
-          <label><input type="checkbox" /> Width remains 180 inches.</label>
-          <label><input type="checkbox" /> Height remains 115 inches.</label>
-          <label><input type="checkbox" /> Panel and row layout matches the original.</label>
-          <label><input type="checkbox" /> Door location matches the original.</label>
-          <label><input type="checkbox" /> Vendor or metal group changed as intended.</label>
+        <p className="sectionLabel">Step 1</p>
+        <h3 style={{ marginTop: 0 }}>NULL Out the Male Vertical</h3>
+
+        <div className="lessonText">
+          <p>
+            Navigate to the left-side options and make sure{" "}
+            <strong>Male Vertical</strong> is selected.
+          </p>
+
+          <p>
+            Open the <strong>Product Code</strong> dropdown and select{" "}
+            <strong>NULL</strong>.
+          </p>
+
+          <p>
+            Setting the male member to NULL tells the software that this side of
+            the mullion should not contain a physical part.
+          </p>
         </div>
       </div>
 
-      <h3>Independent Challenge</h3>
+      <figure
+        style={{
+          textAlign: "center",
+          margin: "32px 0",
+        }}
+      >
+        <img
+          src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/null_part.png"
+          alt="Selecting NULL for the male vertical"
+          style={{
+            width: "700px",
+            maxWidth: "100%",
+            height: "auto",
+            display: "block",
+            margin: "0 auto",
+            borderRadius: "16px",
+            border: "1px solid rgba(255,255,255,.12)",
+          }}
+        />
 
-      <div className="lessonText">
+        <figcaption
+          style={{
+            marginTop: "10px",
+            color: "rgba(255,255,255,.6)",
+          }}
+        >
+          Select NULL for the Male Vertical Product Code.
+        </figcaption>
+      </figure>
+
+      <div className="sectionBox">
+        <p className="sectionLabel">Step 2</p>
+        <h3 style={{ marginTop: 0 }}>Replace the Female Mullion</h3>
+
+        <div className="lessonText">
+          <p>
+            Now navigate to the <strong>Female Vertical</strong> settings.
+          </p>
+
+          <p>
+            Open the Product Code dropdown and locate part number{" "}
+            <strong>FG-3107</strong>.
+          </p>
+
+          <p>
+            Select FG-3107 as the new female member.
+          </p>
+        </div>
+      </div>
+
+      <div className="calloutBox">
+        <strong>IMPORTANT: Click Apply.</strong>
+
         <p>
-          Create one additional alternate bid without reviewing the previous
-          page. Use a different installed metal group and give the new project a
-          clear name.
+          After selecting FG-3107, make sure you click{" "}
+          <strong>Apply</strong>.
         </p>
 
         <p>
-          When finished, compare the original and both alternate projects in the
-          All Projects list.
+          If you change the part number and then click away from the screen
+          without selecting Apply, the change will be lost.
+        </p>
+      </div>
+
+      <h3>Verify the Change</h3>
+
+      <div className="lessonText">
+        <p>
+          After applying the new part, click away from the member and then
+          select the same vertical again.
+        </p>
+
+        <p>
+          Confirm that the male component is now NULL and the female component
+          shows <strong>FG-3107</strong>.
+        </p>
+
+        <p>
+          You have now replaced a two-piece vertical mullion with a single
+          framing member without rebuilding the frame.
         </p>
       </div>
 
       <div className="sectionBox">
         <p className="sectionLabel">Lesson 10 Complete</p>
-        <h3 style={{ marginTop: 0 }}>You have completed the Frame Builder module</h3>
+        <h3 style={{ marginTop: 0 }}>
+          You can now modify individual frame components
+        </h3>
+
         <div className="takeawayGrid">
-          <div><strong>✓</strong>Locate and configure splice tools</div>
-          <div><strong>✓</strong>Use editor tools and shortcuts</div>
-          <div><strong>✓</strong>Create an alternate project</div>
-          <div><strong>✓</strong>Verify geometry after system changes</div>
+          <div>
+            <strong>✓</strong>
+            Identify male and female components
+          </div>
+
+          <div>
+            <strong>✓</strong>
+            Recognize two-piece mullions
+          </div>
+
+          <div>
+            <strong>✓</strong>
+            NULL out an unused component
+          </div>
+
+          <div>
+            <strong>✓</strong>
+            Replace an individual stick by part number
+          </div>
         </div>
       </div>
 

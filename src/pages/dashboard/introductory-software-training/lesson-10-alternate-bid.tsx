@@ -187,15 +187,6 @@ export default function LessonTenAlternateBidPage() {
           you will be prompted with the question below. Say yes and the program will automatically apply your changes across all of your frames in the frame set.
         </p>
 
-             <p>
-         Once you have changed the vendor and metal groups on the frames you wanted to change,
-         press the "Create Alternate Bid" button at the bottom of the screen. 
-        </p>
-
-                     <p>
-        It may ask you a few questions about certain framing members. 
-        Click yes to any pop ups and, when finished, you should see your new alternate bid in the main projects list. 
-        </p>
       </div>
 
       <figure
@@ -217,6 +208,42 @@ export default function LessonTenAlternateBidPage() {
       border: "1px solid rgba(255,255,255,.12)",
     }}
   />
+
+      <h3>Complete the Alt Bid</h3>
+
+      <div className="lessonText">
+
+
+
+             <p>
+         Once you have changed the vendor and metal groups on the frames you wanted to change,
+         press the "Create Alternate Bid" button at the bottom of the screen. 
+        </p>
+
+                     <p>
+        It may ask you a few questions about certain framing members. 
+        Click yes to any pop ups and, when finished, you should see your new alternate bid in the main projects list. 
+        </p>
+ 
+      </div>
+
+
+
+  <img
+    src="https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-05-create.png"
+    alt="Lesson 10 Alternate Bid project"
+    style={{
+      width: "700px",
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+
 
 
 
