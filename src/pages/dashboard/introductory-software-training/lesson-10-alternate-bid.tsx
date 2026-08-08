@@ -23,10 +23,10 @@ const image01 =
   "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/alternate_bid.png";
 
 const image02 =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-02-job-selection.png";
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/L-29.png";
 
 const image03 =
-  "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/alternate-bid/images/alternate-bid-03-main-alt-screen.png";
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/frame_selection_alt_bid.png";
 
 export default function LessonTenAlternateBidPage() {
   return (
@@ -63,13 +63,6 @@ export default function LessonTenAlternateBidPage() {
 
       </div>
 
-      <figure style={{ maxWidth: "720px", margin: "28px auto 0", textAlign: "center" }}>
-        <img src={image01} alt="Alternate Bid menu location" style={{ width: "100%", borderRadius: "16px" }} />
-        <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
-          Alternate Bid is located beneath the All Projects area.
-        </figcaption>
-      </figure>
-
       <h3>Select the Training Project</h3>
 
       <div className="lessonText">
@@ -82,6 +75,14 @@ export default function LessonTenAlternateBidPage() {
           Enter the new project name shown below.
         </p>
       </div>
+
+            <figure style={{ maxWidth: "720px", margin: "28px auto 0", textAlign: "center" }}>
+        <img src={image01} alt="Alternate Bid menu location" style={{ width: "100%", borderRadius: "16px" }} />
+        <figcaption style={{ marginTop: "10px", color: "rgba(255,255,255,.55)" }}>
+          Alternate Bid is located beneath the All Projects area.
+        </figcaption>
+      </figure>
+
 
       <div className="sectionBox">
         <p className="sectionLabel">Alternate Project Name</p>
@@ -96,7 +97,7 @@ export default function LessonTenAlternateBidPage() {
   }}
 >
   <img
-    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/ALT_BID_EXAMPLE.png"
+    src="https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_10/lesson_10_alt_bid.png"
     alt="Lesson 10 Alternate Bid project"
     style={{
       width: "700px",
