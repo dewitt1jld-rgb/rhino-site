@@ -548,37 +548,13 @@ export default function LessonTenIndividualComponentsPage() {
         </p>
       </div>
 
-      <h3>Verify the Change</h3>
-
-      <div className="lessonText">
-        <p>
-          After applying the new part, click away from the member and then
-          select the same vertical again.
-        </p>
-
-        <p>
-          Confirm that the male component is now NULL and the female component
-          shows <strong>FG-3107</strong>.
-        </p>
-
-        <p>
-          You have now replaced a two-piece vertical mullion with a single
-          framing member without rebuilding the frame.
-        </p>
-      </div>
 
 
       <h3>Confirm the Single-Stick Result</h3>
 
 <div className="lessonText">
-  <p>
-    After changing the Male Vertical to <strong>NULL</strong>, assigning
-    <strong> FG-3107</strong> to the Female Vertical, and clicking{" "}
-    <strong>Apply</strong>, the change should be saved to the selected member.
-  </p>
-</div>
 
-<figure
+  <figure
   style={{
     textAlign: "center",
     margin: "32px 0",
@@ -607,6 +583,13 @@ export default function LessonTenIndividualComponentsPage() {
     Always select Apply after changing the Product Code.
   </figcaption>
 </figure>
+  <p>
+    After changing the Male Vertical to <strong>NULL</strong>, assigning
+    <strong> FG-3107</strong> to the Female Vertical, and clicking{" "}
+    <strong>Apply</strong>, the change should be saved to the selected member.
+  </p>
+</div>
+
 
 <div className="lessonText">
   <p>
