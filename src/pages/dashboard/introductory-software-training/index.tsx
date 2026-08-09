@@ -67,7 +67,7 @@ const courseModules: CourseModule[] = [
         status: "Available",
         description:
           "Download Glazier Studio and PartnerPak, enter your customer number, activate the software, and confirm everything is ready.",
-        href: "/dashboard/introductory-software-training/download-install",
+        href: "/dashboard/introductory-software-training/lesson-4-download-install",
       },
       {
         number: "05",
@@ -84,7 +84,7 @@ const courseModules: CourseModule[] = [
         status: "Available",
         description:
           "Open the program, understand the main layout, identify important tools, and learn the basic frame-building workflow.",
-        href: "/dashboard/introductory-software-training/lesson-2-launch",
+        href: "/dashboard/introductory-software-training/lesson-6-launch",
       },
     ],
   },

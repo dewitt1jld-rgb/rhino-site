@@ -652,16 +652,6 @@ export default function LessonTenIndividualComponentsPage() {
   </p>
 </div>
 
-<div className="calloutBox">
-  <strong>Head and sill channel are different.</strong>
-
-  <p>
-    Most individual frame members can be manually changed after the frame is
-    built. The head and sill channel must be established correctly through the
-    metal group.
-  </p>
-</div>
-
 <h3>Perimeter Members Cannot Be Deleted</h3>
 
 <div className="lessonText">

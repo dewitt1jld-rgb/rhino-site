@@ -43,8 +43,7 @@ export default function LessonNineReverseJoineryPage() {
       <div className="calloutBox">
         <strong>Continue using the Lesson 7 Training Project.</strong>
         <p>
-          Open the same frame you modified in Lesson 8. Save a copy before
-          beginning so you can restore the original frame if needed.
+          Open the same frame you modified in Lesson 8. 
         </p>
       </div>
 
@@ -116,7 +115,7 @@ export default function LessonNineReverseJoineryPage() {
 
       <div className="lessonText">
         <p>
-          Select the same member again and use Reverse Joinery a second time.
+          This time select the vertical and use Reverse Joinery a second time.
           Confirm that the intersection returns to its original condition.
         </p>
 
