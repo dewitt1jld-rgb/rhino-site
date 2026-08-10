@@ -200,7 +200,7 @@ export default function LessonTwoLaunchPage() {
             </Link>
 
             <Link
-              href="/dashboard/introductory-software-training/lesson-2-overview"
+              href="/dashboard/introductory-software-training/lesson-7-overview"
               className="primary"
             >
               Next →

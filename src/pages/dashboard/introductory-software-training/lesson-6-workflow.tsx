@@ -181,7 +181,7 @@ export default function LessonTwoWorkflowPage() {
 
           <div className="navButtons">
             <Link
-              href="/dashboard/introductory-software-training/lesson-2-overview"
+              href="/dashboard/introductory-software-training/lesson-6-overview"
               className="secondary"
             >
               ← Previous

@@ -238,7 +238,7 @@ export default function FabricateInstallPage() {
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/download-install"
+          href="/dashboard/introductory-software-training/lesson-4-download-install"
           className="primary"
         >
           Continue to Lesson 4 →
