@@ -12,14 +12,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-
-    return res.status(405).json({
-      error: "Method not allowed.",
-    });
-  }
-
   try {
     const supabaseUrl =
       process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -77,89 +69,170 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    VALIDATE REQUEST
+    GET USER PROGRESS
     --------------------------------------------------
     */
 
-    const {
-      action,
-      lessonNumber,
-      stepNumber,
-      page,
-    } = req.body as ProgressBody;
-
-    if (
-      action !== "visit" &&
-      action !== "complete"
-    ) {
-      return res.status(400).json({
-        error: "Invalid progress action.",
-      });
-    }
-
-    if (
-      !Number.isInteger(lessonNumber) ||
-      !Number.isInteger(stepNumber) ||
-      !lessonNumber ||
-      !stepNumber
-    ) {
-      return res.status(400).json({
-        error: "Invalid lesson or step number.",
-      });
-    }
-
-    const now =
-      new Date().toISOString();
-
-    /*
-    --------------------------------------------------
-    USER OPENED A LESSON STEP
-    --------------------------------------------------
-    */
-
-    if (action === "visit") {
+    if (req.method === "GET") {
       const {
+        data: courseProgress,
         error: courseProgressError,
       } = await supabase
         .from("academy_course_progress")
-        .upsert(
-          {
-            user_id: user.id,
-            current_lesson: lessonNumber,
-            current_step: stepNumber,
-            last_page: page || null,
-            updated_at: now,
-          },
-          {
-            onConflict: "user_id",
-          }
-        );
+        .select(`
+          current_lesson,
+          current_step,
+          last_page,
+          updated_at
+        `)
+        .eq("user_id", user.id)
+        .maybeSingle();
 
       if (courseProgressError) {
         console.error(
-          "Course progress error:",
+          "Course progress read error:",
           courseProgressError
         );
 
         return res.status(500).json({
           error:
-            "Unable to save current course position.",
+            "Unable to load current course position.",
+        });
+      }
+
+      const {
+        data: completedSteps,
+        error: completedStepsError,
+      } = await supabase
+        .from("academy_progress")
+        .select(`
+          lesson_number,
+          step_number,
+          completed,
+          completed_at,
+          updated_at
+        `)
+        .eq("user_id", user.id)
+        .eq("completed", true)
+        .order("lesson_number", {
+          ascending: true,
+        })
+        .order("step_number", {
+          ascending: true,
+        });
+
+      if (completedStepsError) {
+        console.error(
+          "Completed progress read error:",
+          completedStepsError
+        );
+
+        return res.status(500).json({
+          error:
+            "Unable to load completed course progress.",
         });
       }
 
       return res.status(200).json({
-        success: true,
-        action: "visit",
+        courseProgress:
+          courseProgress || null,
+
+        completedSteps:
+          completedSteps || [],
       });
     }
 
     /*
     --------------------------------------------------
-    USER COMPLETED A STEP
+    SAVE USER PROGRESS
     --------------------------------------------------
     */
 
-    if (action === "complete") {
+    if (req.method === "POST") {
+      const {
+        action,
+        lessonNumber,
+        stepNumber,
+        page,
+      } = req.body as ProgressBody;
+
+      if (
+        action !== "visit" &&
+        action !== "complete"
+      ) {
+        return res.status(400).json({
+          error: "Invalid progress action.",
+        });
+      }
+
+      if (
+        !Number.isInteger(lessonNumber) ||
+        !Number.isInteger(stepNumber) ||
+        !lessonNumber ||
+        !stepNumber
+      ) {
+        return res.status(400).json({
+          error:
+            "Invalid lesson or step number.",
+        });
+      }
+
+      const now =
+        new Date().toISOString();
+
+      /*
+      ----------------------------------------------
+      USER OPENED A LESSON STEP
+      ----------------------------------------------
+      */
+
+      if (action === "visit") {
+        const {
+          error: courseProgressError,
+        } = await supabase
+          .from(
+            "academy_course_progress"
+          )
+          .upsert(
+            {
+              user_id: user.id,
+              current_lesson:
+                lessonNumber,
+              current_step:
+                stepNumber,
+              last_page:
+                page || null,
+              updated_at: now,
+            },
+            {
+              onConflict: "user_id",
+            }
+          );
+
+        if (courseProgressError) {
+          console.error(
+            "Course progress error:",
+            courseProgressError
+          );
+
+          return res.status(500).json({
+            error:
+              "Unable to save current course position.",
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          action: "visit",
+        });
+      }
+
+      /*
+      ----------------------------------------------
+      USER COMPLETED A STEP
+      ----------------------------------------------
+      */
+
       const {
         error: stepProgressError,
       } = await supabase
@@ -167,8 +240,10 @@ export default async function handler(
         .upsert(
           {
             user_id: user.id,
-            lesson_number: lessonNumber,
-            step_number: stepNumber,
+            lesson_number:
+              lessonNumber,
+            step_number:
+              stepNumber,
             completed: true,
             completed_at: now,
             updated_at: now,
@@ -196,6 +271,15 @@ export default async function handler(
         action: "complete",
       });
     }
+
+    res.setHeader(
+      "Allow",
+      "GET, POST"
+    );
+
+    return res.status(405).json({
+      error: "Method not allowed.",
+    });
   } catch (error) {
     console.error(
       "Academy progress API error:",
@@ -204,7 +288,7 @@ export default async function handler(
 
     return res.status(500).json({
       error:
-        "Unable to update training progress.",
+        "Unable to process training progress.",
     });
   }
 }
