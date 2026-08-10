@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useState,
   type MouseEvent,
   type ReactNode,
 } from "react";
@@ -28,6 +29,12 @@ type AcademyLessonLayoutProps = {
   nextLabel?: string;
 };
 
+type CompletedStep = {
+  lesson_number: number;
+  step_number: number;
+  completed: boolean;
+};
+
 export default function AcademyLessonLayout({
   lessonNumber,
   lessonTitle,
@@ -48,9 +55,14 @@ export default function AcademyLessonLayout({
   const numericLessonNumber =
     Number.parseInt(lessonNumber, 10);
 
+  const [
+    completedStepNumbers,
+    setCompletedStepNumbers,
+  ] = useState<number[]>([]);
+
   /*
   --------------------------------------------------
-  SEND PROGRESS EVENT TO SERVER
+  SEND PROGRESS EVENT
   --------------------------------------------------
   */
 
@@ -58,46 +70,40 @@ export default function AcademyLessonLayout({
     action: "visit" | "complete"
   ) {
     try {
-      const supabase =
-        createClient();
+      const supabase = createClient();
 
       const {
         data: { session },
-      } =
-        await supabase.auth.getSession();
+      } = await supabase.auth.getSession();
 
       if (!session?.access_token) {
         return;
       }
 
-      const response =
-        await fetch(
-          "/api/academy-progress",
-          {
-            method: "POST",
+      const response = await fetch(
+        "/api/academy-progress",
+        {
+          method: "POST",
 
-            headers: {
-              "Content-Type":
-                "application/json",
+          headers: {
+            "Content-Type":
+              "application/json",
 
-              Authorization:
-                `Bearer ${session.access_token}`,
-            },
+            Authorization:
+              `Bearer ${session.access_token}`,
+          },
 
-            body: JSON.stringify({
-              action,
-
-              lessonNumber:
-                numericLessonNumber,
-
-              stepNumber:
-                currentStep,
-
-              page:
-                router.asPath,
-            }),
-          }
-        );
+          body: JSON.stringify({
+            action,
+            lessonNumber:
+              numericLessonNumber,
+            stepNumber:
+              currentStep,
+            page:
+              router.asPath,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const responseText =
@@ -107,14 +113,31 @@ export default function AcademyLessonLayout({
           "Academy progress failed:",
           responseText
         );
+
+        return;
       }
-    } catch (error) {
+
       /*
-        Progress tracking should never
-        prevent a student from using
-        the lesson.
+      If this step was just completed,
+      immediately update the sidebar
+      without waiting for another page
+      refresh.
       */
 
+      if (action === "complete") {
+        setCompletedStepNumbers(
+          (current) =>
+            current.includes(
+              currentStep
+            )
+              ? current
+              : [
+                  ...current,
+                  currentStep,
+                ]
+        );
+      }
+    } catch (error) {
       console.error(
         "Academy progress tracking error:",
         error
@@ -124,12 +147,91 @@ export default function AcademyLessonLayout({
 
   /*
   --------------------------------------------------
-  RECORD CURRENT COURSE POSITION
+  LOAD COMPLETED SECTIONS
   --------------------------------------------------
+  */
 
-  Opening a page does NOT complete it.
+  async function loadCompletedSteps() {
+    try {
+      const supabase = createClient();
 
-  It only saves where the student currently is.
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session?.access_token) {
+        return;
+      }
+
+      const response = await fetch(
+        "/api/academy-progress",
+        {
+          method: "GET",
+
+          headers: {
+            Authorization:
+              `Bearer ${session.access_token}`,
+          },
+        }
+      );
+
+      const responseText =
+        await response.text();
+
+      let result: any = {};
+
+      try {
+        result =
+          responseText
+            ? JSON.parse(responseText)
+            : {};
+      } catch {
+        console.error(
+          "Invalid academy progress response:",
+          responseText
+        );
+        return;
+      }
+
+      if (!response.ok) {
+        console.error(
+          "Unable to load completed academy sections:",
+          result
+        );
+        return;
+      }
+
+      const allCompletedSteps:
+        CompletedStep[] =
+        result.completedSteps || [];
+
+      const thisLessonSteps =
+        allCompletedSteps
+          .filter(
+            (item) =>
+              item.lesson_number ===
+                numericLessonNumber &&
+              item.completed
+          )
+          .map(
+            (item) =>
+              item.step_number
+          );
+
+      setCompletedStepNumbers(
+        thisLessonSteps
+      );
+    } catch (error) {
+      console.error(
+        "Unable to load academy section status:",
+        error
+      );
+    }
+  }
+
+  /*
+  --------------------------------------------------
+  RECORD CURRENT POSITION
   --------------------------------------------------
   */
 
@@ -145,7 +247,8 @@ export default function AcademyLessonLayout({
       return;
     }
 
-    saveProgress("visit");
+    void saveProgress("visit");
+    void loadCompletedSteps();
   }, [
     router.isReady,
     router.asPath,
@@ -155,19 +258,8 @@ export default function AcademyLessonLayout({
 
   /*
   --------------------------------------------------
-  MARK STEP COMPLETE WHEN NEXT IS CLICKED
-  --------------------------------------------------
-
-  This catches BOTH:
-
-  1. The new bottom-navigation Continue button
-
-  2. Older lesson pages that already contain:
-
-     <Link className="primary">
-
-  Previous buttons and sidebar links do NOT
-  complete the current step.
+  MARK CURRENT SECTION COMPLETE
+  WHEN NEXT BUTTON IS CLICKED
   --------------------------------------------------
   */
 
@@ -185,14 +277,6 @@ export default function AcademyLessonLayout({
     if (!nextLink) {
       return;
     }
-
-    /*
-      Do not block navigation.
-
-      Next.js navigation stays inside
-      the application, while the progress
-      request is sent in the background.
-    */
 
     void saveProgress(
       "complete"
@@ -213,33 +297,84 @@ export default function AcademyLessonLayout({
           Lesson {lessonNumber}
         </p>
 
-        <h1>{lessonTitle}</h1>
+        <h1>
+          {lessonTitle}
+        </h1>
 
         <p className="academyDescription">
           {lessonDescription}
         </p>
 
         <div className="academyStepList">
-          {steps.map((step) =>
-            step.number === currentStep ? (
-              <div
-                className="academyStep active"
-                key={step.number}
-              >
-                {step.number}.{" "}
-                {step.title}
-              </div>
-            ) : (
+          {steps.map((step) => {
+            const isCurrent =
+              step.number ===
+              currentStep;
+
+            const isComplete =
+              completedStepNumbers.includes(
+                step.number
+              );
+
+            const content = (
+              <>
+                <span className="academyStepMain">
+                  <span
+                    className={
+                      isComplete
+                        ? "academyStepCheck complete"
+                        : "academyStepCheck"
+                    }
+                  >
+                    {isComplete
+                      ? "✓"
+                      : step.number}
+                  </span>
+
+                  <span className="academyStepTitle">
+                    {step.title}
+                  </span>
+                </span>
+
+                <span
+                  className={
+                    isComplete
+                      ? "academyStepStatus complete"
+                      : "academyStepStatus"
+                  }
+                >
+                  {isComplete
+                    ? "Complete"
+                    : isCurrent
+                      ? "In Progress"
+                      : "Not Complete"}
+                </span>
+              </>
+            );
+
+            if (isCurrent) {
+              return (
+                <div
+                  className="academyStep active"
+                  key={
+                    step.number
+                  }
+                >
+                  {content}
+                </div>
+              );
+            }
+
+            return (
               <Link
                 href={step.href}
                 className="academyStep"
                 key={step.number}
               >
-                {step.number}.{" "}
-                {step.title}
+                {content}
               </Link>
-            )
-          )}
+            );
+          })}
         </div>
       </aside>
 
@@ -257,10 +392,14 @@ export default function AcademyLessonLayout({
               <div className="academyPreviousArea">
                 {previousHref && (
                   <Link
-                    href={previousHref}
+                    href={
+                      previousHref
+                    }
                     className="secondary"
                   >
-                    {previousLabel}
+                    {
+                      previousLabel
+                    }
                   </Link>
                 )}
               </div>
@@ -268,10 +407,14 @@ export default function AcademyLessonLayout({
               <div className="academyNextArea">
                 {nextHref && (
                   <Link
-                    href={nextHref}
+                    href={
+                      nextHref
+                    }
                     className="primary"
                   >
-                    {nextLabel}
+                    {
+                      nextLabel
+                    }
                   </Link>
                 )}
               </div>
@@ -288,7 +431,8 @@ export default function AcademyLessonLayout({
         .academyPage {
           min-height: 100vh;
           display: grid;
-          grid-template-columns: 360px minmax(0, 1fr);
+          grid-template-columns:
+            360px minmax(0, 1fr);
           background:
             radial-gradient(
               circle at top left,
@@ -307,8 +451,19 @@ export default function AcademyLessonLayout({
         .academySidebar {
           min-height: 100vh;
           padding: 34px 24px;
-          background: rgba(5, 7, 11, 0.72);
-          border-right: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(
+            5,
+            7,
+            11,
+            0.72
+          );
+          border-right: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.08
+            );
         }
 
         .academyBack {
@@ -340,7 +495,12 @@ export default function AcademyLessonLayout({
 
         .academyDescription {
           margin-bottom: 28px;
-          color: rgba(255, 255, 255, 0.72);
+          color: rgba(
+            255,
+            255,
+            255,
+            0.72
+          );
           line-height: 1.65;
         }
 
@@ -350,11 +510,31 @@ export default function AcademyLessonLayout({
           gap: 10px;
         }
 
+        /*
+        ----------------------------------
+        SIDEBAR SECTION STATUS
+        ----------------------------------
+        */
+
         .academyStep {
+          display: flex;
+          flex-direction: column;
+          gap: 9px;
           padding: 14px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.08
+            );
           border-radius: 14px;
-          background: rgba(255, 255, 255, 0.045);
+          background: rgba(
+            255,
+            255,
+            255,
+            0.045
+          );
           color: white;
           font-weight: 900;
           text-decoration: none;
@@ -364,21 +544,121 @@ export default function AcademyLessonLayout({
             transform 0.2s ease;
         }
 
-        .academyStep:hover {
-          border-color: rgba(245, 158, 11, 0.35);
-          background: rgba(245, 158, 11, 0.08);
-          transform: translateX(3px);
+        a.academyStep:hover {
+          border-color: rgba(
+            245,
+            158,
+            11,
+            0.35
+          );
+          background: rgba(
+            245,
+            158,
+            11,
+            0.08
+          );
+          transform:
+            translateX(3px);
         }
 
         .academyStep.active {
-          border-color: rgba(245, 158, 11, 0.5);
-          background: rgba(245, 158, 11, 0.14);
+          border-color: rgba(
+            245,
+            158,
+            11,
+            0.5
+          );
+          background: rgba(
+            245,
+            158,
+            11,
+            0.14
+          );
           color: #fbbf24;
         }
 
-        .academyStep.active:hover {
-          transform: none;
+        .academyStepMain {
+          display: flex;
+          align-items: center;
+          gap: 11px;
         }
+
+        .academyStepCheck {
+          width: 29px;
+          height: 29px;
+          flex: 0 0 29px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 9px;
+          background: rgba(
+            255,
+            255,
+            255,
+            0.07
+          );
+          color: rgba(
+            255,
+            255,
+            255,
+            0.65
+          );
+          font-size: 13px;
+          font-weight: 950;
+        }
+
+        .academyStepCheck.complete {
+          background: rgba(
+            34,
+            197,
+            94,
+            0.18
+          );
+          color: #86efac;
+          border: 1px solid
+            rgba(
+              34,
+              197,
+              94,
+              0.3
+            );
+        }
+
+        .academyStepTitle {
+          min-width: 0;
+          line-height: 1.35;
+        }
+
+        .academyStepStatus {
+          padding-left: 40px;
+          color: rgba(
+            255,
+            255,
+            255,
+            0.38
+          );
+          font-size: 11px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+        }
+
+        .academyStepStatus.complete {
+          color: #86efac;
+        }
+
+        .academyStep.active
+          .academyStepStatus:not(
+            .complete
+          ) {
+          color: #fbbf24;
+        }
+
+        /*
+        ----------------------------------
+        MAIN LESSON CONTENT
+        ----------------------------------
+        */
 
         .academyStage {
           display: flex;
@@ -391,14 +671,29 @@ export default function AcademyLessonLayout({
           width: 100%;
           max-width: 1040px;
           padding: 42px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.08
+            );
           border-radius: 24px;
-          background: rgba(15, 23, 42, 0.82);
+          background: rgba(
+            15,
+            23,
+            42,
+            0.82
+          );
         }
 
         .academyCard h2 {
           margin: 0 0 18px;
-          font-size: clamp(32px, 5vw, 42px);
+          font-size: clamp(
+            32px,
+            5vw,
+            42px
+          );
           line-height: 1.08;
         }
 
@@ -414,15 +709,36 @@ export default function AcademyLessonLayout({
         .takeawayBox {
           margin-top: 24px;
           padding: 22px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.08
+            );
           border-radius: 18px;
-          background: rgba(255, 255, 255, 0.045);
+          background: rgba(
+            255,
+            255,
+            255,
+            0.045
+          );
         }
 
         .goalBox {
           margin-top: 0;
-          border-color: rgba(245, 158, 11, 0.3);
-          background: rgba(245, 158, 11, 0.12);
+          border-color: rgba(
+            245,
+            158,
+            11,
+            0.3
+          );
+          background: rgba(
+            245,
+            158,
+            11,
+            0.12
+          );
         }
 
         .goalBox strong,
@@ -432,7 +748,12 @@ export default function AcademyLessonLayout({
 
         .bodyText,
         .lessonText {
-          color: rgba(255, 255, 255, 0.78);
+          color: rgba(
+            255,
+            255,
+            255,
+            0.78
+          );
           font-size: 18px;
           line-height: 1.8;
         }
@@ -455,21 +776,36 @@ export default function AcademyLessonLayout({
           display: block;
           width: 100%;
           height: auto;
-          border: 1px solid rgba(255, 255, 255, 0.12);
+          border: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.12
+            );
           border-radius: 18px;
           background: #05070b;
         }
 
         .fullWidthMedia figcaption {
           margin-top: 10px;
-          color: rgba(255, 255, 255, 0.5);
+          color: rgba(
+            255,
+            255,
+            255,
+            0.5
+          );
           text-align: center;
         }
 
         .responsibilityGrid,
         .takeawayGrid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-template-columns:
+            repeat(
+              2,
+              minmax(0, 1fr)
+            );
           gap: 12px;
           margin-top: 24px;
         }
@@ -477,10 +813,26 @@ export default function AcademyLessonLayout({
         .responsibilityGrid div,
         .takeawayGrid div {
           padding: 16px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.08
+            );
           border-radius: 14px;
-          background: rgba(255, 255, 255, 0.035);
-          color: rgba(255, 255, 255, 0.74);
+          background: rgba(
+            255,
+            255,
+            255,
+            0.035
+          );
+          color: rgba(
+            255,
+            255,
+            255,
+            0.74
+          );
           line-height: 1.55;
         }
 
@@ -493,9 +845,16 @@ export default function AcademyLessonLayout({
         blockquote {
           margin: 25px 0;
           padding: 24px 28px;
-          border-left: 5px solid #f59e0b;
-          border-radius: 0 16px 16px 0;
-          background: rgba(245, 158, 11, 0.08);
+          border-left:
+            5px solid #f59e0b;
+          border-radius:
+            0 16px 16px 0;
+          background: rgba(
+            245,
+            158,
+            11,
+            0.08
+          );
           font-size: 24px;
           font-weight: 850;
           line-height: 1.4;
@@ -504,7 +863,8 @@ export default function AcademyLessonLayout({
         .navButtons,
         .academyBottomNavigation {
           display: flex;
-          justify-content: space-between;
+          justify-content:
+            space-between;
           align-items: center;
           gap: 16px;
           margin-top: 42px;
@@ -512,7 +872,13 @@ export default function AcademyLessonLayout({
 
         .academyBottomNavigation {
           padding-top: 30px;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.08
+            );
         }
 
         .academyPreviousArea,
@@ -521,7 +887,8 @@ export default function AcademyLessonLayout({
         }
 
         .academyNextArea {
-          justify-content: flex-end;
+          justify-content:
+            flex-end;
           margin-left: auto;
         }
 
@@ -548,28 +915,49 @@ export default function AcademyLessonLayout({
 
         .primary:hover {
           background: #fbbf24;
-          transform: translateY(-2px);
+          transform:
+            translateY(-2px);
         }
 
         .secondary {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(
+            255,
+            255,
+            255,
+            0.1
+          );
           color: white;
         }
 
         .secondary:hover {
-          background: rgba(255, 255, 255, 0.16);
-          transform: translateY(-2px);
+          background: rgba(
+            255,
+            255,
+            255,
+            0.16
+          );
+          transform:
+            translateY(-2px);
         }
 
-        @media (max-width: 900px) {
+        @media (
+          max-width: 900px
+        ) {
           .academyPage {
-            grid-template-columns: 1fr;
+            grid-template-columns:
+              1fr;
           }
 
           .academySidebar {
             min-height: auto;
             border-right: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid
+              rgba(
+                255,
+                255,
+                255,
+                0.08
+              );
           }
 
           .academyStage {
@@ -582,14 +970,18 @@ export default function AcademyLessonLayout({
 
           .responsibilityGrid,
           .takeawayGrid {
-            grid-template-columns: 1fr;
+            grid-template-columns:
+              1fr;
           }
         }
 
-        @media (max-width: 560px) {
+        @media (
+          max-width: 560px
+        ) {
           .navButtons,
           .academyBottomNavigation {
-            flex-direction: column;
+            flex-direction:
+              column;
             align-items: stretch;
           }
 
