@@ -1,7 +1,6 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -9,10 +8,10 @@ export default function SignupPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [customerNumber, setCustomerNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const supabase = createClient();
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,6 +19,7 @@ export default function SignupPage() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     setErrorMessage("");
     setSuccessMessage("");
 
@@ -38,13 +38,18 @@ export default function SignupPage() {
       return;
     }
 
+    if (!customerNumber.trim()) {
+      setErrorMessage("Please enter your customer number.");
+      return;
+    }
+
     if (!email.trim()) {
       setErrorMessage("Please enter your email address.");
       return;
     }
 
-    if (password.length < 6) {
-      setErrorMessage("Password must be at least 6 characters.");
+    if (!password) {
+      setErrorMessage("Please enter a password.");
       return;
     }
 
@@ -55,33 +60,48 @@ export default function SignupPage() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-      options: {
-        data: {
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
-          company_name: companyName.trim(),
+    try {
+      const response = await fetch("/api/register-employee", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      },
-    });
+        body: JSON.stringify({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          companyName: companyName.trim(),
+          customerNumber: customerNumber.trim(),
+          email: email.trim().toLowerCase(),
+          password,
+        }),
+      });
 
-    setLoading(false);
+      const result = await response.json();
 
-    if (error) {
-      setErrorMessage(error.message);
-      return;
+      if (!response.ok) {
+        throw new Error(
+          result.error || "Unable to create your account."
+        );
+      }
+
+      setSuccessMessage(
+        `Account created successfully${
+          result.company?.name
+            ? ` and connected to ${result.company.name}`
+            : ""
+        }. Redirecting you to login...`
+      );
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 1800);
+    } catch (error: any) {
+      setErrorMessage(
+        error?.message || "Unable to create your account."
+      );
+    } finally {
+      setLoading(false);
     }
-
-
-    setSuccessMessage(
-      "Account created successfully. A subscription is still required before training access is unlocked. Redirecting you to pricing now..."
-    );
-
-    setTimeout(() => {
-      router.push("/pricing?newSignup=1");
-    }, 1800);
   }
 
   return (
@@ -93,12 +113,26 @@ export default function SignupPage() {
         <div className="signupCard">
           <div className="headerBlock">
             <div className="eyebrow">Create Your Account</div>
-            <h1 className="pageTitle">Join The Rhino Wrangler</h1>
+
+            <h1 className="pageTitle">
+              Join The Rhino Wrangler
+            </h1>
+
             <p className="pageText">
-              Create your account below. Please note that creating an account does
-              not automatically unlock training access. After signup, you will be
-              redirected to pricing so you can review subscription options and
-              preview available content.
+              Create your individual training account using your
+              company's Rhino Wrangler customer number. Your account
+              will be connected to your company's existing training
+              access.
+            </p>
+          </div>
+
+          <div className="companyNotice">
+            <strong>Company access required</strong>
+
+            <p>
+              Your company must already have active Rhino Wrangler
+              access. Ask your company administrator for the company
+              name and customer number associated with the account.
             </p>
           </div>
 
@@ -108,6 +142,7 @@ export default function SignupPage() {
                 <label htmlFor="firstName" className="label">
                   First Name
                 </label>
+
                 <input
                   id="firstName"
                   type="text"
@@ -116,6 +151,7 @@ export default function SignupPage() {
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="John"
                   autoComplete="given-name"
+                  required
                 />
               </div>
 
@@ -123,6 +159,7 @@ export default function SignupPage() {
                 <label htmlFor="lastName" className="label">
                   Last Name
                 </label>
+
                 <input
                   id="lastName"
                   type="text"
@@ -131,29 +168,63 @@ export default function SignupPage() {
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Doe"
                   autoComplete="family-name"
+                  required
                 />
               </div>
+            </div>
+
+            <div className="companyDivider">
+              Company Access
             </div>
 
             <div className="fieldGroup">
               <label htmlFor="companyName" className="label">
                 Company Name
               </label>
+
               <input
                 id="companyName"
                 type="text"
                 className="input"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Company Name"
+                placeholder="Joe's Glass"
                 autoComplete="organization"
+                required
               />
+            </div>
+
+            <div className="fieldGroup">
+              <label htmlFor="customerNumber" className="label">
+                Customer Number
+              </label>
+
+              <input
+                id="customerNumber"
+                type="text"
+                className="input"
+                value={customerNumber}
+                onChange={(e) => setCustomerNumber(e.target.value)}
+                placeholder="06254"
+                autoComplete="off"
+                required
+              />
+
+              <div className="helperText">
+                This number was provided when your company purchased
+                Rhino Wrangler access.
+              </div>
+            </div>
+
+            <div className="accountDivider">
+              Your Login
             </div>
 
             <div className="fieldGroup">
               <label htmlFor="email" className="label">
                 Email Address
               </label>
+
               <input
                 id="email"
                 type="email"
@@ -162,6 +233,7 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@company.com"
                 autoComplete="email"
+                required
               />
             </div>
 
@@ -170,6 +242,7 @@ export default function SignupPage() {
                 <label htmlFor="password" className="label">
                   Password
                 </label>
+
                 <input
                   id="password"
                   type="password"
@@ -178,6 +251,7 @@ export default function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
                   autoComplete="new-password"
+                  required
                 />
               </div>
 
@@ -185,6 +259,7 @@ export default function SignupPage() {
                 <label htmlFor="confirmPassword" className="label">
                   Confirm Password
                 </label>
+
                 <input
                   id="confirmPassword"
                   type="password"
@@ -193,17 +268,31 @@ export default function SignupPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm password"
                   autoComplete="new-password"
+                  required
                 />
               </div>
             </div>
 
-            {errorMessage ? <div className="message error">{errorMessage}</div> : null}
-            {successMessage ? (
-              <div className="message success">{successMessage}</div>
+            {errorMessage ? (
+              <div className="message error">
+                {errorMessage}
+              </div>
             ) : null}
 
-            <button type="submit" className="primaryButton" disabled={loading}>
-              {loading ? "Creating Account..." : "Create Account"}
+            {successMessage ? (
+              <div className="message success">
+                {successMessage}
+              </div>
+            ) : null}
+
+            <button
+              type="submit"
+              className="primaryButton"
+              disabled={loading}
+            >
+              {loading
+                ? "Creating Account..."
+                : "Create Account"}
             </button>
 
             <div className="footerText">
@@ -226,9 +315,21 @@ export default function SignupPage() {
           position: relative;
           overflow: hidden;
           background:
-            radial-gradient(circle at top right, rgba(88, 130, 255, 0.12), transparent 22%),
-            radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.05), transparent 18%),
-            linear-gradient(180deg, #070b12 0%, #05070c 100%);
+            radial-gradient(
+              circle at top right,
+              rgba(88, 130, 255, 0.12),
+              transparent 22%
+            ),
+            radial-gradient(
+              circle at bottom left,
+              rgba(255, 255, 255, 0.05),
+              transparent 18%
+            ),
+            linear-gradient(
+              180deg,
+              #070b12 0%,
+              #05070c 100%
+            );
         }
 
         .backgroundGlow {
@@ -273,7 +374,7 @@ export default function SignupPage() {
         }
 
         .headerBlock {
-          margin-bottom: 28px;
+          margin-bottom: 24px;
         }
 
         .eyebrow {
@@ -300,6 +401,27 @@ export default function SignupPage() {
           font-size: 1rem;
           line-height: 1.8;
           max-width: 680px;
+        }
+
+        .companyNotice {
+          margin-bottom: 26px;
+          padding: 18px 20px;
+          border-radius: 16px;
+          border: 1px solid rgba(245, 158, 11, 0.28);
+          background: rgba(245, 158, 11, 0.08);
+        }
+
+        .companyNotice strong {
+          display: block;
+          margin-bottom: 6px;
+          color: #fbbf24;
+          font-weight: 800;
+        }
+
+        .companyNotice p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.6;
         }
 
         .formGrid {
@@ -336,7 +458,10 @@ export default function SignupPage() {
           padding: 0 16px;
           font-size: 1rem;
           outline: none;
-          transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+          transition:
+            border-color 0.2s ease,
+            background 0.2s ease,
+            box-shadow 0.2s ease;
         }
 
         .input::placeholder {
@@ -344,9 +469,28 @@ export default function SignupPage() {
         }
 
         .input:focus {
-          border-color: rgba(255, 255, 255, 0.22);
+          border-color: rgba(245, 158, 11, 0.55);
           background: rgba(255, 255, 255, 0.07);
-          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+          box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.06);
+        }
+
+        .companyDivider,
+        .accountDivider {
+          margin-top: 6px;
+          padding-top: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          color: #f59e0b;
+          font-size: 0.76rem;
+          font-weight: 900;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+        }
+
+        .helperText {
+          margin-top: -2px;
+          color: rgba(255, 255, 255, 0.48);
+          font-size: 0.82rem;
+          line-height: 1.5;
         }
 
         .message {
@@ -373,17 +517,20 @@ export default function SignupPage() {
           min-height: 56px;
           border: none;
           border-radius: 16px;
-          background: rgba(255, 255, 255, 0.1);
-          color: #ffffff;
+          background: #f59e0b;
+          color: #111827;
           font-size: 1rem;
-          font-weight: 800;
+          font-weight: 900;
           cursor: pointer;
-          transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+          transition:
+            transform 0.2s ease,
+            background 0.2s ease,
+            opacity 0.2s ease;
         }
 
         .primaryButton:hover:not(:disabled) {
           transform: translateY(-1px);
-          background: rgba(255, 255, 255, 0.16);
+          background: #fbbf24;
         }
 
         .primaryButton:disabled {
@@ -398,7 +545,7 @@ export default function SignupPage() {
         }
 
         .inlineLink {
-          color: #ffffff;
+          color: #fbbf24;
           font-weight: 800;
           text-decoration: none;
         }
