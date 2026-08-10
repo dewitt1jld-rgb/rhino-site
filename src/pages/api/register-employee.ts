@@ -4,16 +4,12 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-const adminSupabase = createClient(
-  supabaseUrl,
-  serviceRoleKey,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-);
+const adminSupabase = createClient(supabaseUrl, serviceRoleKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+});
 
 type RegisterBody = {
   firstName?: string;
@@ -23,6 +19,12 @@ type RegisterBody = {
   companyName?: string;
   customerNumber?: string;
 };
+
+function normalizeCompanyName(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -45,6 +47,12 @@ export default async function handler(
     customerNumber,
   } = req.body as RegisterBody;
 
+  /*
+  ---------------------------------------
+  BASIC VALIDATION
+  ---------------------------------------
+  */
+
   if (
     !firstName?.trim() ||
     !lastName?.trim() ||
@@ -58,33 +66,40 @@ export default async function handler(
     });
   }
 
+  const cleanEmail = email.trim().toLowerCase();
+  const cleanCustomerNumber = customerNumber.trim();
+
   try {
     /*
-      --------------------------------------------------
-      1. FIND THE COMPANY
-      --------------------------------------------------
+    ---------------------------------------
+    1. FIND COMPANY
+    ---------------------------------------
     */
 
-    const { data: company, error: companyError } =
-      await adminSupabase
-        .from("companies")
-        .select(
-          `
-          id,
-          company_name,
-          customer_number,
-          access_status,
-          seat_limit
-          `
-        )
-        .eq("customer_number", customerNumber.trim())
-        .maybeSingle();
+    const {
+      data: company,
+      error: companyError,
+    } = await adminSupabase
+      .from("companies")
+      .select(`
+        id,
+        company_name,
+        customer_number,
+        access_status,
+        seat_limit
+      `)
+      .eq("customer_number", cleanCustomerNumber)
+      .maybeSingle();
 
     if (companyError) {
-      console.error("Company lookup error:", companyError);
+      console.error(
+        "Company lookup error:",
+        companyError
+      );
 
       return res.status(500).json({
-        error: "Unable to verify the company.",
+        error:
+          "We could not verify your company information.",
       });
     }
 
@@ -96,23 +111,22 @@ export default async function handler(
     }
 
     /*
-      --------------------------------------------------
-      2. VERIFY COMPANY NAME
-      --------------------------------------------------
+    ---------------------------------------
+    2. CHECK COMPANY NAME
+    ---------------------------------------
     */
 
-    const normalizeCompanyName = (value: string) =>
-      value
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "");
-
     const enteredCompany =
-      normalizeCompanyName(companyName.trim());
+      normalizeCompanyName(
+        companyName.trim()
+      );
 
-    const storedCompany =
-      normalizeCompanyName(company.company_name);
+    const actualCompany =
+      normalizeCompanyName(
+        company.company_name
+      );
 
-    if (enteredCompany !== storedCompany) {
+    if (enteredCompany !== actualCompany) {
       return res.status(400).json({
         error:
           "The company name does not match the customer number.",
@@ -120,9 +134,9 @@ export default async function handler(
     }
 
     /*
-      --------------------------------------------------
-      3. VERIFY COMPANY ACCESS
-      --------------------------------------------------
+    ---------------------------------------
+    3. CHECK COMPANY ACCESS
+    ---------------------------------------
     */
 
     if (company.access_status !== "active") {
@@ -133,9 +147,9 @@ export default async function handler(
     }
 
     /*
-      --------------------------------------------------
-      4. COUNT ACTIVE SEATS
-      --------------------------------------------------
+    ---------------------------------------
+    4. CHECK CURRENT SEAT USAGE
+    ---------------------------------------
     */
 
     const {
@@ -151,44 +165,99 @@ export default async function handler(
       .eq("is_active", true);
 
     if (seatError) {
-      console.error("Seat count error:", seatError);
+      console.error(
+        "Seat count error:",
+        seatError
+      );
 
       return res.status(500).json({
-        error: "Unable to verify available seats.",
+        error:
+          "We could not verify the company's available seats.",
       });
     }
 
-    const usedSeats = activeSeatCount ?? 0;
+    const usedSeats =
+      activeSeatCount ?? 0;
 
-    if (usedSeats >= company.seat_limit) {
+    if (
+      usedSeats >=
+      company.seat_limit
+    ) {
       return res.status(403).json({
-        error: `${company.company_name} has reached its current user limit of ${company.seat_limit} seats. Please contact The Rhino Wrangler to increase the seat limit.`,
+        error:
+          `${company.company_name} has reached its current ${company.seat_limit}-user limit. Please contact The Rhino Wrangler to increase the company seat limit.`,
       });
     }
 
     /*
-      --------------------------------------------------
-      5. CREATE SUPABASE AUTH USER
-      --------------------------------------------------
+    ---------------------------------------
+    5. CHECK FOR EXISTING AUTH USER
+    ---------------------------------------
+    */
+
+    const {
+      data: existingProfiles,
+      error: existingProfileError,
+    } = await adminSupabase
+      .from("profiles")
+      .select("id, email")
+      .eq("email", cleanEmail)
+      .limit(1);
+
+    if (existingProfileError) {
+      console.error(
+        "Existing profile check error:",
+        existingProfileError
+      );
+    }
+
+    if (
+      existingProfiles &&
+      existingProfiles.length > 0
+    ) {
+      return res.status(409).json({
+        error:
+          "An account already exists with this email address. Please sign in instead.",
+      });
+    }
+
+    /*
+    ---------------------------------------
+    6. CREATE SUPABASE AUTH USER
+    ---------------------------------------
     */
 
     const {
       data: createdUser,
       error: createUserError,
-    } = await adminSupabase.auth.admin.createUser({
-      email: email.trim().toLowerCase(),
-      password,
-      email_confirm: true,
-      user_metadata: {
-        first_name: firstName.trim(),
-        last_name: lastName.trim(),
-        company_name: company.company_name,
-      },
-    });
+    } =
+      await adminSupabase.auth.admin.createUser(
+        {
+          email: cleanEmail,
+          password,
+
+          /*
+            This marks the account confirmed immediately.
+            No confirmation email is required.
+          */
+          email_confirm: true,
+
+          user_metadata: {
+            first_name:
+              firstName.trim(),
+
+            last_name:
+              lastName.trim(),
+
+            company_name:
+              company.company_name,
+          },
+        }
+      );
 
     if (createUserError) {
       console.error(
-        "Supabase user creation error:",
+        "Auth user creation error:",
         createUserError
       );
 
@@ -204,98 +273,147 @@ export default async function handler(
       }
 
       return res.status(400).json({
-        error: createUserError.message,
+        error:
+          createUserError.message,
       });
     }
 
-    const userId = createdUser.user?.id;
+    const userId =
+      createdUser.user?.id;
 
     if (!userId) {
       return res.status(500).json({
         error:
-          "The account was created but no user ID was returned.",
+          "The account could not be created.",
       });
     }
 
     /*
-      --------------------------------------------------
-      6. CREATE THE RHINO WRANGLER PROFILE
-      --------------------------------------------------
+    ---------------------------------------
+    7. UPDATE AUTO-CREATED PROFILE
+    ---------------------------------------
+
+    Your existing Supabase trigger creates
+    the profiles row when auth.users is
+    created.
+
+    Therefore we UPDATE instead of INSERT.
     */
 
-    const { error: profileError } =
-      await adminSupabase
-        .from("profiles")
-        .insert({
-          id: userId,
+    const {
+      data: updatedProfile,
+      error: profileError,
+    } = await adminSupabase
+      .from("profiles")
+      .update({
+        first_name:
+          firstName.trim(),
 
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
+        last_name:
+          lastName.trim(),
 
-          email: email
-            .trim()
-            .toLowerCase(),
+        email: cleanEmail,
 
-          company_name:
-            company.company_name,
+        company_name:
+          company.company_name,
 
-          company_id:
-            company.id,
+        company_id:
+          company.id,
 
-          role: "employee",
+        role:
+          "employee",
 
-          is_active: true,
+        is_active:
+          true,
 
-          last_active_at:
-            new Date().toISOString(),
-        });
+        last_active_at:
+          new Date().toISOString(),
 
-    if (profileError) {
+        updated_at:
+          new Date().toISOString(),
+      })
+      .eq("id", userId)
+      .select("id")
+      .maybeSingle();
+
+    if (
+      profileError ||
+      !updatedProfile
+    ) {
       console.error(
-        "Profile creation error:",
+        "Profile update error:",
         profileError
       );
 
       /*
-        Remove the Auth user if the profile creation failed.
-        This prevents us from leaving a half-created account.
+        Prevent a half-created account.
       */
 
-      await adminSupabase.auth.admin.deleteUser(
-        userId
-      );
+      await adminSupabase
+        .auth
+        .admin
+        .deleteUser(userId);
 
       return res.status(500).json({
         error:
-          "The user account could not be linked to the company.",
+          "The login was created, but the employee profile could not be linked to the company.",
       });
     }
 
     /*
-      --------------------------------------------------
-      7. CREATE INITIAL ACADEMY POSITION
-      --------------------------------------------------
+    ---------------------------------------
+    8. CREATE INITIAL ACADEMY PROGRESS
+    ---------------------------------------
     */
 
-    await adminSupabase
-      .from("academy_course_progress")
-      .upsert({
-        user_id: userId,
+    const {
+      error: progressError,
+    } = await adminSupabase
+      .from(
+        "academy_course_progress"
+      )
+      .upsert(
+        {
+          user_id:
+            userId,
 
-        current_lesson: 1,
-        current_step: 1,
+          current_lesson:
+            1,
 
-        last_page:
-          "/dashboard/introductory-software-training",
+          current_step:
+            1,
 
-        updated_at:
-          new Date().toISOString(),
-      });
+          last_page:
+            "/dashboard/introductory-software-training",
+
+          updated_at:
+            new Date().toISOString(),
+        },
+        {
+          onConflict:
+            "user_id",
+        }
+      );
+
+    if (progressError) {
+      /*
+        Don't destroy the account just
+        because course progress failed.
+
+        The user can still sign in and we
+        can repair progress later.
+      */
+
+      console.error(
+        "Academy progress creation error:",
+        progressError
+      );
+    }
 
     /*
-      --------------------------------------------------
-      SUCCESS
-      --------------------------------------------------
+    ---------------------------------------
+    SUCCESS
+    ---------------------------------------
     */
 
     return res.status(200).json({
@@ -304,8 +422,22 @@ export default async function handler(
       message:
         "Your Rhino Wrangler account has been created.",
 
+      user: {
+        id: userId,
+        firstName:
+          firstName.trim(),
+
+        lastName:
+          lastName.trim(),
+
+        email:
+          cleanEmail,
+      },
+
       company: {
-        name: company.company_name,
+        name:
+          company.company_name,
+
         customerNumber:
           company.customer_number,
 
@@ -324,7 +456,7 @@ export default async function handler(
 
     return res.status(500).json({
       error:
-        "Something went wrong while creating the account.",
+        "Something unexpected happened while creating the account.",
     });
   }
 }

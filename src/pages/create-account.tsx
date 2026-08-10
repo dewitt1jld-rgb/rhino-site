@@ -61,12 +61,24 @@ export default function CreateAccountPage() {
           },
 
           body: JSON.stringify({
-            firstName,
-            lastName,
-            email,
+            firstName:
+              firstName.trim(),
+
+            lastName:
+              lastName.trim(),
+
+            email:
+              email
+                .trim()
+                .toLowerCase(),
+
             password,
-            companyName,
-            customerNumber,
+
+            companyName:
+              companyName.trim(),
+
+            customerNumber:
+              customerNumber.trim(),
           }),
         }
       );
@@ -82,12 +94,12 @@ export default function CreateAccountPage() {
       }
 
       setSuccess(
-        "Your Rhino Wrangler account has been created."
+        `Account created successfully. You are now connected to ${result.company?.name || "your company"}.`
       );
 
       setTimeout(() => {
         router.push("/login");
-      }, 1200);
+      }, 1500);
     } catch (err: any) {
       setError(
         err?.message ||
@@ -111,24 +123,26 @@ export default function CreateAccountPage() {
           </h1>
 
           <p>
-            Create your individual Rhino
-            Wrangler account using your
-            company's customer number.
+            Create your own Rhino Wrangler
+            login and connect it to your
+            company's existing access.
           </p>
         </div>
 
         <div className="companyNote">
           <strong>
-            Already purchased through your
-            company?
+            Your company already owns access?
           </strong>
 
           <p>
             You do not need to purchase
             Rhino Wrangler again. Enter your
             company's name and customer
-            number below to connect your
-            account to its existing access.
+            number below. If the information
+            matches an active company account
+            and a seat is available, your new
+            account will be connected
+            automatically.
           </p>
         </div>
 
@@ -138,7 +152,9 @@ export default function CreateAccountPage() {
         >
           <div className="nameGrid">
             <label>
-              <span>First Name</span>
+              <span>
+                First Name
+              </span>
 
               <input
                 type="text"
@@ -148,12 +164,15 @@ export default function CreateAccountPage() {
                     e.target.value
                   )
                 }
+                autoComplete="given-name"
                 required
               />
             </label>
 
             <label>
-              <span>Last Name</span>
+              <span>
+                Last Name
+              </span>
 
               <input
                 type="text"
@@ -163,6 +182,7 @@ export default function CreateAccountPage() {
                     e.target.value
                   )
                 }
+                autoComplete="family-name"
                 required
               />
             </label>
@@ -175,8 +195,12 @@ export default function CreateAccountPage() {
               type="email"
               value={email}
               onChange={(e) =>
-                setEmail(e.target.value)
+                setEmail(
+                  e.target.value
+                )
               }
+              autoComplete="email"
+              placeholder="you@company.com"
               required
             />
           </label>
@@ -192,6 +216,8 @@ export default function CreateAccountPage() {
                   e.target.value
                 )
               }
+              autoComplete="new-password"
+              placeholder="Create a password"
               required
             />
           </label>
@@ -201,7 +227,9 @@ export default function CreateAccountPage() {
           </div>
 
           <label>
-            <span>Company Name</span>
+            <span>
+              Company Name
+            </span>
 
             <input
               type="text"
@@ -236,7 +264,7 @@ export default function CreateAccountPage() {
 
           <p className="helper">
             Your customer number is provided
-            to the company when Rhino
+            to your company when Rhino
             Wrangler access is purchased.
           </p>
 
