@@ -1,0 +1,901 @@
+import { FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { academySupabase } from "../../../lib/academySupabase";
+
+type Mode = "create" | "signin";
+
+type AcademyProfile = {
+  first_name: string;
+  last_name: string | null;
+};
+
+export default function AcademyProfilePage() {
+  const router = useRouter();
+
+  const [mode, setMode] = useState<Mode>("create");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [signedIn, setSignedIn] = useState(false);
+  const [profile, setProfile] = useState<AcademyProfile | null>(null);
+
+  useEffect(() => {
+    checkAcademySession();
+  }, []);
+
+  async function checkAcademySession() {
+    setCheckingSession(true);
+
+    const {
+      data: { session },
+    } = await academySupabase.auth.getSession();
+
+    if (!session?.user) {
+      setSignedIn(false);
+      setCheckingSession(false);
+      return;
+    }
+
+    const { data } = await academySupabase
+      .from("academy_profiles")
+      .select("first_name, last_name")
+      .eq("id", session.user.id)
+      .single();
+
+    if (data) {
+      setProfile(data);
+    }
+
+    setSignedIn(true);
+    setCheckingSession(false);
+  }
+
+  async function createTrainingProfile(event: FormEvent) {
+    event.preventDefault();
+
+    setError("");
+    setMessage("");
+
+    if (!firstName.trim()) {
+      setError("Please enter your first name.");
+      return;
+    }
+
+    if (!email.trim()) {
+      setError("Please enter your email.");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("Please choose a password with at least 8 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("The passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error: signupError } =
+        await academySupabase.auth.signUp({
+          email: email.trim().toLowerCase(),
+          password,
+        });
+
+      if (signupError) {
+        throw signupError;
+      }
+
+      if (!data.user) {
+        throw new Error("The training account could not be created.");
+      }
+
+      /*
+        We intentionally expect an immediate session because this Academy
+        signup is designed not to require email confirmation.
+      */
+      if (!data.session) {
+        throw new Error(
+          "Your account was created, but Supabase is waiting for email confirmation. Disable Confirm Email in Supabase before using Academy signup."
+        );
+      }
+
+      const { error: profileError } = await academySupabase
+        .from("academy_profiles")
+        .insert({
+          id: data.user.id,
+          first_name: firstName.trim(),
+          last_name: lastName.trim() || null,
+          last_active_at: new Date().toISOString(),
+        });
+
+      if (profileError) {
+        throw profileError;
+      }
+
+      const { error: progressError } = await academySupabase
+        .from("academy_course_progress")
+        .insert({
+          user_id: data.user.id,
+          current_lesson: 1,
+          current_step: 1,
+          last_page:
+            "/dashboard/introductory-software-training",
+          updated_at: new Date().toISOString(),
+        });
+
+      if (progressError) {
+        throw progressError;
+      }
+
+      setMessage("Training profile created successfully.");
+
+      await router.push(
+        "/dashboard/introductory-software-training"
+      );
+    } catch (err: any) {
+      setError(
+        err?.message ||
+          "Something went wrong while creating your training profile."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function signIn(event: FormEvent) {
+    event.preventDefault();
+
+    setError("");
+    setMessage("");
+
+    if (!email.trim() || !password) {
+      setError("Enter your email and password.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error: signInError } =
+        await academySupabase.auth.signInWithPassword({
+          email: email.trim().toLowerCase(),
+          password,
+        });
+
+      if (signInError) {
+        throw signInError;
+      }
+
+      if (!data.user) {
+        throw new Error("Unable to sign into the training profile.");
+      }
+
+      await academySupabase
+        .from("academy_profiles")
+        .update({
+          last_active_at: new Date().toISOString(),
+        })
+        .eq("id", data.user.id);
+
+      await router.push(
+        "/dashboard/introductory-software-training"
+      );
+    } catch (err: any) {
+      setError(
+        err?.message ||
+          "Unable to sign into your training profile."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function signOut() {
+    setLoading(true);
+
+    await academySupabase.auth.signOut();
+
+    setSignedIn(false);
+    setProfile(null);
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+
+    setLoading(false);
+  }
+
+  if (checkingSession) {
+    return (
+      <main className="page">
+        <div className="loadingCard">
+          <p>Loading training profile...</p>
+        </div>
+
+        <PageStyles />
+      </main>
+    );
+  }
+
+  if (signedIn) {
+    return (
+      <main className="page">
+        <section className="profileShell">
+          <div className="brand">
+            <p className="eyebrow">Rhino Wrangler Academy</p>
+
+            <h1>
+              Welcome back
+              {profile?.first_name
+                ? `, ${profile.first_name}`
+                : ""}
+            </h1>
+
+            <p className="lead">
+              Your training profile is active. Your course progress
+              will be saved to this profile as you work through the
+              Academy.
+            </p>
+          </div>
+
+          <div className="signedInCard">
+            <div className="statusIcon">✓</div>
+
+            <div>
+              <p className="smallLabel">
+                Training Profile Active
+              </p>
+
+              <h2>
+                {profile
+                  ? `${profile.first_name}${
+                      profile.last_name
+                        ? ` ${profile.last_name}`
+                        : ""
+                    }`
+                  : "Academy Trainee"}
+              </h2>
+
+              <p>
+                Continue your current course or return to the
+                curriculum to choose a lesson.
+              </p>
+            </div>
+          </div>
+
+          <div className="actionRow">
+            <Link
+              href="/dashboard/introductory-software-training"
+              className="primaryButton"
+            >
+              Continue Training →
+            </Link>
+
+            <button
+              type="button"
+              className="secondaryButton"
+              onClick={signOut}
+              disabled={loading}
+            >
+              Sign Out of Training Profile
+            </button>
+          </div>
+
+          <div className="importantNote">
+            <strong>Training profile only</strong>
+
+            <p>
+              Signing out here only signs out your personal Academy
+              training profile. It does not sign the company out of
+              The Rhino Wrangler.
+            </p>
+          </div>
+        </section>
+
+        <PageStyles />
+      </main>
+    );
+  }
+
+  return (
+    <main className="page">
+      <section className="profileShell">
+        <div className="brand">
+          <p className="eyebrow">Rhino Wrangler Academy</p>
+
+          <h1>Your Personal Training Profile</h1>
+
+          <p className="lead">
+            Create a personal Academy profile to save your position,
+            track completed lessons, and continue training from any
+            computer.
+          </p>
+        </div>
+
+        <div className="infoBox">
+          <strong>This does not affect your company's access.</strong>
+
+          <p>
+            Your training profile is separate from the login used to
+            access The Rhino Wrangler. It is only used to remember your
+            individual Academy progress.
+          </p>
+        </div>
+
+        <div className="tabRow">
+          <button
+            type="button"
+            className={
+              mode === "create"
+                ? "tabButton active"
+                : "tabButton"
+            }
+            onClick={() => {
+              setMode("create");
+              setError("");
+              setMessage("");
+            }}
+          >
+            Create Training Profile
+          </button>
+
+          <button
+            type="button"
+            className={
+              mode === "signin"
+                ? "tabButton active"
+                : "tabButton"
+            }
+            onClick={() => {
+              setMode("signin");
+              setError("");
+              setMessage("");
+            }}
+          >
+            Sign In
+          </button>
+        </div>
+
+        {mode === "create" ? (
+          <form
+            className="formCard"
+            onSubmit={createTrainingProfile}
+          >
+            <div className="formHeading">
+              <p className="eyebrow">New Trainee</p>
+
+              <h2>Create Training Profile</h2>
+
+              <p>
+                Your progress will be attached to this account.
+              </p>
+            </div>
+
+            <div className="nameGrid">
+              <label>
+                <span>First Name</span>
+
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) =>
+                    setFirstName(e.target.value)
+                  }
+                  autoComplete="given-name"
+                  placeholder="First name"
+                  required
+                />
+              </label>
+
+              <label>
+                <span>Last Name</span>
+
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={(e) =>
+                    setLastName(e.target.value)
+                  }
+                  autoComplete="family-name"
+                  placeholder="Last name"
+                />
+              </label>
+            </div>
+
+            <label>
+              <span>Email</span>
+
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                placeholder="you@company.com"
+                required
+              />
+            </label>
+
+            <label>
+              <span>Password</span>
+
+              <input
+                type="password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                autoComplete="new-password"
+                placeholder="Create a password"
+                required
+              />
+            </label>
+
+            <label>
+              <span>Confirm Password</span>
+
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) =>
+                  setConfirmPassword(e.target.value)
+                }
+                autoComplete="new-password"
+                placeholder="Enter the password again"
+                required
+              />
+            </label>
+
+            {error && (
+              <div className="errorBox">{error}</div>
+            )}
+
+            {message && (
+              <div className="successBox">{message}</div>
+            )}
+
+            <button
+              className="submitButton"
+              type="submit"
+              disabled={loading}
+            >
+              {loading
+                ? "Creating Profile..."
+                : "Create Training Profile →"}
+            </button>
+
+            <p className="switchText">
+              Already have a training profile?{" "}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("signin");
+                  setError("");
+                }}
+              >
+                Sign in here
+              </button>
+            </p>
+          </form>
+        ) : (
+          <form
+            className="formCard"
+            onSubmit={signIn}
+          >
+            <div className="formHeading">
+              <p className="eyebrow">Returning Trainee</p>
+
+              <h2>Continue Your Training</h2>
+
+              <p>
+                Sign in to restore your saved Academy progress.
+              </p>
+            </div>
+
+            <label>
+              <span>Email</span>
+
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                placeholder="you@company.com"
+                required
+              />
+            </label>
+
+            <label>
+              <span>Password</span>
+
+              <input
+                type="password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                autoComplete="current-password"
+                placeholder="Your training password"
+                required
+              />
+            </label>
+
+            {error && (
+              <div className="errorBox">{error}</div>
+            )}
+
+            {message && (
+              <div className="successBox">{message}</div>
+            )}
+
+            <button
+              className="submitButton"
+              type="submit"
+              disabled={loading}
+            >
+              {loading
+                ? "Signing In..."
+                : "Continue Training →"}
+            </button>
+
+            <p className="switchText">
+              Need a training profile?{" "}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("create");
+                  setError("");
+                }}
+              >
+                Create one here
+              </button>
+            </p>
+          </form>
+        )}
+
+        <Link
+          href="/dashboard/introductory-software-training"
+          className="backLink"
+        >
+          ← Back to Academy
+        </Link>
+      </section>
+
+      <PageStyles />
+    </main>
+  );
+}
+
+function PageStyles() {
+  return (
+    <style jsx global>{`
+      * {
+        box-sizing: border-box;
+      }
+
+      .page {
+        min-height: 100vh;
+        padding: 60px 24px;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(245, 158, 11, 0.12),
+            transparent 34%
+          ),
+          linear-gradient(
+            135deg,
+            #05070b 0%,
+            #0d1118 45%,
+            #05070b 100%
+          );
+        color: white;
+      }
+
+      .profileShell {
+        width: 100%;
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      .brand {
+        margin-bottom: 28px;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: #f59e0b;
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: clamp(36px, 6vw, 54px);
+        line-height: 1.05;
+      }
+
+      .lead {
+        margin: 18px 0 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 18px;
+        line-height: 1.75;
+      }
+
+      .infoBox,
+      .importantNote {
+        margin-bottom: 24px;
+        padding: 20px;
+        border: 1px solid rgba(245, 158, 11, 0.28);
+        border-radius: 18px;
+        background: rgba(245, 158, 11, 0.08);
+      }
+
+      .infoBox strong,
+      .importantNote strong {
+        color: #fbbf24;
+      }
+
+      .infoBox p,
+      .importantNote p {
+        margin: 8px 0 0;
+        color: rgba(255, 255, 255, 0.72);
+        line-height: 1.65;
+      }
+
+      .tabRow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 14px;
+        padding: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        background: rgba(15, 23, 42, 0.72);
+      }
+
+      .tabButton {
+        padding: 14px;
+        border: none;
+        border-radius: 11px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.62);
+        font-size: 15px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .tabButton.active {
+        background: rgba(245, 158, 11, 0.14);
+        color: #fbbf24;
+      }
+
+      .formCard,
+      .signedInCard {
+        padding: 34px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 24px;
+        background: rgba(15, 23, 42, 0.86);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+      }
+
+      .formHeading {
+        margin-bottom: 24px;
+      }
+
+      .formHeading h2,
+      .signedInCard h2 {
+        margin: 0;
+        font-size: 30px;
+      }
+
+      .formHeading p:not(.eyebrow),
+      .signedInCard p {
+        color: rgba(255, 255, 255, 0.64);
+        line-height: 1.6;
+      }
+
+      .nameGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 18px;
+      }
+
+      label > span {
+        display: block;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        font-weight: 850;
+      }
+
+      input {
+        width: 100%;
+        min-height: 50px;
+        padding: 0 15px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        outline: none;
+        background: rgba(5, 7, 11, 0.72);
+        color: white;
+        font-size: 16px;
+      }
+
+      input:focus {
+        border-color: rgba(245, 158, 11, 0.7);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
+      }
+
+      .submitButton,
+      .primaryButton,
+      .secondaryButton {
+        min-height: 50px;
+        padding: 14px 22px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 900;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .submitButton,
+      .primaryButton {
+        background: #f59e0b;
+        color: #111827;
+      }
+
+      .submitButton {
+        width: 100%;
+        font-size: 16px;
+      }
+
+      .submitButton:disabled,
+      .secondaryButton:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+
+      .secondaryButton {
+        background: rgba(255, 255, 255, 0.09);
+        color: white;
+      }
+
+      .switchText {
+        margin: 20px 0 0;
+        color: rgba(255, 255, 255, 0.58);
+        text-align: center;
+      }
+
+      .switchText button {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #fbbf24;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .errorBox,
+      .successBox {
+        margin-bottom: 18px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        line-height: 1.5;
+      }
+
+      .errorBox {
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        background: rgba(239, 68, 68, 0.1);
+        color: #fecaca;
+      }
+
+      .successBox {
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        background: rgba(34, 197, 94, 0.1);
+        color: #bbf7d0;
+      }
+
+      .backLink {
+        display: inline-block;
+        margin-top: 24px;
+        color: #f59e0b;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .signedInCard {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .statusIcon {
+        width: 58px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        background: rgba(34, 197, 94, 0.14);
+        color: #86efac;
+        font-size: 28px;
+        font-weight: 950;
+      }
+
+      .smallLabel {
+        margin: 0 0 6px !important;
+        color: #86efac !important;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .actionRow {
+        display: flex;
+        gap: 14px;
+        margin: 22px 0;
+      }
+
+      .primaryButton,
+      .secondaryButton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .loadingCard {
+        max-width: 500px;
+        margin: 100px auto;
+        padding: 30px;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.85);
+        text-align: center;
+      }
+
+      @media (max-width: 650px) {
+        .page {
+          padding: 36px 16px;
+        }
+
+        .nameGrid,
+        .tabRow {
+          grid-template-columns: 1fr;
+        }
+
+        .formCard,
+        .signedInCard {
+          padding: 24px;
+        }
+
+        .signedInCard {
+          grid-template-columns: 1fr;
+        }
+
+        .actionRow {
+          flex-direction: column;
+        }
+      }
+    `}</style>
+  );
+}
