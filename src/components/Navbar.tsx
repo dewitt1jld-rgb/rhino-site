@@ -228,6 +228,10 @@ const portalLabel = (
       <Link href="/dashboard/class-admin" className="adminDropdownLink">
         Class Reservations
       </Link>
+
+        <Link href="/dashboard/admin/companies-users">
+    Companies & Users
+  </Link>
     </div>
   </div>
 )}
