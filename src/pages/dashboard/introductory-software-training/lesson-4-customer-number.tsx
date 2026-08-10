@@ -8,7 +8,7 @@ export default function CustomerNumberPage() {
           ← Back to Course
         </Link>
 
-        <p className="eyebrow">Lesson 01</p>
+        <p className="eyebrow">Lesson 04</p>
         <h1>Download, Install & Activate Software</h1>
         <p className="description">
           Get Glazier Studio and PartnerPak installed or updated before moving
