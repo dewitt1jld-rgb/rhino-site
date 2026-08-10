@@ -117,6 +117,44 @@ export default function LoginPage() {
         access.hasAccess === true ||
         access.status === "active"
       ) {
+let deviceId =
+  window.localStorage.getItem(
+    "rhino_device_id"
+  );
+
+if (!deviceId) {
+  deviceId =
+    crypto.randomUUID();
+
+  window.localStorage.setItem(
+    "rhino_device_id",
+    deviceId
+  );
+}
+
+try {
+  await fetch("/api/track-login", {
+    method: "POST",
+
+    headers: {
+      "Content-Type":
+        "application/json",
+
+      Authorization:
+        `Bearer ${data.session.access_token}`,
+    },
+
+    body: JSON.stringify({
+      deviceId,
+    }),
+  });
+} catch (trackingError) {
+  console.error(
+    "Login tracking failed:",
+    trackingError
+  );
+}
+
         router.push("/dashboard");
         return;
       }
