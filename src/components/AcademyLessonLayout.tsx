@@ -1,5 +1,12 @@
+import {
+  useEffect,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
+
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useRouter } from "next/router";
+import { createClient } from "../lib/supabase";
 
 type Step = {
   number: number;
@@ -33,7 +40,164 @@ export default function AcademyLessonLayout({
   nextHref,
   nextLabel = "Continue →",
 }: AcademyLessonLayoutProps) {
-  const showBottomNavigation = Boolean(previousHref || nextHref);
+  const router = useRouter();
+
+  const showBottomNavigation =
+    Boolean(previousHref || nextHref);
+
+  const numericLessonNumber =
+    Number.parseInt(lessonNumber, 10);
+
+  /*
+  --------------------------------------------------
+  SEND PROGRESS EVENT TO SERVER
+  --------------------------------------------------
+  */
+
+  async function saveProgress(
+    action: "visit" | "complete"
+  ) {
+    try {
+      const supabase =
+        createClient();
+
+      const {
+        data: { session },
+      } =
+        await supabase.auth.getSession();
+
+      if (!session?.access_token) {
+        return;
+      }
+
+      const response =
+        await fetch(
+          "/api/academy-progress",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                `Bearer ${session.access_token}`,
+            },
+
+            body: JSON.stringify({
+              action,
+
+              lessonNumber:
+                numericLessonNumber,
+
+              stepNumber:
+                currentStep,
+
+              page:
+                router.asPath,
+            }),
+          }
+        );
+
+      if (!response.ok) {
+        const responseText =
+          await response.text();
+
+        console.error(
+          "Academy progress failed:",
+          responseText
+        );
+      }
+    } catch (error) {
+      /*
+        Progress tracking should never
+        prevent a student from using
+        the lesson.
+      */
+
+      console.error(
+        "Academy progress tracking error:",
+        error
+      );
+    }
+  }
+
+  /*
+  --------------------------------------------------
+  RECORD CURRENT COURSE POSITION
+  --------------------------------------------------
+
+  Opening a page does NOT complete it.
+
+  It only saves where the student currently is.
+  --------------------------------------------------
+  */
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+
+    if (
+      !numericLessonNumber ||
+      !currentStep
+    ) {
+      return;
+    }
+
+    saveProgress("visit");
+  }, [
+    router.isReady,
+    router.asPath,
+    numericLessonNumber,
+    currentStep,
+  ]);
+
+  /*
+  --------------------------------------------------
+  MARK STEP COMPLETE WHEN NEXT IS CLICKED
+  --------------------------------------------------
+
+  This catches BOTH:
+
+  1. The new bottom-navigation Continue button
+
+  2. Older lesson pages that already contain:
+
+     <Link className="primary">
+
+  Previous buttons and sidebar links do NOT
+  complete the current step.
+  --------------------------------------------------
+  */
+
+  function handleLessonClick(
+    event: MouseEvent<HTMLElement>
+  ) {
+    const target =
+      event.target as HTMLElement;
+
+    const nextLink =
+      target.closest(
+        "a.primary"
+      ) as HTMLAnchorElement | null;
+
+    if (!nextLink) {
+      return;
+    }
+
+    /*
+      Do not block navigation.
+
+      Next.js navigation stays inside
+      the application, while the progress
+      request is sent in the background.
+    */
+
+    void saveProgress(
+      "complete"
+    );
+  }
 
   return (
     <main className="academyPage">
@@ -45,16 +209,25 @@ export default function AcademyLessonLayout({
           ← Back to Course
         </Link>
 
-        <p className="academyEyebrow">Lesson {lessonNumber}</p>
+        <p className="academyEyebrow">
+          Lesson {lessonNumber}
+        </p>
+
         <h1>{lessonTitle}</h1>
 
-        <p className="academyDescription">{lessonDescription}</p>
+        <p className="academyDescription">
+          {lessonDescription}
+        </p>
 
         <div className="academyStepList">
           {steps.map((step) =>
             step.number === currentStep ? (
-              <div className="academyStep active" key={step.number}>
-                {step.number}. {step.title}
+              <div
+                className="academyStep active"
+                key={step.number}
+              >
+                {step.number}.{" "}
+                {step.title}
               </div>
             ) : (
               <Link
@@ -62,7 +235,8 @@ export default function AcademyLessonLayout({
                 className="academyStep"
                 key={step.number}
               >
-                {step.number}. {step.title}
+                {step.number}.{" "}
+                {step.title}
               </Link>
             )
           )}
@@ -70,14 +244,22 @@ export default function AcademyLessonLayout({
       </aside>
 
       <section className="academyStage">
-        <article className="academyCard">
+        <article
+          className="academyCard"
+          onClickCapture={
+            handleLessonClick
+          }
+        >
           {children}
 
           {showBottomNavigation && (
             <div className="academyBottomNavigation">
               <div className="academyPreviousArea">
                 {previousHref && (
-                  <Link href={previousHref} className="secondary">
+                  <Link
+                    href={previousHref}
+                    className="secondary"
+                  >
                     {previousLabel}
                   </Link>
                 )}
@@ -85,7 +267,10 @@ export default function AcademyLessonLayout({
 
               <div className="academyNextArea">
                 {nextHref && (
-                  <Link href={nextHref} className="primary">
+                  <Link
+                    href={nextHref}
+                    className="primary"
+                  >
                     {nextLabel}
                   </Link>
                 )}
