@@ -231,10 +231,10 @@ export default function LessonEightMemberEditsPage() {
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training"
+          href="/dashboard/introductory-software-training/lesson-9-reverse-joinery"
           className="primary"
         >
-          Return to Curriculum
+          Continue to lesson 9
         </Link>
       </div>
     </AcademyLessonLayout>
