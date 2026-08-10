@@ -1,11 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 function getAdminEmails() {
   return (process.env.ADMIN_EMAILS || "")
     .split(",")
@@ -19,47 +14,114 @@ export default async function handler(
 ) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
+
     return res.status(405).json({
       error: "Method not allowed.",
     });
   }
 
-  /*
-  --------------------------------------------------
-  VERIFY ADMIN
-  --------------------------------------------------
-  */
-
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).json({
-      error: "Not authenticated.",
-    });
-  }
-
-  const token = authHeader.replace("Bearer ", "");
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser(token);
-
-  if (userError || !user?.email) {
-    return res.status(401).json({
-      error: "Not authenticated.",
-    });
-  }
-
-  const adminEmails = getAdminEmails();
-
-  if (!adminEmails.includes(user.email.toLowerCase())) {
-    return res.status(403).json({
-      error: "Admin access required.",
-    });
-  }
-
   try {
+    /*
+    --------------------------------------------------
+    VERIFY ENVIRONMENT VARIABLES
+    --------------------------------------------------
+    */
+
+    const supabaseUrl =
+      process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    const serviceRoleKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error(
+        "Companies/users API missing Supabase environment variables.",
+        {
+          hasUrl: Boolean(supabaseUrl),
+          hasServiceRoleKey: Boolean(serviceRoleKey),
+        }
+      );
+
+      return res.status(500).json({
+        error:
+          "The server is missing required Supabase configuration.",
+      });
+    }
+
+    /*
+    --------------------------------------------------
+    CREATE SERVER SUPABASE CLIENT
+    --------------------------------------------------
+    */
+
+    const supabase = createClient(
+      supabaseUrl,
+      serviceRoleKey,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      }
+    );
+
+    /*
+    --------------------------------------------------
+    VERIFY ADMIN
+    --------------------------------------------------
+    */
+
+    const authHeader =
+      req.headers.authorization;
+
+    if (!authHeader) {
+      return res.status(401).json({
+        error: "Not authenticated.",
+      });
+    }
+
+    const token =
+      authHeader.replace(
+        "Bearer ",
+        ""
+      );
+
+    const {
+      data: { user },
+      error: userError,
+    } =
+      await supabase.auth.getUser(
+        token
+      );
+
+    if (
+      userError ||
+      !user?.email
+    ) {
+      console.error(
+        "Admin user verification failed:",
+        userError
+      );
+
+      return res.status(401).json({
+        error: "Not authenticated.",
+      });
+    }
+
+    const adminEmails =
+      getAdminEmails();
+
+    if (
+      !adminEmails.includes(
+        user.email.toLowerCase()
+      )
+    ) {
+      return res.status(403).json({
+        error:
+          "Admin access required.",
+      });
+    }
+
     /*
     --------------------------------------------------
     LOAD COMPANIES
@@ -82,6 +144,11 @@ export default async function handler(
       .order("company_name");
 
     if (companyError) {
+      console.error(
+        "Company query failed:",
+        companyError
+      );
+
       throw companyError;
     }
 
@@ -110,12 +177,17 @@ export default async function handler(
       `);
 
     if (profileError) {
+      console.error(
+        "Profiles query failed:",
+        profileError
+      );
+
       throw profileError;
     }
 
     /*
     --------------------------------------------------
-    LOAD KNOWN DEVICES
+    LOAD DEVICES
     --------------------------------------------------
     */
 
@@ -136,31 +208,45 @@ export default async function handler(
         first_seen_at,
         last_seen_at
       `)
-      .order("last_seen_at", {
-        ascending: false,
-      });
+      .order(
+        "last_seen_at",
+        {
+          ascending: false,
+        }
+      );
 
     if (deviceError) {
+      console.error(
+        "Devices query failed:",
+        deviceError
+      );
+
       throw deviceError;
     }
 
     /*
     --------------------------------------------------
-    LOAD LOGIN COUNT FOR LAST 30 DAYS
+    LOAD LOGINS FROM LAST 30 DAYS
     --------------------------------------------------
     */
 
     const thirtyDaysAgo =
       new Date(
         Date.now() -
-          30 * 24 * 60 * 60 * 1000
+          30 *
+            24 *
+            60 *
+            60 *
+            1000
       ).toISOString();
 
     const {
       data: recentLogins,
       error: loginError,
     } = await supabase
-      .from("user_login_history")
+      .from(
+        "user_login_history"
+      )
       .select(`
         user_id,
         logged_in_at
@@ -171,6 +257,11 @@ export default async function handler(
       );
 
     if (loginError) {
+      console.error(
+        "Login history query failed:",
+        loginError
+      );
+
       throw loginError;
     }
 
@@ -183,7 +274,10 @@ export default async function handler(
     const devicesByUser =
       new Map<string, any[]>();
 
-    for (const device of devices || []) {
+    for (
+      const device of
+        devices || []
+    ) {
       const current =
         devicesByUser.get(
           device.user_id
@@ -206,7 +300,10 @@ export default async function handler(
     const loginCountByUser =
       new Map<string, number>();
 
-    for (const login of recentLogins || []) {
+    for (
+      const login of
+        recentLogins || []
+    ) {
       const current =
         loginCountByUser.get(
           login.user_id
@@ -220,7 +317,7 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    BUILD COMPANY RESPONSE
+    BUILD COMPANY DATA
     --------------------------------------------------
     */
 
@@ -234,87 +331,100 @@ export default async function handler(
                   profile.company_id ===
                   company.id
               )
-              .map((profile) => {
-                const userDevices =
-                  devicesByUser.get(
-                    profile.id
-                  ) || [];
+              .map(
+                (profile) => {
+                  const userDevices =
+                    devicesByUser.get(
+                      profile.id
+                    ) || [];
 
-                const latestDevice =
-                  userDevices[0] || null;
+                  const latestDevice =
+                    userDevices[0] ||
+                    null;
 
-                const deviceCount =
-                  userDevices.length;
+                  const deviceCount =
+                    userDevices.length;
 
-                const logins30Days =
-                  loginCountByUser.get(
-                    profile.id
-                  ) || 0;
+                  const logins30Days =
+                    loginCountByUser.get(
+                      profile.id
+                    ) || 0;
 
-                return {
-                  id: profile.id,
+                  return {
+                    id:
+                      profile.id,
 
-                  firstName:
-                    profile.first_name,
+                    firstName:
+                      profile.first_name,
 
-                  lastName:
-                    profile.last_name,
+                    lastName:
+                      profile.last_name,
 
-                  email:
-                    profile.email,
+                    email:
+                      profile.email,
 
-                  role:
-                    profile.role,
+                    role:
+                      profile.role,
 
-                  isActive:
-                    profile.is_active,
+                    isActive:
+                      profile.is_active,
 
-                  lastActiveAt:
-                    profile.last_active_at,
+                    lastActiveAt:
+                      profile.last_active_at,
 
-                  deviceCount,
+                    deviceCount,
 
-                  logins30Days,
+                    logins30Days,
 
-                  suspicious:
-                    deviceCount >= 8,
+                    /*
+                      For now, flag 8+
+                      known devices.
+                    */
+                    suspicious:
+                      deviceCount >= 8,
 
-                  latestDevice:
-                    latestDevice
-                      ? {
-                          deviceId:
-                            latestDevice.device_id,
+                    latestDevice:
+                      latestDevice
+                        ? {
+                            deviceId:
+                              latestDevice.device_id,
 
-                          ipAddress:
-                            latestDevice.ip_address,
+                            ipAddress:
+                              latestDevice.ip_address,
 
-                          country:
-                            latestDevice.country,
+                            country:
+                              latestDevice.country,
 
-                          region:
-                            latestDevice.region,
+                            region:
+                              latestDevice.region,
 
-                          city:
-                            latestDevice.city,
+                            city:
+                              latestDevice.city,
 
-                          browser:
-                            latestDevice.browser,
+                            browser:
+                              latestDevice.browser,
 
-                          operatingSystem:
-                            latestDevice.operating_system,
+                            operatingSystem:
+                              latestDevice.operating_system,
 
-                          lastSeenAt:
-                            latestDevice.last_seen_at,
-                        }
-                      : null,
-                };
-              });
+                            lastSeenAt:
+                              latestDevice.last_seen_at,
+                          }
+                        : null,
+                  };
+                }
+              );
 
           const usedSeats =
             companyUsers.filter(
               (user) =>
                 user.isActive
             ).length;
+
+          const seatLimit =
+            Number(
+              company.seat_limit
+            ) || 0;
 
           return {
             id:
@@ -329,14 +439,13 @@ export default async function handler(
             accessStatus:
               company.access_status,
 
-            seatLimit:
-              company.seat_limit,
+            seatLimit,
 
             usedSeats,
 
             availableSeats:
               Math.max(
-                company.seat_limit -
+                seatLimit -
                   usedSeats,
                 0
               ),
@@ -347,17 +456,24 @@ export default async function handler(
         }
       );
 
+    /*
+    --------------------------------------------------
+    SUCCESS
+    --------------------------------------------------
+    */
+
     return res.status(200).json({
       companies: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(
-      "Companies admin error:",
+      "Companies/users API failed:",
       error
     );
 
     return res.status(500).json({
       error:
+        error?.message ||
         "Unable to load company information.",
     });
   }

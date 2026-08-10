@@ -134,8 +134,22 @@ export default function CompaniesUsersPage() {
           }
         );
 
-      const result =
-        await response.json();
+const responseText =
+  await response.text();
+
+let result: any = {};
+
+try {
+  result =
+    responseText
+      ? JSON.parse(responseText)
+      : {};
+} catch {
+  throw new Error(
+    responseText ||
+      "The server returned an invalid response."
+  );
+}
 
       if (
         response.status === 401
