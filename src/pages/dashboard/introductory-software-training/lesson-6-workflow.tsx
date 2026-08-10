@@ -1,487 +1,307 @@
 import Link from "next/link";
+import AcademyLessonLayout from "../../../components/AcademyLessonLayout";
 
-export default function LessonTwoWorkflowPage() {
+const steps = [
+  {
+    number: 1,
+    title: "Launch the Software",
+    href: "/dashboard/introductory-software-training/lesson-6-launch",
+  },
+  {
+    number: 2,
+    title: "Program Walkthrough",
+    href: "/dashboard/introductory-software-training/lesson-6-overview",
+  },
+  {
+    number: 3,
+    title: "Order of Opperations",
+    href: "/dashboard/introductory-software-training/lesson-6-workflow",
+  },
+];
+
+export default function LessonSixWorkflowPage() {
   return (
-    <main className="page">
-      <aside className="sidebar">
-        <Link href="/dashboard/introductory-software-training" className="back">
-          ← Back to Course
-        </Link>
+    <AcademyLessonLayout
+      lessonNumber="06"
+      lessonTitle="Understanding the Program Layout"
+      lessonDescription="Understand the overall workflow before jumping into project creation, frame building, reports, and fabrication."
+      currentStep={3}
+      steps={steps}
+    >
+      <p className="academyEyebrow">Step 3 of 3</p>
 
-        <p className="eyebrow">Lesson 02</p>
-        <h1>Introduction to Glazier Studio & PartnerPak</h1>
+      <h2>Order of Opperations</h2>
 
-        <p className="description">
-          Understand the overall workflow before jumping into project creation,
-          frame building, reports, and fabrication.
+      <div className="goalBox">
+        <strong>Goal:</strong> Understand the general order of operations, where to start and what the end goal is.
+      </div>
+
+      <p className="bodyText">
+        Before learning the detailed tools, it helps to understand the full
+        workflow. You will not follow these same steps each time but this is a good basic start to understanding how the software works.
+      </p>
+
+      <div className="sectionBox">
+        <h3>The Typical Workflow</h3>
+
+        <p>
+          Most jobs follow the same general path. You start with a Bid
+          request, create a project, build the frames, review the materials,
+          run reports, and then send the job toward fabrication.
         </p>
 
-        <div className="stepList">
-          <Link
-            href="/dashboard/introductory-software-training/lesson-2-launch"
-            className="step"
-          >
-            1. Launch the Software
-          </Link>
-
-          <Link
-            href="/dashboard/introductory-software-training/lesson-2-overview"
-            className="step"
-          >
-            2. Program Walkthrough
-          </Link>
-
-          <div className="step active">3. Order of Opperations </div>
+        <div className="workflowStack">
+          <div className="workflowItem">Bid Request</div>
+          <div className="workflowArrow">↓</div>
+          <div className="workflowItem">Create Project</div>
+          <div className="workflowArrow">↓</div>
+          <div className="workflowItem">Build Frames</div>
+          <div className="workflowArrow">↓</div>
+          <div className="workflowItem">Run Reports</div>
+          <div className="workflowArrow">↓</div>
+          <div className="workflowItem">Win Bid</div>
+          <div className="workflowArrow">↓</div>
+          <div className="workflowItem">Create correct metal groups</div>
+          <div className="workflowArrow">↓</div>
+          <div className="workflowItem">Touch up project</div>
+          <div className="workflowArrow">↓</div>
+          <div className="workflowItem">Send to Metal Fabrication/RhinoFab</div>
         </div>
-      </aside>
+      </div>
 
-      <section className="stage">
-        <article className="card">
-          <p className="eyebrow">Step 3 of 3</p>
-          <h2>Order of Opperations</h2>
+      <div className="sectionBox">
+        <h3>How the Main Pieces Work Together</h3>
 
-          <div className="goalBox">
-            <strong>Goal:</strong> Understand the general order of operations, where to start and what the end goal is. 
+        <div className="featureGrid">
+          <div className="featureBox">
+            <h4>Projects</h4>
+            <p>
+              A project holds the customer, job, frame, report, and
+              fabrication information in one organized place.
+            </p>
           </div>
 
-          <p className="bodyText">
-            Before learning the detailed tools, it helps to understand the full
-            workflow. You will not follow these same steps each time but this is a good basic start to understanding how the software works.
+          <div className="featureBox">
+            <h4>Frames</h4>
+            <p>
+              Frames are the curtain walls, storefronts, doors, and systems you
+              create inside the project.
+            </p>
+          </div>
+
+          <div className="featureBox">
+            <h4>Metal Groups</h4>
+            <p>
+              Metal groups define the system being used. They control the
+              family of material that makes up the frame.
+            </p>
+          </div>
+
+          <div className="featureBox">
+            <h4>Catalog Parts</h4>
+            <p>
+              Catalog parts are the individual pieces inside the system,
+              such as heads, jambs, sills, mullions, stops, and accessories.
+            </p>
+          </div>
+
+          <div className="featureBox">
+            <h4>Reports</h4>
+            <p>
+              Reports turn the project and frame information into useful
+              output for estimating, material review, glass, drawings, and
+              fabrication.
+            </p>
+          </div>
+
+          <div className="featureBox">
+            <h4>metal fabrication</h4>
+            <p>
+              Is the final step before sending a project out to the RhinoFab saw to be cut and fabricated
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="sectionBox">
+        <h3>From Frame to Fabrication</h3>
+
+        <p>
+          Once a frame is built, the software can do more than simply show
+          the drawing. That frame can be used for estimating, reports, metal
+          fabrication, and eventually machine output.
+        </p>
+
+        <div className="horizontalFlow">
+          <span>Frame</span>
+          <span>→</span>
+          <span>Reports</span>
+          <span>→</span>
+          <span>Metal Fabrication</span>
+          <span>→</span>
+          <span>Saw / RhinoFab</span>
+        </div>
+
+        <p>
+          You do not need to understand every part of this yet. The goal is
+          to see the direction we are heading before we start building real
+          projects in the next lessons.
+        </p>
+      </div>
+
+      <div className="infoGrid">
+        <div className="warningBox">
+          <h3>Important</h3>
+
+          <p>
+            Do not worry if terms like metal groups, catalog parts, reports,
+            or fabrication do not fully make sense yet. Each one will be
+            explained later in the course.
           </p>
+        </div>
+      </div>
 
-          <div className="sectionBox">
-            <h3>The Typical Workflow</h3>
+      <div className="completeBox">
+        <h3>Lesson 6 Complete</h3>
 
-            <p>
-              Most jobs follow the same general path. You start with a Bid
-              request, create a project, build the frames, review the materials,
-              run reports, and then send the job toward fabrication.
-            </p>
+        <p>
+          You now have a basic understanding of what Glazier Studio and
+          PartnerPak are used for. In Lesson 3, we will begin creating your
+          first project and preparing to build your first frame.
+        </p>
+      </div>
 
-            <div className="workflowStack">
-              <div className="workflowItem">Bid Request</div>
-              <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Create Project</div>
-              <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Build Frames</div>
-              <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Run Reports</div>
-              <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Win Bid</div>
-              <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Create correct metal groups</div>
-              <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Touch up project</div>
-              <div className="workflowArrow">↓</div>
-              <div className="workflowItem">Send to Metal Fabrication/RhinoFab</div>
-            </div>
-          </div>
+      <div className="navButtons">
+        <Link
+          href="/dashboard/introductory-software-training/lesson-6-overview"
+          className="secondary"
+        >
+          ← Previous
+        </Link>
 
-          <div className="sectionBox">
-            <h3>How the Main Pieces Work Together</h3>
+        <Link
+          href="/dashboard/introductory-software-training"
+          className="primary"
+        >
+          Finish Lesson
+        </Link>
+      </div>
 
-            <div className="featureGrid">
-              <div className="featureBox">
-                <h4>Projects</h4>
-                <p>
-                  A project holds the customer, job, frame, report, and
-                  fabrication information in one organized place.
-                </p>
-              </div>
-
-              <div className="featureBox">
-                <h4>Frames</h4>
-                <p>
-                  Frames are the curtain walls, storefronts, doors, and systems you
-                  create inside the project.
-                </p>
-              </div>
-
-              <div className="featureBox">
-                <h4>Metal Groups</h4>
-                <p>
-                  Metal groups define the system being used. They control the
-                  family of material that makes up the frame.
-                </p>
-              </div>
-
-              <div className="featureBox">
-                <h4>Catalog Parts</h4>
-                <p>
-                  Catalog parts are the individual pieces inside the system,
-                  such as heads, jambs, sills, mullions, stops, and accessories.
-                </p>
-              </div>
-
-              <div className="featureBox">
-                <h4>Reports</h4>
-                <p>
-                  Reports turn the project and frame information into useful
-                  output for estimating, material review, glass, drawings, and
-                  fabrication.
-                </p>
-              </div>
-
-              <div className="featureBox">
-                <h4>metal fabrication</h4>
-                <p>
-                  Is the final step before sending a project out to the RhinoFab saw to be cut and fabricated
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="sectionBox">
-            <h3>From Frame to Fabrication</h3>
-
-            <p>
-              Once a frame is built, the software can do more than simply show
-              the drawing. That frame can be used for estimating, reports, metal
-              fabrication, and eventually machine output.
-            </p>
-
-            <div className="horizontalFlow">
-              <span>Frame</span>
-              <span>→</span>
-              <span>Reports</span>
-              <span>→</span>
-              <span>Metal Fabrication</span>
-              <span>→</span>
-              <span>Saw / RhinoFab</span>
-            </div>
-
-            <p>
-              You do not need to understand every part of this yet. The goal is
-              to see the direction we are heading before we start building real
-              projects in the next lessons.
-            </p>
-          </div>
-
-          <div className="infoGrid">
-            
-
-            <div className="warningBox">
-              <h3>Important</h3>
-              <p>
-                Do not worry if terms like metal groups, catalog parts, reports,
-                or fabrication do not fully make sense yet. Each one will be
-                explained later in the course.
-              </p>
-            </div>
-          </div>
-
-          <div className="completeBox">
-            <h3>Lesson 6 Complete</h3>
-            <p>
-              You now have a basic understanding of what Glazier Studio and
-              PartnerPak are used for. In Lesson 3, we will begin creating your
-              first project and preparing to build your first frame.
-            </p>
-          </div>
-
-          <div className="navButtons">
-            <Link
-              href="/dashboard/introductory-software-training/lesson-6-overview"
-              className="secondary"
-            >
-              ← Previous
-            </Link>
-
-            <Link
-              href="/dashboard/introductory-software-training"
-              className="primary"
-            >
-              Finish Lesson
-            </Link>
-          </div>
-        </article>
-      </section>
-
-      <SharedStyles />
-    </main>
-  );
-}
-
-function SharedStyles() {
-  return (
-    <style jsx global>{`
-      .page {
-        min-height: 100vh;
-        display: grid;
-        grid-template-columns: 360px 1fr;
-        background:
-          radial-gradient(circle at top left, rgba(245, 158, 11, 0.1), transparent 34%),
-          linear-gradient(135deg, #05070b 0%, #0d1118 45%, #05070b 100%);
-        color: white;
-      }
-
-      .sidebar {
-        min-height: 100vh;
-        padding: 34px 24px;
-        background: rgba(5, 7, 11, 0.72);
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      .back {
-        display: inline-block;
-        margin-bottom: 28px;
-        color: #f59e0b;
-        font-weight: 900;
-        text-decoration: none;
-      }
-
-      .eyebrow {
-        color: #f59e0b;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin: 0 0 10px;
-      }
-
-      h1 {
-        margin: 0 0 14px;
-        font-size: 30px;
-        line-height: 1.1;
-      }
-
-      .description {
-        color: rgba(255, 255, 255, 0.72);
-        line-height: 1.65;
-        margin-bottom: 28px;
-      }
-
-      .stepList {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .step {
-        padding: 14px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.045);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        color: white;
-        font-weight: 900;
-        text-decoration: none;
-      }
-
-      .step.active {
-        background: rgba(245, 158, 11, 0.14);
-        border-color: rgba(245, 158, 11, 0.5);
-        color: #fbbf24;
-      }
-
-      .stage {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 48px;
-      }
-
-      .card {
-        width: 100%;
-        max-width: 1040px;
-        padding: 42px;
-        border-radius: 24px;
-        background: rgba(15, 23, 42, 0.82);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      h2 {
-        font-size: 42px;
-        line-height: 1.08;
-        margin: 0 0 18px;
-      }
-
-      .goalBox,
-      .sectionBox,
-      .completeBox {
-        margin-top: 24px;
-        padding: 22px;
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.045);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      .goalBox {
-        margin-top: 0;
-        background: rgba(245, 158, 11, 0.12);
-        border-color: rgba(245, 158, 11, 0.3);
-      }
-
-      .completeBox {
-        background: rgba(34, 197, 94, 0.1);
-        border-color: rgba(34, 197, 94, 0.28);
-      }
-
-      .goalBox strong {
-        color: #fbbf24;
-      }
-
-      .bodyText,
-      .sectionBox p,
-      .completeBox p {
-        font-size: 18px;
-        line-height: 1.8;
-        color: rgba(255, 255, 255, 0.78);
-      }
-
-      .sectionBox h3,
-      .completeBox h3 {
-        color: #fbbf24;
-        margin-top: 0;
-      }
-
-      .workflowStack {
-        max-width: 420px;
-        margin: 28px auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .workflowItem {
-        width: 100%;
-        padding: 16px 18px;
-        border-radius: 16px;
-        background: rgba(245, 158, 11, 0.12);
-        border: 1px solid rgba(245, 158, 11, 0.28);
-        color: #fbbf24;
-        font-weight: 900;
-        text-align: center;
-      }
-
-      .workflowArrow {
-        color: #f59e0b;
-        font-size: 26px;
-        font-weight: 900;
-        line-height: 1.4;
-      }
-
-      .featureGrid,
-      .infoGrid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-      }
-
-      .featureBox {
-        padding: 20px;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.045);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      .featureBox h4 {
-        margin: 0 0 10px;
-        color: #fbbf24;
-      }
-
-      .featureBox p {
-        margin: 0;
-        color: rgba(255, 255, 255, 0.74);
-        line-height: 1.55;
-      }
-
-      .horizontalFlow {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-        margin: 22px 0;
-      }
-
-      .horizontalFlow span {
-        padding: 10px 13px;
-        border-radius: 999px;
-        background: rgba(245, 158, 11, 0.12);
-        border: 1px solid rgba(245, 158, 11, 0.28);
-        color: #fbbf24;
-        font-weight: 900;
-      }
-
-      .tipBox,
-      .warningBox {
-        padding: 20px;
-        border-radius: 16px;
-      }
-
-      .tipBox {
-        background: rgba(34, 197, 94, 0.1);
-        border: 1px solid rgba(34, 197, 94, 0.24);
-      }
-
-      .warningBox {
-        background: rgba(245, 158, 11, 0.1);
-        border: 1px solid rgba(245, 158, 11, 0.26);
-      }
-
-      .tipBox h3,
-      .warningBox h3 {
-        margin-top: 0;
-      }
-
-      .tipBox p,
-      .warningBox p {
-        color: rgba(255, 255, 255, 0.74);
-        line-height: 1.55;
-      }
-
-      .navButtons {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        margin-top: 42px;
-      }
-
-      .primary,
-      .secondary {
-        border-radius: 12px;
-        padding: 14px 22px;
-        font-weight: 900;
-        text-decoration: none;
-      }
-
-      .primary {
-        background: #f59e0b;
-        color: #111827;
-      }
-
-      .secondary {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-      }
-
-      @media (max-width: 900px) {
-        .page {
-          grid-template-columns: 1fr;
+      <style jsx>{`
+        .bodyText,
+        .sectionBox p,
+        .completeBox p {
+          font-size: 18px;
+          line-height: 1.8;
+          color: rgba(255, 255, 255, 0.78);
         }
 
-        .sidebar {
-          min-height: auto;
-          border-right: none;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        .sectionBox h3,
+        .completeBox h3 {
+          color: #fbbf24;
+          margin-top: 0;
         }
 
-        .stage {
+        .completeBox {
+          margin-top: 24px;
           padding: 22px;
+          border-radius: 18px;
+          background: rgba(34, 197, 94, 0.1);
+          border: 1px solid rgba(34, 197, 94, 0.28);
         }
 
-        .card {
-          padding: 26px;
+        .workflowStack {
+          max-width: 420px;
+          margin: 28px auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
 
-        h2 {
-          font-size: 32px;
+        .workflowItem {
+          width: 100%;
+          padding: 16px 18px;
+          border-radius: 16px;
+          background: rgba(245, 158, 11, 0.12);
+          border: 1px solid rgba(245, 158, 11, 0.28);
+          color: #fbbf24;
+          font-weight: 900;
+          text-align: center;
+        }
+
+        .workflowArrow {
+          color: #f59e0b;
+          font-size: 26px;
+          font-weight: 900;
+          line-height: 1.4;
         }
 
         .featureGrid,
         .infoGrid {
-          grid-template-columns: 1fr;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 20px;
+          margin-top: 20px;
         }
-      }
-    `}</style>
+
+        .featureBox {
+          padding: 20px;
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.045);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .featureBox h4 {
+          margin: 0 0 10px;
+          color: #fbbf24;
+        }
+
+        .featureBox p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.74);
+          line-height: 1.55;
+        }
+
+        .horizontalFlow {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          align-items: center;
+          margin: 22px 0;
+        }
+
+        .horizontalFlow span {
+          padding: 10px 13px;
+          border-radius: 999px;
+          background: rgba(245, 158, 11, 0.12);
+          border: 1px solid rgba(245, 158, 11, 0.28);
+          color: #fbbf24;
+          font-weight: 900;
+        }
+
+        .warningBox {
+          padding: 20px;
+          border-radius: 16px;
+          background: rgba(245, 158, 11, 0.1);
+          border: 1px solid rgba(245, 158, 11, 0.26);
+        }
+
+        .warningBox h3 {
+          margin-top: 0;
+        }
+
+        .warningBox p {
+          color: rgba(255, 255, 255, 0.74);
+          line-height: 1.55;
+        }
+
+        @media (max-width: 900px) {
+          .featureGrid,
+          .infoGrid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+    </AcademyLessonLayout>
   );
 }
