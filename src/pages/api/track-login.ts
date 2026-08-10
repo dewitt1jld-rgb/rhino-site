@@ -88,11 +88,46 @@ export default async function handler(
 
   const userAgent =
     req.headers["user-agent"] || "";
+const ipAddress = getClientIp(req);
 
-  const ipAddress = getClientIp(req);
+/*
+-------------------------------------
+APPROXIMATE LOCATION
+-------------------------------------
 
-  const browser =
-    parseBrowser(userAgent);
+Vercel provides general geographic information
+based on the incoming request.
+
+This is approximate only and is intended for
+account-security / login-history purposes.
+*/
+
+const countryHeader =
+  req.headers["x-vercel-ip-country"];
+
+const regionHeader =
+  req.headers["x-vercel-ip-country-region"];
+
+const cityHeader =
+  req.headers["x-vercel-ip-city"];
+
+const country =
+  typeof countryHeader === "string"
+    ? countryHeader
+    : null;
+
+const region =
+  typeof regionHeader === "string"
+    ? regionHeader
+    : null;
+
+const city =
+  typeof cityHeader === "string"
+    ? decodeURIComponent(cityHeader)
+    : null;
+
+const browser =
+  parseBrowser(userAgent);
 
   const operatingSystem =
     parseOS(userAgent);
@@ -114,13 +149,17 @@ export default async function handler(
         user_id: user.id,
         device_id: deviceId,
 
-        ip_address:
-          ipAddress,
+ip_address:
+  ipAddress,
 
-        browser,
+country,
+region,
+city,
 
-        operating_system:
-          operatingSystem,
+browser,
+
+operating_system:
+  operatingSystem,
 
         user_agent:
           userAgent,
@@ -155,13 +194,17 @@ export default async function handler(
       user_id: user.id,
       device_id: deviceId,
 
-      ip_address:
-        ipAddress,
+ip_address:
+  ipAddress,
 
-      browser,
+country,
+region,
+city,
 
-      operating_system:
-        operatingSystem,
+browser,
+
+operating_system:
+  operatingSystem,
 
       user_agent:
         userAgent,
