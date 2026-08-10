@@ -145,7 +145,7 @@ export default function DownloadInstallPage() {
               ← Course List
             </Link>
 
-            <Link href="/dashboard/introductory-software-training/customer-number" className="primary">
+            <Link href="/dashboard/introductory-software-training/lesson-4-customer-number" className="primary">
               Next →
             </Link>
           </div>

@@ -95,7 +95,7 @@ export default function CustomerNumberPage() {
               ← Previous
             </Link>
 
-            <Link href="/dashboard/introductory-software-training/connect-network" className="primary">
+            <Link href="/dashboard/introductory-software-training/lesson-4-connect-network" className="primary">
               Next →
             </Link>
           </div>
