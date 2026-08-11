@@ -261,7 +261,7 @@ export default async function handler(
             company_name:
               cleanCompanyName,
             company_id: null,
-            role: "user",
+            role: "member",
             is_active: true,
             last_active_at: now,
             updated_at: now,
