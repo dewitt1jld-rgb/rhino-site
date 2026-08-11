@@ -11,12 +11,16 @@ const adminSupabase = createClient(supabaseUrl, serviceRoleKey, {
   },
 });
 
+type AccountType = "owner" | "employee";
+
 type RegisterBody = {
+  accountType?: AccountType;
   firstName?: string;
   lastName?: string;
   email?: string;
   password?: string;
   companyName?: string;
+  rhinoAccessCode?: string;
   customerNumber?: string;
 };
 
@@ -24,6 +28,107 @@ function normalizeCompanyName(value: string) {
   return value
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "");
+}
+
+async function emailAlreadyExists(cleanEmail: string) {
+  const {
+    data: existingProfiles,
+    error: existingProfileError,
+  } = await adminSupabase
+    .from("profiles")
+    .select("id, email")
+    .eq("email", cleanEmail)
+    .limit(1);
+
+  if (existingProfileError) {
+    console.error(
+      "Existing profile check error:",
+      existingProfileError
+    );
+  }
+
+  return Boolean(
+    existingProfiles &&
+      existingProfiles.length > 0
+  );
+}
+
+async function createAuthUser({
+  firstName,
+  lastName,
+  companyName,
+  cleanEmail,
+  password,
+}: {
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  cleanEmail: string;
+  password: string;
+}) {
+  const {
+    data: createdUser,
+    error: createUserError,
+  } =
+    await adminSupabase.auth.admin.createUser(
+      {
+        email: cleanEmail,
+        password,
+        email_confirm: true,
+        user_metadata: {
+          first_name: firstName,
+          last_name: lastName,
+          company_name: companyName,
+        },
+      }
+    );
+
+  if (createUserError) {
+    throw createUserError;
+  }
+
+  const userId =
+    createdUser.user?.id;
+
+  if (!userId) {
+    throw new Error(
+      "The account could not be created."
+    );
+  }
+
+  return userId;
+}
+
+async function createInitialAcademyProgress(
+  userId: string
+) {
+  const {
+    error: progressError,
+  } = await adminSupabase
+    .from(
+      "academy_course_progress"
+    )
+    .upsert(
+      {
+        user_id: userId,
+        current_lesson: 1,
+        current_step: 1,
+        last_page:
+          "/dashboard/introductory-software-training",
+        updated_at:
+          new Date().toISOString(),
+      },
+      {
+        onConflict: "user_id",
+      }
+    );
+
+  if (progressError) {
+    console.error(
+      "Academy progress creation error:",
+      progressError
+    );
+  }
 }
 
 export default async function handler(
@@ -39,41 +144,206 @@ export default async function handler(
   }
 
   const {
+    accountType = "employee",
     firstName,
     lastName,
     email,
     password,
     companyName,
+    rhinoAccessCode,
     customerNumber,
   } = req.body as RegisterBody;
 
-  /*
-  ---------------------------------------
-  BASIC VALIDATION
-  ---------------------------------------
-  */
+  if (
+    accountType !== "owner" &&
+    accountType !== "employee"
+  ) {
+    return res.status(400).json({
+      error:
+        "Please select a valid account type.",
+    });
+  }
 
   if (
     !firstName?.trim() ||
     !lastName?.trim() ||
     !email?.trim() ||
     !password ||
-    !companyName?.trim() ||
-    !customerNumber?.trim()
+    !companyName?.trim()
   ) {
     return res.status(400).json({
-      error: "Please complete every field.",
+      error:
+        "Please complete every required field.",
     });
   }
 
-  const cleanEmail = email.trim().toLowerCase();
-  const cleanCustomerNumber = customerNumber.trim();
+  const cleanFirstName =
+    firstName.trim();
+
+  const cleanLastName =
+    lastName.trim();
+
+  const cleanCompanyName =
+    companyName.trim();
+
+  const cleanEmail =
+    email.trim().toLowerCase();
+
+  const cleanRhinoAccessCode =
+    (
+      rhinoAccessCode ||
+      customerNumber ||
+      ""
+    )
+      .trim()
+      .toUpperCase();
+
+  if (
+    accountType === "employee" &&
+    !cleanRhinoAccessCode
+  ) {
+    return res.status(400).json({
+      error:
+        "Please enter your Rhino Access Code.",
+    });
+  }
 
   try {
+    if (
+      await emailAlreadyExists(
+        cleanEmail
+      )
+    ) {
+      return res.status(409).json({
+        error:
+          "An account already exists with this email address. Please sign in instead.",
+      });
+    }
+
     /*
-    ---------------------------------------
-    1. FIND COMPANY
-    ---------------------------------------
+    ==================================================
+    NEW COMPANY OWNER
+    ==================================================
+    */
+
+    if (accountType === "owner") {
+      let userId: string | null =
+        null;
+
+      try {
+        userId =
+          await createAuthUser({
+            firstName:
+              cleanFirstName,
+            lastName:
+              cleanLastName,
+            companyName:
+              cleanCompanyName,
+            cleanEmail,
+            password,
+          });
+
+        const now =
+          new Date().toISOString();
+
+        const {
+          data: updatedProfile,
+          error: profileError,
+        } = await adminSupabase
+          .from("profiles")
+          .update({
+            first_name:
+              cleanFirstName,
+            last_name:
+              cleanLastName,
+            email:
+              cleanEmail,
+            company_name:
+              cleanCompanyName,
+            company_id: null,
+            role: "user",
+            is_active: true,
+            last_active_at: now,
+            updated_at: now,
+          })
+          .eq("id", userId)
+          .select("id")
+          .maybeSingle();
+
+        if (
+          profileError ||
+          !updatedProfile
+        ) {
+          console.error(
+            "Owner profile update error:",
+            profileError
+          );
+
+          throw new Error(
+            "The login was created, but the owner profile could not be prepared."
+          );
+        }
+
+        await createInitialAcademyProgress(
+          userId
+        );
+
+        return res.status(200).json({
+          success: true,
+          accountType: "owner",
+          message:
+            "Your account has been created. Sign in to continue to purchasing.",
+          user: {
+            id: userId,
+            firstName:
+              cleanFirstName,
+            lastName:
+              cleanLastName,
+            email:
+              cleanEmail,
+          },
+          company: {
+            name:
+              cleanCompanyName,
+            rhinoAccessCode: null,
+          },
+        });
+      } catch (error: any) {
+        console.error(
+          "Owner registration error:",
+          error
+        );
+
+        if (userId) {
+          await adminSupabase
+            .auth
+            .admin
+            .deleteUser(userId);
+        }
+
+        if (
+          error?.message
+            ?.toLowerCase()
+            .includes("already")
+        ) {
+          return res.status(409).json({
+            error:
+              "An account already exists with this email address.",
+          });
+        }
+
+        return res.status(400).json({
+          error:
+            error?.message ||
+            "Unable to create the owner account.",
+        });
+      }
+    }
+
+    /*
+    ==================================================
+    EXISTING COMPANY EMPLOYEE
+    ==================================================
     */
 
     const {
@@ -88,7 +358,10 @@ export default async function handler(
         access_status,
         seat_limit
       `)
-      .eq("customer_number", cleanCustomerNumber)
+      .eq(
+        "customer_number",
+        cleanRhinoAccessCode
+      )
       .maybeSingle();
 
     if (companyError) {
@@ -106,19 +379,13 @@ export default async function handler(
     if (!company) {
       return res.status(400).json({
         error:
-          "The customer number you entered could not be found.",
+          "The Rhino Access Code you entered could not be found.",
       });
     }
 
-    /*
-    ---------------------------------------
-    2. CHECK COMPANY NAME
-    ---------------------------------------
-    */
-
     const enteredCompany =
       normalizeCompanyName(
-        companyName.trim()
+        cleanCompanyName
       );
 
     const actualCompany =
@@ -126,31 +393,25 @@ export default async function handler(
         company.company_name
       );
 
-    if (enteredCompany !== actualCompany) {
+    if (
+      enteredCompany !==
+      actualCompany
+    ) {
       return res.status(400).json({
         error:
-          "The company name does not match the customer number.",
+          "The company name does not match the Rhino Access Code.",
       });
     }
 
-    /*
-    ---------------------------------------
-    3. CHECK COMPANY ACCESS
-    ---------------------------------------
-    */
-
-    if (company.access_status !== "active") {
+    if (
+      company.access_status !==
+      "active"
+    ) {
       return res.status(403).json({
         error:
           "This company's Rhino Wrangler access is not currently active.",
       });
     }
-
-    /*
-    ---------------------------------------
-    4. CHECK CURRENT SEAT USAGE
-    ---------------------------------------
-    */
 
     const {
       count: activeSeatCount,
@@ -161,8 +422,14 @@ export default async function handler(
         count: "exact",
         head: true,
       })
-      .eq("company_id", company.id)
-      .eq("is_active", true);
+      .eq(
+        "company_id",
+        company.id
+      )
+      .eq(
+        "is_active",
+        true
+      );
 
     if (seatError) {
       console.error(
@@ -189,81 +456,33 @@ export default async function handler(
       });
     }
 
-    /*
-    ---------------------------------------
-    5. CHECK FOR EXISTING AUTH USER
-    ---------------------------------------
-    */
+    let userId:
+      | string
+      | null = null;
 
-    const {
-      data: existingProfiles,
-      error: existingProfileError,
-    } = await adminSupabase
-      .from("profiles")
-      .select("id, email")
-      .eq("email", cleanEmail)
-      .limit(1);
-
-    if (existingProfileError) {
-      console.error(
-        "Existing profile check error:",
-        existingProfileError
-      );
-    }
-
-    if (
-      existingProfiles &&
-      existingProfiles.length > 0
-    ) {
-      return res.status(409).json({
-        error:
-          "An account already exists with this email address. Please sign in instead.",
-      });
-    }
-
-    /*
-    ---------------------------------------
-    6. CREATE SUPABASE AUTH USER
-    ---------------------------------------
-    */
-
-    const {
-      data: createdUser,
-      error: createUserError,
-    } =
-      await adminSupabase.auth.admin.createUser(
-        {
-          email: cleanEmail,
+    try {
+      userId =
+        await createAuthUser({
+          firstName:
+            cleanFirstName,
+          lastName:
+            cleanLastName,
+          companyName:
+            company.company_name,
+          cleanEmail,
           password,
-
-          /*
-            This marks the account confirmed immediately.
-            No confirmation email is required.
-          */
-          email_confirm: true,
-
-          user_metadata: {
-            first_name:
-              firstName.trim(),
-
-            last_name:
-              lastName.trim(),
-
-            company_name:
-              company.company_name,
-          },
-        }
-      );
-
-    if (createUserError) {
+        });
+    } catch (
+      createUserError: any
+    ) {
       console.error(
         "Auth user creation error:",
         createUserError
       );
 
       if (
-        createUserError.message
-          .toLowerCase()
+        createUserError?.message
+          ?.toLowerCase()
           .includes("already")
       ) {
         return res.status(409).json({
@@ -274,31 +493,13 @@ export default async function handler(
 
       return res.status(400).json({
         error:
-          createUserError.message,
+          createUserError?.message ||
+          "Unable to create the account.",
       });
     }
 
-    const userId =
-      createdUser.user?.id;
-
-    if (!userId) {
-      return res.status(500).json({
-        error:
-          "The account could not be created.",
-      });
-    }
-
-    /*
-    ---------------------------------------
-    7. UPDATE AUTO-CREATED PROFILE
-    ---------------------------------------
-
-    Your existing Supabase trigger creates
-    the profiles row when auth.users is
-    created.
-
-    Therefore we UPDATE instead of INSERT.
-    */
+    const now =
+      new Date().toISOString();
 
     const {
       data: updatedProfile,
@@ -307,30 +508,23 @@ export default async function handler(
       .from("profiles")
       .update({
         first_name:
-          firstName.trim(),
-
+          cleanFirstName,
         last_name:
-          lastName.trim(),
-
-        email: cleanEmail,
-
+          cleanLastName,
+        email:
+          cleanEmail,
         company_name:
           company.company_name,
-
         company_id:
           company.id,
-
         role:
           "employee",
-
         is_active:
           true,
-
         last_active_at:
-          new Date().toISOString(),
-
+          now,
         updated_at:
-          new Date().toISOString(),
+          now,
       })
       .eq("id", userId)
       .select("id")
@@ -345,10 +539,6 @@ export default async function handler(
         profileError
       );
 
-      /*
-        Prevent a half-created account.
-      */
-
       await adminSupabase
         .auth
         .admin
@@ -360,97 +550,39 @@ export default async function handler(
       });
     }
 
-    /*
-    ---------------------------------------
-    8. CREATE INITIAL ACADEMY PROGRESS
-    ---------------------------------------
-    */
-
-    const {
-      error: progressError,
-    } = await adminSupabase
-      .from(
-        "academy_course_progress"
-      )
-      .upsert(
-        {
-          user_id:
-            userId,
-
-          current_lesson:
-            1,
-
-          current_step:
-            1,
-
-          last_page:
-            "/dashboard/introductory-software-training",
-
-          updated_at:
-            new Date().toISOString(),
-        },
-        {
-          onConflict:
-            "user_id",
-        }
-      );
-
-    if (progressError) {
-      /*
-        Don't destroy the account just
-        because course progress failed.
-
-        The user can still sign in and we
-        can repair progress later.
-      */
-
-      console.error(
-        "Academy progress creation error:",
-        progressError
-      );
-    }
-
-    /*
-    ---------------------------------------
-    SUCCESS
-    ---------------------------------------
-    */
+    await createInitialAcademyProgress(
+      userId
+    );
 
     return res.status(200).json({
       success: true,
-
+      accountType: "employee",
       message:
         "Your Rhino Wrangler account has been created.",
-
       user: {
-        id: userId,
+        id:
+          userId,
         firstName:
-          firstName.trim(),
-
+          cleanFirstName,
         lastName:
-          lastName.trim(),
-
+          cleanLastName,
         email:
           cleanEmail,
       },
-
       company: {
         name:
           company.company_name,
-
-        customerNumber:
+        rhinoAccessCode:
           company.customer_number,
-
         usedSeats:
           usedSeats + 1,
-
         seatLimit:
           company.seat_limit,
       },
     });
   } catch (error) {
     console.error(
-      "Employee registration error:",
+      "Registration error:",
       error
     );
 

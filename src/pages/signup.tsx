@@ -2,13 +2,16 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
+type AccountType = "owner" | "employee";
+
 export default function SignupPage() {
   const router = useRouter();
 
+  const [accountType, setAccountType] = useState<AccountType>("owner");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [customerNumber, setCustomerNumber] = useState("");
+  const [rhinoAccessCode, setRhinoAccessCode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,6 +19,12 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  function changeAccountType(type: AccountType) {
+    setAccountType(type);
+    setErrorMessage("");
+    setSuccessMessage("");
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -38,8 +47,8 @@ export default function SignupPage() {
       return;
     }
 
-    if (!customerNumber.trim()) {
-      setErrorMessage("Please enter your customer number.");
+    if (accountType === "employee" && !rhinoAccessCode.trim()) {
+      setErrorMessage("Please enter your Rhino Access Code.");
       return;
     }
 
@@ -67,21 +76,47 @@ export default function SignupPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          accountType,
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           companyName: companyName.trim(),
-          customerNumber: customerNumber.trim(),
+          rhinoAccessCode:
+            accountType === "employee"
+              ? rhinoAccessCode.trim().toUpperCase()
+              : undefined,
           email: email.trim().toLowerCase(),
           password,
         }),
       });
 
-      const result = await response.json();
+      const responseText = await response.text();
+
+      let result: any = {};
+
+      try {
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch {
+        throw new Error(
+          responseText || "The server returned an invalid response."
+        );
+      }
 
       if (!response.ok) {
         throw new Error(
           result.error || "Unable to create your account."
         );
+      }
+
+      if (accountType === "owner") {
+        setSuccessMessage(
+          "Your account has been created. Redirecting you to login so you can purchase company access..."
+        );
+
+        setTimeout(() => {
+          router.push("/login");
+        }, 1600);
+
+        return;
       }
 
       setSuccessMessage(
@@ -94,7 +129,7 @@ export default function SignupPage() {
 
       setTimeout(() => {
         router.push("/login");
-      }, 1800);
+      }, 1600);
     } catch (error: any) {
       setErrorMessage(
         error?.message || "Unable to create your account."
@@ -119,22 +154,73 @@ export default function SignupPage() {
             </h1>
 
             <p className="pageText">
-              Create your individual training account using your
-              company's Rhino Wrangler customer number. Your account
-              will be connected to your company's existing training
-              access.
+              Create your own Rhino Wrangler login. If your company is new,
+              create the owner account first and purchase access after signing
+              in. If your company already has access, join it using the Rhino
+              Access Code provided by your company administrator.
             </p>
           </div>
 
-          <div className="companyNotice">
-            <strong>Company access required</strong>
+          <div className="accountChoice">
+            <button
+              type="button"
+              className={
+                accountType === "owner"
+                  ? "choiceButton active"
+                  : "choiceButton"
+              }
+              onClick={() => changeAccountType("owner")}
+            >
+              <span className="choiceTitle">
+                I&apos;m Purchasing for My Company
+              </span>
 
-            <p>
-              Your company must already have active Rhino Wrangler
-              access. Ask your company administrator for the company
-              name and customer number associated with the account.
-            </p>
+              <span className="choiceText">
+                Start a new company account. No Rhino Access Code is needed yet.
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className={
+                accountType === "employee"
+                  ? "choiceButton active"
+                  : "choiceButton"
+              }
+              onClick={() => changeAccountType("employee")}
+            >
+              <span className="choiceTitle">
+                My Company Already Has Access
+              </span>
+
+              <span className="choiceText">
+                Join an existing company using its Rhino Access Code.
+              </span>
+            </button>
           </div>
+
+          {accountType === "owner" ? (
+            <div className="companyNotice ownerNotice">
+              <strong>Starting a new company account</strong>
+
+              <p>
+                Create your login below. After signing in, you&apos;ll purchase
+                Rhino Wrangler access. Once payment is complete, your company
+                will receive a unique Rhino Access Code in the format
+                <strong> RW-#####</strong> and a default limit of 7 users.
+              </p>
+            </div>
+          ) : (
+            <div className="companyNotice">
+              <strong>Company access required</strong>
+
+              <p>
+                Your company must already have active Rhino Wrangler access.
+                Ask your company administrator for the company name and
+                Rhino Access Code associated with the account.
+              </p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="formGrid">
             <div className="fieldRow twoCol">
@@ -174,7 +260,7 @@ export default function SignupPage() {
             </div>
 
             <div className="companyDivider">
-              Company Access
+              Company Information
             </div>
 
             <div className="fieldGroup">
@@ -194,27 +280,31 @@ export default function SignupPage() {
               />
             </div>
 
-            <div className="fieldGroup">
-              <label htmlFor="customerNumber" className="label">
-                Customer Number
-              </label>
+            {accountType === "employee" && (
+              <div className="fieldGroup">
+                <label htmlFor="rhinoAccessCode" className="label">
+                  Rhino Access Code
+                </label>
 
-              <input
-                id="customerNumber"
-                type="text"
-                className="input"
-                value={customerNumber}
-                onChange={(e) => setCustomerNumber(e.target.value)}
-                placeholder="06254"
-                autoComplete="off"
-                required
-              />
+                <input
+                  id="rhinoAccessCode"
+                  type="text"
+                  className="input codeInput"
+                  value={rhinoAccessCode}
+                  onChange={(e) =>
+                    setRhinoAccessCode(e.target.value.toUpperCase())
+                  }
+                  placeholder="RW-12345"
+                  autoComplete="off"
+                  required
+                />
 
-              <div className="helperText">
-                This number was provided when your company purchased
-                Rhino Wrangler access.
+                <div className="helperText">
+                  This code was provided when your company purchased Rhino
+                  Wrangler access.
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="accountDivider">
               Your Login
@@ -292,7 +382,9 @@ export default function SignupPage() {
             >
               {loading
                 ? "Creating Account..."
-                : "Create Account"}
+                : accountType === "owner"
+                  ? "Create Account & Continue"
+                  : "Create Employee Account"}
             </button>
 
             <div className="footerText">
@@ -403,6 +495,60 @@ export default function SignupPage() {
           max-width: 680px;
         }
 
+        .accountChoice {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 20px;
+        }
+
+        .choiceButton {
+          padding: 18px;
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.035);
+          color: white;
+          text-align: left;
+          cursor: pointer;
+          transition:
+            border-color 0.2s ease,
+            background 0.2s ease,
+            transform 0.2s ease;
+        }
+
+        .choiceButton:hover {
+          transform: translateY(-1px);
+          border-color: rgba(245, 158, 11, 0.32);
+        }
+
+        .choiceButton.active {
+          border-color: rgba(245, 158, 11, 0.7);
+          background: rgba(245, 158, 11, 0.12);
+          box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.05);
+        }
+
+        .choiceTitle,
+        .choiceText {
+          display: block;
+        }
+
+        .choiceTitle {
+          color: #ffffff;
+          font-weight: 900;
+          line-height: 1.35;
+        }
+
+        .choiceButton.active .choiceTitle {
+          color: #fbbf24;
+        }
+
+        .choiceText {
+          margin-top: 7px;
+          color: rgba(255, 255, 255, 0.58);
+          font-size: 0.82rem;
+          line-height: 1.5;
+        }
+
         .companyNotice {
           margin-bottom: 26px;
           padding: 18px 20px;
@@ -411,10 +557,22 @@ export default function SignupPage() {
           background: rgba(245, 158, 11, 0.08);
         }
 
+        .ownerNotice {
+          border-color: rgba(34, 197, 94, 0.25);
+          background: rgba(34, 197, 94, 0.07);
+        }
+
         .companyNotice strong {
+          color: #fbbf24;
+        }
+
+        .ownerNotice > strong {
+          color: #86efac;
+        }
+
+        .companyNotice > strong {
           display: block;
           margin-bottom: 6px;
-          color: #fbbf24;
           font-weight: 800;
         }
 
@@ -462,6 +620,12 @@ export default function SignupPage() {
             border-color 0.2s ease,
             background 0.2s ease,
             box-shadow 0.2s ease;
+        }
+
+        .codeInput {
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          font-weight: 800;
         }
 
         .input::placeholder {
@@ -560,6 +724,7 @@ export default function SignupPage() {
             border-radius: 22px;
           }
 
+          .accountChoice,
           .fieldRow.twoCol {
             grid-template-columns: 1fr;
           }
