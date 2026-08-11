@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
@@ -24,7 +23,7 @@ export default function Navbar() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
  
 
-  const isLoggedIn = !!profile;
+const isLoggedIn = !!userEmail;
   const hasActiveAccess = accessStatus === "active";
   const isAdmin =
   userEmail?.trim().toLowerCase() === "landon@therhinowrangler.com";
@@ -55,47 +54,101 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function loadUserProfile() {
       setLoadingUser(true);
 
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setUserEmail(session?.user?.email || null);
+      try {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
 
-      const user = session?.user;
+        if (cancelled) return;
 
-      if (!user) {
-        setProfile(null);
-        setAccessStatus(null);
-        setLoadingUser(false);
-        return;
+        if (sessionError) {
+          console.error("Navbar session lookup failed:", sessionError);
+        }
+
+        const user = session?.user ?? null;
+
+        setUserEmail(user?.email ?? null);
+
+        if (!user || !session) {
+          setProfile(null);
+          setAccessStatus(null);
+          return;
+        }
+
+        const {
+          data: profileData,
+          error: profileError,
+        } = await supabase
+          .from("profiles")
+          .select("company_name, first_name")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (cancelled) return;
+
+        if (profileError) {
+          console.error("Navbar profile lookup failed:", profileError);
+        }
+
+        setProfile(profileData ?? null);
+
+        try {
+          const accessResponse = await fetch("/api/check-access", {
+            headers: {
+              Authorization: `Bearer ${session.access_token}`,
+            },
+          });
+
+          if (cancelled) return;
+
+          const responseText = await accessResponse.text();
+
+          let accessResult: any = {};
+
+          if (responseText) {
+            try {
+              accessResult = JSON.parse(responseText);
+            } catch {
+              console.error(
+                "Navbar access endpoint returned invalid JSON:",
+                responseText
+              );
+            }
+          }
+
+          if (!accessResponse.ok) {
+            console.error(
+              "Navbar access lookup failed:",
+              accessResponse.status,
+              accessResult
+            );
+
+            setAccessStatus(null);
+          } else {
+            setAccessStatus(
+              accessResult?.hasAccess === true
+                ? "active"
+                : accessResult?.status ?? null
+            );
+          }
+        } catch (accessError) {
+          console.error("Navbar access request failed:", accessError);
+
+          if (!cancelled) {
+            setAccessStatus(null);
+          }
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingUser(false);
+        }
       }
-
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("company_name, first_name")
-        .eq("id", user.id)
-        .single();
-
-const accessResponse = await fetch("/api/check-access", {
-  headers: {
-    Authorization: `Bearer ${session.access_token}`,
-  },
-});
-
-let accessResult: any = {};
-
-if (accessResponse.ok) {
-  accessResult = await accessResponse.json();
-}
-
-setProfile(profileData ?? null);
-setAccessStatus(
-  accessResult?.hasAccess === true
-    ? "active"
-    : accessResult?.status ?? null
-);
     }
 
     loadUserProfile();
@@ -106,7 +159,10 @@ setAccessStatus(
       loadUserProfile();
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const isActiveLink = (href: string) => {
@@ -238,9 +294,12 @@ const portalLabel = (
         Class Reservations
       </Link>
 
-        <Link href="/dashboard/admin/companies-users">
-    Companies & Users
-  </Link>
+      <Link
+        href="/dashboard/admin/companies-users"
+        className="adminDropdownLink"
+      >
+        Companies & Users
+      </Link>
     </div>
   </div>
 )}
@@ -341,7 +400,7 @@ const portalLabel = (
           </button>
 
           <div className="mobileButtons">
-            {!loadingUser && !hasActiveAccess && (
+            {!loadingUser && !isLoggedIn && (
               <>
                 <Link
                   href="/login"
@@ -352,13 +411,23 @@ const portalLabel = (
                 </Link>
 
                 <Link
-                  href="/pricing"
+                  href="/signup"
                   className="ctaButton mobileFull"
                   onClick={closeMenu}
                 >
                   Get Access
                 </Link>
               </>
+            )}
+
+            {!loadingUser && isLoggedIn && !hasActiveAccess && (
+              <Link
+                href="/pricing"
+                className="ctaButton mobileFull"
+                onClick={closeMenu}
+              >
+                Purchase Access
+              </Link>
             )}
 
             {!loadingUser && isLoggedIn && (
