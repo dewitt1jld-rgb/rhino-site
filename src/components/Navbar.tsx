@@ -78,15 +78,24 @@ export default function Navbar() {
         .eq("id", user.id)
         .single();
 
-      const { data: accessData } = await supabase
-        .from("member_access")
-        .select("status")
-        .eq("profile_id", user.id)
-        .maybeSingle();
+const accessResponse = await fetch("/api/check-access", {
+  headers: {
+    Authorization: `Bearer ${session.access_token}`,
+  },
+});
 
-      setProfile(profileData ?? null);
-      setAccessStatus(accessData?.status ?? null);
-      setLoadingUser(false);
+let accessResult: any = {};
+
+if (accessResponse.ok) {
+  accessResult = await accessResponse.json();
+}
+
+setProfile(profileData ?? null);
+setAccessStatus(
+  accessResult?.hasAccess === true
+    ? "active"
+    : accessResult?.status ?? null
+);
     }
 
     loadUserProfile();

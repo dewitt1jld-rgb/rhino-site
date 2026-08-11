@@ -132,20 +132,35 @@ if (accountType === "owner") {
   return;
 }
 
-      setSuccessMessage(
-        `Account created successfully${
-          result.company?.name
-            ? ` and connected to ${result.company.name}`
-            : ""
-        }. Redirecting you to login...`
-      );
+setSuccessMessage(
+  `Account created successfully${
+    result.company?.name
+      ? ` and connected to ${result.company.name}`
+      : ""
+  }. Signing you in...`
+);
 
-      setTimeout(() => {
-        router.push("/login");
-      }, 1600);
+const supabase = createClient();
+
+const { error: signInError } =
+  await supabase.auth.signInWithPassword({
+    email: email.trim().toLowerCase(),
+    password,
+  });
+
+if (signInError) {
+  throw new Error(
+    "Your account was created, but we could not sign you in automatically. Please log in manually."
+  );
+}
+
+router.push("/dashboard");
+
+return;
     } catch (error: any) {
       setErrorMessage(
-        error?.message || "Unable to create your account."
+        error?.message ||
+          "Unable to create your account."
       );
     } finally {
       setLoading(false);
