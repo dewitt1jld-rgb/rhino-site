@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { randomInt } from "crypto";
 import { sendEmail } from "@/lib/email";
 import { buildWelcomeEmail } from "@/lib/emails/welcomeEmail";
 
@@ -36,6 +37,159 @@ function formatAmount(amountTotal: number | null, currency: string | null) {
   }).format(amountTotal / 100);
 }
 
+
+async function generateUniqueRhinoAccessCode() {
+  for (let attempt = 0; attempt < 25; attempt++) {
+    const numericPart = randomInt(0, 100000)
+      .toString()
+      .padStart(5, "0");
+
+    const code = `RW-${numericPart}`;
+
+    const { data, error } = await supabaseAdmin
+      .from("companies")
+      .select("id")
+      .eq("customer_number", code)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data) {
+      return code;
+    }
+  }
+
+  throw new Error("Unable to generate a unique Rhino Access Code.");
+}
+
+async function ensureCompanyForPurchase({
+  profileId,
+  companyName,
+}: {
+  profileId: string;
+  companyName?: string | null;
+}) {
+  const { data: profile, error: profileError } = await supabaseAdmin
+    .from("profiles")
+    .select(`
+      id,
+      company_id,
+      company_name
+    `)
+    .eq("id", profileId)
+    .maybeSingle();
+
+  if (profileError) {
+    throw profileError;
+  }
+
+  if (!profile) {
+    throw new Error("Purchaser profile could not be found.");
+  }
+
+  /*
+    Stripe may retry webhook events.
+    If this profile is already connected to a company,
+    reuse that company instead of creating a duplicate.
+  */
+  if (profile.company_id) {
+    const { data: existingCompany, error: existingCompanyError } =
+      await supabaseAdmin
+        .from("companies")
+        .select(`
+          id,
+          company_name,
+          customer_number,
+          seat_limit,
+          access_status
+        `)
+        .eq("id", profile.company_id)
+        .single();
+
+    if (existingCompanyError) {
+      throw existingCompanyError;
+    }
+
+    if (existingCompany.access_status !== "active") {
+      const { error: activateCompanyError } = await supabaseAdmin
+        .from("companies")
+        .update({
+          access_status: "active",
+        })
+        .eq("id", existingCompany.id);
+
+      if (activateCompanyError) {
+        throw activateCompanyError;
+      }
+    }
+
+    return {
+      ...existingCompany,
+      access_status: "active",
+    };
+  }
+
+  const cleanCompanyName =
+    companyName?.trim() ||
+    profile.company_name?.trim();
+
+  if (!cleanCompanyName) {
+    throw new Error(
+      "Company name is missing from the purchaser profile and Stripe metadata."
+    );
+  }
+
+  const rhinoAccessCode =
+    await generateUniqueRhinoAccessCode();
+
+  const { data: company, error: companyError } = await supabaseAdmin
+    .from("companies")
+    .insert({
+      company_name: cleanCompanyName,
+      customer_number: rhinoAccessCode,
+      seat_limit: 7,
+      access_status: "active",
+    })
+    .select(`
+      id,
+      company_name,
+      customer_number,
+      seat_limit,
+      access_status
+    `)
+    .single();
+
+  if (companyError) {
+    throw companyError;
+  }
+
+  const { error: profileUpdateError } = await supabaseAdmin
+    .from("profiles")
+    .update({
+      company_id: company.id,
+      company_name: cleanCompanyName,
+      role: "company_admin",
+      is_active: true,
+    })
+    .eq("id", profileId);
+
+  if (profileUpdateError) {
+    /*
+      Avoid leaving behind an orphaned company if linking the owner fails.
+    */
+    await supabaseAdmin
+      .from("companies")
+      .delete()
+      .eq("id", company.id);
+
+    throw profileUpdateError;
+  }
+
+  return company;
+}
+
 async function sendAdminSitePurchaseEmail({
   userEmail,
   extraReceiptEmail,
@@ -45,6 +199,7 @@ async function sendAdminSitePurchaseEmail({
   lastName,
   companyName,
   stripeCustomerId,
+  rhinoAccessCode,
 }: {
   userEmail?: string | null;
   extraReceiptEmail?: string | null;
@@ -54,6 +209,7 @@ async function sendAdminSitePurchaseEmail({
   lastName?: string | null;
   companyName?: string | null;
   stripeCustomerId?: string | null;
+  rhinoAccessCode?: string | null;
 }) {
   const adminEmails =
     process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "";
@@ -99,7 +255,8 @@ async function sendAdminSitePurchaseEmail({
           <strong>Stripe Customer ID:</strong> ${
             stripeCustomerId || "Unknown"
           }<br />
-          <strong>Stripe Session:</strong> ${stripeSessionId || "Unknown"}
+          <strong>Stripe Session:</strong> ${stripeSessionId || "Unknown"}<br />
+          <strong>Rhino Access Code:</strong> ${rhinoAccessCode || "Unknown"}
         </p>
 
         <p><strong>Status:</strong> Member access should now be active.</p>
@@ -407,13 +564,39 @@ if (!updatedRows || updatedRows.length === 0) {
     return res.status(200).json({ received: true });
   }
 }
+
+/*
+--------------------------------------------------
+CREATE / ACTIVATE COMPANY ACCOUNT
+--------------------------------------------------
+*/
+const company = await ensureCompanyForPurchase({
+  profileId,
+  companyName: metadata.company_name,
+});
+
+const rhinoAccessCode =
+  company.customer_number;
+
+console.log("Company access ready:", {
+  profileId,
+  companyId: company.id,
+  companyName: company.company_name,
+  rhinoAccessCode,
+  seatLimit: company.seat_limit,
+});
+
 console.log("Sending purchase welcome email to:", userEmail);
 
       if (userEmail) {
         await sendEmail({
           to: userEmail,
           subject: "Welcome to The Rhino Wrangler",
-          html: buildWelcomeEmail(userEmail),
+          html: buildWelcomeEmail(
+            userEmail,
+            rhinoAccessCode,
+            company.company_name
+          ),
         });
       }
 
@@ -450,6 +633,7 @@ await sendAdminSitePurchaseEmail({
   companyName: metadata.company_name,
   stripeCustomerId:
     typeof session.customer === "string" ? session.customer : session.customer?.id,
+  rhinoAccessCode,
 });
       console.log("Member access activated:", profileId);
     } catch (error) {

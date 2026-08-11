@@ -1,9 +1,14 @@
-export function buildWelcomeEmail(email: string) {
+export function buildWelcomeEmail(
+  email: string,
+  rhinoAccessCode: string,
+  companyName: string
+) {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
     "https://www.therhinowranglertesting.com";
 
   const dashboardUrl = `${siteUrl}/dashboard`;
+  const signupUrl = `${siteUrl}/signup`;
   const contactUrl = `${siteUrl}/contact`;
   const privacyUrl = `${siteUrl}/privacy`;
 
@@ -21,7 +26,7 @@ export function buildWelcomeEmail(email: string) {
       <tr>
         <td align="center">
           <table width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;background:#0b1220;border:1px solid #3f2f12;border-radius:24px;overflow:hidden;">
-            
+
             <tr>
               <td align="center" style="padding:34px 28px 18px;">
                 <img src="${logoUrl}" alt="The Rhino Wrangler" style="max-width:180px;width:100%;height:auto;margin-bottom:22px;display:block;" />
@@ -33,7 +38,7 @@ export function buildWelcomeEmail(email: string) {
                 </h1>
                 <p style="margin:18px auto 0;max-width:540px;color:#d1d5db;font-size:16px;line-height:1.7;">
                   Thank you for purchasing access to The Rhino Wrangler Training Platform.
-                  Your account is now active and ready to use.
+                  Your company account is now active and ready to use.
                 </p>
               </td>
             </tr>
@@ -92,14 +97,38 @@ export function buildWelcomeEmail(email: string) {
                   </h2>
 
                   <p style="margin:0;color:#d1d5db;font-size:15px;line-height:1.7;">
-                    Your Rhino Wrangler subscription is licensed to your company, not just one individual.
-                    Feel free to share your login credentials with authorized employees, operators, estimators,
-                    programmers, managers, and shop team members within your organization.
+                    Your Rhino Wrangler access is licensed to your company. Each authorized employee should create
+                    their own account so their login, course progress, classes, and account activity remain separate.
+                  </p>
+
+                  <p style="margin:18px 0 0;color:#ffffff;font-size:15px;line-height:1.7;">
+                    <strong>Company:</strong> ${companyName}
+                  </p>
+
+                  <div style="margin:20px 0;padding:18px;border-radius:14px;background:#050b14;border:1px solid #f59e0b;text-align:center;">
+                    <p style="margin:0 0 7px;color:#9ca3af;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">
+                      Rhino Access Code
+                    </p>
+
+                    <p style="margin:0;color:#f59e0b;font-size:30px;font-weight:900;letter-spacing:.08em;">
+                      ${rhinoAccessCode}
+                    </p>
+                  </div>
+
+                  <p style="margin:0;color:#d1d5db;font-size:15px;line-height:1.7;">
+                    Give this Rhino Access Code and your company name to authorized employees.
+                    They can use them when creating their own Rhino Wrangler account.
                   </p>
 
                   <p style="margin:16px 0 0;color:#ffffff;font-size:15px;line-height:1.7;">
-                    <strong>Login Email:</strong>
+                    <strong>Your Login Email:</strong>
                     <a href="mailto:${email}" style="color:#f59e0b;text-decoration:none;">${email}</a>
+                  </p>
+
+                  <p style="margin:14px 0 0;">
+                    <a href="${signupUrl}" style="color:#f59e0b;font-weight:800;text-decoration:none;">
+                      Employee Account Signup →
+                    </a>
                   </p>
                 </div>
               </td>
@@ -139,7 +168,7 @@ export function buildWelcomeEmail(email: string) {
                 <div style="border-top:1px solid #263244;padding-top:22px;">
                   <p style="margin:0 0 10px;color:#9ca3af;font-size:13px;line-height:1.7;">
                     <strong style="color:#ffffff;">Billing Reminder:</strong>
-                    Your initial access has been activated. Your lifetime access purchase has been activated. There are no annual renewal charges for this membership.
+                    Your lifetime access purchase has been activated. There are no annual renewal charges for this membership.
                   </p>
 
                   <p style="margin:0 0 10px;color:#9ca3af;font-size:13px;line-height:1.7;">

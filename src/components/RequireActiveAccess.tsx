@@ -6,48 +6,135 @@ type RequireActiveAccessProps = {
   children: React.ReactNode;
 };
 
+type AccessResponse = {
+  status?: string;
+  hasAccess?: boolean;
+  source?: "company" | "member_access";
+  reason?: string;
+  company?: {
+    id: string;
+    name: string;
+    customerNumber: string;
+    seatLimit: number;
+  };
+  error?: string;
+};
+
 export default function RequireActiveAccess({
   children,
 }: RequireActiveAccessProps) {
   const router = useRouter();
+
   const [checking, setChecking] = useState(true);
+
   const supabase = createClient();
 
   useEffect(() => {
     let mounted = true;
 
     async function checkAccess() {
+      /*
+      ---------------------------------------
+      1. GET CURRENT SUPABASE SESSION
+      ---------------------------------------
+      */
+
       const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
 
       if (!mounted) return;
 
-      if (userError || !user) {
+      if (
+        sessionError ||
+        !session?.user ||
+        !session.access_token
+      ) {
         router.replace("/login");
         return;
       }
 
-      const { data: access, error: accessError } = await supabase
-        .from("member_access")
-        .select("status")
-        .eq("profile_id", user.id)
-        .single();
+      /*
+      ---------------------------------------
+      2. ASK OUR SERVER TO CHECK ACCESS
+      ---------------------------------------
 
-      if (!mounted) return;
+      This is important.
 
-      if (accessError || !access) {
-        router.replace("/account-inactive?noAccess=1");
-        return;
+      The browser no longer decides access
+      by reading member_access directly.
+
+      Our API checks:
+
+      NEW USERS:
+      profiles -> company -> access_status
+
+      OLD USERS:
+      member_access -> status
+      */
+
+      try {
+        const response = await fetch("/api/check-access", {
+          method: "GET",
+
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
+
+        if (!mounted) return;
+
+        if (response.status === 401) {
+          router.replace("/login");
+          return;
+        }
+
+        const access: AccessResponse =
+          await response.json();
+
+        if (!response.ok) {
+          console.error(
+            "Access check failed:",
+            access
+          );
+
+          router.replace(
+            "/account-inactive?noAccess=1"
+          );
+
+          return;
+        }
+
+        /*
+        ---------------------------------------
+        3. GRANT OR DENY ACCESS
+        ---------------------------------------
+        */
+
+        if (
+          access.hasAccess === true ||
+          access.status === "active"
+        ) {
+          setChecking(false);
+          return;
+        }
+
+        router.replace(
+          "/account-inactive?noAccess=1"
+        );
+      } catch (error) {
+        console.error(
+          "Access verification error:",
+          error
+        );
+
+        if (!mounted) return;
+
+        router.replace(
+          "/account-inactive?noAccess=1"
+        );
       }
-
-      if (access.status !== "active") {
-        router.replace("/account-inactive?noAccess=1");
-        return;
-      }
-
-      setChecking(false);
     }
 
     checkAccess();
@@ -55,7 +142,7 @@ export default function RequireActiveAccess({
     return () => {
       mounted = false;
     };
-  }, [router]);
+  }, [router, supabase]);
 
   if (checking) {
     return (
@@ -63,8 +150,12 @@ export default function RequireActiveAccess({
         <div className="guardShell">
           <div className="guardCard">
             <div className="spinner" />
+
             <h2>Checking Access</h2>
-            <p>Please wait while we verify your membership.</p>
+
+            <p>
+              Please wait while we verify your membership.
+            </p>
           </div>
         </div>
 
@@ -74,7 +165,11 @@ export default function RequireActiveAccess({
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(180deg, #070b12 0%, #05070c 100%);
+            background: linear-gradient(
+              180deg,
+              #070b12 0%,
+              #05070c 100%
+            );
             padding: 24px;
           }
 
@@ -84,9 +179,16 @@ export default function RequireActiveAccess({
             border-radius: 24px;
             padding: 32px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.04);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid
+              rgba(255, 255, 255, 0.08);
+            background: rgba(
+              255,
+              255,
+              255,
+              0.04
+            );
+            box-shadow: 0 20px 50px
+              rgba(0, 0, 0, 0.3);
           }
 
           .spinner {
@@ -94,9 +196,11 @@ export default function RequireActiveAccess({
             height: 42px;
             margin: 0 auto 18px;
             border-radius: 999px;
-            border: 3px solid rgba(255, 255, 255, 0.18);
+            border: 3px solid
+              rgba(255, 255, 255, 0.18);
             border-top-color: #ffffff;
-            animation: spin 0.8s linear infinite;
+            animation: spin 0.8s
+              linear infinite;
           }
 
           h2 {
@@ -108,7 +212,12 @@ export default function RequireActiveAccess({
 
           p {
             margin: 0;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(
+              255,
+              255,
+              255,
+              0.7
+            );
             line-height: 1.7;
           }
 

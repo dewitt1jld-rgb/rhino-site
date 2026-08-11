@@ -3,23 +3,33 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 
+type AccountType = "owner" | "employee";
+
 export default function SignupPage() {
   const router = useRouter();
 
+  const [accountType, setAccountType] = useState<AccountType>("owner");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [rhinoAccessCode, setRhinoAccessCode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const supabase = createClient();
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  function changeAccountType(type: AccountType) {
+    setAccountType(type);
+    setErrorMessage("");
+    setSuccessMessage("");
+  }
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     setErrorMessage("");
     setSuccessMessage("");
 
@@ -38,13 +48,18 @@ export default function SignupPage() {
       return;
     }
 
+    if (accountType === "employee" && !rhinoAccessCode.trim()) {
+      setErrorMessage("Please enter your Rhino Access Code.");
+      return;
+    }
+
     if (!email.trim()) {
       setErrorMessage("Please enter your email address.");
       return;
     }
 
-    if (password.length < 6) {
-      setErrorMessage("Password must be at least 6 characters.");
+    if (!password) {
+      setErrorMessage("Please enter a password.");
       return;
     }
 
@@ -55,33 +70,86 @@ export default function SignupPage() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-      options: {
-        data: {
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
-          company_name: companyName.trim(),
+    try {
+      const response = await fetch("/api/register-employee", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      },
+        body: JSON.stringify({
+          accountType,
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          companyName: companyName.trim(),
+          rhinoAccessCode:
+            accountType === "employee"
+              ? rhinoAccessCode.trim().toUpperCase()
+              : undefined,
+          email: email.trim().toLowerCase(),
+          password,
+        }),
+      });
+
+      const responseText = await response.text();
+
+      let result: any = {};
+
+      try {
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch {
+        throw new Error(
+          responseText || "The server returned an invalid response."
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          result.error || "Unable to create your account."
+        );
+      }
+
+if (accountType === "owner") {
+  setSuccessMessage(
+    "Your account has been created. Signing you in..."
+  );
+
+  const supabase = createClient();
+
+  const { error: signInError } =
+    await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
     });
 
-    setLoading(false);
-
-    if (error) {
-      setErrorMessage(error.message);
-      return;
-    }
-
-
-    setSuccessMessage(
-      "Account created successfully. A subscription is still required before training access is unlocked. Redirecting you to pricing now..."
+  if (signInError) {
+    throw new Error(
+      "Your account was created, but we could not sign you in automatically. Please log in manually."
     );
+  }
 
-    setTimeout(() => {
-      router.push("/pricing?newSignup=1");
-    }, 1800);
+  router.push("/pricing");
+
+  return;
+}
+
+      setSuccessMessage(
+        `Account created successfully${
+          result.company?.name
+            ? ` and connected to ${result.company.name}`
+            : ""
+        }. Redirecting you to login...`
+      );
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 1600);
+    } catch (error: any) {
+      setErrorMessage(
+        error?.message || "Unable to create your account."
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -93,14 +161,79 @@ export default function SignupPage() {
         <div className="signupCard">
           <div className="headerBlock">
             <div className="eyebrow">Create Your Account</div>
-            <h1 className="pageTitle">Join The Rhino Wrangler</h1>
+
+            <h1 className="pageTitle">
+              Join The Rhino Wrangler
+            </h1>
+
             <p className="pageText">
-              Create your account below. Please note that creating an account does
-              not automatically unlock training access. After signup, you will be
-              redirected to pricing so you can review subscription options and
-              preview available content.
+              Create your own Rhino Wrangler login. If your company is new,
+              create the owner account first and purchase access after signing
+              in. If your company already has access, join it using the Rhino
+              Access Code provided by your company administrator.
             </p>
           </div>
+
+          <div className="accountChoice">
+            <button
+              type="button"
+              className={
+                accountType === "owner"
+                  ? "choiceButton active"
+                  : "choiceButton"
+              }
+              onClick={() => changeAccountType("owner")}
+            >
+              <span className="choiceTitle">
+                I&apos;m Purchasing for My Company
+              </span>
+
+              <span className="choiceText">
+                Start a new company account. No Rhino Access Code is needed yet.
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className={
+                accountType === "employee"
+                  ? "choiceButton active"
+                  : "choiceButton"
+              }
+              onClick={() => changeAccountType("employee")}
+            >
+              <span className="choiceTitle">
+                My Company Already Has Access
+              </span>
+
+              <span className="choiceText">
+                Join an existing company using its Rhino Access Code.
+              </span>
+            </button>
+          </div>
+
+          {accountType === "owner" ? (
+            <div className="companyNotice ownerNotice">
+              <strong>Starting a new company account</strong>
+
+              <p>
+                Create your login below. After signing in, you&apos;ll purchase
+                Rhino Wrangler access. Once payment is complete, your company
+                will receive a unique Rhino Access Code in the format
+                <strong> RW-#####</strong> and a default limit of 7 users.
+              </p>
+            </div>
+          ) : (
+            <div className="companyNotice">
+              <strong>Company access required</strong>
+
+              <p>
+                Your company must already have active Rhino Wrangler access.
+                Ask your company administrator for the company name and
+                Rhino Access Code associated with the account.
+              </p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="formGrid">
             <div className="fieldRow twoCol">
@@ -108,6 +241,7 @@ export default function SignupPage() {
                 <label htmlFor="firstName" className="label">
                   First Name
                 </label>
+
                 <input
                   id="firstName"
                   type="text"
@@ -116,6 +250,7 @@ export default function SignupPage() {
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="John"
                   autoComplete="given-name"
+                  required
                 />
               </div>
 
@@ -123,6 +258,7 @@ export default function SignupPage() {
                 <label htmlFor="lastName" className="label">
                   Last Name
                 </label>
+
                 <input
                   id="lastName"
                   type="text"
@@ -131,29 +267,67 @@ export default function SignupPage() {
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Doe"
                   autoComplete="family-name"
+                  required
                 />
               </div>
+            </div>
+
+            <div className="companyDivider">
+              Company Information
             </div>
 
             <div className="fieldGroup">
               <label htmlFor="companyName" className="label">
                 Company Name
               </label>
+
               <input
                 id="companyName"
                 type="text"
                 className="input"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Company Name"
+                placeholder="Joe's Glass"
                 autoComplete="organization"
+                required
               />
+            </div>
+
+            {accountType === "employee" && (
+              <div className="fieldGroup">
+                <label htmlFor="rhinoAccessCode" className="label">
+                  Rhino Access Code
+                </label>
+
+                <input
+                  id="rhinoAccessCode"
+                  type="text"
+                  className="input codeInput"
+                  value={rhinoAccessCode}
+                  onChange={(e) =>
+                    setRhinoAccessCode(e.target.value.toUpperCase())
+                  }
+                  placeholder="RW-12345"
+                  autoComplete="off"
+                  required
+                />
+
+                <div className="helperText">
+                  This code was provided when your company purchased Rhino
+                  Wrangler access.
+                </div>
+              </div>
+            )}
+
+            <div className="accountDivider">
+              Your Login
             </div>
 
             <div className="fieldGroup">
               <label htmlFor="email" className="label">
                 Email Address
               </label>
+
               <input
                 id="email"
                 type="email"
@@ -162,6 +336,7 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@company.com"
                 autoComplete="email"
+                required
               />
             </div>
 
@@ -170,6 +345,7 @@ export default function SignupPage() {
                 <label htmlFor="password" className="label">
                   Password
                 </label>
+
                 <input
                   id="password"
                   type="password"
@@ -178,6 +354,7 @@ export default function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
                   autoComplete="new-password"
+                  required
                 />
               </div>
 
@@ -185,6 +362,7 @@ export default function SignupPage() {
                 <label htmlFor="confirmPassword" className="label">
                   Confirm Password
                 </label>
+
                 <input
                   id="confirmPassword"
                   type="password"
@@ -193,17 +371,33 @@ export default function SignupPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm password"
                   autoComplete="new-password"
+                  required
                 />
               </div>
             </div>
 
-            {errorMessage ? <div className="message error">{errorMessage}</div> : null}
-            {successMessage ? (
-              <div className="message success">{successMessage}</div>
+            {errorMessage ? (
+              <div className="message error">
+                {errorMessage}
+              </div>
             ) : null}
 
-            <button type="submit" className="primaryButton" disabled={loading}>
-              {loading ? "Creating Account..." : "Create Account"}
+            {successMessage ? (
+              <div className="message success">
+                {successMessage}
+              </div>
+            ) : null}
+
+            <button
+              type="submit"
+              className="primaryButton"
+              disabled={loading}
+            >
+              {loading
+                ? "Creating Account..."
+                : accountType === "owner"
+                  ? "Create Account & Continue"
+                  : "Create Employee Account"}
             </button>
 
             <div className="footerText">
@@ -226,9 +420,21 @@ export default function SignupPage() {
           position: relative;
           overflow: hidden;
           background:
-            radial-gradient(circle at top right, rgba(88, 130, 255, 0.12), transparent 22%),
-            radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.05), transparent 18%),
-            linear-gradient(180deg, #070b12 0%, #05070c 100%);
+            radial-gradient(
+              circle at top right,
+              rgba(88, 130, 255, 0.12),
+              transparent 22%
+            ),
+            radial-gradient(
+              circle at bottom left,
+              rgba(255, 255, 255, 0.05),
+              transparent 18%
+            ),
+            linear-gradient(
+              180deg,
+              #070b12 0%,
+              #05070c 100%
+            );
         }
 
         .backgroundGlow {
@@ -273,7 +479,7 @@ export default function SignupPage() {
         }
 
         .headerBlock {
-          margin-bottom: 28px;
+          margin-bottom: 24px;
         }
 
         .eyebrow {
@@ -300,6 +506,93 @@ export default function SignupPage() {
           font-size: 1rem;
           line-height: 1.8;
           max-width: 680px;
+        }
+
+        .accountChoice {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 20px;
+        }
+
+        .choiceButton {
+          padding: 18px;
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.035);
+          color: white;
+          text-align: left;
+          cursor: pointer;
+          transition:
+            border-color 0.2s ease,
+            background 0.2s ease,
+            transform 0.2s ease;
+        }
+
+        .choiceButton:hover {
+          transform: translateY(-1px);
+          border-color: rgba(245, 158, 11, 0.32);
+        }
+
+        .choiceButton.active {
+          border-color: rgba(245, 158, 11, 0.7);
+          background: rgba(245, 158, 11, 0.12);
+          box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.05);
+        }
+
+        .choiceTitle,
+        .choiceText {
+          display: block;
+        }
+
+        .choiceTitle {
+          color: #ffffff;
+          font-weight: 900;
+          line-height: 1.35;
+        }
+
+        .choiceButton.active .choiceTitle {
+          color: #fbbf24;
+        }
+
+        .choiceText {
+          margin-top: 7px;
+          color: rgba(255, 255, 255, 0.58);
+          font-size: 0.82rem;
+          line-height: 1.5;
+        }
+
+        .companyNotice {
+          margin-bottom: 26px;
+          padding: 18px 20px;
+          border-radius: 16px;
+          border: 1px solid rgba(245, 158, 11, 0.28);
+          background: rgba(245, 158, 11, 0.08);
+        }
+
+        .ownerNotice {
+          border-color: rgba(34, 197, 94, 0.25);
+          background: rgba(34, 197, 94, 0.07);
+        }
+
+        .companyNotice strong {
+          color: #fbbf24;
+        }
+
+        .ownerNotice > strong {
+          color: #86efac;
+        }
+
+        .companyNotice > strong {
+          display: block;
+          margin-bottom: 6px;
+          font-weight: 800;
+        }
+
+        .companyNotice p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.6;
         }
 
         .formGrid {
@@ -336,7 +629,16 @@ export default function SignupPage() {
           padding: 0 16px;
           font-size: 1rem;
           outline: none;
-          transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+          transition:
+            border-color 0.2s ease,
+            background 0.2s ease,
+            box-shadow 0.2s ease;
+        }
+
+        .codeInput {
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          font-weight: 800;
         }
 
         .input::placeholder {
@@ -344,9 +646,28 @@ export default function SignupPage() {
         }
 
         .input:focus {
-          border-color: rgba(255, 255, 255, 0.22);
+          border-color: rgba(245, 158, 11, 0.55);
           background: rgba(255, 255, 255, 0.07);
-          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+          box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.06);
+        }
+
+        .companyDivider,
+        .accountDivider {
+          margin-top: 6px;
+          padding-top: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          color: #f59e0b;
+          font-size: 0.76rem;
+          font-weight: 900;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+        }
+
+        .helperText {
+          margin-top: -2px;
+          color: rgba(255, 255, 255, 0.48);
+          font-size: 0.82rem;
+          line-height: 1.5;
         }
 
         .message {
@@ -373,17 +694,20 @@ export default function SignupPage() {
           min-height: 56px;
           border: none;
           border-radius: 16px;
-          background: rgba(255, 255, 255, 0.1);
-          color: #ffffff;
+          background: #f59e0b;
+          color: #111827;
           font-size: 1rem;
-          font-weight: 800;
+          font-weight: 900;
           cursor: pointer;
-          transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+          transition:
+            transform 0.2s ease,
+            background 0.2s ease,
+            opacity 0.2s ease;
         }
 
         .primaryButton:hover:not(:disabled) {
           transform: translateY(-1px);
-          background: rgba(255, 255, 255, 0.16);
+          background: #fbbf24;
         }
 
         .primaryButton:disabled {
@@ -398,7 +722,7 @@ export default function SignupPage() {
         }
 
         .inlineLink {
-          color: #ffffff;
+          color: #fbbf24;
           font-weight: 800;
           text-decoration: none;
         }
@@ -413,6 +737,7 @@ export default function SignupPage() {
             border-radius: 22px;
           }
 
+          .accountChoice,
           .fieldRow.twoCol {
             grid-template-columns: 1fr;
           }
