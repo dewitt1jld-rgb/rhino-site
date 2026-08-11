@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase";
 
 type AccountType = "owner" | "employee";
 
@@ -107,17 +108,29 @@ export default function SignupPage() {
         );
       }
 
-      if (accountType === "owner") {
-        setSuccessMessage(
-          "Your account has been created. Redirecting you to login so you can purchase company access..."
-        );
+if (accountType === "owner") {
+  setSuccessMessage(
+    "Your account has been created. Signing you in..."
+  );
 
-        setTimeout(() => {
-          router.push("/login");
-        }, 1600);
+  const supabase = createClient();
 
-        return;
-      }
+  const { error: signInError } =
+    await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    });
+
+  if (signInError) {
+    throw new Error(
+      "Your account was created, but we could not sign you in automatically. Please log in manually."
+    );
+  }
+
+  router.push("/pricing");
+
+  return;
+}
 
       setSuccessMessage(
         `Account created successfully${

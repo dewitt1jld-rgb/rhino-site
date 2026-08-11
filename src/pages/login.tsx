@@ -179,33 +179,7 @@ try {
     <>
       <div className="pageShell">
         <div className="contentWrap">
-          <div className="migrationBanner">
-            <h2>
-              Already purchased training on our previous website?
-            </h2>
 
-            <p>
-              If you purchased Rhino Wrangler training before the new
-              platform launched, you do <strong>not</strong> need to
-              purchase again. Submit a transfer request and we'll move
-              your access over.
-            </p>
-
-            <Link
-              href="/transfer-access"
-              className="migrationButton"
-            >
-              <span
-                style={{
-                  color: "#f59e0b",
-                  fontWeight: 900,
-                  textDecoration: "none",
-                }}
-              >
-                Transfer My Existing Access
-              </span>
-            </Link>
-          </div>
 
           <div className="loginCard">
             <h1 className="title">
