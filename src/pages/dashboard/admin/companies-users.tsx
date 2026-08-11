@@ -101,6 +101,20 @@ export default function CompaniesUsersPage() {
   const [error, setError] =
     useState("");
 
+  const [
+    updatingCompanyId,
+    setUpdatingCompanyId,
+  ] = useState<string | null>(null);
+
+  const [
+    seatMessage,
+    setSeatMessage,
+  ] = useState<{
+    companyId: string;
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
   useEffect(() => {
     loadCompanies();
   }, []);
@@ -134,20 +148,21 @@ export default function CompaniesUsersPage() {
           }
         );
 
-const responseText = await response.text();
+      const responseText =
+        await response.text();
 
-let result: any = {};
+      let result: any = {};
 
-try {
-  result = responseText
-    ? JSON.parse(responseText)
-    : {};
-} catch {
-  throw new Error(
-    responseText ||
-      "The server returned an invalid response."
-  );
-}
+      try {
+        result = responseText
+          ? JSON.parse(responseText)
+          : {};
+      } catch {
+        throw new Error(
+          responseText ||
+            "The server returned an invalid response."
+        );
+      }
 
       if (
         response.status === 401
@@ -180,6 +195,170 @@ try {
       );
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function updateSeatLimit(
+    company: Company,
+    newSeatLimit: number
+  ) {
+    setSeatMessage(null);
+
+    if (
+      newSeatLimit <
+      company.usedSeats
+    ) {
+      setSeatMessage({
+        companyId: company.id,
+        type: "error",
+        text:
+          `Cannot reduce the seat limit below ${company.usedSeats} active user${company.usedSeats === 1 ? "" : "s"}.`,
+      });
+
+      return;
+    }
+
+    if (newSeatLimit < 1) {
+      setSeatMessage({
+        companyId: company.id,
+        type: "error",
+        text:
+          "Seat limit must be at least 1.",
+      });
+
+      return;
+    }
+
+    const supabase =
+      createClient();
+
+    const {
+      data: { session },
+    } =
+      await supabase.auth.getSession();
+
+    if (!session) {
+      router.replace("/login");
+      return;
+    }
+
+    setUpdatingCompanyId(
+      company.id
+    );
+
+    try {
+      const response =
+        await fetch(
+          "/api/admin/companies-users",
+          {
+            method: "PATCH",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                `Bearer ${session.access_token}`,
+            },
+
+            body: JSON.stringify({
+              companyId:
+                company.id,
+
+              seatLimit:
+                newSeatLimit,
+            }),
+          }
+        );
+
+      const responseText =
+        await response.text();
+
+      let result: any = {};
+
+      try {
+        result = responseText
+          ? JSON.parse(responseText)
+          : {};
+      } catch {
+        throw new Error(
+          responseText ||
+            "The server returned an invalid response."
+        );
+      }
+
+      if (
+        response.status === 401
+      ) {
+        router.replace("/login");
+        return;
+      }
+
+      if (
+        response.status === 403
+      ) {
+        router.replace("/dashboard");
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          result.error ||
+            "Unable to update seat limit."
+        );
+      }
+
+      setCompanies(
+        (currentCompanies) =>
+          currentCompanies.map(
+            (currentCompany) =>
+              currentCompany.id ===
+              company.id
+                ? {
+                    ...currentCompany,
+
+                    seatLimit:
+                      result.company
+                        .seatLimit,
+
+                    usedSeats:
+                      result.company
+                        .usedSeats,
+
+                    availableSeats:
+                      result.company
+                        .availableSeats,
+                  }
+                : currentCompany
+          )
+      );
+
+      setSeatMessage({
+        companyId:
+          company.id,
+
+        type:
+          "success",
+
+        text:
+          `${company.companyName} now has ${result.company.seatLimit} seat${result.company.seatLimit === 1 ? "" : "s"}.`,
+      });
+    } catch (error: any) {
+      setSeatMessage({
+        companyId:
+          company.id,
+
+        type:
+          "error",
+
+        text:
+          error?.message ||
+          "Unable to update seat limit.",
+      });
+    } finally {
+      setUpdatingCompanyId(
+        null
+      );
     }
   }
 
@@ -286,6 +465,16 @@ try {
                 expandedCompany ===
                 company.id;
 
+              const updatingSeats =
+                updatingCompanyId ===
+                company.id;
+
+              const companySeatMessage =
+                seatMessage?.companyId ===
+                company.id
+                  ? seatMessage
+                  : null;
+
               return (
                 <section
                   className="companyCard"
@@ -371,6 +560,99 @@ try {
 
                   {expanded && (
                     <div className="usersSection">
+                      <div className="seatControlPanel">
+                        <div>
+                          <p className="seatControlEyebrow">
+                            Seat Management
+                          </p>
+
+                          <h3>
+                            Company Seat Limit
+                          </h3>
+
+                          <p className="seatControlHelp">
+                            This company is using{" "}
+                            <strong>
+                              {
+                                company.usedSeats
+                              }
+                            </strong>{" "}
+                            of{" "}
+                            <strong>
+                              {
+                                company.seatLimit
+                              }
+                            </strong>{" "}
+                            seats.
+                          </p>
+                        </div>
+
+                        <div className="seatControlActions">
+                          <button
+                            type="button"
+                            className="seatButton removeSeat"
+                            disabled={
+                              updatingSeats ||
+                              company.seatLimit <=
+                                company.usedSeats
+                            }
+                            onClick={() =>
+                              updateSeatLimit(
+                                company,
+                                company.seatLimit -
+                                  1
+                              )
+                            }
+                          >
+                            − Remove Seat
+                          </button>
+
+                          <div className="seatLimitDisplay">
+                            <span>
+                              Seat Limit
+                            </span>
+
+                            <strong>
+                              {
+                                company.seatLimit
+                              }
+                            </strong>
+                          </div>
+
+                          <button
+                            type="button"
+                            className="seatButton addSeat"
+                            disabled={
+                              updatingSeats
+                            }
+                            onClick={() =>
+                              updateSeatLimit(
+                                company,
+                                company.seatLimit +
+                                  1
+                              )
+                            }
+                          >
+                            + Add Seat
+                          </button>
+                        </div>
+                      </div>
+
+                      {companySeatMessage && (
+                        <div
+                          className={
+                            companySeatMessage.type ===
+                            "success"
+                              ? "seatMessage seatSuccess"
+                              : "seatMessage seatError"
+                          }
+                        >
+                          {
+                            companySeatMessage.text
+                          }
+                        </div>
+                      )}
+
                       <div className="usersHeading">
                         <h3>
                           Employees
@@ -838,6 +1120,201 @@ function Styles() {
           );
       }
 
+      /*
+      ----------------------------------
+      SEAT MANAGEMENT
+      ----------------------------------
+      */
+
+      .seatControlPanel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin: 24px 0 0;
+        padding: 20px;
+        border: 1px solid
+          rgba(
+            245,
+            158,
+            11,
+            0.22
+          );
+        border-radius: 16px;
+        background: rgba(
+          245,
+          158,
+          11,
+          0.06
+        );
+      }
+
+      .seatControlEyebrow {
+        margin: 0 0 5px;
+        color: #f59e0b;
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .seatControlPanel h3 {
+        margin: 0;
+        color: white;
+        font-size: 19px;
+      }
+
+      .seatControlHelp {
+        margin: 7px 0 0;
+        color: rgba(
+          255,
+          255,
+          255,
+          0.6
+        );
+        font-size: 14px;
+      }
+
+      .seatControlActions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 0 0 auto;
+      }
+
+      .seatButton {
+        min-height: 42px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font: inherit;
+        font-weight: 900;
+        cursor: pointer;
+        transition:
+          transform 0.18s ease,
+          opacity 0.18s ease;
+      }
+
+      .seatButton:hover:not(
+          :disabled
+        ) {
+        transform:
+          translateY(-1px);
+      }
+
+      .seatButton:disabled {
+        opacity: 0.38;
+        cursor: not-allowed;
+      }
+
+      .addSeat {
+        border: 1px solid
+          rgba(
+            34,
+            197,
+            94,
+            0.32
+          );
+        background: rgba(
+          34,
+          197,
+          94,
+          0.13
+        );
+        color: #86efac;
+      }
+
+      .removeSeat {
+        border: 1px solid
+          rgba(
+            239,
+            68,
+            68,
+            0.28
+          );
+        background: rgba(
+          239,
+          68,
+          68,
+          0.09
+        );
+        color: #fecaca;
+      }
+
+      .seatLimitDisplay {
+        min-width: 82px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        background: rgba(
+          255,
+          255,
+          255,
+          0.055
+        );
+        text-align: center;
+      }
+
+      .seatLimitDisplay span {
+        display: block;
+        color: rgba(
+          255,
+          255,
+          255,
+          0.45
+        );
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .seatLimitDisplay strong {
+        display: block;
+        margin-top: 2px;
+        color: white;
+        font-size: 20px;
+      }
+
+      .seatMessage {
+        margin-top: 12px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .seatSuccess {
+        border: 1px solid
+          rgba(
+            34,
+            197,
+            94,
+            0.28
+          );
+        background: rgba(
+          34,
+          197,
+          94,
+          0.08
+        );
+        color: #86efac;
+      }
+
+      .seatError {
+        border: 1px solid
+          rgba(
+            239,
+            68,
+            68,
+            0.28
+          );
+        background: rgba(
+          239,
+          68,
+          68,
+          0.08
+        );
+        color: #fecaca;
+      }
+
       .usersHeading {
         display: flex;
         justify-content: space-between;
@@ -1074,6 +1551,16 @@ function Styles() {
               minmax(0, 1fr)
             );
         }
+
+        .seatControlPanel {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .seatControlActions {
+          justify-content: flex-start;
+          flex-wrap: wrap;
+        }
       }
 
       @media (
@@ -1108,6 +1595,20 @@ function Styles() {
         .userStats {
           grid-template-columns:
             1fr;
+        }
+
+        .seatControlActions {
+          display: grid;
+          grid-template-columns:
+            1fr;
+        }
+
+        .seatLimitDisplay {
+          order: -1;
+        }
+
+        .seatButton {
+          width: 100%;
         }
       }
     `}</style>

@@ -12,8 +12,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
+  if (!["GET", "PATCH"].includes(req.method || "")) {
+    res.setHeader("Allow", "GET, PATCH");
 
     return res.status(405).json({
       error: "Method not allowed.",
@@ -119,6 +119,155 @@ export default async function handler(
       return res.status(403).json({
         error:
           "Admin access required.",
+      });
+    }
+
+    /*
+    --------------------------------------------------
+    UPDATE COMPANY SEAT LIMIT
+    --------------------------------------------------
+    */
+
+    if (req.method === "PATCH") {
+      const {
+        companyId,
+        seatLimit,
+      } = req.body || {};
+
+      if (
+        !companyId ||
+        typeof companyId !== "string"
+      ) {
+        return res.status(400).json({
+          error:
+            "A valid company ID is required.",
+        });
+      }
+
+      const requestedSeatLimit =
+        Number(seatLimit);
+
+      if (
+        !Number.isInteger(
+          requestedSeatLimit
+        ) ||
+        requestedSeatLimit < 1
+      ) {
+        return res.status(400).json({
+          error:
+            "Seat limit must be a whole number of at least 1.",
+        });
+      }
+
+      const {
+        data: company,
+        error: companyLookupError,
+      } = await supabase
+        .from("companies")
+        .select(`
+          id,
+          company_name,
+          seat_limit
+        `)
+        .eq("id", companyId)
+        .maybeSingle();
+
+      if (companyLookupError) {
+        console.error(
+          "Company lookup failed:",
+          companyLookupError
+        );
+
+        throw companyLookupError;
+      }
+
+      if (!company) {
+        return res.status(404).json({
+          error: "Company not found.",
+        });
+      }
+
+      const {
+        count: activeUserCount,
+        error: activeUserCountError,
+      } = await supabase
+        .from("profiles")
+        .select("id", {
+          count: "exact",
+          head: true,
+        })
+        .eq("company_id", companyId)
+        .eq("is_active", true);
+
+      if (activeUserCountError) {
+        console.error(
+          "Active user count failed:",
+          activeUserCountError
+        );
+
+        throw activeUserCountError;
+      }
+
+      const usedSeats =
+        activeUserCount || 0;
+
+      if (
+        requestedSeatLimit <
+        usedSeats
+      ) {
+        return res.status(400).json({
+          error:
+            `Cannot reduce ${company.company_name} below ${usedSeats} active user${usedSeats === 1 ? "" : "s"}.`,
+        });
+      }
+
+      const {
+        data: updatedCompany,
+        error: updateError,
+      } = await supabase
+        .from("companies")
+        .update({
+          seat_limit:
+            requestedSeatLimit,
+        })
+        .eq("id", companyId)
+        .select(`
+          id,
+          company_name,
+          seat_limit
+        `)
+        .single();
+
+      if (updateError) {
+        console.error(
+          "Seat limit update failed:",
+          updateError
+        );
+
+        throw updateError;
+      }
+
+      return res.status(200).json({
+        success: true,
+        company: {
+          id:
+            updatedCompany.id,
+          companyName:
+            updatedCompany.company_name,
+          seatLimit:
+            Number(
+              updatedCompany.seat_limit
+            ) || 0,
+          usedSeats,
+          availableSeats:
+            Math.max(
+              (Number(
+                updatedCompany.seat_limit
+              ) || 0) -
+                usedSeats,
+              0
+            ),
+        },
       });
     }
 
