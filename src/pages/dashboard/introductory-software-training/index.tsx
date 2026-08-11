@@ -752,15 +752,6 @@ export default function IntroductorySoftwareTrainingPage() {
       ).length;
     }, [completedSteps]);
 
-  const progressPercent =
-    totalAvailableSteps > 0
-      ? Math.round(
-          (completedAvailableSteps /
-            totalAvailableSteps) *
-            100
-        )
-      : 0;
-
   const completedLessonCount =
     useMemo(() => {
       let total = 0;
@@ -800,6 +791,20 @@ export default function IntroductorySoftwareTrainingPage() {
 
       return total;
     }, [completedSteps]);
+
+  const progressPercent =
+    lessonCount > 0
+      ? Math.round(
+          (completedLessonCount /
+            lessonCount) *
+            100
+        )
+      : 0;
+
+  const allAvailableLessonsComplete =
+    availableLessonCount > 0 &&
+    completedLessonCount >=
+      availableLessonCount;
 
   const currentLesson =
     courseProgress?.current_lesson ||
@@ -883,14 +888,11 @@ export default function IntroductorySoftwareTrainingPage() {
                 Complete
               </h2>
 
-              <p>
-                {
-                  completedAvailableSteps
-                }{" "}
-                of {totalAvailableSteps}{" "}
-                available training steps
-                complete.
-              </p>
+    <p>
+  {completedLessonCount} of{" "}
+  {lessonCount} total lessons
+  complete.
+</p>
             </div>
 
             <div className="progressNumbers">
@@ -927,66 +929,86 @@ export default function IntroductorySoftwareTrainingPage() {
             />
           </div>
 
-          {courseProgress &&
-          currentLessonInfo ? (
-            <div className="continueTraining">
-              <div>
-                <p className="continueLabel">
-                  Continue Where You Left
-                  Off
-                </p>
+{allAvailableLessonsComplete ? (
+  <div className="caughtUpBox">
+    <div className="caughtUpIcon">
+      ✓
+    </div>
 
-                <h3>
-                  Lesson{" "}
-                  {String(
-                    currentLesson
-                  ).padStart(2, "0")}
-                  :{" "}
-                  {
-                    currentLessonInfo.title
-                  }
-                </h3>
+    <div className="caughtUpContent">
+      <p className="continueLabel">
+        You&apos;re All Caught Up
+      </p>
 
-                <p>
-                  Current position: Step{" "}
-                  {currentStep}
-                </p>
-              </div>
+      <h3>
+        All Available Lessons Complete
+      </h3>
 
-              <Link
-                href={continueHref}
-                className="continueButton"
-              >
-                Continue Training →
-              </Link>
-            </div>
-          ) : (
-            <div className="continueTraining">
-              <div>
-                <p className="continueLabel">
-                  Ready to Begin?
-                </p>
+      <p>
+        You have completed all{" "}
+        {availableLessonCount} lessons
+        currently available. More lessons
+        are being added weekly as the
+        Rhino Wrangler Academy continues
+        to grow.
+      </p>
+    </div>
+  </div>
+) : courseProgress &&
+  currentLessonInfo ? (
+  <div className="continueTraining">
+    <div>
+      <p className="continueLabel">
+        Continue Where You Left Off
+      </p>
 
-                <h3>
-                  Start Lesson 01
-                </h3>
+      <h3>
+        Lesson{" "}
+        {String(
+          currentLesson
+        ).padStart(2, "0")}
+        :{" "}
+        {currentLessonInfo.title}
+      </h3>
 
-                <p>
-                  Begin with the
-                  fundamentals of the
-                  commercial glass
-                  industry.
-                </p>
-              </div>
+      <p>
+        Current position: Step{" "}
+        {currentStep}
+      </p>
+    </div>
 
-              <Link
-                href="/dashboard/introductory-software-training/lesson-1-glazing-basics"
-                className="continueButton"
-              >
-                Start Training →
-              </Link>
-            </div>
-          )}
+    <Link
+      href={continueHref}
+      className="continueButton"
+    >
+      Continue Training →
+    </Link>
+  </div>
+) : (
+  <div className="continueTraining">
+    <div>
+      <p className="continueLabel">
+        Ready to Begin?
+      </p>
+
+      <h3>
+        Start Lesson 01
+      </h3>
+
+      <p>
+        Begin with the fundamentals of
+        the commercial glass industry.
+      </p>
+    </div>
+
+    <Link
+      href="/dashboard/introductory-software-training/lesson-1-glazing-basics"
+      className="continueButton"
+    >
+      Start Training →
+    </Link>
+  </div>
+)}
         </section>
       )}
 
@@ -1363,6 +1385,52 @@ export default function IntroductorySoftwareTrainingPage() {
           text-transform: uppercase;
         }
 
+
+        .caughtUpBox {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+.caughtUpIcon {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: rgba(34, 197, 94, 0.16);
+  border: 1px solid
+    rgba(34, 197, 94, 0.32);
+  color: #86efac;
+  font-size: 26px;
+  font-weight: 950;
+}
+
+.caughtUpContent h3 {
+  margin: 0 0 6px;
+  color: white;
+  font-size: 21px;
+}
+
+.caughtUpContent p:not(
+    .continueLabel
+  ) {
+  max-width: 720px;
+  margin: 0;
+  color: rgba(
+    255,
+    255,
+    255,
+    0.6
+  );
+  line-height: 1.6;
+}
         .overallProgressTrack {
           height: 14px;
           margin-top: 22px;
@@ -2169,7 +2237,9 @@ export default function IntroductorySoftwareTrainingPage() {
             gap: 18px;
             padding: 22px;
           }
-
+.caughtUpBox {
+  align-items: flex-start;
+}
           .lessonMeta {
             align-items: flex-start;
           }
