@@ -122,33 +122,33 @@ export const glazierMenu: SidebarItem[] = [
       slug: "/dashboard/glazier-studio/metal-groups/assembly-data",
     },
     {
-  title: "Catalog Parts",
-  slug: "/dashboard/glazier-studio/metal-groups/catalog-parts",
-},
-{
-  title: "Fabrication Options",
-  slug: "/dashboard/glazier-studio/metal-groups/fabrication-options",
-},
-
-{
-  title: "Fab Formula Builder",
-  slug: "/dashboard/glazier-studio/metal-groups/fab-formula-builder",
-},
-
-{
-  title: "Metal Groups",
-  slug: "/dashboard/glazier-studio/metal-groups/metal-groups",
-},
-
-{
-  title: "Primary Fabrications",
-  slug: "/dashboard/glazier-studio/metal-groups/primary-fabrications",
-},
-
-{
-  title: "Secondary Fabrications",
-  slug: "/dashboard/glazier-studio/metal-groups/secondary-fabrications",
-},
+      title: "Catalog Parts",
+      slug: "/dashboard/glazier-studio/metal-groups/catalog-parts",
+    },
+    {
+      title: "Fabrication Options",
+      slug: "/dashboard/glazier-studio/metal-groups/fabrication-options",
+    },
+    {
+      title: "Fab Formula Builder",
+      slug: "/dashboard/glazier-studio/metal-groups/fab-formula-builder",
+    },
+    {
+      title: "Metal Groups",
+      slug: "/dashboard/glazier-studio/metal-groups/metal-groups",
+    },
+    {
+      title: "Mirror Attachment Holes",
+      slug: "/dashboard/glazier-studio/metal-groups/mirror-attachment-holes",
+    },
+    {
+      title: "Primary Fabrications",
+      slug: "/dashboard/glazier-studio/metal-groups/primary-fabrications",
+    },
+    {
+      title: "Secondary Fabrications",
+      slug: "/dashboard/glazier-studio/metal-groups/secondary-fabrications",
+    },
   ],
 },
 
