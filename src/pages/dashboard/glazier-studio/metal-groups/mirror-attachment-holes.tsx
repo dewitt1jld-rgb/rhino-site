@@ -127,7 +127,7 @@ export default function MirrorAttachmentHolesPage() {
               dropdowns used on this screen.
             </div>
 
-            <div className="imageWrap medium">
+            <div className="imageWrap large">
               <img
                 src={img.fabricationData}
                 alt="Primary fabrication data for mirror attachment holes"

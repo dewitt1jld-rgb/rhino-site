@@ -243,7 +243,7 @@ export default function IncorrectPartLengthPage() {
         The first cut is made on the <strong>left side</strong> of the saw
         cabinet. This first cut is considered the <strong>lead trim</strong>.
       </p>
-
+<p></p>
       <p>
         After the lead trim, the saw rotates to the
         <strong> right side</strong> of the cabinet and should make the
@@ -258,7 +258,7 @@ export default function IncorrectPartLengthPage() {
         The first cut is made on the <strong>right side</strong> of the saw
         cabinet. This first cut is considered the <strong>lead trim</strong>.
       </p>
-
+<p></p>
       <p>
         After the lead trim, the saw rotates to the
         <strong> left side</strong> of the cabinet and should make the
@@ -287,7 +287,7 @@ export default function IncorrectPartLengthPage() {
         <strong> all pieces</strong> being cut from the stock length.
       </p>
     </div>
-
+<p></p>
     <div className="comparisonCard rotational">
       <h3>Saw Rotational Offset</h3>
 
@@ -330,15 +330,9 @@ export default function IncorrectPartLengthPage() {
     using saw kerf alone because your remaining pieces are already correct.
   </p>
 
-  <div className="formulaExample">
-    <span className="formulaLabel">First piece error</span>
-    <strong>1/32&quot; short</strong>
-
-    <span className="formulaArrow">÷ 2</span>
-
-    <span className="formulaLabel">Rotational adjustment</span>
-    <strong>1/64&quot;</strong>
-  </div>
+<p>To fix the first piece we are going to adjust the "Saw Rotational Offset" value which can be found in system settings.</p>
+<p></p>
+<p>We only want to change this value by <strong>HALF</strong> the amount we are short/long by</p>
 
   <div className="callout danger">
     <h3>Only Adjust Half of the Error</h3>
@@ -350,7 +344,7 @@ export default function IncorrectPartLengthPage() {
 
     <p>
       If the first piece is 1/32&quot; too short, increase the existing saw
-      rotational value by 1/64&quot;.
+      rotational offset value by 1/64&quot;.
     </p>
   </div>
 </section>
@@ -599,43 +593,7 @@ export default function IncorrectPartLengthPage() {
   </div>
 </section>
 
-<section className="panel">
-  <div className="panelHeader">
-    <h2>Angled Cut Troubleshooting Summary</h2>
-  </div>
 
-  <div className="angleSummaryGrid">
-    <div>
-      <span>90° Cut</span>
-      <strong>Saw Kerf / Rotational Offset</strong>
-    </div>
-
-    <div>
-      <span>Bevel</span>
-      <strong>Part Height</strong>
-    </div>
-
-    <div>
-      <span>Miter</span>
-      <strong>Part Depth</strong>
-    </div>
-
-    <div>
-      <span>Compound</span>
-      <strong>Part Height + Part Depth</strong>
-    </div>
-  </div>
-
-  <div className="callout danger">
-    <h3>Recommended Order</h3>
-
-    <p>
-      Run all four Miter Cut Length calibration tests first. If the calibration
-      is correct and the angled cut length is still wrong, verify the actual
-      profile dimensions in Parts Library using calipers.
-    </p>
-  </div>
-</section>
 
         <style jsx>{`
           .pageWrap {
