@@ -165,30 +165,32 @@ const courseModules: CourseModule[] = [
     ],
   },
 
-  {
-    number: "04",
-    title: "Profiles & Components",
-    description:
-      "Understand how aluminum systems and individual parts are organized inside the software.",
-    lessons: [
-      {
-        number: "11",
-        title: "Understanding Metal Groups",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how metal groups organize storefront systems, assign profiles, control frame behavior, and support fabrication.",
-      },
-      {
-        number: "12",
-        title: "Working with Catalog Parts",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how catalog parts are created, organized, modified, and connected to the systems used throughout a project.",
-      },
-    ],
-  },
+{
+  number: "04",
+  title: "Profiles & Components",
+  description:
+    "Understand how aluminum systems and individual parts are organized inside the software.",
+  lessons: [
+    {
+      number: "11",
+      title: "Catalog Parts",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 3,
+      description:
+        "Learn how to navigate Catalog Parts, create custom parts, understand assemblies, and control the individual components used throughout Glazier Studio.",
+      href: "/dashboard/introductory-software-training/lesson-11-catalog-part-basics",
+    },
+    {
+      number: "12",
+      title: "Understanding Metal Groups",
+      time: "Coming soon",
+      status: "In Production",
+      description:
+        "Learn how metal groups organize storefront systems, assign profiles, control frame behavior, and support fabrication.",
+    },
+  ],
+},
 
   {
     number: "05",
