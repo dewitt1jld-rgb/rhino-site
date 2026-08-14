@@ -181,14 +181,16 @@ const courseModules: CourseModule[] = [
         "Learn how to navigate Catalog Parts, create custom parts, understand assemblies, and control the individual components used throughout Glazier Studio.",
       href: "/dashboard/introductory-software-training/lesson-11-catalog-part-basics",
     },
-    {
-      number: "12",
-      title: "Understanding Metal Groups",
-      time: "Coming soon",
-      status: "In Production",
-      description:
-        "Learn how metal groups organize storefront systems, assign profiles, control frame behavior, and support fabrication.",
-    },
+{
+  number: "12",
+  title: "Understanding Metal Groups",
+  time: "60–90 min",
+  status: "Available",
+  stepCount: 3,
+  description:
+    "Learn how metal groups organize framing systems, create your own project-specific metal groups, and configure the fabrication options that control how frames are built.",
+  href: "/dashboard/introductory-software-training/lesson-12-metal-group-basics",
+},
   ],
 },
 

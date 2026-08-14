@@ -113,10 +113,12 @@ export default function LessonElevenAssembliesPage() {
       <h3>Assembly Data</h3>
       <div className="lessonText">
         <p>
-          The visible name of the assembly is only a description. Naming a part something like <strong>A/Part 1 + Part 2</strong> does not actually cause those two parts to be picked up.
+          Naming a part something like <strong>A/Part 1 + Part 2</strong> does not actually cause those two parts to be picked up.
+          The visible name in the image above is just a name. A/FG-3110+FG-3111 could just as easily be named Rhino Wrangler corner mullion. Its just a name.
+          
         </p>
         <p>
-          The section that controls the real parts is <strong>Assembly Data</strong>.
+          The section that controls what parts get picked up is the <strong>Assembly Data</strong> tab.
         </p>
       </div>
 
@@ -131,7 +133,7 @@ export default function LessonElevenAssembliesPage() {
       </div>
 
       <div className="calloutBox">
-        <strong>Order matters.</strong>
+        <strong>Order matters (but only for the first part).</strong>
         <p>
           The first part in Assembly Data is the part that receives fabrications. Keep that in mind when deciding which member should be listed first.
         </p>
