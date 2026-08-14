@@ -55,7 +55,7 @@ export default function LessonElevenCreateCatalogPartPage() {
         </p>
       </div>
 
-      <h3>Copy the Base Part</h3>
+      <h3>Select the Base Part and Click Copy</h3>
       <figure className="fullWidthMedia">
         <img src={img.clickCopy} alt="Copy button on the Catalog Parts screen" />
         <figcaption>Highlight the base part and click the Copy button in the upper-right corner.</figcaption>
@@ -73,7 +73,7 @@ export default function LessonElevenCreateCatalogPartPage() {
 
       <div className="lessonText">
         <p>
-          Change the copied name to the correct part number you are creating. From this point forward, change only what you need to change.
+          Change the copied name to the correct part number you are creating. From this point forward, change only what you have to. I have highlighted those sections in yellow. 
         </p>
       </div>
 
@@ -93,10 +93,9 @@ export default function LessonElevenCreateCatalogPartPage() {
 
       <h3>Function</h3>
       <div className="calloutBox">
-        <strong>Do not force the Function field.</strong>
+        <strong>Do not change the Function field.</strong>
         <p>
-          If you copied the correct type of base part, Function should already be correct. If it is not, stop and start over with a better base part instead of trying to change the Function manually.
-        </p>
+          If you copied a similar part the Function should already be correct. If it is not, do not change it. Start over with the correct base part and try again. </p>
       </div>
 
       <h3>Custom Part</h3>
@@ -155,10 +154,10 @@ export default function LessonElevenCreateCatalogPartPage() {
       <h3>That&apos;s It</h3>
       <div className="lessonText">
         <p>
-          Once the part name, description, custom setting, design parameters, and optional pricing are correct, the new part is ready to use.
+          Once the part name, description, design parameters, and optional pricing are correct, the new part is ready to use.
         </p>
         <p>
-          If you need automatic screw spline or shear block holes added to the part, that will require Primary or Secondary Fabrications. We will cover those in a later lesson.
+          If you need fabrications such as screw spline or shear block holes added to the part, that will require Primary or Secondary Fabrications. We will cover those in a later lesson.
         </p>
         <p>
           For now, the part can be added to a Metal Group or manually added to a cut list in Metal Fabrication.

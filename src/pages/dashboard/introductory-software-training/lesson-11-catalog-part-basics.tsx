@@ -106,7 +106,7 @@ export default function LessonElevenCatalogPartBasicsPage() {
           Catalog Parts are not limited to aluminum extrusions. You can also create custom glass, hardware, vinyl, rubber, and other parts if the program does not already contain the item you need.
         </p>
         <p>
-          In the next section, we will build a custom catalog part and go through the settings that actually matter.
+          In the next section, we will build a custom catalog part and go through the settings that actually matter. We will also practice the F2 hot key in the metal group screen. 
         </p>
       </div>
 
@@ -116,7 +116,7 @@ export default function LessonElevenCatalogPartBasicsPage() {
           <label><input type="checkbox" /> I opened the Catalog Parts screen.</label>
           <label><input type="checkbox" /> I changed vendor catalogs.</label>
           <label><input type="checkbox" /> I used the search feature.</label>
-          <label><input type="checkbox" /> I tested the F2 shortcut.</label>
+          <label><input type="checkbox" /> I saw how the F2 button works.</label>
         </div>
       </div>
 
