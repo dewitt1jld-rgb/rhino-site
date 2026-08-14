@@ -98,7 +98,16 @@ export default function LessonElevenAssembliesPage() {
       </div>
 
       <figure className="fullWidthMedia">
-        <img src={img.cornerAssembly} alt="Two-piece corner assembly example" />
+                      <img
+  src={img.cornerAssembly}
+  alt="Two-piece corner assembly example"
+  style={{
+    width: "50%",
+    height: "auto",
+    display: "block",
+    margin: "0 auto",
+  }}
+/>
       </figure>
 
       <h3>Assembly Data</h3>
