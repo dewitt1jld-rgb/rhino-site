@@ -48,7 +48,16 @@ export default function LessonElevenAssembliesPage() {
 
       <h3>How Assemblies Appear in Catalog Parts</h3>
       <figure className="fullWidthMedia">
-        <img src={img.assemblyPart} alt="Assembly parts in Catalog Parts" />
+        <img
+  src={img.assemblyPart}
+  alt="Assembly parts in Catalog Parts"
+  style={{
+    width: "50%",
+    height: "auto",
+    display: "block",
+    margin: "0 auto",
+  }}
+/>
         <figcaption>Assemblies commonly use an A/ prefix in the part name.</figcaption>
       </figure>
 
