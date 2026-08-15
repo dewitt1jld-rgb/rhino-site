@@ -56,12 +56,12 @@ export default function LessonTwelveMetalGroupBasicsPage() {
 
       <div className="goalBox">
         <strong>Goal:</strong> Understand what a metal group is, why choosing
-        the correct metal group matters, and how to identify common storefront
+        the correct metal group matters, and how to identify common 
         configurations before making any changes.
       </div>
 
       <div className="calloutBox">
-        <strong>Metal groups are one of the most important parts of Glazier Studio.</strong>
+        <strong>Metal groups are one of the most important parts of Glazier Studio and PartnerPak.</strong>
         <p>
           This is probably one of the more intricate screens in the program.
           Your entire project is based around the metal group you choose. If
@@ -133,8 +133,7 @@ export default function LessonTwelveMetalGroupBasicsPage() {
       <div className="calloutBox">
         <strong>Think of it this way:</strong>
         <p>
-          The frame tells Glazier Studio <em>where</em> a stick goes. The metal
-          group tells Glazier Studio <em>which part number</em> should go there.
+          The metal group tells Glazier Studio <em>which part numbers</em> go to which part of the frame. 
         </p>
       </div>
 
@@ -157,16 +156,23 @@ export default function LessonTwelveMetalGroupBasicsPage() {
         </p>
       </div>
 
-      <figure className="fullWidthMedia">
-        <img
-          src={img.fg3000}
-          alt="FG-3000 metal group variations"
-        />
-        <figcaption>
-          FG-3000 and the different metal group variations available for the
-          system.
-        </figcaption>
-      </figure>
+<figure className="fullWidthMedia">
+  <img
+    src={img.fg3000}
+    alt="FG-3000 metal group variations"
+    style={{
+      width: "100%",
+      maxWidth: "450px",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+    }}
+  />
+  <figcaption>
+    FG-3000 and the different metal group variations available for the
+    system.
+  </figcaption>
+</figure>
 
       <div className="lessonText">
         <p>
@@ -327,7 +333,7 @@ export default function LessonTwelveMetalGroupBasicsPage() {
         </p>
       </div>
 
-      <h3>Why We Do Not Use the Head or Sill</h3>
+      <h3>Why We Do Not Use the Head or Sill to Determine Stops up or Down</h3>
 
       <div className="lessonText">
         <p>
@@ -461,15 +467,22 @@ export default function LessonTwelveMetalGroupBasicsPage() {
         </p>
       </div>
 
-      <figure className="fullWidthMedia">
-        <img
-          src={img.metalGroupGeneral}
-          alt="Metal Group general properties and settings"
-        />
-        <figcaption>
-          The tabs and settings available for the selected metal group.
-        </figcaption>
-      </figure>
+    <figure className="fullWidthMedia">
+  <img
+    src={img.metalGroupGeneral}
+    alt="Metal Group general properties and settings"
+    style={{
+      width: "100%",
+      maxWidth: "450px",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+    }}
+  />
+  <figcaption>
+    The tabs and settings available for the selected metal group.
+  </figcaption>
+</figure>
 
       <div className="lessonText">
         <p>

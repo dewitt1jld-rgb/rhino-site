@@ -225,7 +225,7 @@ export default function LessonTwelveBuildMetalGroupPage() {
 
         <p>
           Creating your own copy lets you customize the system for your project
-          and gives you a unique metal group that will not be confused with the
+          and gives you a unique metal group that will not be replaced with the
           program&apos;s default version.
         </p>
       </div>

@@ -9,6 +9,8 @@ const supabaseAdmin = createSupabaseClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+type CheckoutPlan = "annual" | "lifetime";
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,10 +20,18 @@ export default async function handler(
   }
 
   try {
+    /*
+    --------------------------------------------------
+    VERIFY USER
+    --------------------------------------------------
+    */
+
     const token = req.headers.authorization?.replace("Bearer ", "");
 
     if (!token) {
-      return res.status(401).json({ error: "Missing auth token" });
+      return res.status(401).json({
+        error: "Missing auth token",
+      });
     }
 
     const {
@@ -30,20 +40,76 @@ export default async function handler(
     } = await supabaseAdmin.auth.getUser(token);
 
     if (userError || !user) {
-      return res.status(401).json({ error: "User not found" });
+      return res.status(401).json({
+        error: "User not found",
+      });
     }
 
-  
-    const { data: existingAccess, error: accessCheckError } =
-      await supabaseAdmin
-        .from("member_access")
-        .select("status, stripe_customer_id, stripe_subscription_id")
-        .eq("profile_id", user.id)
-        .maybeSingle();
+    /*
+    --------------------------------------------------
+    VERIFY PLAN
+    --------------------------------------------------
+    */
+
+    const { plan } = req.body as {
+      plan?: CheckoutPlan;
+    };
+
+    if (plan !== "annual" && plan !== "lifetime") {
+      return res.status(400).json({
+        error: "Please select a valid purchase plan.",
+      });
+    }
+
+    const isAnnual = plan === "annual";
+
+    /*
+    --------------------------------------------------
+    VERIFY STRIPE PRICE
+    --------------------------------------------------
+    */
+
+    const priceId = isAnnual
+      ? process.env.STRIPE_ANNUAL_PRICE_ID
+      : process.env.STRIPE_LIFETIME_PRICE_ID;
+
+    if (!priceId) {
+      console.error(
+        `Missing Stripe price ID for ${plan} plan.`
+      );
+
+      return res.status(500).json({
+        error:
+          "This purchase option is not configured correctly. Please contact support.",
+      });
+    }
+
+    /*
+    --------------------------------------------------
+    CHECK EXISTING ACCESS
+    --------------------------------------------------
+    */
+
+    const {
+      data: existingAccess,
+      error: accessCheckError,
+    } = await supabaseAdmin
+      .from("member_access")
+      .select(
+        "status, stripe_customer_id, stripe_subscription_id"
+      )
+      .eq("profile_id", user.id)
+      .maybeSingle();
 
     if (accessCheckError) {
-      console.error("Failed to check existing member access:", accessCheckError);
-      return res.status(500).json({ error: "Unable to verify account access." });
+      console.error(
+        "Failed to check existing member access:",
+        accessCheckError
+      );
+
+      return res.status(500).json({
+        error: "Unable to verify account access.",
+      });
     }
 
     if (
@@ -52,56 +118,139 @@ export default async function handler(
     ) {
       return res.status(409).json({
         error:
-          "This account has already purchased initial access. Please use the billing portal or contact support.",
+          "This account has already purchased access. Please contact support if you need to change plans.",
       });
     }
 
+    /*
+    --------------------------------------------------
+    BASE URL
+    --------------------------------------------------
+    */
+
     const baseUrl =
-      process.env.NEXT_PUBLIC_SITE_URL || req.headers.origin || "http://localhost:3000";
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      req.headers.origin ||
+      "http://localhost:3000";
 
-const metadata = {
-  profile_id: user.id,
-  email: user.email || "",
-  first_name: user.user_metadata?.first_name || "",
-  last_name: user.user_metadata?.last_name || "",
-  company_name: user.user_metadata?.company_name || "",
-};
+    /*
+    --------------------------------------------------
+    METADATA
+    --------------------------------------------------
+    */
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      customer_creation: "always",
+    const metadata = {
+      profile_id: user.id,
+      email: user.email || "",
+      first_name:
+        user.user_metadata?.first_name || "",
+      last_name:
+        user.user_metadata?.last_name || "",
+      company_name:
+        user.user_metadata?.company_name || "",
+      plan,
+      support_included:
+        isAnnual ? "true" : "false",
+    };
 
-      // Forces Stripe Checkout to use the logged-in account email.
-      customer_email: user.email || undefined,
+    /*
+    --------------------------------------------------
+    CREATE STRIPE CHECKOUT SESSION
+    --------------------------------------------------
+    */
 
-       allow_promotion_codes: true,
+    const checkoutSession =
+      await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
 
-      payment_intent_data: {
-        setup_future_usage: "off_session",
+        mode: isAnnual
+          ? "subscription"
+          : "payment",
 
-        // Stripe receipt goes to the logged-in account email.
-        receipt_email: user.email || undefined,
+        customer_creation: isAnnual
+          ? undefined
+          : "always",
+
+        customer_email:
+          user.email || undefined,
+
+        allow_promotion_codes: true,
+
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+
+        /*
+        Metadata placed directly on the
+        Checkout Session.
+
+        Your checkout.session.completed
+        webhook can read this.
+        */
 
         metadata,
-      },
 
-      line_items: [
-        {
-          price: process.env.STRIPE_INITIAL_PRICE_ID!,
-          quantity: 1,
-        },
-      ],
+        /*
+        ANNUAL SUBSCRIPTION
 
-      metadata,
+        Stripe creates a Subscription.
+        Put the same metadata on it so
+        subscription webhook events know
+        which Rhino Wrangler account it
+        belongs to.
+        */
 
-      success_url: `${baseUrl}/welcome`,
-      cancel_url: `${baseUrl}/pricing?canceled=true`,
+        ...(isAnnual
+          ? {
+              subscription_data: {
+                metadata,
+              },
+            }
+          : {
+              /*
+              LIFETIME PURCHASE
+
+              Stripe creates a PaymentIntent.
+              Store the same metadata there.
+              */
+
+              payment_intent_data: {
+                receipt_email:
+                  user.email || undefined,
+
+                metadata,
+              },
+            }),
+
+        success_url:
+          `${baseUrl}/welcome?plan=${plan}`,
+
+        cancel_url:
+          `${baseUrl}/pricing?canceled=true`,
+      });
+
+    /*
+    --------------------------------------------------
+    SUCCESS
+    --------------------------------------------------
+    */
+
+    return res.status(200).json({
+      url: checkoutSession.url,
     });
-
-    return res.status(200).json({ url: session.url });
   } catch (err: any) {
-    console.error("Stripe checkout error:", err);
-    return res.status(500).json({ error: err.message });
+    console.error(
+      "Stripe checkout error:",
+      err
+    );
+
+    return res.status(500).json({
+      error:
+        err?.message ||
+        "Unable to start checkout.",
+    });
   }
 }
