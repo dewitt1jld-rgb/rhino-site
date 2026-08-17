@@ -142,58 +142,74 @@ export default function LessonThirteenFabricationBasicsPage() {
         </p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gap: "20px",
-          margin: "30px 0",
-        }}
-      >
-        <figure style={{ margin: 0, textAlign: "center" }}>
-          <img
-            src={img.primary}
-            alt="Primary fabrication rules screen"
-            style={{
-              width: "100%",
-              height: "auto",
-              borderRadius: "16px",
-              border: "1px solid rgba(255,255,255,.12)",
-            }}
-          />
+<div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: "36px",
+    margin: "30px 0",
+  }}
+>
+  <figure
+    style={{
+      margin: 0,
+      textAlign: "center",
+    }}
+  >
+    <img
+      src={img.primary}
+      alt="Primary fabrication rules screen"
+      style={{
+        width: "100%",
+        maxWidth: "1000px",
+        height: "auto",
+        display: "block",
+        margin: "0 auto",
+        borderRadius: "16px",
+        border: "1px solid rgba(255,255,255,.12)",
+      }}
+    />
 
-          <figcaption
-            style={{
-              marginTop: "10px",
-              color: "rgba(255,255,255,.6)",
-            }}
-          >
-            Primary Fabrications
-          </figcaption>
-        </figure>
+    <figcaption
+      style={{
+        marginTop: "12px",
+        color: "rgba(255,255,255,.6)",
+      }}
+    >
+      Primary Fabrications
+    </figcaption>
+  </figure>
 
-        <figure style={{ margin: 0, textAlign: "center" }}>
-          <img
-            src={img.secondary}
-            alt="Secondary fabrication rules screen"
-            style={{
-              width: "100%",
-              height: "auto",
-              borderRadius: "16px",
-              border: "1px solid rgba(255,255,255,.12)",
-            }}
-          />
+  <figure
+    style={{
+      margin: 0,
+      textAlign: "center",
+    }}
+  >
+    <img
+      src={img.secondary}
+      alt="Secondary fabrication rules screen"
+      style={{
+        width: "100%",
+        maxWidth: "1000px",
+        height: "auto",
+        display: "block",
+        margin: "0 auto",
+        borderRadius: "16px",
+        border: "1px solid rgba(255,255,255,.12)",
+      }}
+    />
 
-          <figcaption
-            style={{
-              marginTop: "10px",
-              color: "rgba(255,255,255,.6)",
-            }}
-          >
-            Secondary Fabrications
-          </figcaption>
-        </figure>
-      </div>
+    <figcaption
+      style={{
+        marginTop: "12px",
+        color: "rgba(255,255,255,.6)",
+      }}
+    >
+      Secondary Fabrications
+    </figcaption>
+  </figure>
+</div>
 
       <div className="lessonText">
         <p>
