@@ -161,7 +161,7 @@ export default function LessonThirteenFabricationBasicsPage() {
       alt="Primary fabrication rules screen"
       style={{
         width: "100%",
-        maxWidth: "1000px",
+        maxWidth: "1200px",
         height: "auto",
         display: "block",
         margin: "0 auto",
@@ -191,7 +191,7 @@ export default function LessonThirteenFabricationBasicsPage() {
       alt="Secondary fabrication rules screen"
       style={{
         width: "100%",
-        maxWidth: "1000px",
+        maxWidth: "1200px",
         height: "auto",
         display: "block",
         margin: "0 auto",
@@ -222,6 +222,46 @@ export default function LessonThirteenFabricationBasicsPage() {
           fabrication fundamentals before building anything.
         </p>
       </div>
+
+      <div
+  style={{
+    margin: "32px 0",
+    padding: "22px 24px",
+    borderRadius: "16px",
+    background: "rgba(245, 158, 11, 0.08)",
+    border: "1px solid rgba(245, 158, 11, 0.28)",
+  }}
+>
+  <strong
+    style={{
+      display: "block",
+      marginBottom: "10px",
+      color: "#f59e0b",
+      fontSize: "1.05rem",
+    }}
+  >
+    TIP: Pull Up the Screen and Follow Along
+  </strong>
+
+  <p style={{ margin: "0 0 12px" }}>
+    If you would like a visual reference while going through this lesson,
+    navigate to the <strong>Catalog Parts</strong> screen and search for part{" "}
+    <strong>FG-3103</strong>.
+  </p>
+
+  <p style={{ margin: "0 0 12px" }}>
+    On the right-hand side of the screen, find{" "}
+    <strong>Secondary Fabrications</strong> and click the small blue box to
+    open the fabrication screen.
+  </p>
+
+  <p style={{ margin: 0 }}>
+    <strong>DO NOT CHANGE ANYTHING ON THIS SCREEN.</strong> Any changes made
+    here can affect live projects and fabrications. We are only opening this
+    screen so you can see a real example while we explain what each column
+    means and how it works.
+  </p>
+</div>
 
       <h3>Fab Style</h3>
 
