@@ -195,30 +195,32 @@ const courseModules: CourseModule[] = [
 },
 
 
-  {
-    number: "05",
-    title: "Formulas & Hole Placement",
-    description:
-      "Create repeatable rules for weep holes, anchor holes, and other automatically positioned operations.",
-    lessons: [
-      {
-        number: "13",
-        title: "Weep Holes & Anchor Holes",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how weep holes and anchor holes are created, positioned, tested, and applied to the correct members.",
-      },
-      {
-        number: "14",
-        title: "Formula Builder Fundamentals",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Use variables, measurements, conditions, and formulas to control the placement of holes and fabrication operations.",
-      },
-    ],
-  },
+{
+  number: "05",
+  title: "Fabrications & Hole Placement",
+  description:
+    "Understand how fabrication screens work, how operations are positioned, and how automatic weep and anchor holes are created.",
+  lessons: [
+    {
+      number: "13",
+      title: "Understanding Fabrications",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 3,
+      description:
+        "Learn how fabrication screens are organized, understand X, Y, and Z locations, and review the operations, tools, directions, and conditions used throughout Glazier Studio and PartnerPak.",
+      href: "/dashboard/introductory-software-training/lesson-13-fabrication-basics",
+    },
+    {
+      number: "14",
+      title: "Weep & Anchor Holes",
+      time: "Coming soon",
+      status: "In Production",
+      description:
+        "Learn how to create, position, configure, and test automatic weep holes and anchor holes inside a metal group.",
+    },
+  ],
+},
 
   {
     number: "06",
