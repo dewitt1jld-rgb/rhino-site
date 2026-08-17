@@ -240,7 +240,7 @@ export default function LessonThirteenFabricationBasicsPage() {
       fontSize: "1.05rem",
     }}
   >
-    TIP: Pull Up the Screen and Follow Along
+    TIP: How to get to your own fabrication screen
   </strong>
 
   <p style={{ margin: "0 0 12px" }}>
@@ -304,59 +304,8 @@ export default function LessonThirteenFabricationBasicsPage() {
           curtain wall systems use shear block connections.
         </p>
 
-        <p>
-          You should not guess which one applies. Instead, look at the metal
-          group you are currently using.
-        </p>
-      </div>
+            </div>
 
-      <h3>Use the Metal Group to Understand the Frame</h3>
-
-      <div className="lessonText">
-        <p>
-          One of the most useful habits you can develop is learning to use the
-          Metal Group screen as a reference.
-        </p>
-
-        <p>
-          The metal group tells you what kind of framing system you are working
-          with and helps explain why certain fabrication rules are being used.
-        </p>
-      </div>
-
-      <figure
-        style={{
-          textAlign: "center",
-          margin: "30px 0",
-        }}
-      >
-        <img
-          src={img.keywords}
-          alt="Metal group keywords"
-          style={{
-            width: "100%",
-            maxWidth: "420px",
-            height: "auto",
-            margin: "0 auto",
-            display: "block",
-            borderRadius: "16px",
-            border: "1px solid rgba(255,255,255,.12)",
-          }}
-        />
-      </figure>
-
-      <div className="lessonText">
-        <p>
-          Keywords can help identify whether a system is screw spline, shear
-          block, inside glazed, outside glazed, impact, or another special
-          condition.
-        </p>
-
-        <p>
-          Before changing a fabrication, understand the metal group it belongs
-          to.
-        </p>
-      </div>
 
       <h3>Glazing Style</h3>
 
@@ -492,6 +441,80 @@ export default function LessonThirteenFabricationBasicsPage() {
           <strong> when</strong> a fabrication should happen.
         </p>
       </div>
+
+      <div
+  style={{
+    margin: "40px 0 30px",
+    padding: "24px",
+    borderRadius: "16px",
+    background: "rgba(59, 130, 246, 0.08)",
+    border: "1px solid rgba(59, 130, 246, 0.28)",
+  }}
+>
+  <strong
+    style={{
+      display: "block",
+      marginBottom: "10px",
+      color: "#60a5fa",
+      fontSize: "1.1rem",
+    }}
+  >
+    SHORTCUT / TROUBLESHOOTING TIP
+  </strong>
+
+  <h3
+    style={{
+      margin: "0 0 14px",
+    }}
+  >
+    Use the Metal Group to Understand the Frame
+  </h3>
+
+  <p>
+    When you are trying to understand why a fabrication is being applied,
+    one of the best places to look is the <strong>Metal Group</strong>.
+  </p>
+
+  <p>
+    The Metal Group can help you identify what type of framing system you are
+    working with and give you clues as to why certain fabrication rules are
+    being used.
+  </p>
+
+  <figure
+    style={{
+      textAlign: "center",
+      margin: "24px 0",
+    }}
+  >
+    <img
+      src={img.keywords}
+      alt="Metal group keywords"
+      style={{
+        width: "100%",
+        maxWidth: "420px",
+        height: "auto",
+        margin: "0 auto",
+        display: "block",
+        borderRadius: "16px",
+        border: "1px solid rgba(255,255,255,.12)",
+      }}
+    />
+  </figure>
+
+  <p>
+    Pay particular attention to the <strong>Keywords</strong>. These can help
+    identify whether the system is screw spline, shear block, inside glazed,
+    outside glazed, impact, or another special condition.
+  </p>
+
+  <p style={{ marginBottom: 0 }}>
+    <strong>Keep this trick in mind:</strong> If you are ever looking at a
+    fabrication and wondering why it exists or what it is supposed to do,
+    checking the Metal Group can give you important context before you start
+    changing anything.
+  </p>
+</div>
 
       <div className="takeawayBox">
         <p className="sectionLabel">Checkpoint</p>
