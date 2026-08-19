@@ -211,14 +211,16 @@ const courseModules: CourseModule[] = [
         "Learn how fabrication screens are organized, understand X, Y, and Z locations, and review the operations, tools, directions, and conditions used throughout Glazier Studio and PartnerPak.",
       href: "/dashboard/introductory-software-training/lesson-13-fabrication-basics",
     },
-    {
-      number: "14",
-      title: "Weep & Anchor Holes",
-      time: "Coming soon",
-      status: "In Production",
-      description:
-        "Learn how to create, position, configure, and test automatic weep holes and anchor holes inside a metal group.",
-    },
+{
+  number: "14",
+  title: "Weep & Anchor Holes",
+  time: "45–60 min",
+  status: "Available",
+  stepCount: 3,
+  description:
+    "Learn what weep holes and anchor holes are, understand how fabrication formulas determine their locations, and build your own weep-hole setup inside a training metal group.",
+  href: "/dashboard/introductory-software-training/lesson-14-weep-anchor-basics",
+},
   ],
 },
 
