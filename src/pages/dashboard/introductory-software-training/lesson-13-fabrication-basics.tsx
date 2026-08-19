@@ -37,6 +37,8 @@ const img = {
 
   stopPosition:
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/metal-group%26catalog-parts/fabrication-options/images/fabrication-options-06-stop-position.png",
+
+     fabOperations: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/metal-group%26catalog-parts/fabrication-options/images/fabrication-options-07-fab-operations.png",
 };
 
 export default function LessonThirteenFabricationBasicsPage() {
@@ -98,8 +100,8 @@ export default function LessonThirteenFabricationBasicsPage() {
         <div className="takeawayGrid">
           <label>Weep Holes</label>
           <label>Anchor Holes</label>
-          <label>Primary Fabrications</label>
-          <label>Secondary Fabrications</label>
+          <label>Fabrication Example</label>
+          <label>Fabrication Example</label>
           <label>Metal Fabrication</label>
           <label>Door Fabrication</label>
           <label>Library Fabrications</label>
@@ -403,6 +405,73 @@ export default function LessonThirteenFabricationBasicsPage() {
         </p>
       </div>
 
+<h3>Fab Operations</h3>
+
+<div className="lessonText">
+  <p>
+    The <strong>Fab Operation</strong> dropdown tells the software what type
+    of machining operation needs to be performed.
+  </p>
+
+  <p>
+    You will see many of these same operations throughout Primary
+    Fabrications, Secondary Fabrications, Metal Fabrication, Door
+    Fabrication, Library Fabrications, and other fabrication screens.
+  </p>
+</div>
+
+<div className="twoColumn">
+  <div className="imageWrap small">
+    <img
+      src={img.fabOperations}
+      alt="Fab operation dropdown"
+      style={{ maxWidth: "180px" }}
+    />
+  </div>
+
+  <div>
+    <p className="helperText">
+      Fab Operation defines the type of machining being performed.
+      Common supported operations include Circle, Countersink, Drill,
+      Rectangle, and Slot.
+    </p>
+
+    <div className="callout warning">
+      Operations highlighted in red may not be recognized by all
+      machines or may require special pattern files.
+    </div>
+  </div>
+</div>
+
+<div className="infoGrid">
+  <div className="infoCard">
+    <h3>Circle</h3>
+    <p>Used for holes larger than the drill bit diameter.</p>
+  </div>
+
+  <div className="infoCard">
+    <h3>Countersink</h3>
+    <p>Used for screws that need to sit flush with the metal.</p>
+  </div>
+
+  <div className="infoCard">
+    <h3>Drill</h3>
+    <p>Used when the hole is the same size as the drill bit.</p>
+  </div>
+
+  <div className="infoCard">
+    <h3>Rectangle</h3>
+    <p>A milling operation requiring both height and width.</p>
+  </div>
+
+  <div className="infoCard">
+    <h3>Slot</h3>
+    <p>Similar to rectangle, but commonly used for slotted holes.</p>
+  </div>
+</div>
+
+
+
       <h3>Do Not Memorize Every Dropdown</h3>
 
       <div className="lessonText">
@@ -430,7 +499,7 @@ export default function LessonThirteenFabricationBasicsPage() {
       </div>
 
       <div className="calloutBox">
-        <strong>That is the real lesson.</strong>
+        <strong>Key takeaways</strong>
 
         <p>
           Fabrication screens are not just random collections of settings.
@@ -471,14 +540,18 @@ export default function LessonThirteenFabricationBasicsPage() {
   </h3>
 
   <p>
-    When you are trying to understand why a fabrication is being applied,
-    one of the best places to look is the <strong>Metal Group</strong>.
+    Another point from lesson 12. Remember when we were selected on a metal group and I told you to skip the key words section for now?
+  </p>
+ <p>
+    The fabrication screens are where I utilize this the most. I only <strong>VIEW</strong> key words. Do not make changes to them for now!
   </p>
 
+
+
   <p>
-    The Metal Group can help you identify what type of framing system you are
+    The Metal Group key words screen can help you identify what type of framing system you are
     working with and give you clues as to why certain fabrication rules are
-    being used.
+    being used and more importantly, Which ones are NOT being used. 
   </p>
 
   <figure
@@ -509,10 +582,8 @@ export default function LessonThirteenFabricationBasicsPage() {
   </p>
 
   <p style={{ marginBottom: 0 }}>
-    <strong>Keep this trick in mind:</strong> If you are ever looking at a
-    fabrication and wondering why it exists or what it is supposed to do,
-    checking the Metal Group can give you important context before you start
-    changing anything.
+    <strong>Keep this trick in mind:</strong> Most secondary fabrications have between 2-12 lines of fabrications and each stick may only use 2 of those line items. 
+    Understanding and being able to view the key words tells us exactly what lines items that metal group is using for fabrication. We will cver this more in the next lessons. 
   </p>
 </div>
 
@@ -531,7 +602,7 @@ export default function LessonThirteenFabricationBasicsPage() {
           </label>
 
           <label>
-            <input type="checkbox" /> I understand the purpose of Fab Style.
+            <input type="checkbox" /> I understand that this is not about memorization but about understanding how the program works.
           </label>
 
           <label>
