@@ -224,46 +224,45 @@ const courseModules: CourseModule[] = [
   ],
 },
 
-  {
-    number: "06",
-    title: "Metal Fabrication",
-    description:
-      "Build and apply the fabrication operations that prepare aluminum members for production.",
-    lessons: [
-      {
-        number: "15",
-        title: "Introduction to Metal Fabrication",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn the Metal Fabrication screen and create basic drills, slots, notches, saw cuts, and machining operations.",
-      },
-      {
-        number: "16",
-        title: "Advanced Metal Fabrication",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Create more advanced fabrication patterns using formulas, conditions, reference points, and multiple operations.",
-      },
-      {
-        number: "17",
-        title: "Secondary Fabrications",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how secondary fabrications differ from primary fabrications and how they are assigned to individual project members.",
-      },
-      {
-        number: "18",
-        title: "Fabrication Workflows & Best Practices",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Connect metal groups, catalog parts, assemblies, primary fabrications, and secondary fabrications into one complete workflow.",
-      },
-    ],
-  },
+{
+  number: "06",
+  title: "Metal Fabrication",
+  description:
+    "Learn how to navigate the Metal Fabrication screen, import and correct project fabrications, and troubleshoot secondary fabrications before sending a job to production.",
+  lessons: [
+    {
+      number: "15",
+      title: "Introduction to Metal Fabrication",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 2,
+      description:
+        "Learn how to navigate the Metal Fabrication screen, understand the project and stick information, and review the fabrication operations used to prepare material for production.",
+      href: "/dashboard/introductory-software-training/lesson-15-metal-fabrication-basics",
+    },
+    {
+      number: "16",
+      title: "Import and Fix Our Test Project",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 3,
+      description:
+        "Import the test project we have been building throughout the course, review the generated fabrications, identify problems, and make the corrections needed before production.",
+      href: "/dashboard/introductory-software-training/lesson-16-import-fix-project",
+    },
+    {
+      number: "17",
+      title: "Secondary Fabrications",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 3,
+      description:
+        "Learn how secondary fabrications transfer from one member to another and how to identify and correct screw spline, shear block, and other transferred fabrication problems.",
+      href: "/dashboard/introductory-software-training/lesson-17-secondary-fabrications",
+    },
+  ],
+},
+
 
   {
     number: "07",

@@ -1051,8 +1051,14 @@ export default function LessonFourteenCreateWeepHolesPage() {
 
       <div className="lessonText">
         <p>
-          Based on the information shown above, the hole is being drilled from
-          the <strong>Front</strong> using a <strong>5/16&quot; drill bit</strong>.
+          Based on the information shown above, the hole is only being used when it is an 
+          inside glazed stops down metal group. We want to change this to match our configuration.
+          To do that change the glazing style and stop position to "ALL". 
+          </p>
+
+          <p>
+          The holes is also being drilled from
+          the <strong>Front</strong> using a <strong>5/16&quot; drill bit</strong> which is correct.
         </p>
 
         <p>
