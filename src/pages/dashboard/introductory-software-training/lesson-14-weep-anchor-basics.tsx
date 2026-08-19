@@ -497,13 +497,13 @@ export default function LessonFourteenWeepAnchorBasicsPage() {
       <div className="calloutBox">
         <strong>We're going to build these separately.</strong>
         <p>
-          In Step 2, we will use Fab Formula Builder to establish the{" "}
+          In Section 2, we will use the Fab Formula Builder to build a formula and establish the{" "}
           <strong>WHERE</strong>.
         </p>
 
         <p>
-          In Step 3, we will establish the <strong>WHAT</strong> on the
-          individual part and put the two pieces together.
+          In Section 3, we will establish the <strong>WHAT</strong> on the
+          individual part and connect the fabrication to the formula. 
         </p>
       </div>
 
