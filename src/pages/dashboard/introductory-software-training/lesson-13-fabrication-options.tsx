@@ -71,7 +71,8 @@ export default function LessonThirteenFabricationOptionsPage() {
       <div className="lessonText">
         <p>
           Fab Operation describes the type of machining that needs to be
-          performed.
+          performed. The machines CAN NOT do any operation highlighted in red. 
+          Pattern is yellow because it is more difficult and I will have a dedicated screen explaining patterns
         </p>
       </div>
 
@@ -100,36 +101,34 @@ export default function LessonThirteenFabricationOptionsPage() {
         <div className="takeawayGrid">
           <div>
             <strong>Drill</strong>
-            <p>Used when the desired hole matches the drill bit diameter.</p>
+            <p>This is only a plunge in and out type bit. This function can not move side to side. These bits are labeled as D##-A/B</p>
           </div>
 
           <div>
             <strong>Circle</strong>
             <p>
-              Commonly used when the desired hole is larger than the tool and
-              must be routed.
+             Used with a End-Mill bit. This feature allows you to make a larger hole then a standard drill bit could. These bits are labeled as EM##-A/B
             </p>
           </div>
 
           <div>
             <strong>Countersink</strong>
             <p>
-              Used when the screw head needs to sit flush with the material.
+              Used when the screw head needs to sit flush with the material. These bits are labeled as CSD##-A/B
             </p>
           </div>
 
           <div>
             <strong>Rectangle</strong>
             <p>
-              A milling operation with both a width and height.
+              A milling operation (using an E.M. bit) with both a width and height.
             </p>
           </div>
 
           <div>
             <strong>Slot</strong>
             <p>
-              Similar to a rectangle but typically used to create a slotted
-              hole.
+              Similar to a rectangle but will only be the width of the endmill bit. A slot utilizes a width OR a height. Never both. 
             </p>
           </div>
         </div>
@@ -140,7 +139,7 @@ export default function LessonThirteenFabricationOptionsPage() {
 
         <p>
           A normal drill bit can plunge straight into the material, but it
-          cannot route sideways to create a larger circle or rectangle.
+          cannot route sideways to create a larger circle or rectangle. You must use an Endmill bit for this. 
         </p>
       </div>
 
@@ -224,8 +223,8 @@ export default function LessonThirteenFabricationOptionsPage() {
           <div>
             <strong>Countersink Routers</strong>
             <p>
-              Specialty tools capable of drilling and routing certain
-              fabrication patterns.
+              Specialty tools capable of countersinking and routing certain
+              fabrications. 
             </p>
           </div>
         </div>
@@ -240,8 +239,7 @@ export default function LessonThirteenFabricationOptionsPage() {
         </p>
 
         <p>
-          If you are unsure while troubleshooting, .375&quot; can be a useful
-          starting point for understanding the relationship.
+          If you are unsure of the depth, .375&quot; typically works on 90 percent of operations.
         </p>
 
         <p>
@@ -254,9 +252,8 @@ export default function LessonThirteenFabricationOptionsPage() {
         <strong>Physical tool length still matters.</strong>
 
         <p>
-          A software depth cannot make a drill bit physically longer. If the
-          operation is deeper than the exposed cutting tool can reach, a
-          different tool may be required.
+          A software depth cannot make a drill bit physically longer. If you tell the machine to drill at a depth of 3 inches 
+          and your drill bit only has 1.5 inches of usable cutting surface, you will crash the drill into the part. Make sure you are consious of the drill bit you are using. 
         </p>
       </div>
 
@@ -265,17 +262,14 @@ export default function LessonThirteenFabricationOptionsPage() {
       <div className="lessonText">
         <p>
           Limit is an older field associated with maximum safe drilling depth,
-          particularly for left-handed drilling applications.
+         </p>
+
+        <p>
+          This feature actually does not work but the software still requires a value larger than the depth in this field. 
         </p>
 
         <p>
-          It is rarely something most current users need to actively adjust, but
-          the program may still require a value.
-        </p>
-
-        <p>
-          A value such as <strong>1&quot;</strong> is commonly entered when the
-          field needs data and no special limit is being used.
+          A value such as <strong>1&quot;</strong> is commonly entered here. 
         </p>
       </div>
 
@@ -293,21 +287,23 @@ export default function LessonThirteenFabricationOptionsPage() {
             <strong>CTSK</strong>
             <p>
               Controls the finished countersink diameter based on the screw
-              head.
+              head. To add a CTSK depth the general rule is to measure the size of the screw head and add .010". 
             </p>
           </div>
 
           <div>
             <strong>Width & Height</strong>
             <p>
-              Used when routing rectangular or slotted operations.
+              Used when routing rectangular or slotted operations. Width is ALWAYS orientated in the Y 
+              direction while height is up and down on the front and back surface and back and forth on the top or bottom surface. 
             </p>
           </div>
 
           <div>
             <strong>Diameter</strong>
             <p>
-              Used when routing a circle larger than the selected endmill.
+              Used when routing a circle larger than the selected endmill. If you try to do a cirlce and the diameter is the same sizeor smaller then the drill 
+              bit diameter itself, the machine will freeze and be unable to complete the opperation. 
             </p>
           </div>
         </div>
@@ -356,64 +352,6 @@ export default function LessonThirteenFabricationOptionsPage() {
         </p>
       </div>
 
-      <h3>Formula Options</h3>
-
-      <div className="lessonText">
-        <p>
-          Some fabrication locations are not created from one fixed number.
-        </p>
-
-        <p>
-          Instead, the program uses formulas that respond to the frame,
-          surrounding members, or the location of the part.
-        </p>
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gap: "20px",
-          margin: "30px 0",
-        }}
-      >
-        <img
-          src={img.formulaBox}
-          alt="Fabrication formula checkbox options"
-          style={{
-            width: "100%",
-            maxWidth: "420px",
-            margin: "0 auto",
-            borderRadius: "16px",
-            border: "1px solid rgba(255,255,255,.12)",
-          }}
-        />
-
-        <img
-          src={img.weepAnchor}
-          alt="Weep and anchor fabrication formula settings"
-          style={{
-            width: "100%",
-            maxWidth: "620px",
-            margin: "0 auto",
-            borderRadius: "16px",
-            border: "1px solid rgba(255,255,255,.12)",
-          }}
-        />
-      </div>
-
-      <div className="lessonText">
-        <p>
-          You do not need to understand every formula yet.
-        </p>
-
-        <p>
-          For now, understand why formulas exist: they allow fabrications to
-          move automatically instead of forcing us to enter one fixed location
-          that only works on one exact frame.
-        </p>
-      </div>
-
       <h3>Custom Fab</h3>
 
       <div className="calloutBox">
@@ -445,14 +383,14 @@ export default function LessonThirteenFabricationOptionsPage() {
             <strong>Impact Position</strong>
             <p>
               Used in certain Secondary Fabrication and impact-related
-              conditions.
+              conditions. This allows you to tell a fabrication to activate only when its attached to a certain type of member. 
             </p>
           </div>
 
           <div>
             <strong>Mating PC</strong>
             <p>
-              Can limit a Secondary Fabrication based on the surrounding part.
+              Can limit a Secondary Fabrication so that it only activates when connected to a specific part number. 
             </p>
           </div>
 
@@ -467,14 +405,14 @@ export default function LessonThirteenFabricationOptionsPage() {
             <strong>Function</strong>
             <p>
               Can limit a fabrication to a certain member function such as a
-              head or sill.
+              head or sill. If you use a fabrication on one line item, you must use them on all line items. 
             </p>
           </div>
 
           <div>
             <strong>Steps</strong>
             <p>
-              Allows a routing operation to be completed in multiple passes.
+              Allows a routing operation to be completed in multiple passes. This is helpfull when routing or cutting material that is thicker then 1/8"
             </p>
           </div>
 
@@ -509,21 +447,20 @@ export default function LessonThirteenFabricationOptionsPage() {
           <div>
             <strong>1. When should it happen?</strong>
             <p>
-              Fab Style, glazing condition, stop position, function, and other
-              conditions.
+              Fab Style, glazing condition, stop position controls WHEN. 
             </p>
           </div>
 
           <div>
             <strong>2. Where should it happen?</strong>
-            <p>X, Y, Z, formulas, and rotational values.</p>
+            <p>X, Y, Z controls WHERE.</p>
           </div>
 
           <div>
             <strong>3. What should the machine do?</strong>
             <p>
               Operation, direction, tool, drill size, depth, width, height, and
-              diameter.
+              diameter controls WHAT the machine is going to do
             </p>
           </div>
         </div>
@@ -551,15 +488,7 @@ export default function LessonThirteenFabricationOptionsPage() {
             <input type="checkbox" /> I understand the difference between Drill,
             Circle, Rectangle, Slot, and Countersink.
           </label>
-
-          <label>
-            <input type="checkbox" /> I understand why Direction and Tool must
-            match the physical machining operation.
-          </label>
-
-          <label>
-            <input type="checkbox" /> I understand why formulas exist.
-          </label>
+       
 
           <label>
             <input type="checkbox" /> I am ready to build real fabrications.

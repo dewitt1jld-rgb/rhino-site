@@ -211,20 +211,19 @@ export default function LessonThirteenXYZPage() {
         <strong>Simple coordinate summary:</strong>
 
         <p>
-          X helps locate the drilling surface across the profile.
+          X is measured from the back of the part forward
         </p>
 
         <p>
-          Y typically locates the operation along the length of the member.
+          Y is measured from the lead end of the stick down the length
         </p>
 
         <p>
-          Z locates the drilling surface vertically from the bottom of the
-          profile.
+          Z is measured from the bottom uf the part up
         </p>
       </div>
 
-      <h3>RX & RY</h3>
+      <h3>RX & RY (5700, 5600 and 5000 series machines only) </h3>
 
       <div className="lessonText">
         <p>
@@ -233,8 +232,7 @@ export default function LessonThirteenXYZPage() {
         </p>
 
         <p>
-          If your machine does not support angled drilling, these values can
-          generally be left blank.
+          If your machine does not support angled drilling, these values should be left blank.
         </p>
 
         <p>
@@ -242,10 +240,7 @@ export default function LessonThirteenXYZPage() {
           the other.
         </p>
 
-        <p>
-          The values can move from negative angles through zero to positive
-          angles, with <strong>0</strong> representing a straight plunge.
-        </p>
+
       </div>
 
       <figure className="fullWidthMedia">
@@ -259,8 +254,7 @@ export default function LessonThirteenXYZPage() {
         <strong>You do not need to memorize RX and RY yet.</strong>
 
         <p>
-          For now, simply understand that they control drill angle rather than
-          normal fabrication position.
+          For now, simply understand that they control the rotational drill. If you do not have a ratoational drill please ignore these fields. 
         </p>
       </div>
 
@@ -269,29 +263,22 @@ export default function LessonThirteenXYZPage() {
 
         <div className="takeawayGrid">
           <label>
-            <input type="checkbox" /> I understand what X measures.
+            <input type="checkbox" /> I understand how X is measured
           </label>
 
           <label>
-            <input type="checkbox" /> I understand why Y can behave differently.
+            <input type="checkbox" /> I understand how Y is measured.
           </label>
 
           <label>
-            <input type="checkbox" /> I understand Primary Fabrication Y.
+            <input type="checkbox" /> I understand how Z is measured.
           </label>
 
           <label>
-            <input type="checkbox" /> I understand Secondary Fabrication Y.
+            <input type="checkbox" /> I understand the concept of RX and RY.
           </label>
 
-          <label>
-            <input type="checkbox" /> I understand Fab Rules Library centerline
-            Y values.
-          </label>
-
-          <label>
-            <input type="checkbox" /> I understand what Z measures.
-          </label>
+     
         </div>
       </div>
 
