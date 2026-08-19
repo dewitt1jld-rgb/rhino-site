@@ -209,105 +209,136 @@ export default function LessonFourteenFabFormulaBuilderPage() {
         </div>
       </div>
 
-      <h3>What Each Formula Type Represents</h3>
+<h3>What Each Formula Type Represents</h3>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gap: "24px",
-          margin: "32px 0",
-        }}
-      >
-        <figure style={{ margin: 0, textAlign: "center" }}>
-          <img
-            src={img.anchorHolesEnd}
-            alt="Anchor holes at the ends of a stick"
-            style={{
-              width: "100%",
-              height: "auto",
-              borderRadius: "16px",
-              border: "1px solid rgba(255,255,255,.12)",
-            }}
-          />
+<div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: "36px",
+    margin: "32px 0",
+  }}
+>
+  <figure
+    style={{
+      margin: 0,
+      textAlign: "center",
+    }}
+  >
+    <img
+      src={img.anchorHolesEnd}
+      alt="Anchor holes at the ends of a stick"
+      style={{
+        width: "100%",
+        maxWidth: "1000px",
+        height: "auto",
+        display: "block",
+        margin: "0 auto",
+        borderRadius: "16px",
+        border: "1px solid rgba(255,255,255,.12)",
+      }}
+    />
 
-          <figcaption
-            style={{
-              marginTop: "10px",
-              color: "rgba(255,255,255,.6)",
-            }}
-          >
-            Anchor holes located near the ends of a stick.
-          </figcaption>
-        </figure>
+    <figcaption
+      style={{
+        marginTop: "12px",
+        color: "rgba(255,255,255,.6)",
+      }}
+    >
+      Anchor holes located near the ends of a stick.
+    </figcaption>
+  </figure>
 
-        <figure style={{ margin: 0, textAlign: "center" }}>
-          <img
-            src={img.anchorHolesCenter}
-            alt="Anchor holes in the center of a stick"
-            style={{
-              width: "100%",
-              height: "auto",
-              borderRadius: "16px",
-              border: "1px solid rgba(255,255,255,.12)",
-            }}
-          />
+  <figure
+    style={{
+      margin: 0,
+      textAlign: "center",
+    }}
+  >
+    <img
+      src={img.anchorHolesCenter}
+      alt="Anchor holes in the center of a stick"
+      style={{
+        width: "100%",
+        maxWidth: "1000px",
+        height: "auto",
+        display: "block",
+        margin: "0 auto",
+        borderRadius: "16px",
+        border: "1px solid rgba(255,255,255,.12)",
+      }}
+    />
 
-          <figcaption
-            style={{
-              marginTop: "10px",
-              color: "rgba(255,255,255,.6)",
-            }}
-          >
-            Anchor holes located through the center portion of a stick.
-          </figcaption>
-        </figure>
+    <figcaption
+      style={{
+        marginTop: "12px",
+        color: "rgba(255,255,255,.6)",
+      }}
+    >
+      Anchor holes located through the center portion of a stick.
+    </figcaption>
+  </figure>
 
-        <figure style={{ margin: 0, textAlign: "center" }}>
-          <img
-            src={img.weepHoleEnd}
-            alt="Weep holes near the ends of a stick"
-            style={{
-              width: "100%",
-              height: "auto",
-              borderRadius: "16px",
-              border: "1px solid rgba(255,255,255,.12)",
-            }}
-          />
+  <figure
+    style={{
+      margin: 0,
+      textAlign: "center",
+    }}
+  >
+    <img
+      src={img.weepHoleEnd}
+      alt="Weep holes near the ends of a stick"
+      style={{
+        width: "100%",
+        maxWidth: "1000px",
+        height: "auto",
+        display: "block",
+        margin: "0 auto",
+        borderRadius: "16px",
+        border: "1px solid rgba(255,255,255,.12)",
+      }}
+    />
 
-          <figcaption
-            style={{
-              marginTop: "10px",
-              color: "rgba(255,255,255,.6)",
-            }}
-          >
-            Weep holes located near the ends of the stick.
-          </figcaption>
-        </figure>
+    <figcaption
+      style={{
+        marginTop: "12px",
+        color: "rgba(255,255,255,.6)",
+      }}
+    >
+      Weep holes located near the ends of the stick.
+    </figcaption>
+  </figure>
 
-        <figure style={{ margin: 0, textAlign: "center" }}>
-          <img
-            src={img.weepHoleCenter}
-            alt="Weep holes located around intermediate verticals"
-            style={{
-              width: "100%",
-              height: "auto",
-              borderRadius: "16px",
-              border: "1px solid rgba(255,255,255,.12)",
-            }}
-          />
+  <figure
+    style={{
+      margin: 0,
+      textAlign: "center",
+    }}
+  >
+    <img
+      src={img.weepHoleCenter}
+      alt="Weep holes located around intermediate verticals"
+      style={{
+        width: "100%",
+        maxWidth: "1000px",
+        height: "auto",
+        display: "block",
+        margin: "0 auto",
+        borderRadius: "16px",
+        border: "1px solid rgba(255,255,255,.12)",
+      }}
+    />
 
-          <figcaption
-            style={{
-              marginTop: "10px",
-              color: "rgba(255,255,255,.6)",
-            }}
-          >
-            Center weep holes typically relate to intermediate framing
-            conditions.
-          </figcaption>
-        </figure>
-      </div>
+    <figcaption
+      style={{
+        marginTop: "12px",
+        color: "rgba(255,255,255,.6)",
+      }}
+    >
+      Center weep holes typically relate to intermediate framing conditions.
+    </figcaption>
+  </figure>
+</div>
 
       <div className="calloutBox">
         <strong>Example:</strong>
