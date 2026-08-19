@@ -38,6 +38,9 @@ const img = {
 
   stickIds:
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/all-about-frames/metal-fabrication/images/metal-fabrication-09-stick-ids.png",
+
+    metalFab:
+  "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_15/metal_fab.png",
 };
 
 export default function LessonFifteenMetalFabricationBasicsPage() {
@@ -88,7 +91,7 @@ export default function LessonFifteenMetalFabricationBasicsPage() {
         </p>
 
         <p>
-          We will begin making actual project changes in the next section.
+          We will import and make changes to our frames in lesson 16.
         </p>
       </div>
 
@@ -104,6 +107,41 @@ export default function LessonFifteenMetalFabricationBasicsPage() {
         <p>
           Click that option to open the Metal Fabrication screen.
         </p>
+
+
+<figure
+  style={{
+    textAlign: "center",
+    margin: "32px 0",
+  }}
+>
+  <img
+    src={img.metalFab}
+    alt="Metal Fabrication option in Glazier Studio"
+    style={{
+      width: "100%",
+      maxWidth: "700px",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+      borderRadius: "16px",
+      border: "1px solid rgba(255,255,255,.12)",
+    }}
+  />
+
+  <figcaption
+    style={{
+      marginTop: "10px",
+      color: "rgba(255,255,255,.6)",
+    }}
+  >
+    Select Metal Fabrication from the left-hand menu to open the Metal
+    Fabrication screen.
+  </figcaption>
+</figure>
+
+
+
       </div>
 
       <figure className="fullWidthMedia">
