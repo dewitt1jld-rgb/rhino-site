@@ -335,7 +335,7 @@ export default function LessonFourteenFabFormulaBuilderPage() {
         color: "rgba(255,255,255,.6)",
       }}
     >
-      Center weep holes typically relate to intermediate framing conditions.
+      Center weep holes located in the middle of the stick.
     </figcaption>
   </figure>
 </div>
@@ -421,7 +421,7 @@ export default function LessonFourteenFabFormulaBuilderPage() {
         <strong>Terminology note:</strong>
 
         <p>
-          In these fabrication screens, the term <strong>Back Member</strong>
+          In these fabrication screens, the term <strong>Back Member</strong> 
           can refer broadly to framing members such as jambs, heads, sills,
           horizontals, and verticals.
         </p>
@@ -554,7 +554,7 @@ export default function LessonFourteenFabFormulaBuilderPage() {
           </label>
 
           <label>
-            Anchor holes use <strong>End / Center Fab</strong>.
+            Anchor holes use <strong>End / Center formula columns</strong>.
           </label>
 
           <label>
@@ -723,7 +723,7 @@ export default function LessonFourteenFabFormulaBuilderPage() {
 
         <p>
           The difference is that these are weeps, so we use the{" "}
-          <strong>Weep End</strong> formula and columns instead of End Fab.
+          <strong>Weep End</strong> columns instead of End Fab columns when pasting our formula.
         </p>
       </div>
 
@@ -769,8 +769,7 @@ export default function LessonFourteenFabFormulaBuilderPage() {
 
         <p>
           If the installation instructions require the weep hole 4&quot; away
-          from the edge of that vertical, our formula needs to account for both
-          distances.
+          from the edge of that vertical, our formula needs to account for the intermediate mullion width. 
         </p>
 
         <p>
