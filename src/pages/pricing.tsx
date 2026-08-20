@@ -3,7 +3,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
-type CheckoutPlan = "annual" | "lifetime";
+type CheckoutPlan =
+  | "annual"
+  | "lifetime"
+  | "support";
 
 export default function Pricing() {
   const router = useRouter();
@@ -11,7 +14,8 @@ export default function Pricing() {
   const [loadingPlan, setLoadingPlan] =
     useState<CheckoutPlan | null>(null);
 
-  const [agreed, setAgreed] = useState(false);
+  const [agreed, setAgreed] =
+    useState(false);
 
   const showNewSignupMessage =
     router.query.newSignup === "1";
@@ -33,7 +37,9 @@ export default function Pricing() {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        router.push("/signup?returnTo=/pricing");
+        router.push(
+          "/signup?returnTo=/pricing"
+        );
         return;
       }
 
@@ -44,19 +50,22 @@ export default function Pricing() {
         return;
       }
 
-      const response = await fetch("/api/checkout", {
-        method: "POST",
+      const response =
+        await fetch("/api/checkout", {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-          Authorization:
-            `Bearer ${session.access_token}`,
-        },
+          headers: {
+            "Content-Type":
+              "application/json",
 
-        body: JSON.stringify({
-          plan,
-        }),
-      });
+            Authorization:
+              `Bearer ${session.access_token}`,
+          },
+
+          body: JSON.stringify({
+            plan,
+          }),
+        });
 
       /*
       --------------------------------------------------
@@ -65,45 +74,24 @@ export default function Pricing() {
       */
 
       if (response.status === 409) {
-        alert(
-          "You're already set up with Rhino Wrangler.\n\n" +
-            "We'll take you to billing so you can manage your account."
-        );
-
-        const portalRes = await fetch(
-          "/api/customer-portal",
-          {
-            method: "POST",
-
-            headers: {
-              Authorization:
-                `Bearer ${session.access_token}`,
-            },
-          }
-        );
-
-        const portalData =
-          await portalRes.json();
-
-        if (portalData.url) {
-          window.location.href =
-            portalData.url;
-
-          return;
-        }
+        const data =
+          await response.json();
 
         alert(
-          portalData.error ||
-            "Unable to open billing portal. Please contact support."
+          data.error ||
+            "Your company already has a Rhino Wrangler plan. Please contact support if you need to make changes."
         );
 
         return;
       }
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (data.url) {
-        window.location.href = data.url;
+        window.location.href =
+          data.url;
+
         return;
       }
 
@@ -134,8 +122,8 @@ export default function Pricing() {
               <strong>
                 Account created successfully.
               </strong>{" "}
-              Your account is ready. Choose the
-              access option that works best for
+              Your account is ready. Choose
+              the option that works best for
               your company.
             </div>
           )}
@@ -143,10 +131,10 @@ export default function Pricing() {
           {showNoAccessMessage && (
             <div className="statusBanner warningBanner">
               <strong>
-                No active access found.
+                No active training access found.
               </strong>{" "}
-              Choose a plan below to unlock the
-              training platform.
+              Choose a plan below to get
+              started with Rhino Wrangler.
             </div>
           )}
 
@@ -163,7 +151,7 @@ export default function Pricing() {
 
           <section className="heroBlock">
             <div className="eyebrow">
-              Company Access
+              Company Plans
             </div>
 
             <h1 className="pageTitle">
@@ -171,13 +159,12 @@ export default function Pricing() {
             </h1>
 
             <p className="pageText">
-              Both options give your company
-              complete access to The Rhino
-              Wrangler training platform.
-              Choose annual access with technical
-              support or purchase lifetime
-              platform access with no recurring
-              platform fee.
+              Choose specialized support,
+              combine support with the complete
+              Rhino Wrangler training platform,
+              or purchase lifetime access to the
+              training platform with no recurring
+              website fee.
             </p>
           </section>
 
@@ -194,36 +181,136 @@ export default function Pricing() {
 
           <section className="pricingWrap">
 
-            {/* ANNUAL */}
+            {/* SUPPORT ONLY */}
 
-            <div className="planCard featuredPlan">
-              <div className="recommendedBadge">
-                SUPPORT INCLUDED
-              </div>
-
+            <div className="planCard">
               <div className="planLabel">
-                Annual Membership
+                Support Only
               </div>
 
               <h2 className="planTitle">
-                Platform + Technical Support
+                Specialized Phone Support
               </h2>
 
               <div className="price">
-                $2,250
-                <span>/ year</span>
+                $150
+                <span>/ month</span>
               </div>
 
+              <p className="billingText">
+                Billed quarterly at{" "}
+                <strong>$450 every 3 months</strong>
+              </p>
+
               <p className="planText">
-                Full access to The Rhino Wrangler
-                training platform plus ongoing
-                technical support for your company.
+                Direct specialized support for
+                companies that need help with
+                RhinoFab, Glazier Studio,
+                PartnerPak, setup, fabrication,
+                and troubleshooting.
+              </p>
+
+              <ul className="featureList">
+                <li>
+                  Specialized phone support
+                </li>
+
+                <li>
+                  RhinoFab troubleshooting
+                </li>
+
+                <li>
+                  Glazier Studio & PartnerPak
+                  support
+                </li>
+
+                <li>
+                  Fabrication troubleshooting
+                </li>
+
+                <li>
+                  Machine setup guidance
+                </li>
+
+                <li>
+                  Workflow and software questions
+                </li>
+              </ul>
+
+              <div className="noSupportBox">
+                <strong>
+                  Training Platform Not Included
+                </strong>
+
+                <p>
+                  This plan is for specialized
+                  support only. Access to the
+                  Rhino Wrangler training website
+                  is not included.
+                </p>
+              </div>
+
+              <button
+                className="planButton secondaryButton"
+                onClick={() =>
+                  handleCheckout("support")
+                }
+                disabled={
+                  !agreed ||
+                  loadingPlan !== null
+                }
+              >
+                {loadingPlan === "support"
+                  ? "Loading..."
+                  : "Choose Support Only"}
+              </button>
+
+              <p className="smallNote">
+                $450 billed every 3 months until
+                canceled.
+              </p>
+            </div>
+
+            {/* SUPPORT + WEBSITE */}
+
+            <div className="planCard featuredPlan">
+              <div className="recommendedBadge">
+                BEST VALUE
+              </div>
+
+              <div className="planLabel">
+                Support + Website
+              </div>
+
+              <h2 className="planTitle">
+                Complete Rhino Wrangler Access
+              </h2>
+
+              <div className="price">
+                $200
+                <span>/ month</span>
+              </div>
+
+              <p className="billingText">
+                Billed quarterly at{" "}
+                <strong>$600 every 3 months</strong>
+              </p>
+
+              <p className="planText">
+                Get the complete Rhino Wrangler
+                training platform plus specialized
+                ongoing technical support for your
+                company.
               </p>
 
               <ul className="featureList">
                 <li>
                   Full Rhino Wrangler training
                   platform
+                </li>
+
+                <li>
+                  Specialized phone support
                 </li>
 
                 <li>
@@ -260,23 +347,18 @@ export default function Pricing() {
                 <li>
                   Company employee accounts
                 </li>
-
-                <li className="supportFeature">
-                  Technical support included
-                </li>
               </ul>
 
               <div className="supportBox">
                 <strong>
-                  Technical Support Included
+                  Platform + Support Included
                 </strong>
 
                 <p>
-                  Annual members receive access to
-                  Rhino Wrangler technical support
-                  for help with software, training,
-                  troubleshooting, and fabrication
-                  questions.
+                  This is the complete Rhino
+                  Wrangler package: full training
+                  access plus specialized technical
+                  support.
                 </p>
               </div>
 
@@ -292,40 +374,47 @@ export default function Pricing() {
               >
                 {loadingPlan === "annual"
                   ? "Loading..."
-                  : "Choose Annual Membership"}
+                  : "Choose Support + Website"}
               </button>
 
               <p className="smallNote">
-                Renews annually until canceled.
+                $600 billed every 3 months until
+                canceled.
               </p>
             </div>
 
-            {/* LIFETIME */}
+            {/* WEBSITE ONLY */}
 
             <div className="planCard">
               <div className="planLabel">
-                Lifetime Access
+                Website Only
               </div>
 
               <h2 className="planTitle">
-                Lifetime Training Platform
+                Lifetime Training Access
               </h2>
 
               <div className="price">
-                $6,500
+                $3,500
                 <span>one time</span>
               </div>
 
+              <p className="billingText">
+                One payment. No recurring
+                training-platform fee.
+              </p>
+
               <p className="planText">
-                Purchase permanent access to The
+                Purchase lifetime access to the
                 Rhino Wrangler training platform
-                with no recurring platform fee.
+                without an ongoing support
+                contract.
               </p>
 
               <ul className="featureList">
                 <li>
-                  Full Rhino Wrangler training
-                  platform
+                  Lifetime Rhino Wrangler
+                  platform access
                 </li>
 
                 <li>
@@ -366,15 +455,14 @@ export default function Pricing() {
 
               <div className="noSupportBox">
                 <strong>
-                  Technical Support Not Included
+                  Specialized Support Not Included
                 </strong>
 
                 <p>
                   This option includes lifetime
                   access to the training platform.
-                  Ongoing technical support is not
-                  included with the lifetime
-                  purchase.
+                  Specialized phone support can be
+                  added separately later.
                 </p>
               </div>
 
@@ -394,8 +482,7 @@ export default function Pricing() {
               </button>
 
               <p className="smallNote">
-                One-time payment. No annual
-                platform renewal.
+                One-time payment of $3,500.
               </p>
             </div>
           </section>
@@ -408,7 +495,9 @@ export default function Pricing() {
                 type="checkbox"
                 checked={agreed}
                 onChange={(e) =>
-                  setAgreed(e.target.checked)
+                  setAgreed(
+                    e.target.checked
+                  )
                 }
               />
 
@@ -417,7 +506,8 @@ export default function Pricing() {
                 <Link
                   href="/terms"
                   style={{
-                    textDecoration: "underline",
+                    textDecoration:
+                      "underline",
                   }}
                 >
                   Terms of Service
@@ -473,7 +563,7 @@ export default function Pricing() {
         }
 
         .contentWrap {
-          max-width: 1180px;
+          max-width: 1280px;
           margin: 0 auto;
         }
 
@@ -525,7 +615,7 @@ export default function Pricing() {
         }
 
         .pageText {
-          max-width: 780px;
+          max-width: 820px;
           margin: 18px auto 0;
 
           color:
@@ -560,7 +650,7 @@ export default function Pricing() {
 
         /*
         -------------------------------
-        TWO COLUMN PRICING
+        THREE COLUMN PRICING
         -------------------------------
         */
 
@@ -568,9 +658,9 @@ export default function Pricing() {
           display: grid;
 
           grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+            repeat(3, minmax(0, 1fr));
 
-          gap: 26px;
+          gap: 24px;
           align-items: stretch;
         }
 
@@ -581,7 +671,7 @@ export default function Pricing() {
           flex-direction: column;
 
           border-radius: 26px;
-          padding: 34px;
+          padding: 30px;
 
           background:
             radial-gradient(
@@ -605,7 +695,7 @@ export default function Pricing() {
         .featuredPlan {
           border:
             1px solid
-            rgba(245, 158, 11, 0.55);
+            rgba(245, 158, 11, 0.58);
 
           background:
             radial-gradient(
@@ -658,21 +748,21 @@ export default function Pricing() {
 
         .planTitle {
           margin: 0;
-          font-size: 28px;
+          font-size: 27px;
           letter-spacing: -0.03em;
         }
 
         .price {
           margin-top: 22px;
 
-          font-size: 50px;
+          font-size: 46px;
           font-weight: 950;
 
           letter-spacing: 0.025em;
         }
 
         .price span {
-          font-size: 17px;
+          font-size: 16px;
           font-weight: 700;
 
           color:
@@ -681,8 +771,17 @@ export default function Pricing() {
           margin-left: 6px;
         }
 
+        .billingText {
+          margin: 8px 0 0;
+
+          color: #fbbf24;
+
+          font-size: 14px;
+          line-height: 1.5;
+        }
+
         .planText {
-          margin: 14px 0 22px;
+          margin: 16px 0 22px;
 
           color:
             rgba(255, 255, 255, 0.78);
@@ -712,17 +811,6 @@ export default function Pricing() {
           font-weight: 900;
           margin-right: 10px;
         }
-
-        .supportFeature {
-          color: #ffffff !important;
-          font-weight: 900;
-        }
-
-        /*
-        -------------------------------
-        SUPPORT BOXES
-        -------------------------------
-        */
 
         .supportBox,
         .noSupportBox {
@@ -768,12 +856,6 @@ export default function Pricing() {
           font-size: 14px;
           line-height: 1.6;
         }
-
-        /*
-        -------------------------------
-        BUTTONS
-        -------------------------------
-        */
 
         .planButton {
           width: 100%;
@@ -839,16 +921,9 @@ export default function Pricing() {
           font-size: 13px;
         }
 
-        /*
-        -------------------------------
-        TERMS
-        -------------------------------
-        */
-
         .termsSection {
           max-width: 700px;
           margin: 34px auto 0;
-
           padding: 22px;
 
           border-radius: 18px;
@@ -890,12 +965,6 @@ export default function Pricing() {
           font-size: 13px;
         }
 
-        /*
-        -------------------------------
-        DISCLAIMER
-        -------------------------------
-        */
-
         .disclaimerSection {
           max-width: 900px;
           margin: 28px auto 0;
@@ -909,15 +978,12 @@ export default function Pricing() {
           line-height: 1.65;
         }
 
-        /*
-        -------------------------------
-        MOBILE
-        -------------------------------
-        */
-
-        @media (max-width: 850px) {
+        @media (max-width: 1050px) {
           .pricingWrap {
             grid-template-columns: 1fr;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
           }
         }
 

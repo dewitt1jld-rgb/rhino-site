@@ -33,7 +33,7 @@ export default async function handler(
 
   /*
   --------------------------------------------------
-  1. CHECK NEW COMPANY-BASED ACCESS SYSTEM
+  1. CHECK COMPANY-BASED ACCESS SYSTEM
   --------------------------------------------------
   */
 
@@ -51,7 +51,10 @@ export default async function handler(
         company_name,
         customer_number,
         access_status,
-        seat_limit
+        platform_access,
+        support_included,
+        seat_limit,
+        plan_type
       )
     `)
     .eq("id", user.id)
@@ -75,7 +78,9 @@ export default async function handler(
       : profile.companies;
 
     /*
-      Employee account itself must still be active.
+    --------------------------------------------------
+    USER ACCOUNT MUST BE ACTIVE
+    --------------------------------------------------
     */
 
     if (profile.is_active === false) {
@@ -84,14 +89,51 @@ export default async function handler(
         hasAccess: false,
         source: "company",
         reason: "user_inactive",
+
+        company: company
+          ? {
+              id: company.id,
+              name: company.company_name,
+              customerNumber: company.customer_number,
+              seatLimit: company.seat_limit,
+              planType: company.plan_type,
+              platformAccess: company.platform_access,
+              supportIncluded: company.support_included,
+            }
+          : null,
       });
     }
 
     /*
-      Company must have active access.
+    --------------------------------------------------
+    COMPANY MUST HAVE PLATFORM ACCESS
+    --------------------------------------------------
+
+    access_status tells us whether the company
+    currently has an active Rhino Wrangler plan.
+
+    platform_access specifically determines whether
+    this company is allowed into the training portal.
+
+    Examples:
+
+    Annual:
+    access_status = active
+    platform_access = true
+
+    Lifetime:
+    access_status = active
+    platform_access = true
+
+    Support Only:
+    access_status = active
+    platform_access = false
     */
 
-    if (company?.access_status === "active") {
+    if (
+      company?.access_status === "active" &&
+      company?.platform_access === true
+    ) {
       return res.status(200).json({
         status: "active",
         hasAccess: true,
@@ -102,15 +144,68 @@ export default async function handler(
           name: company.company_name,
           customerNumber: company.customer_number,
           seatLimit: company.seat_limit,
+          planType: company.plan_type,
+          platformAccess: company.platform_access,
+          supportIncluded: company.support_included,
         },
       });
     }
+
+    /*
+    --------------------------------------------------
+    SUPPORT-ONLY COMPANY
+    --------------------------------------------------
+
+    They have an active relationship with Rhino
+    Wrangler, but do not have training-platform access.
+    */
+
+    if (
+      company?.access_status === "active" &&
+      company?.platform_access !== true &&
+      company?.support_included === true
+    ) {
+      return res.status(200).json({
+        status: "support_only",
+        hasAccess: false,
+        source: "company",
+        reason: "support_only",
+
+        company: {
+          id: company.id,
+          name: company.company_name,
+          customerNumber: company.customer_number,
+          seatLimit: company.seat_limit,
+          planType: company.plan_type,
+          platformAccess: company.platform_access,
+          supportIncluded: company.support_included,
+        },
+      });
+    }
+
+    /*
+    --------------------------------------------------
+    INACTIVE COMPANY
+    --------------------------------------------------
+    */
 
     return res.status(200).json({
       status: "inactive",
       hasAccess: false,
       source: "company",
       reason: "company_inactive",
+
+      company: company
+        ? {
+            id: company.id,
+            name: company.company_name,
+            customerNumber: company.customer_number,
+            seatLimit: company.seat_limit,
+            planType: company.plan_type,
+            platformAccess: company.platform_access,
+            supportIncluded: company.support_included,
+          }
+        : null,
     });
   }
 

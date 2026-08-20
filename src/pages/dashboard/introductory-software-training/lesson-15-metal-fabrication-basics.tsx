@@ -120,7 +120,7 @@ export default function LessonFifteenMetalFabricationBasicsPage() {
     alt="Metal Fabrication option in Glazier Studio"
     style={{
       width: "100%",
-      maxWidth: "700px",
+      maxWidth: "300px",
       height: "auto",
       display: "block",
       margin: "0 auto",
@@ -258,7 +258,7 @@ export default function LessonFifteenMetalFabricationBasicsPage() {
         </figcaption>
       </figure>
 
-      <h3>You Can Import Only Part of a Project</h3>
+      <h3>You Can Import Everything Or Select individual frames</h3>
 
       <div className="lessonText">
         <p>
@@ -277,7 +277,7 @@ export default function LessonFifteenMetalFabricationBasicsPage() {
         </p>
 
         <p>
-          Use the small plus button to select the frames you want included.
+          Use the small plus button to select the frames you want included. once the frames are selected pressing okay will start the import. 
         </p>
       </div>
 

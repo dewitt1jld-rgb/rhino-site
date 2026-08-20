@@ -12,13 +12,20 @@ const supabaseAdmin = createSupabaseClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+type PurchasePlan =
+  | "annual"
+  | "lifetime"
+  | "support";
+
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
-async function buffer(readable: NextApiRequest) {
+async function buffer(
+  readable: NextApiRequest
+) {
   const chunks: Buffer[] = [];
 
   for await (const chunk of readable) {
@@ -36,14 +43,35 @@ function formatAmount(
   amountTotal: number | null,
   currency: string | null
 ) {
-  if (!amountTotal || !currency) {
+  if (
+    amountTotal === null ||
+    !currency
+  ) {
     return "Unknown";
   }
 
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency.toUpperCase(),
-  }).format(amountTotal / 100);
+  return new Intl.NumberFormat(
+    "en-US",
+    {
+      style: "currency",
+      currency:
+        currency.toUpperCase(),
+    }
+  ).format(amountTotal / 100);
+}
+
+function getPlanLabel(
+  plan?: string | null
+) {
+  if (plan === "annual") {
+    return "Annual Membership";
+  }
+
+  if (plan === "support") {
+    return "Specialized Phone Support";
+  }
+
+  return "Lifetime Access";
 }
 
 /*
@@ -58,14 +86,13 @@ async function generateUniqueRhinoAccessCode() {
     attempt < 25;
     attempt++
   ) {
-    const numericPart = randomInt(
-      0,
-      100000
-    )
-      .toString()
-      .padStart(5, "0");
+    const numericPart =
+      randomInt(0, 100000)
+        .toString()
+        .padStart(5, "0");
 
-    const code = `RW-${numericPart}`;
+    const code =
+      `RW-${numericPart}`;
 
     const {
       data,
@@ -73,7 +100,10 @@ async function generateUniqueRhinoAccessCode() {
     } = await supabaseAdmin
       .from("companies")
       .select("id")
-      .eq("customer_number", code)
+      .eq(
+        "customer_number",
+        code
+      )
       .maybeSingle();
 
     if (error) {
@@ -100,12 +130,14 @@ async function ensureCompanyForPurchase({
   profileId,
   companyName,
   planType,
-  supportIncluded,
+  stripeCustomerId,
+  stripeSubscriptionId,
 }: {
   profileId: string;
   companyName?: string | null;
-  planType: "annual" | "lifetime";
-  supportIncluded: boolean;
+  planType: PurchasePlan;
+  stripeCustomerId: string;
+  stripeSubscriptionId?: string | null;
 }) {
   const {
     data: profile,
@@ -117,7 +149,10 @@ async function ensureCompanyForPurchase({
       company_id,
       company_name
     `)
-    .eq("id", profileId)
+    .eq(
+      "id",
+      profileId
+    )
     .maybeSingle();
 
   if (profileError) {
@@ -131,14 +166,15 @@ async function ensureCompanyForPurchase({
   }
 
   /*
-    If this profile is already connected
-    to a company, reuse that company.
+  --------------------------------------------------
+  EXISTING COMPANY
+  --------------------------------------------------
   */
 
   if (profile.company_id) {
     const {
       data: existingCompany,
-      error: existingCompanyError,
+      error: companyError,
     } = await supabaseAdmin
       .from("companies")
       .select(`
@@ -148,39 +184,169 @@ async function ensureCompanyForPurchase({
         seat_limit,
         access_status,
         plan_type,
-        support_included
+        platform_access,
+        support_included,
+        stripe_customer_id,
+        platform_subscription_id,
+        support_subscription_id
       `)
-      .eq("id", profile.company_id)
+      .eq(
+        "id",
+        profile.company_id
+      )
       .single();
 
-    if (existingCompanyError) {
-      throw existingCompanyError;
+    if (companyError) {
+      throw companyError;
     }
 
+    let nextPlanType =
+      existingCompany.plan_type;
+
+    let nextPlatformAccess =
+      existingCompany.platform_access ===
+      true;
+
+    let nextSupportIncluded =
+      existingCompany.support_included ===
+      true;
+
+    let nextPlatformSubscriptionId =
+      existingCompany
+        .platform_subscription_id;
+
+    let nextSupportSubscriptionId =
+      existingCompany
+        .support_subscription_id;
+
+    /*
+    --------------------------------------------------
+    ANNUAL
+    --------------------------------------------------
+    */
+
+    if (planType === "annual") {
+      nextPlanType = "annual";
+
+      nextPlatformAccess = true;
+
+      nextSupportIncluded = true;
+
+      nextPlatformSubscriptionId =
+        stripeSubscriptionId || null;
+    }
+
+    /*
+    --------------------------------------------------
+    LIFETIME
+    --------------------------------------------------
+    */
+
+    if (planType === "lifetime") {
+      nextPlanType = "lifetime";
+
+      nextPlatformAccess = true;
+
+      /*
+        IMPORTANT:
+        preserve an existing support
+        subscription if the customer
+        bought Support first.
+      */
+
+      nextPlatformSubscriptionId =
+        null;
+    }
+
+    /*
+    --------------------------------------------------
+    SUPPORT
+    --------------------------------------------------
+    */
+
+    if (planType === "support") {
+      nextSupportIncluded = true;
+
+      nextSupportSubscriptionId =
+        stripeSubscriptionId || null;
+
+      /*
+        Lifetime + Support should remain
+        classified as Lifetime.
+
+        Support-only customers are
+        classified as Support.
+      */
+
+      if (!nextPlatformAccess) {
+        nextPlanType = "support";
+      }
+    }
+
+    const nextAccessStatus =
+      nextPlatformAccess ||
+      nextSupportIncluded
+        ? "active"
+        : "inactive";
+
     const {
-      error: companyUpdateError,
+      data: updatedCompany,
+      error: updateError,
     } = await supabaseAdmin
       .from("companies")
       .update({
-        access_status: "active",
-        plan_type: planType,
-        support_included:
-          supportIncluded,
-      })
-      .eq("id", existingCompany.id);
+        plan_type:
+          nextPlanType,
 
-    if (companyUpdateError) {
-      throw companyUpdateError;
+        platform_access:
+          nextPlatformAccess,
+
+        support_included:
+          nextSupportIncluded,
+
+        access_status:
+          nextAccessStatus,
+
+        stripe_customer_id:
+          stripeCustomerId,
+
+        platform_subscription_id:
+          nextPlatformSubscriptionId,
+
+        support_subscription_id:
+          nextSupportSubscriptionId,
+      })
+      .eq(
+        "id",
+        existingCompany.id
+      )
+      .select(`
+        id,
+        company_name,
+        customer_number,
+        seat_limit,
+        access_status,
+        plan_type,
+        platform_access,
+        support_included,
+        stripe_customer_id,
+        platform_subscription_id,
+        support_subscription_id
+      `)
+      .single();
+
+    if (updateError) {
+      throw updateError;
     }
 
-    return {
-      ...existingCompany,
-      access_status: "active",
-      plan_type: planType,
-      support_included:
-        supportIncluded,
-    };
+    return updatedCompany;
   }
+
+  /*
+  --------------------------------------------------
+  NEW COMPANY
+  --------------------------------------------------
+  */
 
   const cleanCompanyName =
     companyName?.trim() ||
@@ -195,19 +361,58 @@ async function ensureCompanyForPurchase({
   const rhinoAccessCode =
     await generateUniqueRhinoAccessCode();
 
+  const platformAccess =
+    planType === "annual" ||
+    planType === "lifetime";
+
+  const supportIncluded =
+    planType === "annual" ||
+    planType === "support";
+
+  const platformSubscriptionId =
+    planType === "annual"
+      ? stripeSubscriptionId || null
+      : null;
+
+  const supportSubscriptionId =
+    planType === "support"
+      ? stripeSubscriptionId || null
+      : null;
+
   const {
     data: company,
     error: companyError,
   } = await supabaseAdmin
     .from("companies")
     .insert({
-      company_name: cleanCompanyName,
-      customer_number: rhinoAccessCode,
+      company_name:
+        cleanCompanyName,
+
+      customer_number:
+        rhinoAccessCode,
+
       seat_limit: 7,
-      access_status: "active",
-      plan_type: planType,
+
+      access_status:
+        "active",
+
+      plan_type:
+        planType,
+
+      platform_access:
+        platformAccess,
+
       support_included:
         supportIncluded,
+
+      stripe_customer_id:
+        stripeCustomerId,
+
+      platform_subscription_id:
+        platformSubscriptionId,
+
+      support_subscription_id:
+        supportSubscriptionId,
     })
     .select(`
       id,
@@ -216,7 +421,11 @@ async function ensureCompanyForPurchase({
       seat_limit,
       access_status,
       plan_type,
-      support_included
+      platform_access,
+      support_included,
+      stripe_customer_id,
+      platform_subscription_id,
+      support_subscription_id
     `)
     .single();
 
@@ -229,18 +438,31 @@ async function ensureCompanyForPurchase({
   } = await supabaseAdmin
     .from("profiles")
     .update({
-      company_id: company.id,
-      company_name: cleanCompanyName,
-      role: "company_admin",
-      is_active: true,
+      company_id:
+        company.id,
+
+      company_name:
+        cleanCompanyName,
+
+      role:
+        "company_admin",
+
+      is_active:
+        true,
     })
-    .eq("id", profileId);
+    .eq(
+      "id",
+      profileId
+    );
 
   if (profileUpdateError) {
     await supabaseAdmin
       .from("companies")
       .delete()
-      .eq("id", company.id);
+      .eq(
+        "id",
+        company.id
+      );
 
     throw profileUpdateError;
   }
@@ -250,13 +472,189 @@ async function ensureCompanyForPurchase({
 
 /*
 --------------------------------------------------
-ADMIN SITE PURCHASE EMAIL
+SYNC MEMBER ACCESS
+--------------------------------------------------
+*/
+
+async function syncMemberAccess({
+  profileId,
+  platformAccess,
+  stripeCustomerId,
+  platformSubscriptionId,
+}: {
+  profileId: string;
+  platformAccess: boolean;
+  stripeCustomerId: string;
+  platformSubscriptionId?: string | null;
+}) {
+  const {
+    data: existing,
+    error: existingError,
+  } = await supabaseAdmin
+    .from("member_access")
+    .select(`
+      profile_id,
+      stripe_subscription_id
+    `)
+    .eq(
+      "profile_id",
+      profileId
+    )
+    .maybeSingle();
+
+  if (existingError) {
+    throw existingError;
+  }
+
+  const values = {
+    status:
+      platformAccess
+        ? "active"
+        : "inactive",
+
+    stripe_customer_id:
+      stripeCustomerId,
+
+    /*
+      Support-only purchases must not
+      overwrite a real platform
+      subscription ID.
+    */
+
+    stripe_subscription_id:
+      platformSubscriptionId ??
+      existing?.stripe_subscription_id ??
+      null,
+  };
+
+  if (existing) {
+    const { error } =
+      await supabaseAdmin
+        .from("member_access")
+        .update(values)
+        .eq(
+          "profile_id",
+          profileId
+        );
+
+    if (error) {
+      throw error;
+    }
+
+    return;
+  }
+
+  const { error } =
+    await supabaseAdmin
+      .from("member_access")
+      .insert({
+        profile_id:
+          profileId,
+        ...values,
+      });
+
+  if (error) {
+    throw error;
+  }
+}
+
+/*
+--------------------------------------------------
+GET COMPANY FROM PROFILE
+--------------------------------------------------
+*/
+
+async function getCompanyForProfile(
+  profileId: string
+) {
+  const {
+    data: profile,
+  } = await supabaseAdmin
+    .from("profiles")
+    .select("company_id")
+    .eq(
+      "id",
+      profileId
+    )
+    .maybeSingle();
+
+  if (!profile?.company_id) {
+    return null;
+  }
+
+  const {
+    data: company,
+  } = await supabaseAdmin
+    .from("companies")
+    .select(`
+      id,
+      plan_type,
+      platform_access,
+      support_included,
+      stripe_customer_id,
+      platform_subscription_id,
+      support_subscription_id
+    `)
+    .eq(
+      "id",
+      profile.company_id
+    )
+    .maybeSingle();
+
+  return company;
+}
+
+/*
+--------------------------------------------------
+SUBSCRIPTION ID FROM INVOICE
+--------------------------------------------------
+*/
+
+function getSubscriptionIdFromInvoice(
+  invoice: Stripe.Invoice
+) {
+  const anyInvoice =
+    invoice as any;
+
+  const directSubscription =
+    anyInvoice.subscription;
+
+  if (
+    typeof directSubscription ===
+    "string"
+  ) {
+    return directSubscription;
+  }
+
+  const parentSubscription =
+    anyInvoice?.parent
+      ?.subscription_details
+      ?.subscription;
+
+  if (
+    typeof parentSubscription ===
+    "string"
+  ) {
+    return parentSubscription;
+  }
+
+  if (
+    parentSubscription?.id
+  ) {
+    return parentSubscription.id;
+  }
+
+  return null;
+}
+
+/*
+--------------------------------------------------
+ADMIN PURCHASE EMAIL
 --------------------------------------------------
 */
 
 async function sendAdminSitePurchaseEmail({
   userEmail,
-  extraReceiptEmail,
   amount,
   stripeSessionId,
   firstName,
@@ -265,10 +663,10 @@ async function sendAdminSitePurchaseEmail({
   stripeCustomerId,
   rhinoAccessCode,
   planType,
+  platformAccess,
   supportIncluded,
 }: {
   userEmail?: string | null;
-  extraReceiptEmail?: string | null;
   amount?: string;
   stripeSessionId?: string;
   firstName?: string | null;
@@ -277,6 +675,7 @@ async function sendAdminSitePurchaseEmail({
   stripeCustomerId?: string | null;
   rhinoAccessCode?: string | null;
   planType?: string | null;
+  platformAccess?: boolean;
   supportIncluded?: boolean;
 }) {
   const adminEmails =
@@ -285,26 +684,11 @@ async function sendAdminSitePurchaseEmail({
     "";
 
   if (!adminEmails) {
-    console.error(
-      "Admin purchase email skipped: ADMIN_EMAILS / ADMIN_EMAIL is missing."
-    );
-
     return;
   }
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://www.therhinowrangler.com";
-
-  const environment =
-    siteUrl.includes("testing")
-      ? "Testing"
-      : "Production";
-
   const planLabel =
-    planType === "annual"
-      ? "Annual Membership"
-      : "Lifetime Access";
+    getPlanLabel(planType);
 
   await sendEmail({
     to: adminEmails,
@@ -313,15 +697,13 @@ async function sendAdminSitePurchaseEmail({
       `New Rhino Wrangler ${planLabel} Purchase`,
 
     html: `
-      <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6;">
+      <div style="font-family:Arial,sans-serif;color:#111827;line-height:1.6;">
         <h1>New Rhino Wrangler Purchase</h1>
 
         <p>
-          A customer just purchased
-          <strong>${planLabel}</strong>.
+          <strong>Plan:</strong>
+          ${planLabel}
         </p>
-
-        <h2>Customer Information</h2>
 
         <p>
           <strong>First Name:</strong>
@@ -333,41 +715,28 @@ async function sendAdminSitePurchaseEmail({
           <strong>Company:</strong>
           ${companyName || "Unknown"}<br />
 
-          <strong>Login Email:</strong>
-          ${userEmail || "Unknown"}<br />
-
-          <strong>Extra Receipt Email:</strong>
-          ${extraReceiptEmail || "None"}
+          <strong>Email:</strong>
+          ${userEmail || "Unknown"}
         </p>
 
-        <h2>Purchase Information</h2>
-
         <p>
-          <strong>Plan:</strong>
-          ${planLabel}<br />
-
-          <strong>Support Included:</strong>
-          ${supportIncluded ? "Yes" : "No"}<br />
-
           <strong>Amount:</strong>
           ${amount || "Unknown"}<br />
 
-          <strong>Environment:</strong>
-          ${environment}<br />
+          <strong>Platform Access:</strong>
+          ${platformAccess ? "Yes" : "No"}<br />
 
-          <strong>Stripe Customer ID:</strong>
+          <strong>Support:</strong>
+          ${supportIncluded ? "Yes" : "No"}<br />
+
+          <strong>Rhino Access Code:</strong>
+          ${rhinoAccessCode || "Unknown"}<br />
+
+          <strong>Stripe Customer:</strong>
           ${stripeCustomerId || "Unknown"}<br />
 
           <strong>Stripe Session:</strong>
-          ${stripeSessionId || "Unknown"}<br />
-
-          <strong>Rhino Access Code:</strong>
-          ${rhinoAccessCode || "Unknown"}
-        </p>
-
-        <p>
-          <strong>Status:</strong>
-          Member access should now be active.
+          ${stripeSessionId || "Unknown"}
         </p>
       </div>
     `,
@@ -376,7 +745,7 @@ async function sendAdminSitePurchaseEmail({
 
 /*
 --------------------------------------------------
-ADMIN CLASS PURCHASE EMAIL
+ADMIN CLASS EMAIL
 --------------------------------------------------
 */
 
@@ -407,12 +776,8 @@ async function sendAdminClassPurchaseEmail({
       "New Rhino Wrangler Class Booking",
 
     html: `
-      <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6;">
+      <div style="font-family:Arial,sans-serif;color:#111827;line-height:1.6;">
         <h1>New Class Booking</h1>
-
-        <p>
-          A student just booked a live virtual class.
-        </p>
 
         <p>
           <strong>Student:</strong>
@@ -440,7 +805,7 @@ async function sendAdminClassPurchaseEmail({
 
 /*
 --------------------------------------------------
-MAIN WEBHOOK HANDLER
+MAIN HANDLER
 --------------------------------------------------
 */
 
@@ -465,7 +830,8 @@ export default async function handler(
       );
   }
 
-  let event: Stripe.Event;
+  let event:
+    Stripe.Event;
 
   try {
     const rawBody =
@@ -480,7 +846,7 @@ export default async function handler(
       );
   } catch (err: any) {
     console.error(
-      "Webhook signature verification failed:",
+      "Webhook verification failed:",
       err.message
     );
 
@@ -492,182 +858,168 @@ export default async function handler(
   }
 
   console.log(
-    "Stripe webhook received:",
+    "Stripe webhook:",
     event.type
   );
 
   /*
   --------------------------------------------------
-  ANNUAL SUBSCRIPTION PAYMENT FAILED
+  INVOICE PAYMENT SUCCEEDED / FAILED
   --------------------------------------------------
   */
 
   if (
     event.type ===
-    "invoice.payment_failed"
+      "invoice.payment_succeeded" ||
+    event.type ===
+      "invoice.payment_failed"
   ) {
     const invoice =
       event.data.object as Stripe.Invoice;
 
-    const customerId =
-      typeof invoice.customer === "string"
-        ? invoice.customer
-        : invoice.customer?.id;
+    const subscriptionId =
+      getSubscriptionIdFromInvoice(
+        invoice
+      );
 
-    if (!customerId) {
+    if (!subscriptionId) {
       return res
         .status(200)
         .json({
           received: true,
         });
+    }
+
+    const subscription =
+      await stripe.subscriptions.retrieve(
+        subscriptionId
+      );
+
+    const plan =
+      subscription.metadata
+        ?.plan as PurchasePlan | undefined;
+
+    const profileId =
+      subscription.metadata
+        ?.profile_id;
+
+    if (
+      !profileId ||
+      (plan !== "annual" &&
+        plan !== "support")
+    ) {
+      return res
+        .status(200)
+        .json({
+          received: true,
+        });
+    }
+
+    const company =
+      await getCompanyForProfile(
+        profileId
+      );
+
+    if (!company) {
+      /*
+        checkout.session.completed may
+        arrive shortly afterward and
+        create the company.
+      */
+
+      return res
+        .status(200)
+        .json({
+          received: true,
+        });
+    }
+
+    const succeeded =
+      event.type ===
+      "invoice.payment_succeeded";
+
+    /*
+    --------------------------------------------------
+    ANNUAL
+    --------------------------------------------------
+    */
+
+    if (plan === "annual") {
+      await supabaseAdmin
+        .from("companies")
+        .update({
+          platform_access:
+            succeeded,
+
+          support_included:
+            succeeded,
+
+          access_status:
+            succeeded
+              ? "active"
+              : "inactive",
+
+          platform_subscription_id:
+            subscriptionId,
+        })
+        .eq(
+          "id",
+          company.id
+        );
+
+      await syncMemberAccess({
+        profileId,
+
+        platformAccess:
+          succeeded,
+
+        stripeCustomerId:
+          typeof subscription.customer ===
+          "string"
+            ? subscription.customer
+            : subscription.customer.id,
+
+        platformSubscriptionId:
+          subscriptionId,
+      });
     }
 
     /*
-      Only deactivate customers whose
-      company is on the annual plan.
-
-      This prevents a lifetime purchaser
-      from accidentally losing access
-      because of an unrelated Stripe
-      invoice.
+    --------------------------------------------------
+    SUPPORT ONLY
+    --------------------------------------------------
     */
 
-    const {
-      data: memberRows,
-      error: memberLookupError,
-    } = await supabaseAdmin
-      .from("member_access")
-      .select(`
-        profile_id,
-        stripe_customer_id
-      `)
-      .eq(
-        "stripe_customer_id",
-        customerId
-      );
-
-    if (memberLookupError) {
-      console.error(
-        "Failed to find member for failed invoice:",
-        memberLookupError
-      );
-
-      return res
-        .status(200)
-        .json({
-          received: true,
-        });
-    }
-
-    for (
-      const member of memberRows || []
-    ) {
-      const {
-        data: profile,
-      } = await supabaseAdmin
-        .from("profiles")
-        .select("company_id")
-        .eq(
-          "id",
-          member.profile_id
-        )
-        .maybeSingle();
-
-      if (!profile?.company_id) {
-        continue;
-      }
-
-      const {
-        data: company,
-      } = await supabaseAdmin
-        .from("companies")
-        .select(
-          "plan_type"
-        )
-        .eq(
-          "id",
-          profile.company_id
-        )
-        .maybeSingle();
-
-      if (
-        company?.plan_type !==
-        "annual"
-      ) {
-        continue;
-      }
-
-      await supabaseAdmin
-        .from("member_access")
-        .update({
-          status: "inactive",
-        })
-        .eq(
-          "profile_id",
-          member.profile_id
-        );
+    if (plan === "support") {
+      const platformStillActive =
+        company.platform_access ===
+        true;
 
       await supabaseAdmin
         .from("companies")
         .update({
-          access_status:
-            "inactive",
           support_included:
-            false,
+            succeeded,
+
+          support_subscription_id:
+            subscriptionId,
+
+          access_status:
+            platformStillActive ||
+            succeeded
+              ? "active"
+              : "inactive",
         })
         .eq(
           "id",
-          profile.company_id
+          company.id
         );
-    }
 
-    const customer =
-      await stripe.customers.retrieve(
-        customerId
-      );
-
-    const customerEmail =
-      !customer.deleted &&
-      customer.email
-        ? customer.email
-        : null;
-
-    if (customerEmail) {
-      await sendEmail({
-        to: customerEmail,
-
-        subject:
-          "Action Required: Rhino Wrangler Training Access Paused",
-
-        html: `
-          <h1>Training Access Paused</h1>
-
-          <p>
-            Your Rhino Wrangler annual membership
-            payment could not be completed.
-          </p>
-
-          <p>
-            Your training access has been paused
-            until the billing issue is corrected.
-          </p>
-
-          <p>
-            <a href="${process.env.NEXT_PUBLIC_SITE_URL}/account-inactive">
-              Restore Access
-            </a>
-          </p>
-
-          <p>
-            If you need help, contact us at
-            ${
-              process.env
-                .SUPPORT_EMAIL ||
-              "landon@therhinowrangler.com"
-            }.
-          </p>
-        `,
-      });
+      /*
+        DO NOT activate/deactivate
+        platform access because of
+        a support payment.
+      */
     }
 
     return res
@@ -679,110 +1031,7 @@ export default async function handler(
 
   /*
   --------------------------------------------------
-  ANNUAL SUBSCRIPTION PAYMENT SUCCESS
-  --------------------------------------------------
-  */
-
-  if (
-    event.type ===
-    "invoice.payment_succeeded"
-  ) {
-    const invoice =
-      event.data.object as Stripe.Invoice;
-
-    const customerId =
-      typeof invoice.customer === "string"
-        ? invoice.customer
-        : invoice.customer?.id;
-
-    if (!customerId) {
-      return res
-        .status(200)
-        .json({
-          received: true,
-        });
-    }
-
-    const {
-      data: memberRows,
-    } = await supabaseAdmin
-      .from("member_access")
-      .select("profile_id")
-      .eq(
-        "stripe_customer_id",
-        customerId
-      );
-
-    for (
-      const member of memberRows || []
-    ) {
-      const {
-        data: profile,
-      } = await supabaseAdmin
-        .from("profiles")
-        .select("company_id")
-        .eq(
-          "id",
-          member.profile_id
-        )
-        .maybeSingle();
-
-      if (!profile?.company_id) {
-        continue;
-      }
-
-      const {
-        data: company,
-      } = await supabaseAdmin
-        .from("companies")
-        .select("plan_type")
-        .eq(
-          "id",
-          profile.company_id
-        )
-        .maybeSingle();
-
-      if (
-        company?.plan_type !==
-        "annual"
-      ) {
-        continue;
-      }
-
-      await supabaseAdmin
-        .from("member_access")
-        .update({
-          status: "active",
-        })
-        .eq(
-          "profile_id",
-          member.profile_id
-        );
-
-      await supabaseAdmin
-        .from("companies")
-        .update({
-          access_status:
-            "active",
-          support_included:
-            true,
-        })
-        .eq(
-          "id",
-          profile.company_id
-        );
-    }
-
-    return res
-      .status(200)
-      .json({
-        received: true,
-      });
-  }
-
-  /*
-  --------------------------------------------------
-  ANNUAL SUBSCRIPTION CANCELLED
+  SUBSCRIPTION CANCELLED
   --------------------------------------------------
   */
 
@@ -793,62 +1042,113 @@ export default async function handler(
     const subscription =
       event.data.object as Stripe.Subscription;
 
-    const customerId =
-      typeof subscription.customer ===
-      "string"
-        ? subscription.customer
-        : subscription.customer.id;
+    const plan =
+      subscription.metadata
+        ?.plan as PurchasePlan | undefined;
 
     const profileId =
       subscription.metadata
         ?.profile_id;
 
-    if (profileId) {
-      await supabaseAdmin
-        .from("member_access")
-        .update({
-          status: "inactive",
-        })
-        .eq(
-          "profile_id",
-          profileId
-        );
+    if (!profileId) {
+      return res
+        .status(200)
+        .json({
+          received: true,
+        });
+    }
 
-      const {
-        data: profile,
-      } = await supabaseAdmin
-        .from("profiles")
-        .select("company_id")
+    const company =
+      await getCompanyForProfile(
+        profileId
+      );
+
+    if (!company) {
+      return res
+        .status(200)
+        .json({
+          received: true,
+        });
+    }
+
+    /*
+    --------------------------------------------------
+    ANNUAL CANCELLED
+    --------------------------------------------------
+    */
+
+    if (plan === "annual") {
+      await supabaseAdmin
+        .from("companies")
+        .update({
+          platform_access:
+            false,
+
+          support_included:
+            false,
+
+          access_status:
+            "inactive",
+
+          platform_subscription_id:
+            null,
+        })
         .eq(
           "id",
-          profileId
-        )
-        .maybeSingle();
+          company.id
+        );
 
-      if (profile?.company_id) {
-        await supabaseAdmin
-          .from("companies")
-          .update({
-            access_status:
-              "inactive",
-            support_included:
-              false,
-          })
-          .eq(
-            "id",
-            profile.company_id
-          );
-      }
-    } else {
+      await syncMemberAccess({
+        profileId,
+
+        platformAccess:
+          false,
+
+        stripeCustomerId:
+          typeof subscription.customer ===
+          "string"
+            ? subscription.customer
+            : subscription.customer.id,
+
+        platformSubscriptionId:
+          null,
+      });
+    }
+
+    /*
+    --------------------------------------------------
+    SUPPORT CANCELLED
+    --------------------------------------------------
+    */
+
+    if (plan === "support") {
+      const stillHasPlatform =
+        company.platform_access ===
+        true;
+
       await supabaseAdmin
-        .from("member_access")
+        .from("companies")
         .update({
-          status: "inactive",
+          support_included:
+            false,
+
+          support_subscription_id:
+            null,
+
+          access_status:
+            stillHasPlatform
+              ? "active"
+              : "inactive",
         })
         .eq(
-          "stripe_customer_id",
-          customerId
+          "id",
+          company.id
         );
+
+      /*
+        Lifetime platform access
+        remains completely untouched.
+      */
     }
 
     return res
@@ -860,7 +1160,7 @@ export default async function handler(
 
   /*
   --------------------------------------------------
-  CHECKOUT COMPLETED
+  CHECKOUT COMPLETE
   --------------------------------------------------
   */
 
@@ -873,7 +1173,7 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    LIVE CLASS PURCHASE
+    CLASS PURCHASE
     --------------------------------------------------
     */
 
@@ -891,65 +1191,60 @@ export default async function handler(
           session.currency
         );
 
-      const {
-        error,
-      } = await supabaseAdmin
-        .from(
-          "class_reservations"
-        )
-        .insert({
-          class_id:
-            metadata.class_id ||
-            null,
+      const { error } =
+        await supabaseAdmin
+          .from(
+            "class_reservations"
+          )
+          .insert({
+            class_id:
+              metadata.class_id ||
+              null,
 
-          stripe_session_id:
-            session.id,
+            stripe_session_id:
+              session.id,
 
-          stripe_payment_intent_id:
-            typeof session.payment_intent ===
-            "string"
-              ? session.payment_intent
-              : null,
+            stripe_payment_intent_id:
+              typeof session.payment_intent ===
+              "string"
+                ? session.payment_intent
+                : null,
 
-          class_name:
-            metadata.class_name ||
-            "",
+            class_name:
+              metadata.class_name ||
+              "",
 
-          class_dates:
-            metadata.class_dates ||
-            "",
+            class_dates:
+              metadata.class_dates ||
+              "",
 
-          class_timezone:
-            metadata.class_timezone ||
-            "",
+            class_timezone:
+              metadata.class_timezone ||
+              "",
 
-          student_name:
-            metadata.student_name ||
-            "",
+            student_name:
+              metadata.student_name ||
+              "",
 
-          student_email:
-            metadata.student_email ||
-            "",
+            student_email:
+              metadata.student_email ||
+              "",
 
-          company_name:
-            metadata.company_name ||
-            "",
+            company_name:
+              metadata.company_name ||
+              "",
 
-          amount_paid:
-            session.amount_total,
+            amount_paid:
+              session.amount_total,
 
-          currency:
-            session.currency,
+            currency:
+              session.currency,
 
-          status: "paid",
-        });
+            status:
+              "paid",
+          });
 
       if (error) {
-        console.error(
-          "Error saving class reservation:",
-          error
-        );
-
         throw error;
       }
 
@@ -962,60 +1257,25 @@ export default async function handler(
           "You're booked for Rhino Wrangler Certified",
 
         html: `
-          <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6;">
-            <h1>You're booked!</h1>
+          <h1>You're booked!</h1>
 
-            <p>
-              Thank you for reserving your seat in:
-            </p>
+          <p>
+            Thank you for reserving your seat in
+            Rhino Wrangler Certified.
+          </p>
 
-            <h2>
-              Rhino Wrangler Certified:
-              Complete Software Masterclass
-            </h2>
+          <p>
+            <strong>Student:</strong>
+            ${metadata.student_name || ""}
+            <br />
 
-            <p>
-              <strong>Student:</strong>
-              ${metadata.student_name || ""}
-              <br />
+            <strong>Company:</strong>
+            ${metadata.company_name || ""}
+            <br />
 
-              <strong>Company:</strong>
-              ${metadata.company_name || ""}
-              <br />
-
-              <strong>Class Dates:</strong>
-              ${metadata.class_dates || ""}
-              <br />
-
-              <strong>Class Time:</strong>
-              8:00 AM – 3:00 PM
-              <br />
-
-              <strong>Time Zone:</strong>
-              ${
-                metadata.class_timezone ||
-                "Eastern Time"
-              }
-            </p>
-
-            <p>
-              Questions? Contact:
-              <br />
-
-              <a href="mailto:landon@therhinowrangler.com">
-                landon@therhinowrangler.com
-              </a>
-            </p>
-
-            <hr />
-
-            <p style="font-size: 13px; color: #6b7280;">
-              The Rhino Wrangler is an
-              independent training program
-              and is not affiliated with or
-              endorsed by DeMichele Group.
-            </p>
-          </div>
+            <strong>Dates:</strong>
+            ${metadata.class_dates || ""}
+          </p>
         `,
       });
 
@@ -1052,7 +1312,7 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    SITE PURCHASE
+    NORMAL SITE PURCHASE
     --------------------------------------------------
     */
 
@@ -1061,32 +1321,28 @@ export default async function handler(
         {}) as {
         profile_id?: string;
         email?: string;
-        extra_receipt_email?: string;
         first_name?: string;
         last_name?: string;
         company_name?: string;
-        plan?: string;
+        plan?: PurchasePlan;
+        platform_access?: string;
         support_included?: string;
       };
 
     const profileId =
       metadata.profile_id;
 
-    const userEmail =
-      metadata.email;
+    const plan =
+      metadata.plan;
 
-    const extraReceiptEmail =
-      metadata.extra_receipt_email;
-
-    const amount =
-      formatAmount(
-        session.amount_total,
-        session.currency
-      );
-
-    if (!profileId) {
+    if (
+      !profileId ||
+      (plan !== "annual" &&
+        plan !== "lifetime" &&
+        plan !== "support")
+    ) {
       console.error(
-        "Missing profile_id in checkout metadata"
+        "Missing or invalid purchase metadata."
       );
 
       return res
@@ -1098,7 +1354,7 @@ export default async function handler(
 
     if (!session.customer) {
       console.error(
-        "Missing Stripe customer on checkout session"
+        "Checkout completed without Stripe Customer."
       );
 
       return res
@@ -1107,37 +1363,6 @@ export default async function handler(
           received: true,
         });
     }
-
-    /*
-    --------------------------------------------------
-    VERIFY PURCHASE PLAN
-    --------------------------------------------------
-    */
-
-    const plan =
-      metadata.plan;
-
-    if (
-      plan !== "annual" &&
-      plan !== "lifetime"
-    ) {
-      console.error(
-        "Invalid or missing plan metadata:",
-        plan
-      );
-
-      return res
-        .status(200)
-        .json({
-          received: true,
-        });
-    }
-
-    const isAnnual =
-      plan === "annual";
-
-    const supportIncluded =
-      isAnnual;
 
     const stripeCustomerId =
       typeof session.customer ===
@@ -1146,9 +1371,8 @@ export default async function handler(
         : session.customer.id;
 
     const stripeSubscriptionId =
-      isAnnual &&
       typeof session.subscription ===
-        "string"
+      "string"
         ? session.subscription
         : null;
 
@@ -1157,12 +1381,10 @@ export default async function handler(
       --------------------------------------------------
       LIFETIME PAYMENT METHOD
       --------------------------------------------------
-
-      Only applies to one-time payments.
       */
 
       if (
-        !isAnnual &&
+        plan === "lifetime" &&
         session.payment_intent
       ) {
         const paymentIntent =
@@ -1193,80 +1415,7 @@ export default async function handler(
 
       /*
       --------------------------------------------------
-      MEMBER ACCESS
-      --------------------------------------------------
-      */
-
-      const {
-        data: updatedRows,
-        error: updateError,
-      } = await supabaseAdmin
-        .from("member_access")
-        .update({
-          status: "active",
-          stripe_customer_id:
-            stripeCustomerId,
-
-          stripe_subscription_id:
-            stripeSubscriptionId,
-        })
-        .eq(
-          "profile_id",
-          profileId
-        )
-        .select("profile_id");
-
-      if (updateError) {
-        console.error(
-          "Failed to update member access:",
-          updateError
-        );
-
-        return res
-          .status(200)
-          .json({
-            received: true,
-          });
-      }
-
-      if (
-        !updatedRows ||
-        updatedRows.length === 0
-      ) {
-        const {
-          error: insertError,
-        } = await supabaseAdmin
-          .from("member_access")
-          .insert({
-            profile_id:
-              profileId,
-
-            status: "active",
-
-            stripe_customer_id:
-              stripeCustomerId,
-
-            stripe_subscription_id:
-              stripeSubscriptionId,
-          });
-
-        if (insertError) {
-          console.error(
-            "Failed to insert member access:",
-            insertError
-          );
-
-          return res
-            .status(200)
-            .json({
-              received: true,
-            });
-        }
-      }
-
-      /*
-      --------------------------------------------------
-      CREATE / ACTIVATE COMPANY
+      COMPANY ENTITLEMENTS
       --------------------------------------------------
       */
 
@@ -1280,118 +1429,129 @@ export default async function handler(
           planType:
             plan,
 
-          supportIncluded,
+          stripeCustomerId,
+
+          stripeSubscriptionId,
         });
+
+      /*
+      --------------------------------------------------
+      MEMBER ACCESS
+      --------------------------------------------------
+      */
+
+      await syncMemberAccess({
+        profileId,
+
+        platformAccess:
+          company.platform_access ===
+          true,
+
+        stripeCustomerId,
+
+        platformSubscriptionId:
+          company
+            .platform_subscription_id,
+      });
 
       const rhinoAccessCode =
         company.customer_number;
 
-      console.log(
-        "Company access ready:",
-        {
-          profileId,
-          companyId:
-            company.id,
+      /*
+      --------------------------------------------------
+      CUSTOMER EMAIL
+      --------------------------------------------------
+      */
 
-          companyName:
-            company.company_name,
+      if (metadata.email) {
+        if (
+          company.platform_access
+        ) {
+          await sendEmail({
+            to:
+              metadata.email,
 
-          rhinoAccessCode,
+            subject:
+              "Welcome to The Rhino Wrangler",
 
-          seatLimit:
-            company.seat_limit,
+            html:
+              buildWelcomeEmail(
+                metadata.email,
+                rhinoAccessCode,
+                company.company_name
+              ),
+          });
+        } else {
+          /*
+          --------------------------------------------------
+          SUPPORT-ONLY EMAIL
+          --------------------------------------------------
+          */
 
-          planType:
-            company.plan_type,
+          await sendEmail({
+            to:
+              metadata.email,
 
-          supportIncluded:
-            company.support_included,
+            subject:
+              "Rhino Wrangler Specialized Phone Support",
+
+            html: `
+              <div style="font-family:Arial,sans-serif;color:#111827;line-height:1.7;">
+                <h1>
+                  Your Rhino Wrangler Support Plan Is Active
+                </h1>
+
+                <p>
+                  Thank you for purchasing Specialized Phone Support.
+                </p>
+
+                <p>
+                  <strong>Company:</strong>
+                  ${company.company_name}
+                  <br />
+
+                  <strong>Rhino Access Code:</strong>
+                  ${rhinoAccessCode}
+                </p>
+
+                <p>
+                  Your plan includes specialized RhinoFab,
+                  Glazier Studio, PartnerPak, setup and
+                  fabrication troubleshooting support.
+                </p>
+
+                <p>
+                  <strong>
+                    Training Platform access is not included
+                    with the Support Only plan.
+                  </strong>
+                </p>
+
+                <p>
+                  Questions? Contact
+                  landon@therhinowrangler.com.
+                </p>
+              </div>
+            `,
+          });
         }
-      );
-
-      /*
-      --------------------------------------------------
-      CUSTOMER WELCOME EMAIL
-      --------------------------------------------------
-      */
-
-      if (userEmail) {
-        await sendEmail({
-          to: userEmail,
-
-          subject:
-            "Welcome to The Rhino Wrangler",
-
-          html: buildWelcomeEmail(
-            userEmail,
-            rhinoAccessCode,
-            company.company_name
-          ),
-        });
       }
 
       /*
       --------------------------------------------------
-      EXTRA RECEIPT EMAIL
-      --------------------------------------------------
-      */
-
-      if (extraReceiptEmail) {
-        await sendEmail({
-          to:
-            extraReceiptEmail,
-
-          subject:
-            "Rhino Wrangler Training Access Receipt",
-
-          html: `
-            <h1>
-              Rhino Wrangler Training Access
-            </h1>
-
-            <p>
-              This is a receipt notification
-              for a Rhino Wrangler training
-              access purchase.
-            </p>
-
-            <p>
-              Account email:
-              ${userEmail || "N/A"}
-            </p>
-
-            <p>
-              Plan:
-              ${
-                isAnnual
-                  ? "Annual Membership"
-                  : "Lifetime Access"
-              }
-            </p>
-
-            <p>
-              Rhino Access Code:
-              ${rhinoAccessCode}
-            </p>
-
-            <p>
-              If you have questions, contact
-              landon@therhinowrangler.com.
-            </p>
-          `,
-        });
-      }
-
-      /*
-      --------------------------------------------------
-      ADMIN PURCHASE EMAIL
+      ADMIN EMAIL
       --------------------------------------------------
       */
 
       await sendAdminSitePurchaseEmail({
-        userEmail,
-        extraReceiptEmail,
-        amount,
+        userEmail:
+          metadata.email,
+
+        amount:
+          formatAmount(
+            session.amount_total,
+            session.currency
+          ),
 
         stripeSessionId:
           session.id,
@@ -1403,7 +1563,7 @@ export default async function handler(
           metadata.last_name,
 
         companyName:
-          metadata.company_name,
+          company.company_name,
 
         stripeCustomerId,
 
@@ -1412,21 +1572,27 @@ export default async function handler(
         planType:
           plan,
 
-        supportIncluded,
+        platformAccess:
+          company.platform_access,
+
+        supportIncluded:
+          company.support_included,
       });
 
       console.log(
-        "Member access activated:",
+        "Purchase processed:",
         {
           profileId,
           plan,
-          stripeCustomerId,
-          stripeSubscriptionId,
+          platformAccess:
+            company.platform_access,
+          supportIncluded:
+            company.support_included,
         }
       );
     } catch (error) {
       console.error(
-        "Failed during checkout completion handling:",
+        "Checkout processing failed:",
         error
       );
     }

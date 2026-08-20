@@ -9,7 +9,7 @@ const supabaseAdmin = createSupabaseClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-type CheckoutPlan = "annual" | "lifetime";
+type CheckoutPlan = "annual" | "lifetime" | "support";
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,7 +26,8 @@ export default async function handler(
     --------------------------------------------------
     */
 
-    const token = req.headers.authorization?.replace("Bearer ", "");
+    const token =
+      req.headers.authorization?.replace("Bearer ", "");
 
     if (!token) {
       return res.status(401).json({
@@ -55,27 +56,198 @@ export default async function handler(
       plan?: CheckoutPlan;
     };
 
-    if (plan !== "annual" && plan !== "lifetime") {
+    if (
+      plan !== "annual" &&
+      plan !== "lifetime" &&
+      plan !== "support"
+    ) {
       return res.status(400).json({
         error: "Please select a valid purchase plan.",
       });
     }
 
-    const isAnnual = plan === "annual";
+    const isSubscription =
+      plan === "annual" || plan === "support";
+
+    const platformAccess =
+      plan === "annual" || plan === "lifetime";
+
+    const supportIncluded =
+      plan === "annual" || plan === "support";
 
     /*
     --------------------------------------------------
-    VERIFY STRIPE PRICE
+    FIND PROFILE / COMPANY
     --------------------------------------------------
     */
 
-    const priceId = isAnnual
-      ? process.env.STRIPE_ANNUAL_PRICE_ID
-      : process.env.STRIPE_LIFETIME_PRICE_ID;
+    const {
+      data: profile,
+      error: profileError,
+    } = await supabaseAdmin
+      .from("profiles")
+      .select("id, company_id")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profileError) {
+      console.error(
+        "Failed to load profile:",
+        profileError
+      );
+
+      return res.status(500).json({
+        error: "Unable to verify your account.",
+      });
+    }
+
+    let company:
+      | {
+          id: string;
+          plan_type: string | null;
+          platform_access: boolean;
+          support_included: boolean;
+          stripe_customer_id: string | null;
+          platform_subscription_id: string | null;
+          support_subscription_id: string | null;
+        }
+      | null = null;
+
+    if (profile?.company_id) {
+      const {
+        data: companyData,
+        error: companyError,
+      } = await supabaseAdmin
+        .from("companies")
+        .select(`
+          id,
+          plan_type,
+          platform_access,
+          support_included,
+          stripe_customer_id,
+          platform_subscription_id,
+          support_subscription_id
+        `)
+        .eq("id", profile.company_id)
+        .maybeSingle();
+
+      if (companyError) {
+        console.error(
+          "Failed to load company:",
+          companyError
+        );
+
+        return res.status(500).json({
+          error:
+            "Unable to verify your company account.",
+        });
+      }
+
+      company = companyData;
+    }
+
+    /*
+    --------------------------------------------------
+    EXISTING MEMBER ACCESS
+    --------------------------------------------------
+    */
+
+    const {
+      data: existingAccess,
+      error: accessError,
+    } = await supabaseAdmin
+      .from("member_access")
+      .select(`
+        status,
+        stripe_customer_id,
+        stripe_subscription_id
+      `)
+      .eq("profile_id", user.id)
+      .maybeSingle();
+
+    if (accessError) {
+      console.error(
+        "Failed to load member access:",
+        accessError
+      );
+
+      return res.status(500).json({
+        error: "Unable to verify account access.",
+      });
+    }
+
+    const alreadyHasPlatform =
+      company?.platform_access === true;
+
+    const alreadyHasSupport =
+      company?.support_included === true;
+
+    /*
+    --------------------------------------------------
+    PREVENT DUPLICATE / CONFLICTING PLANS
+    --------------------------------------------------
+    */
+
+    if (plan === "support" && alreadyHasSupport) {
+      return res.status(409).json({
+        error:
+          "Your company already has active Rhino Wrangler support.",
+      });
+    }
+
+    if (plan === "lifetime" && alreadyHasPlatform) {
+      return res.status(409).json({
+        error:
+          "Your company already has training platform access.",
+      });
+    }
+
+    /*
+      Annual is intended as the complete
+      Platform + Support package.
+
+      If the company already owns either
+      entitlement, handle the conversion
+      manually so we don't create duplicate
+      subscriptions.
+    */
+
+    if (
+      plan === "annual" &&
+      (alreadyHasPlatform || alreadyHasSupport)
+    ) {
+      return res.status(409).json({
+        error:
+          "Your company already has an existing Rhino Wrangler plan. Please contact support to switch to the Annual Membership.",
+      });
+    }
+
+    /*
+    --------------------------------------------------
+    STRIPE PRICE
+    --------------------------------------------------
+    */
+
+    let priceId: string | undefined;
+
+    if (plan === "annual") {
+      priceId =
+        process.env.STRIPE_ANNUAL_PRICE_ID;
+    }
+
+    if (plan === "lifetime") {
+      priceId =
+        process.env.STRIPE_LIFETIME_PRICE_ID;
+    }
+
+    if (plan === "support") {
+      priceId =
+        process.env.STRIPE_SUPPORT_PRICE_ID;
+    }
 
     if (!priceId) {
       console.error(
-        `Missing Stripe price ID for ${plan} plan.`
+        `Missing Stripe price ID for ${plan}.`
       );
 
       return res.status(500).json({
@@ -86,41 +258,43 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    CHECK EXISTING ACCESS
+    EXISTING STRIPE CUSTOMER
     --------------------------------------------------
     */
 
-    const {
-      data: existingAccess,
-      error: accessCheckError,
-    } = await supabaseAdmin
-      .from("member_access")
-      .select(
-        "status, stripe_customer_id, stripe_subscription_id"
-      )
-      .eq("profile_id", user.id)
-      .maybeSingle();
-
-    if (accessCheckError) {
-      console.error(
-        "Failed to check existing member access:",
-        accessCheckError
-      );
-
-      return res.status(500).json({
-        error: "Unable to verify account access.",
-      });
-    }
-
-    if (
+    const existingCustomerId =
+      company?.stripe_customer_id ||
       existingAccess?.stripe_customer_id ||
-      existingAccess?.stripe_subscription_id
-    ) {
-      return res.status(409).json({
-        error:
-          "This account has already purchased access. Please contact support if you need to change plans.",
-      });
-    }
+      null;
+
+    /*
+    --------------------------------------------------
+    METADATA
+    --------------------------------------------------
+    */
+
+    const metadata = {
+      profile_id: user.id,
+
+      email: user.email || "",
+
+      first_name:
+        user.user_metadata?.first_name || "",
+
+      last_name:
+        user.user_metadata?.last_name || "",
+
+      company_name:
+        user.user_metadata?.company_name || "",
+
+      plan,
+
+      platform_access:
+        platformAccess ? "true" : "false",
+
+      support_included:
+        supportIncluded ? "true" : "false",
+    };
 
     /*
     --------------------------------------------------
@@ -135,27 +309,7 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    METADATA
-    --------------------------------------------------
-    */
-
-    const metadata = {
-      profile_id: user.id,
-      email: user.email || "",
-      first_name:
-        user.user_metadata?.first_name || "",
-      last_name:
-        user.user_metadata?.last_name || "",
-      company_name:
-        user.user_metadata?.company_name || "",
-      plan,
-      support_included:
-        isAnnual ? "true" : "false",
-    };
-
-    /*
-    --------------------------------------------------
-    CREATE STRIPE CHECKOUT SESSION
+    CREATE CHECKOUT
     --------------------------------------------------
     */
 
@@ -163,16 +317,33 @@ export default async function handler(
       await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
 
-        mode: isAnnual
+        mode: isSubscription
           ? "subscription"
           : "payment",
 
-        customer_creation: isAnnual
-          ? undefined
-          : "always",
+        /*
+          Reuse the existing Stripe Customer
+          when possible.
 
-        customer_email:
-          user.email || undefined,
+          This is important when a Lifetime
+          customer later purchases Support.
+        */
+
+        ...(existingCustomerId
+          ? {
+              customer: existingCustomerId,
+            }
+          : {
+              customer_email:
+                user.email || undefined,
+
+              ...(!isSubscription
+                ? {
+                    customer_creation:
+                      "always" as const,
+                  }
+                : {}),
+            }),
 
         allow_promotion_codes: true,
 
@@ -183,27 +354,15 @@ export default async function handler(
           },
         ],
 
-        /*
-        Metadata placed directly on the
-        Checkout Session.
-
-        Your checkout.session.completed
-        webhook can read this.
-        */
-
         metadata,
 
         /*
-        ANNUAL SUBSCRIPTION
-
-        Stripe creates a Subscription.
-        Put the same metadata on it so
-        subscription webhook events know
-        which Rhino Wrangler account it
-        belongs to.
+        --------------------------------------------------
+        RECURRING PLANS
+        --------------------------------------------------
         */
 
-        ...(isAnnual
+        ...(isSubscription
           ? {
               subscription_data: {
                 metadata,
@@ -211,10 +370,9 @@ export default async function handler(
             }
           : {
               /*
-              LIFETIME PURCHASE
-
-              Stripe creates a PaymentIntent.
-              Store the same metadata there.
+              --------------------------------------------------
+              LIFETIME PAYMENT
+              --------------------------------------------------
               */
 
               payment_intent_data: {
@@ -231,12 +389,6 @@ export default async function handler(
         cancel_url:
           `${baseUrl}/pricing?canceled=true`,
       });
-
-    /*
-    --------------------------------------------------
-    SUCCESS
-    --------------------------------------------------
-    */
 
     return res.status(200).json({
       url: checkoutSession.url,
