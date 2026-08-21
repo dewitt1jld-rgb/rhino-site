@@ -16,6 +16,10 @@ type AccessResponse = {
   platformSubscriptionId?: string | null;
   supportSubscriptionId?: string | null;
 
+  paymentStatus?: string | null;
+  paymentFailedAt?: string | null;
+  paymentGraceEnd?: string | null;
+
   company?: {
     id: string;
     name: string;
@@ -24,6 +28,10 @@ type AccessResponse = {
     planType?: string | null;
     platformAccess?: boolean;
     supportIncluded?: boolean;
+
+    paymentStatus?: string | null;
+    paymentFailedAt?: string | null;
+    paymentGraceEnd?: string | null;
   } | null;
 };
 
@@ -40,11 +48,68 @@ export default function AccountInactivePage() {
   const [loadingAccess, setLoadingAccess] =
     useState(true);
 
+  /*
+  --------------------------------------------------
+  NORMALIZE ACCESS VALUES
+
+  check-access may return some values at the
+  top level and others inside company.
+  --------------------------------------------------
+  */
+
+  const planType =
+    access?.company?.planType ??
+    access?.planType ??
+    null;
+
+  const platformAccess =
+    access?.company?.platformAccess ??
+    access?.platformAccess ??
+    false;
+
+  const supportIncluded =
+    access?.company?.supportIncluded ??
+    access?.supportIncluded ??
+    false;
+
+  const paymentStatus =
+    access?.company?.paymentStatus ??
+    access?.paymentStatus ??
+    null;
+
+  const paymentFailedAt =
+    access?.company?.paymentFailedAt ??
+    access?.paymentFailedAt ??
+    null;
+
+  const paymentGraceEnd =
+    access?.company?.paymentGraceEnd ??
+    access?.paymentGraceEnd ??
+    null;
+
+  /*
+  --------------------------------------------------
+  ACCOUNT STATES
+  --------------------------------------------------
+  */
+
   const isSupportOnly =
     access?.status === "support_only" ||
     (
-      access?.supportIncluded === true &&
-      access?.platformAccess !== true
+      supportIncluded === true &&
+      platformAccess !== true &&
+      access?.reason !== "payment_grace_expired"
+    );
+
+  const isPaymentPastDue =
+    access?.status === "payment_past_due" ||
+    access?.reason === "payment_grace_expired";
+
+  const isPaymentGrace =
+    access?.status === "payment_grace" ||
+    (
+      paymentStatus === "past_due" &&
+      access?.hasAccess === true
     );
 
   const hasStripeCustomer =
@@ -57,7 +122,9 @@ export default function AccountInactivePage() {
   */
 
   useEffect(() => {
-    if (router.query.portalReturn === "1") {
+    if (
+      router.query.portalReturn === "1"
+    ) {
       setJustReturned(true);
       setCheckingAccess(true);
     }
@@ -74,29 +141,44 @@ export default function AccountInactivePage() {
       try {
         const {
           data: { session },
-        } = await supabase.auth.getSession();
+        } =
+          await supabase.auth.getSession();
 
         if (!session) {
           setLoadingAccess(false);
           return;
         }
 
-        const response = await fetch(
-          "/api/check-access",
-          {
-            headers: {
-              Authorization:
-                `Bearer ${session.access_token}`,
-            },
-          }
-        );
+        const response =
+          await fetch(
+            "/api/check-access",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${session.access_token}`,
+              },
+            }
+          );
 
         const data =
           await response.json();
 
+        /*
+        --------------------------------------------------
+        ACTIVE ACCESS
+
+        payment_grace is still allowed access,
+        so it should also send the customer
+        back to the dashboard.
+        --------------------------------------------------
+        */
+
         if (
-          data.status === "active" &&
-          data.hasAccess === true
+          data.hasAccess === true &&
+          (
+            data.status === "active" ||
+            data.status === "payment_grace"
+          )
         ) {
           window.location.href =
             "/dashboard";
@@ -128,33 +210,52 @@ export default function AccountInactivePage() {
     if (!justReturned) return;
 
     async function checkAccess() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      try {
+        const {
+          data: { session },
+        } =
+          await supabase.auth.getSession();
 
-      if (!session) return;
-
-      const response = await fetch(
-        "/api/check-access",
-        {
-          headers: {
-            Authorization:
-              `Bearer ${session.access_token}`,
-          },
+        if (!session) {
+          setCheckingAccess(false);
+          return;
         }
-      );
 
-      const data =
-        await response.json();
+        const response =
+          await fetch(
+            "/api/check-access",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${session.access_token}`,
+              },
+            }
+          );
 
-      setAccess(data);
+        const data =
+          await response.json();
 
-      if (
-        data.status === "active" &&
-        data.hasAccess === true
-      ) {
-        window.location.href =
-          "/dashboard";
+        setAccess(data);
+
+        if (
+          data.hasAccess === true &&
+          (
+            data.status === "active" ||
+            data.status === "payment_grace"
+          )
+        ) {
+          window.location.href =
+            "/dashboard";
+
+          return;
+        }
+
+        setCheckingAccess(true);
+      } catch (error) {
+        console.error(
+          "Unable to verify restored access:",
+          error
+        );
       }
     }
 
@@ -182,25 +283,30 @@ export default function AccountInactivePage() {
 
       const {
         data: { session },
-      } = await supabase.auth.getSession();
+      } =
+        await supabase.auth.getSession();
 
       if (!session) {
-        alert("Please log in first.");
+        alert(
+          "Please log in first."
+        );
+
         setLoading(false);
         return;
       }
 
-      const response = await fetch(
-        "/api/customer-portal",
-        {
-          method: "POST",
+      const response =
+        await fetch(
+          "/api/customer-portal",
+          {
+            method: "POST",
 
-          headers: {
-            Authorization:
-              `Bearer ${session.access_token}`,
-          },
-        }
-      );
+            headers: {
+              Authorization:
+                `Bearer ${session.access_token}`,
+            },
+          }
+        );
 
       const data =
         await response.json();
@@ -250,10 +356,14 @@ export default function AccountInactivePage() {
 
       const {
         data: { session },
-      } = await supabase.auth.getSession();
+      } =
+        await supabase.auth.getSession();
 
       if (!session) {
-        alert("Please log in first.");
+        alert(
+          "Please log in first."
+        );
+
         setLoading(false);
         return;
       }
@@ -268,17 +378,18 @@ export default function AccountInactivePage() {
         return;
       }
 
-      const response = await fetch(
-        "/api/upgrade-support-plan",
-        {
-          method: "POST",
+      const response =
+        await fetch(
+          "/api/upgrade-support-plan",
+          {
+            method: "POST",
 
-          headers: {
-            Authorization:
-              `Bearer ${session.access_token}`,
-          },
-        }
-      );
+            headers: {
+              Authorization:
+                `Bearer ${session.access_token}`,
+            },
+          }
+        );
 
       const data =
         await response.json();
@@ -308,6 +419,45 @@ export default function AccountInactivePage() {
 
   /*
   --------------------------------------------------
+  FORMAT GRACE DATE
+  --------------------------------------------------
+  */
+
+  function formatGraceDate(
+    value?: string | null
+  ) {
+    if (!value) {
+      return null;
+    }
+
+    const date =
+      new Date(value);
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return null;
+    }
+
+    return date.toLocaleDateString(
+      "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }
+    );
+  }
+
+  const formattedGraceEnd =
+    formatGraceDate(
+      paymentGraceEnd
+    );
+
+  /*
+  --------------------------------------------------
   PAGE COPY
   --------------------------------------------------
   */
@@ -315,32 +465,50 @@ export default function AccountInactivePage() {
   const badgeText =
     justReturned
       ? "Verifying Payment"
-      : isSupportOnly
-        ? "Support Plan Active"
-        : "Access Required";
+      : isPaymentPastDue
+        ? "Payment Required"
+        : isPaymentGrace
+          ? "Payment Grace Period"
+          : isSupportOnly
+            ? "Support Plan Active"
+            : "Access Required";
 
   const pageTitle =
     justReturned
       ? "Checking Your Access..."
-      : isSupportOnly
-        ? "Training Platform Not Included"
-        : "Training Access Inactive";
+      : isPaymentPastDue
+        ? "Payment Required"
+        : isPaymentGrace
+          ? "Payment Issue Detected"
+          : isSupportOnly
+            ? "Training Platform Not Included"
+            : "Training Access Inactive";
 
   const leadText =
     justReturned
       ? "We’re verifying your payment and restoring your training access."
-      : isSupportOnly
-        ? "Your Rhino Wrangler Support Only plan is currently active."
-        : "Your Rhino Wrangler training access is currently inactive.";
+      : isPaymentPastDue
+        ? "We were unable to process your latest subscription payment."
+        : isPaymentGrace
+          ? "Your latest subscription payment was unsuccessful."
+          : isSupportOnly
+            ? "Your Rhino Wrangler Support Only plan is currently active."
+            : "Your Rhino Wrangler training access is currently inactive.";
 
   const bodyText =
     justReturned
       ? "This usually only takes a few seconds. If your payment was completed successfully, you will be redirected to your training dashboard automatically."
-      : isSupportOnly
-        ? "Your current plan includes specialized Rhino Wrangler support, but it does not include access to the training platform. If you would like access to the website, you can upgrade your plan at any time."
-        : hasStripeCustomer
-          ? "This may be due to a failed payment, expired subscription, or account status change. To restore access, update your billing information and complete your renewal payment."
-          : "Your account has been created, but training access has not been purchased yet. Complete your initial purchase to activate your account.";
+      : isPaymentPastDue
+        ? "Your payment grace period has ended, so training access has been temporarily paused. Update your payment method and complete the outstanding payment to restore access."
+        : isPaymentGrace
+          ? formattedGraceEnd
+            ? `Your account is still active during the payment grace period. Please update your payment method and resolve the outstanding payment before ${formattedGraceEnd} to avoid interruption of your training access.`
+            : "Your account is still active during the payment grace period. Please update your payment method and resolve the outstanding payment to avoid interruption of your training access."
+          : isSupportOnly
+            ? "Your current plan includes specialized Rhino Wrangler support, but it does not include access to the training platform. If you would like access to the website, you can upgrade your plan at any time."
+            : hasStripeCustomer
+              ? "Your training access is currently inactive. Use the billing portal below to review your subscription or billing information."
+              : "Your account has been created, but training access has not been purchased yet. Complete your initial purchase to activate your account.";
 
   return (
     <main className="page">
@@ -350,7 +518,11 @@ export default function AccountInactivePage() {
           className={
             isSupportOnly
               ? "badge supportBadge"
-              : "badge"
+              : isPaymentPastDue
+                ? "badge paymentBadge"
+                : isPaymentGrace
+                  ? "badge warningBadge"
+                  : "badge"
           }
         >
           {badgeText}
@@ -379,9 +551,75 @@ export default function AccountInactivePage() {
             </div>
           )}
 
+        {/*
+        --------------------------------------------------
+        PAYMENT REQUIRED NOTICE
+        --------------------------------------------------
+        */}
+
         {!justReturned &&
           !loadingAccess &&
-          isSupportOnly && (
+          isPaymentPastDue && (
+            <div className="notice paymentNotice">
+              <strong>
+                Payment Action Required
+              </strong>
+
+              <span>
+                Your subscription is still associated with your account,
+                but your most recent payment was not completed.
+              </span>
+
+              <span>
+                Update your payment method and pay the outstanding invoice.
+                Once Stripe confirms the payment, your Rhino Wrangler training
+                access will be restored automatically.
+              </span>
+            </div>
+          )}
+
+        {/*
+        --------------------------------------------------
+        PAYMENT GRACE NOTICE
+        --------------------------------------------------
+        */}
+
+        {!justReturned &&
+          !loadingAccess &&
+          isPaymentGrace && (
+            <div className="notice graceNotice">
+              <strong>
+                Payment Grace Period Active
+              </strong>
+
+              <span>
+                Your training access is still active while you resolve the
+                failed payment.
+              </span>
+
+              {formattedGraceEnd && (
+                <span>
+                  Please resolve the payment before
+                  <strong>
+                    {" "}{formattedGraceEnd}
+                  </strong>
+                  {" "}to prevent your training access from being paused.
+                </span>
+              )}
+            </div>
+          )}
+
+        {/*
+        --------------------------------------------------
+        SUPPORT ONLY NOTICE
+        --------------------------------------------------
+        */}
+
+        {!justReturned &&
+          !loadingAccess &&
+          isSupportOnly &&
+          !isPaymentPastDue &&
+          !isPaymentGrace && (
             <div className="notice supportNotice">
               <strong>
                 Want Training Platform Access?
@@ -407,9 +645,17 @@ export default function AccountInactivePage() {
             </div>
           )}
 
+        {/*
+        --------------------------------------------------
+        EXISTING CUSTOMER NOTICE
+        --------------------------------------------------
+        */}
+
         {!justReturned &&
           !loadingAccess &&
           !isSupportOnly &&
+          !isPaymentPastDue &&
+          !isPaymentGrace &&
           hasStripeCustomer && (
             <div className="notice">
               <strong>
@@ -417,16 +663,24 @@ export default function AccountInactivePage() {
               </strong>
 
               <span>
-                Use the billing portal to update
+                Use the billing portal to review
                 your payment method or resolve
                 your subscription status.
               </span>
             </div>
           )}
 
+        {/*
+        --------------------------------------------------
+        NO PURCHASE NOTICE
+        --------------------------------------------------
+        */}
+
         {!justReturned &&
           !loadingAccess &&
           !isSupportOnly &&
+          !isPaymentPastDue &&
+          !isPaymentGrace &&
           !hasStripeCustomer && (
             <div className="notice">
               <strong>
@@ -444,6 +698,12 @@ export default function AccountInactivePage() {
 
         <div className="actions">
 
+          {/*
+          --------------------------------------------------
+          LOADING
+          --------------------------------------------------
+          */}
+
           {!justReturned &&
             loadingAccess && (
               <button
@@ -455,9 +715,63 @@ export default function AccountInactivePage() {
               </button>
             )}
 
+          {/*
+          --------------------------------------------------
+          PAYMENT REQUIRED
+          --------------------------------------------------
+          */}
+
           {!justReturned &&
             !loadingAccess &&
-            isSupportOnly && (
+            isPaymentPastDue && (
+              <button
+                type="button"
+                onClick={
+                  handleRestoreAccess
+                }
+                disabled={loading}
+                className="primaryButton paymentButton"
+              >
+                {loading
+                  ? "Opening Billing Portal..."
+                  : "Update Payment Method"}
+              </button>
+            )}
+
+          {/*
+          --------------------------------------------------
+          PAYMENT GRACE
+          --------------------------------------------------
+          */}
+
+          {!justReturned &&
+            !loadingAccess &&
+            isPaymentGrace && (
+              <button
+                type="button"
+                onClick={
+                  handleRestoreAccess
+                }
+                disabled={loading}
+                className="primaryButton warningButton"
+              >
+                {loading
+                  ? "Opening Billing Portal..."
+                  : "Resolve Payment"}
+              </button>
+            )}
+
+          {/*
+          --------------------------------------------------
+          SUPPORT ONLY
+          --------------------------------------------------
+          */}
+
+          {!justReturned &&
+            !loadingAccess &&
+            isSupportOnly &&
+            !isPaymentPastDue &&
+            !isPaymentGrace && (
               <>
                 <button
                   type="button"
@@ -487,9 +801,17 @@ export default function AccountInactivePage() {
               </>
             )}
 
+          {/*
+          --------------------------------------------------
+          NORMAL EXISTING CUSTOMER
+          --------------------------------------------------
+          */}
+
           {!justReturned &&
             !loadingAccess &&
             !isSupportOnly &&
+            !isPaymentPastDue &&
+            !isPaymentGrace &&
             hasStripeCustomer && (
               <button
                 type="button"
@@ -505,9 +827,17 @@ export default function AccountInactivePage() {
               </button>
             )}
 
+          {/*
+          --------------------------------------------------
+          NO PURCHASE
+          --------------------------------------------------
+          */}
+
           {!justReturned &&
             !loadingAccess &&
             !isSupportOnly &&
+            !isPaymentPastDue &&
+            !isPaymentGrace &&
             !hasStripeCustomer && (
               <a
                 href="/pricing"
@@ -516,6 +846,12 @@ export default function AccountInactivePage() {
                 View Plans
               </a>
             )}
+
+          {/*
+          --------------------------------------------------
+          RETURN FROM STRIPE
+          --------------------------------------------------
+          */}
 
           {justReturned && (
             <button
@@ -617,6 +953,20 @@ export default function AccountInactivePage() {
           color: #166534;
         }
 
+        .paymentBadge {
+          background:
+            rgba(220, 38, 38, 0.12);
+
+          color: #991b1b;
+        }
+
+        .warningBadge {
+          background:
+            rgba(245, 158, 11, 0.16);
+
+          color: #92400e;
+        }
+
         h1 {
           margin: 0;
 
@@ -702,7 +1052,45 @@ export default function AccountInactivePage() {
             );
         }
 
-        .supportNotice strong {
+        .paymentNotice {
+          background:
+            linear-gradient(
+              135deg,
+              #111827 0%,
+              #321414 100%
+            );
+
+          border:
+            1px solid
+            rgba(
+              220,
+              38,
+              38,
+              0.3
+            );
+        }
+
+        .graceNotice {
+          background:
+            linear-gradient(
+              135deg,
+              #111827 0%,
+              #33240d 100%
+            );
+
+          border:
+            1px solid
+            rgba(
+              245,
+              158,
+              11,
+              0.3
+            );
+        }
+
+        .supportNotice strong,
+        .paymentNotice strong,
+        .graceNotice strong {
           color: #ffffff;
         }
 
@@ -804,6 +1192,18 @@ export default function AccountInactivePage() {
         }
 
         .upgradeButton {
+          background: #f59e0b;
+
+          color: #111827;
+        }
+
+        .paymentButton {
+          background: #b91c1c;
+
+          color: #ffffff;
+        }
+
+        .warningButton {
           background: #f59e0b;
 
           color: #111827;
