@@ -197,10 +197,12 @@ export default function Pricing() {
                 <span>/ month</span>
               </div>
 
-              <p className="billingText">
-                Billed quarterly at{" "}
-                <strong>$450 every 3 months</strong>
-              </p>
+         <p className="billingText">
+  Billed quarterly at{" "}
+  <strong>$450 every 3 months</strong>
+  <br />
+  <strong>12-month minimum commitment</strong>
+</p>
 
               <p className="planText">
                 Direct specialized support for
@@ -265,10 +267,11 @@ export default function Pricing() {
                   : "Choose Support Only"}
               </button>
 
-              <p className="smallNote">
-                $450 billed every 3 months until
-                canceled.
-              </p>
+         <p className="smallNote">
+  12-month minimum commitment. $450 billed every
+  3 months. After the initial 12-month commitment,
+  service continues until canceled.
+</p>
             </div>
 
             {/* SUPPORT + WEBSITE */}
@@ -291,10 +294,12 @@ export default function Pricing() {
                 <span>/ month</span>
               </div>
 
-              <p className="billingText">
-                Billed quarterly at{" "}
-                <strong>$600 every 3 months</strong>
-              </p>
+           <p className="billingText">
+  Billed quarterly at{" "}
+  <strong>$600 every 3 months</strong>
+  <br />
+  <strong>12-month minimum commitment</strong>
+</p>
 
               <p className="planText">
                 Get the complete Rhino Wrangler
@@ -377,10 +382,11 @@ export default function Pricing() {
                   : "Choose Support + Website"}
               </button>
 
-              <p className="smallNote">
-                $600 billed every 3 months until
-                canceled.
-              </p>
+     <p className="smallNote">
+  12-month minimum commitment. $600 billed every
+  3 months. After the initial 12-month commitment,
+  service continues until canceled.
+</p>
             </div>
 
             {/* WEBSITE ONLY */}
