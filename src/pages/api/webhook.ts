@@ -115,6 +115,15 @@ function addOneYear(
   return endDate;
 }
 
+function addSevenDays(
+  startDate: Date
+) {
+  return new Date(
+    startDate.getTime() +
+      7 * 24 * 60 * 60 * 1000
+  );
+}
+
 function getCommitmentDates({
   planType,
   purchaseTimestamp,
@@ -129,9 +138,6 @@ function getCommitmentDates({
   /*
   --------------------------------------------------
   LIFETIME
-
-  Lifetime access does not create a recurring
-  commitment by itself.
   --------------------------------------------------
   */
 
@@ -148,14 +154,6 @@ function getCommitmentDates({
     };
   }
 
-  /*
-  --------------------------------------------------
-  PURCHASE DATE
-
-  Stripe timestamps are Unix seconds.
-  --------------------------------------------------
-  */
-
   const purchaseDate =
     purchaseTimestamp
       ? new Date(
@@ -165,13 +163,7 @@ function getCommitmentDates({
 
   /*
   --------------------------------------------------
-  PRESERVE ACTIVE COMMITMENT
-
-  If the company already has an active
-  commitment, do not restart the 12-month clock.
-
-  This is especially important when upgrading
-  Support Only -> Support + Website.
+  PRESERVE EXISTING ACTIVE COMMITMENT
   --------------------------------------------------
   */
 
@@ -345,7 +337,10 @@ async function ensureCompanyForPurchase({
         commitment_start_date,
         commitment_end_date,
         cancel_requested,
-        cancel_requested_at
+        cancel_requested_at,
+        payment_status,
+        payment_failed_at,
+        payment_grace_end
       `)
       .eq(
         "id",
@@ -397,12 +392,6 @@ async function ensureCompanyForPurchase({
             .commitment_end_date,
       });
 
-    let nextCommitmentStartDate =
-      commitment.commitmentStartDate;
-
-    let nextCommitmentEndDate =
-      commitment.commitmentEndDate;
-
     let nextCancelRequested =
       existingCompany.cancel_requested ===
       true;
@@ -410,12 +399,6 @@ async function ensureCompanyForPurchase({
     let nextCancelRequestedAt =
       existingCompany
         .cancel_requested_at;
-
-    /*
-      If this begins a genuinely NEW
-      12-month commitment, clear any old
-      cancellation request.
-    */
 
     if (
       commitment.startedNewCommitment
@@ -447,11 +430,6 @@ async function ensureCompanyForPurchase({
         stripeSubscriptionId ||
         null;
 
-      /*
-        Support is already included in
-        this subscription.
-      */
-
       nextSupportSubscriptionId =
         null;
     }
@@ -474,11 +452,6 @@ async function ensureCompanyForPurchase({
       nextPlatformSubscriptionId =
         null;
 
-      /*
-        Preserve a separate Support Only
-        subscription if one already exists.
-      */
-
       if (
         existingCompany
           .support_subscription_id
@@ -490,16 +463,6 @@ async function ensureCompanyForPurchase({
           existingCompany
             .support_subscription_id;
       }
-
-      /*
-        If there is no recurring support
-        subscription, lifetime itself does
-        not require a commitment.
-
-        Existing commitment information is
-        left untouched here so an existing
-        Support commitment is not destroyed.
-      */
     }
 
     /*
@@ -518,12 +481,6 @@ async function ensureCompanyForPurchase({
         stripeSubscriptionId ||
         null;
 
-      /*
-        If the company does not already
-        have website access, classify it
-        as Support Only.
-      */
-
       if (
         !nextPlatformAccess
       ) {
@@ -536,11 +493,6 @@ async function ensureCompanyForPurchase({
         nextPlatformSubscriptionId =
           null;
       }
-
-      /*
-        Lifetime + Support remains Lifetime
-        for platform classification.
-      */
 
       if (
         nextPlatformAccess &&
@@ -586,16 +538,32 @@ async function ensureCompanyForPurchase({
           nextSupportSubscriptionId,
 
         commitment_start_date:
-          nextCommitmentStartDate,
+          commitment
+            .commitmentStartDate,
 
         commitment_end_date:
-          nextCommitmentEndDate,
+          commitment
+            .commitmentEndDate,
 
         cancel_requested:
           nextCancelRequested,
 
         cancel_requested_at:
           nextCancelRequestedAt,
+
+        /*
+        Successful purchase means the
+        account is financially current.
+        */
+
+        payment_status:
+          "current",
+
+        payment_failed_at:
+          null,
+
+        payment_grace_end:
+          null,
       })
       .eq(
         "id",
@@ -616,7 +584,10 @@ async function ensureCompanyForPurchase({
         commitment_start_date,
         commitment_end_date,
         cancel_requested,
-        cancel_requested_at
+        cancel_requested_at,
+        payment_status,
+        payment_failed_at,
+        payment_grace_end
       `)
       .single();
 
@@ -665,12 +636,6 @@ async function ensureCompanyForPurchase({
       ? stripeSubscriptionId ||
         null
       : null;
-
-  /*
-  --------------------------------------------------
-  NEW COMPANY COMMITMENT
-  --------------------------------------------------
-  */
 
   const commitment =
     getCommitmentDates({
@@ -727,6 +692,15 @@ async function ensureCompanyForPurchase({
 
       cancel_requested_at:
         null,
+
+      payment_status:
+        "current",
+
+      payment_failed_at:
+        null,
+
+      payment_grace_end:
+        null,
     })
     .select(`
       id,
@@ -743,7 +717,10 @@ async function ensureCompanyForPurchase({
       commitment_start_date,
       commitment_end_date,
       cancel_requested,
-      cancel_requested_at
+      cancel_requested_at,
+      payment_status,
+      payment_failed_at,
+      payment_grace_end
     `)
     .single();
 
@@ -929,7 +906,10 @@ async function getCompanyForProfile(
       commitment_start_date,
       commitment_end_date,
       cancel_requested,
-      cancel_requested_at
+      cancel_requested_at,
+      payment_status,
+      payment_failed_at,
+      payment_grace_end
     `)
     .eq(
       "id",
@@ -1283,41 +1263,225 @@ export default async function handler(
           });
       }
 
-      const succeeded =
-        event.type ===
-        "invoice.payment_succeeded";
+      const stripeCustomerId =
+        typeof subscription.customer ===
+        "string"
+          ? subscription.customer
+          : subscription.customer.id;
 
       /*
       --------------------------------------------------
-      SUPPORT + WEBSITE
+      PAYMENT SUCCEEDED
+      --------------------------------------------------
+
+      Clear any past-due/grace-period status.
+      --------------------------------------------------
+      */
+
+      if (
+        event.type ===
+        "invoice.payment_succeeded"
+      ) {
+        /*
+        --------------------------------------------------
+        SUPPORT + WEBSITE
+        --------------------------------------------------
+        */
+
+        if (
+          plan === "annual"
+        ) {
+          await supabaseAdmin
+            .from("companies")
+            .update({
+              plan_type:
+                "annual",
+
+              platform_access:
+                true,
+
+              support_included:
+                true,
+
+              access_status:
+                "active",
+
+              stripe_customer_id:
+                stripeCustomerId,
+
+              platform_subscription_id:
+                subscriptionId,
+
+              support_subscription_id:
+                null,
+
+              payment_status:
+                "current",
+
+              payment_failed_at:
+                null,
+
+              payment_grace_end:
+                null,
+            })
+            .eq(
+              "id",
+              company.id
+            )
+            .throwOnError();
+
+          await syncMemberAccess({
+            profileId,
+
+            platformAccess:
+              true,
+
+            stripeCustomerId,
+
+            platformSubscriptionId:
+              subscriptionId,
+          });
+        }
+
+        /*
+        --------------------------------------------------
+        SUPPORT ONLY
+        --------------------------------------------------
+        */
+
+        if (
+          plan === "support"
+        ) {
+          const platformStillActive =
+            company.platform_access ===
+            true;
+
+          const nextPlanType =
+            platformStillActive
+              ? company.plan_type
+              : "support";
+
+          await supabaseAdmin
+            .from("companies")
+            .update({
+              plan_type:
+                nextPlanType,
+
+              support_included:
+                true,
+
+              stripe_customer_id:
+                stripeCustomerId,
+
+              support_subscription_id:
+                subscriptionId,
+
+              access_status:
+                "active",
+
+              payment_status:
+                "current",
+
+              payment_failed_at:
+                null,
+
+              payment_grace_end:
+                null,
+            })
+            .eq(
+              "id",
+              company.id
+            )
+            .throwOnError();
+
+          await syncMemberAccess({
+            profileId,
+
+            platformAccess:
+              platformStillActive,
+
+            stripeCustomerId,
+
+            platformSubscriptionId:
+              company
+                .platform_subscription_id,
+          });
+        }
+
+        return res
+          .status(200)
+          .json({
+            received: true,
+          });
+      }
+
+      /*
+      --------------------------------------------------
+      PAYMENT FAILED
+      --------------------------------------------------
+
+      IMPORTANT:
+
+      Do NOT deactivate access immediately.
+
+      Start a 7-day grace period.
+
+      If this account is already past_due,
+      preserve the ORIGINAL failure/grace
+      timestamps so every Stripe retry does
+      not restart the 7-day clock.
+      --------------------------------------------------
+      */
+
+      const failureDate =
+        new Date();
+
+      const alreadyPastDue =
+        company.payment_status ===
+        "past_due";
+
+      const paymentFailedAt =
+        alreadyPastDue &&
+        company.payment_failed_at
+          ? company.payment_failed_at
+          : failureDate.toISOString();
+
+      const paymentGraceEnd =
+        alreadyPastDue &&
+        company.payment_grace_end
+          ? company.payment_grace_end
+          : addSevenDays(
+              failureDate
+            ).toISOString();
+
+      /*
+      --------------------------------------------------
+      SUPPORT + WEBSITE FAILED PAYMENT
       --------------------------------------------------
       */
 
       if (
         plan === "annual"
       ) {
-        const stripeCustomerId =
-          typeof subscription.customer ===
-          "string"
-            ? subscription.customer
-            : subscription.customer.id;
-
         await supabaseAdmin
           .from("companies")
           .update({
+            /*
+              Customer stays active during
+              the grace period.
+            */
+
             plan_type:
               "annual",
 
             platform_access:
-              succeeded,
+              true,
 
             support_included:
-              succeeded,
+              true,
 
             access_status:
-              succeeded
-                ? "active"
-                : "inactive",
+              "active",
 
             stripe_customer_id:
               stripeCustomerId,
@@ -1327,6 +1491,15 @@ export default async function handler(
 
             support_subscription_id:
               null,
+
+            payment_status:
+              "past_due",
+
+            payment_failed_at:
+              paymentFailedAt,
+
+            payment_grace_end:
+              paymentGraceEnd,
           })
           .eq(
             "id",
@@ -1334,11 +1507,16 @@ export default async function handler(
           )
           .throwOnError();
 
+        /*
+          Keep legacy training access active
+          during the grace period.
+        */
+
         await syncMemberAccess({
           profileId,
 
           platformAccess:
-            succeeded,
+            true,
 
           stripeCustomerId,
 
@@ -1349,19 +1527,13 @@ export default async function handler(
 
       /*
       --------------------------------------------------
-      SUPPORT ONLY
+      SUPPORT ONLY FAILED PAYMENT
       --------------------------------------------------
       */
 
       if (
         plan === "support"
       ) {
-        const stripeCustomerId =
-          typeof subscription.customer ===
-          "string"
-            ? subscription.customer
-            : subscription.customer.id;
-
         const platformStillActive =
           company.platform_access ===
           true;
@@ -1374,11 +1546,19 @@ export default async function handler(
         await supabaseAdmin
           .from("companies")
           .update({
+            /*
+              Support remains available
+              during the grace period.
+            */
+
             plan_type:
               nextPlanType,
 
             support_included:
-              succeeded,
+              true,
+
+            access_status:
+              "active",
 
             stripe_customer_id:
               stripeCustomerId,
@@ -1386,11 +1566,14 @@ export default async function handler(
             support_subscription_id:
               subscriptionId,
 
-            access_status:
-              platformStillActive ||
-              succeeded
-                ? "active"
-                : "inactive",
+            payment_status:
+              "past_due",
+
+            payment_failed_at:
+              paymentFailedAt,
+
+            payment_grace_end:
+              paymentGraceEnd,
           })
           .eq(
             "id",
@@ -1411,6 +1594,19 @@ export default async function handler(
               .platform_subscription_id,
         });
       }
+
+      console.log(
+        "Payment failed - grace period started/preserved:",
+        {
+          profileId,
+          companyId:
+            company.id,
+          subscriptionId,
+          plan,
+          paymentFailedAt,
+          paymentGraceEnd,
+        }
+      );
 
       return res
         .status(200)
@@ -1507,6 +1703,12 @@ export default async function handler(
 
             support_subscription_id:
               null,
+
+            payment_failed_at:
+              null,
+
+            payment_grace_end:
+              null,
           })
           .eq(
             "id",
@@ -1553,6 +1755,12 @@ export default async function handler(
               stillHasPlatform
                 ? "active"
                 : "inactive",
+
+            payment_failed_at:
+              null,
+
+            payment_grace_end:
+              null,
           })
           .eq(
             "id",
@@ -1896,13 +2104,6 @@ export default async function handler(
       /*
       --------------------------------------------------
       COMMITMENT START TIMESTAMP
-      --------------------------------------------------
-
-      Prefer Stripe's subscription creation
-      timestamp for recurring plans.
-
-      Fall back to the Checkout Session creation
-      timestamp when necessary.
       --------------------------------------------------
       */
 
@@ -2303,6 +2504,10 @@ export default async function handler(
           commitmentEndDate:
             company
               .commitment_end_date,
+
+          paymentStatus:
+            company
+              .payment_status,
         }
       );
 
