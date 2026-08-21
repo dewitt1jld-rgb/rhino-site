@@ -165,96 +165,104 @@ const courseModules: CourseModule[] = [
     ],
   },
 
-  {
-    number: "04",
-    title: "Profiles & Components",
-    description:
-      "Understand how aluminum systems and individual parts are organized inside the software.",
-    lessons: [
-      {
-        number: "11",
-        title: "Understanding Metal Groups",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how metal groups organize storefront systems, assign profiles, control frame behavior, and support fabrication.",
-      },
-      {
-        number: "12",
-        title: "Working with Catalog Parts",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how catalog parts are created, organized, modified, and connected to the systems used throughout a project.",
-      },
-    ],
-  },
+{
+  number: "04",
+  title: "Profiles & Components",
+  description:
+    "Understand how aluminum systems and individual parts are organized inside the software.",
+  lessons: [
+    {
+      number: "11",
+      title: "Catalog Parts",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 3,
+      description:
+        "Learn how to navigate Catalog Parts, create custom parts, understand assemblies, and control the individual components used throughout Glazier Studio.",
+      href: "/dashboard/introductory-software-training/lesson-11-catalog-part-basics",
+    },
+{
+  number: "12",
+  title: "Understanding Metal Groups",
+  time: "60–90 min",
+  status: "Available",
+  stepCount: 3,
+  description:
+    "Learn how metal groups organize framing systems, create your own project-specific metal groups, and configure the fabrication options that control how frames are built.",
+  href: "/dashboard/introductory-software-training/lesson-12-metal-group-basics",
+},
+  ],
+},
 
-  {
-    number: "05",
-    title: "Formulas & Hole Placement",
-    description:
-      "Create repeatable rules for weep holes, anchor holes, and other automatically positioned operations.",
-    lessons: [
-      {
-        number: "13",
-        title: "Weep Holes & Anchor Holes",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how weep holes and anchor holes are created, positioned, tested, and applied to the correct members.",
-      },
-      {
-        number: "14",
-        title: "Formula Builder Fundamentals",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Use variables, measurements, conditions, and formulas to control the placement of holes and fabrication operations.",
-      },
-    ],
-  },
 
-  {
-    number: "06",
-    title: "Metal Fabrication",
-    description:
-      "Build and apply the fabrication operations that prepare aluminum members for production.",
-    lessons: [
-      {
-        number: "15",
-        title: "Introduction to Metal Fabrication",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn the Metal Fabrication screen and create basic drills, slots, notches, saw cuts, and machining operations.",
-      },
-      {
-        number: "16",
-        title: "Advanced Metal Fabrication",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Create more advanced fabrication patterns using formulas, conditions, reference points, and multiple operations.",
-      },
-      {
-        number: "17",
-        title: "Secondary Fabrications",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how secondary fabrications differ from primary fabrications and how they are assigned to individual project members.",
-      },
-      {
-        number: "18",
-        title: "Fabrication Workflows & Best Practices",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Connect metal groups, catalog parts, assemblies, primary fabrications, and secondary fabrications into one complete workflow.",
-      },
-    ],
-  },
+{
+  number: "05",
+  title: "Fabrications & Hole Placement",
+  description:
+    "Understand how fabrication screens work, how operations are positioned, and how automatic weep and anchor holes are created.",
+  lessons: [
+    {
+      number: "13",
+      title: "Understanding Fabrications",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 3,
+      description:
+        "Learn how fabrication screens are organized, understand X, Y, and Z locations, and review the operations, tools, directions, and conditions used throughout Glazier Studio and PartnerPak.",
+      href: "/dashboard/introductory-software-training/lesson-13-fabrication-basics",
+    },
+{
+  number: "14",
+  title: "Weep & Anchor Holes",
+  time: "45–60 min",
+  status: "Available",
+  stepCount: 3,
+  description:
+    "Learn what weep holes and anchor holes are, understand how fabrication formulas determine their locations, and build your own weep-hole setup inside a training metal group.",
+  href: "/dashboard/introductory-software-training/lesson-14-weep-anchor-basics",
+},
+  ],
+},
+
+{
+  number: "06",
+  title: "Metal Fabrication",
+  description:
+    "Learn how to navigate the Metal Fabrication screen, import and correct project fabrications, and troubleshoot secondary fabrications before sending a job to production.",
+  lessons: [
+    {
+      number: "15",
+      title: "Introduction to Metal Fabrication",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 2,
+      description:
+        "Learn how to navigate the Metal Fabrication screen, understand the project and stick information, and review the fabrication operations used to prepare material for production.",
+      href: "/dashboard/introductory-software-training/lesson-15-metal-fabrication-basics",
+    },
+    {
+      number: "16",
+      title: "Import and Fix Our Test Project",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 3,
+      description:
+        "Import the test project we have been building throughout the course, review the generated fabrications, identify problems, and make the corrections needed before production.",
+      href: "/dashboard/introductory-software-training/lesson-16-import-fix-project",
+    },
+    {
+      number: "17",
+      title: "Secondary Fabrications",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 3,
+      description:
+        "Learn how secondary fabrications transfer from one member to another and how to identify and correct screw spline, shear block, and other transferred fabrication problems.",
+      href: "/dashboard/introductory-software-training/lesson-17-secondary-fabrications",
+    },
+  ],
+},
+
 
   {
     number: "07",

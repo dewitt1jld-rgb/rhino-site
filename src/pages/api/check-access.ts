@@ -10,7 +10,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const authHeader = req.headers.authorization;
+  const authHeader =
+    req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({
@@ -18,14 +19,24 @@ export default async function handler(
     });
   }
 
-  const token = authHeader.replace("Bearer ", "");
+  const token =
+    authHeader.replace(
+      "Bearer ",
+      ""
+    );
 
   const {
     data: { user },
     error: userError,
-  } = await supabase.auth.getUser(token);
+  } =
+    await supabase.auth.getUser(
+      token
+    );
 
-  if (userError || !user) {
+  if (
+    userError ||
+    !user
+  ) {
     return res.status(401).json({
       error: "No user",
     });
@@ -33,7 +44,7 @@ export default async function handler(
 
   /*
   --------------------------------------------------
-  1. CHECK NEW COMPANY-BASED ACCESS SYSTEM
+  1. CHECK COMPANY-BASED ACCESS SYSTEM
   --------------------------------------------------
   */
 
@@ -50,11 +61,23 @@ export default async function handler(
         id,
         company_name,
         customer_number,
+        plan_type,
+        platform_access,
+        support_included,
         access_status,
-        seat_limit
+        seat_limit,
+        stripe_customer_id,
+        platform_subscription_id,
+        support_subscription_id,
+        payment_status,
+        payment_failed_at,
+        payment_grace_end
       )
     `)
-    .eq("id", user.id)
+    .eq(
+      "id",
+      user.id
+    )
     .maybeSingle();
 
   if (profileError) {
@@ -65,63 +88,375 @@ export default async function handler(
   }
 
   /*
-    If the user belongs to a company,
-    company access becomes the source of truth.
+  --------------------------------------------------
+  COMPANY ACCESS IS SOURCE OF TRUTH
+  --------------------------------------------------
   */
 
-  if (profile?.company_id) {
-    const company = Array.isArray(profile.companies)
-      ? profile.companies[0]
-      : profile.companies;
+  if (
+    profile?.company_id
+  ) {
+    const company =
+      Array.isArray(
+        profile.companies
+      )
+        ? profile.companies[0]
+        : profile.companies;
 
     /*
-      Employee account itself must still be active.
+    --------------------------------------------------
+    USER ACCOUNT MUST BE ACTIVE
+    --------------------------------------------------
     */
 
-    if (profile.is_active === false) {
-      return res.status(200).json({
-        status: "inactive",
-        hasAccess: false,
-        source: "company",
-        reason: "user_inactive",
-      });
+    if (
+      profile.is_active === false
+    ) {
+      return res
+        .status(200)
+        .json({
+          status:
+            "inactive",
+
+          hasAccess:
+            false,
+
+          source:
+            "company",
+
+          reason:
+            "user_inactive",
+
+          company:
+            company
+              ? {
+                  id:
+                    company.id,
+
+                  name:
+                    company.company_name,
+
+                  customerNumber:
+                    company.customer_number,
+
+                  seatLimit:
+                    company.seat_limit,
+
+                  planType:
+                    company.plan_type,
+
+                  platformAccess:
+                    company.platform_access,
+
+                  supportIncluded:
+                    company.support_included,
+
+                  paymentStatus:
+                    company.payment_status,
+
+                  paymentFailedAt:
+                    company.payment_failed_at,
+
+                  paymentGraceEnd:
+                    company.payment_grace_end,
+                }
+              : null,
+        });
     }
 
     /*
-      Company must have active access.
+    --------------------------------------------------
+    PAYMENT GRACE PERIOD
+    --------------------------------------------------
+
+    If a recurring payment has failed,
+    customers retain access until the
+    grace-period deadline.
+
+    Once that deadline passes, training
+    access is denied.
+    --------------------------------------------------
     */
 
-    if (company?.access_status === "active") {
-      return res.status(200).json({
-        status: "active",
-        hasAccess: true,
-        source: "company",
+    if (
+      company?.payment_status ===
+        "past_due" &&
+      company?.payment_grace_end
+    ) {
+      const now =
+        new Date();
 
-        company: {
-          id: company.id,
-          name: company.company_name,
-          customerNumber: company.customer_number,
-          seatLimit: company.seat_limit,
-        },
-      });
+      const graceEnd =
+        new Date(
+          company.payment_grace_end
+        );
+
+      if (
+        !Number.isNaN(
+          graceEnd.getTime()
+        )
+      ) {
+        /*
+        --------------------------------------------------
+        GRACE PERIOD EXPIRED
+        --------------------------------------------------
+        */
+
+        if (
+          now >= graceEnd
+        ) {
+          return res
+            .status(200)
+            .json({
+              status:
+                "payment_past_due",
+
+              hasAccess:
+                false,
+
+              source:
+                "company",
+
+              reason:
+                "payment_grace_expired",
+
+              company: {
+                id:
+                  company.id,
+
+                name:
+                  company.company_name,
+
+                customerNumber:
+                  company.customer_number,
+
+                seatLimit:
+                  company.seat_limit,
+
+                planType:
+                  company.plan_type,
+
+                platformAccess:
+                  company.platform_access,
+
+                supportIncluded:
+                  company.support_included,
+
+                paymentStatus:
+                  company.payment_status,
+
+                paymentFailedAt:
+                  company.payment_failed_at,
+
+                paymentGraceEnd:
+                  company.payment_grace_end,
+              },
+            });
+        }
+
+        /*
+        --------------------------------------------------
+        STILL INSIDE GRACE PERIOD
+        --------------------------------------------------
+
+        Continue to normal access rules below.
+        --------------------------------------------------
+        */
+      }
     }
 
-    return res.status(200).json({
-      status: "inactive",
-      hasAccess: false,
-      source: "company",
-      reason: "company_inactive",
-    });
+    /*
+    --------------------------------------------------
+    COMPANY HAS PLATFORM ACCESS
+    --------------------------------------------------
+    */
+
+    if (
+      company?.access_status ===
+        "active" &&
+      company?.platform_access ===
+        true
+    ) {
+      return res
+        .status(200)
+        .json({
+          status:
+            company.payment_status ===
+            "past_due"
+              ? "payment_grace"
+              : "active",
+
+          hasAccess:
+            true,
+
+          source:
+            "company",
+
+          reason:
+            company.payment_status ===
+            "past_due"
+              ? "payment_grace"
+              : undefined,
+
+          company: {
+            id:
+              company.id,
+
+            name:
+              company.company_name,
+
+            customerNumber:
+              company.customer_number,
+
+            seatLimit:
+              company.seat_limit,
+
+            planType:
+              company.plan_type,
+
+            platformAccess:
+              company.platform_access,
+
+            supportIncluded:
+              company.support_included,
+
+            paymentStatus:
+              company.payment_status,
+
+            paymentFailedAt:
+              company.payment_failed_at,
+
+            paymentGraceEnd:
+              company.payment_grace_end,
+          },
+        });
+    }
+
+    /*
+    --------------------------------------------------
+    SUPPORT-ONLY COMPANY
+    --------------------------------------------------
+    */
+
+    if (
+      company?.access_status ===
+        "active" &&
+      company?.platform_access !==
+        true &&
+      company?.support_included ===
+        true
+    ) {
+      return res
+        .status(200)
+        .json({
+          status:
+            "support_only",
+
+          hasAccess:
+            false,
+
+          source:
+            "company",
+
+          reason:
+            "support_only",
+
+          company: {
+            id:
+              company.id,
+
+            name:
+              company.company_name,
+
+            customerNumber:
+              company.customer_number,
+
+            seatLimit:
+              company.seat_limit,
+
+            planType:
+              company.plan_type,
+
+            platformAccess:
+              company.platform_access,
+
+            supportIncluded:
+              company.support_included,
+
+            paymentStatus:
+              company.payment_status,
+
+            paymentFailedAt:
+              company.payment_failed_at,
+
+            paymentGraceEnd:
+              company.payment_grace_end,
+          },
+        });
+    }
+
+    /*
+    --------------------------------------------------
+    INACTIVE COMPANY
+    --------------------------------------------------
+    */
+
+    return res
+      .status(200)
+      .json({
+        status:
+          "inactive",
+
+        hasAccess:
+          false,
+
+        source:
+          "company",
+
+        reason:
+          "company_inactive",
+
+        company:
+          company
+            ? {
+                id:
+                  company.id,
+
+                name:
+                  company.company_name,
+
+                customerNumber:
+                  company.customer_number,
+
+                seatLimit:
+                  company.seat_limit,
+
+                planType:
+                  company.plan_type,
+
+                platformAccess:
+                  company.platform_access,
+
+                supportIncluded:
+                  company.support_included,
+
+                paymentStatus:
+                  company.payment_status,
+
+                paymentFailedAt:
+                  company.payment_failed_at,
+
+                paymentGraceEnd:
+                  company.payment_grace_end,
+              }
+            : null,
+      });
   }
 
   /*
   --------------------------------------------------
   2. FALL BACK TO OLD MEMBER_ACCESS SYSTEM
   --------------------------------------------------
-
-  Existing customers who have not yet been moved
-  to the company-based structure continue working
-  exactly as they do today.
   */
 
   const {
@@ -130,19 +465,33 @@ export default async function handler(
   } = await supabase
     .from("member_access")
     .select("status")
-    .eq("profile_id", user.id)
+    .eq(
+      "profile_id",
+      user.id
+    )
     .maybeSingle();
 
-  if (memberAccessError) {
+  if (
+    memberAccessError
+  ) {
     console.error(
       "Legacy member access lookup error:",
       memberAccessError
     );
   }
 
-  return res.status(200).json({
-    status: memberAccess?.status ?? "inactive",
-    hasAccess: memberAccess?.status === "active",
-    source: "member_access",
-  });
+  return res
+    .status(200)
+    .json({
+      status:
+        memberAccess?.status ??
+        "inactive",
+
+      hasAccess:
+        memberAccess?.status ===
+        "active",
+
+      source:
+        "member_access",
+    });
 }
