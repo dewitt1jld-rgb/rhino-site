@@ -10,7 +10,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const authHeader = req.headers.authorization;
+  const authHeader =
+    req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({
@@ -18,14 +19,24 @@ export default async function handler(
     });
   }
 
-  const token = authHeader.replace("Bearer ", "");
+  const token =
+    authHeader.replace(
+      "Bearer ",
+      ""
+    );
 
   const {
     data: { user },
     error: userError,
-  } = await supabase.auth.getUser(token);
+  } =
+    await supabase.auth.getUser(
+      token
+    );
 
-  if (userError || !user) {
+  if (
+    userError ||
+    !user
+  ) {
     return res.status(401).json({
       error: "No user",
     });
@@ -57,10 +68,16 @@ export default async function handler(
         seat_limit,
         stripe_customer_id,
         platform_subscription_id,
-        support_subscription_id
+        support_subscription_id,
+        payment_status,
+        payment_failed_at,
+        payment_grace_end
       )
     `)
-    .eq("id", user.id)
+    .eq(
+      "id",
+      user.id
+    )
     .maybeSingle();
 
   if (profileError) {
@@ -72,17 +89,19 @@ export default async function handler(
 
   /*
   --------------------------------------------------
-  COMPANY-BASED ACCOUNT
+  COMPANY ACCESS IS SOURCE OF TRUTH
   --------------------------------------------------
-
-  If the user belongs to a company,
-  the company becomes the source of truth.
   */
 
-  if (profile?.company_id) {
-    const company = Array.isArray(profile.companies)
-      ? profile.companies[0]
-      : profile.companies;
+  if (
+    profile?.company_id
+  ) {
+    const company =
+      Array.isArray(
+        profile.companies
+      )
+        ? profile.companies[0]
+        : profile.companies;
 
     /*
     --------------------------------------------------
@@ -90,228 +109,354 @@ export default async function handler(
     --------------------------------------------------
     */
 
-    if (profile.is_active === false) {
-      return res.status(200).json({
-        status: "inactive",
-        hasAccess: false,
-        source: "company",
-        reason: "user_inactive",
+    if (
+      profile.is_active === false
+    ) {
+      return res
+        .status(200)
+        .json({
+          status:
+            "inactive",
 
-        planType:
-          company?.plan_type ?? null,
+          hasAccess:
+            false,
 
-        platformAccess:
-          company?.platform_access ?? false,
+          source:
+            "company",
 
-        supportIncluded:
-          company?.support_included ?? false,
+          reason:
+            "user_inactive",
 
-        stripeCustomerId:
-          company?.stripe_customer_id ?? null,
+          company:
+            company
+              ? {
+                  id:
+                    company.id,
 
-        platformSubscriptionId:
-          company?.platform_subscription_id ?? null,
+                  name:
+                    company.company_name,
 
-        supportSubscriptionId:
-          company?.support_subscription_id ?? null,
+                  customerNumber:
+                    company.customer_number,
 
-        company: company
-          ? {
-              id: company.id,
-              name: company.company_name,
-              customerNumber: company.customer_number,
-              seatLimit: company.seat_limit,
-              planType: company.plan_type,
-              platformAccess: company.platform_access,
-              supportIncluded: company.support_included,
-            }
-          : null,
-      });
+                  seatLimit:
+                    company.seat_limit,
+
+                  planType:
+                    company.plan_type,
+
+                  platformAccess:
+                    company.platform_access,
+
+                  supportIncluded:
+                    company.support_included,
+
+                  paymentStatus:
+                    company.payment_status,
+
+                  paymentFailedAt:
+                    company.payment_failed_at,
+
+                  paymentGraceEnd:
+                    company.payment_grace_end,
+                }
+              : null,
+        });
     }
 
     /*
     --------------------------------------------------
-    ACTIVE TRAINING PLATFORM ACCESS
+    PAYMENT GRACE PERIOD
     --------------------------------------------------
 
-    A company must have BOTH:
+    If a recurring payment has failed,
+    customers retain access until the
+    grace-period deadline.
 
-    access_status = active
-    platform_access = true
-
-    to enter the training platform.
-
-    Examples:
-
-    Support + Website:
-    access_status = active
-    platform_access = true
-    support_included = true
-
-    Lifetime Website:
-    access_status = active
-    platform_access = true
-    support_included = false
+    Once that deadline passes, training
+    access is denied.
+    --------------------------------------------------
     */
 
     if (
-      company?.access_status === "active" &&
-      company?.platform_access === true
+      company?.payment_status ===
+        "past_due" &&
+      company?.payment_grace_end
     ) {
-      return res.status(200).json({
-        status: "active",
-        hasAccess: true,
-        source: "company",
-        reason: "platform_active",
+      const now =
+        new Date();
 
-        planType:
-          company.plan_type,
+      const graceEnd =
+        new Date(
+          company.payment_grace_end
+        );
 
-        platformAccess:
-          true,
+      if (
+        !Number.isNaN(
+          graceEnd.getTime()
+        )
+      ) {
+        /*
+        --------------------------------------------------
+        GRACE PERIOD EXPIRED
+        --------------------------------------------------
+        */
 
-        supportIncluded:
-          company.support_included === true,
+        if (
+          now >= graceEnd
+        ) {
+          return res
+            .status(200)
+            .json({
+              status:
+                "payment_past_due",
 
-        stripeCustomerId:
-          company.stripe_customer_id,
+              hasAccess:
+                false,
 
-        platformSubscriptionId:
-          company.platform_subscription_id,
+              source:
+                "company",
 
-        supportSubscriptionId:
-          company.support_subscription_id,
+              reason:
+                "payment_grace_expired",
 
-        company: {
-          id: company.id,
-          name: company.company_name,
-          customerNumber: company.customer_number,
-          seatLimit: company.seat_limit,
-          planType: company.plan_type,
-          platformAccess: company.platform_access,
-          supportIncluded: company.support_included,
-        },
-      });
+              company: {
+                id:
+                  company.id,
+
+                name:
+                  company.company_name,
+
+                customerNumber:
+                  company.customer_number,
+
+                seatLimit:
+                  company.seat_limit,
+
+                planType:
+                  company.plan_type,
+
+                platformAccess:
+                  company.platform_access,
+
+                supportIncluded:
+                  company.support_included,
+
+                paymentStatus:
+                  company.payment_status,
+
+                paymentFailedAt:
+                  company.payment_failed_at,
+
+                paymentGraceEnd:
+                  company.payment_grace_end,
+              },
+            });
+        }
+
+        /*
+        --------------------------------------------------
+        STILL INSIDE GRACE PERIOD
+        --------------------------------------------------
+
+        Continue to normal access rules below.
+        --------------------------------------------------
+        */
+      }
     }
 
     /*
     --------------------------------------------------
-    SUPPORT ONLY
+    COMPANY HAS PLATFORM ACCESS
     --------------------------------------------------
-
-    A Support Only company has an active paid
-    relationship with Rhino Wrangler, but DOES NOT
-    have access to the training platform.
-
-    Example:
-
-    plan_type = support
-    access_status = active
-    platform_access = false
-    support_included = true
     */
 
     if (
-      company?.access_status === "active" &&
-      company?.platform_access !== true &&
-      company?.support_included === true
+      company?.access_status ===
+        "active" &&
+      company?.platform_access ===
+        true
     ) {
-      return res.status(200).json({
-        status: "support_only",
-        hasAccess: false,
-        source: "company",
-        reason: "support_only",
+      return res
+        .status(200)
+        .json({
+          status:
+            company.payment_status ===
+            "past_due"
+              ? "payment_grace"
+              : "active",
 
-        planType:
-          company.plan_type,
+          hasAccess:
+            true,
 
-        platformAccess:
-          false,
+          source:
+            "company",
 
-        supportIncluded:
-          true,
+          reason:
+            company.payment_status ===
+            "past_due"
+              ? "payment_grace"
+              : undefined,
 
-        stripeCustomerId:
-          company.stripe_customer_id,
+          company: {
+            id:
+              company.id,
 
-        platformSubscriptionId:
-          company.platform_subscription_id,
+            name:
+              company.company_name,
 
-        supportSubscriptionId:
-          company.support_subscription_id,
+            customerNumber:
+              company.customer_number,
 
-        company: {
-          id: company.id,
-          name: company.company_name,
-          customerNumber: company.customer_number,
-          seatLimit: company.seat_limit,
-          planType: company.plan_type,
-          platformAccess: company.platform_access,
-          supportIncluded: company.support_included,
-        },
-      });
+            seatLimit:
+              company.seat_limit,
+
+            planType:
+              company.plan_type,
+
+            platformAccess:
+              company.platform_access,
+
+            supportIncluded:
+              company.support_included,
+
+            paymentStatus:
+              company.payment_status,
+
+            paymentFailedAt:
+              company.payment_failed_at,
+
+            paymentGraceEnd:
+              company.payment_grace_end,
+          },
+        });
+    }
+
+    /*
+    --------------------------------------------------
+    SUPPORT-ONLY COMPANY
+    --------------------------------------------------
+    */
+
+    if (
+      company?.access_status ===
+        "active" &&
+      company?.platform_access !==
+        true &&
+      company?.support_included ===
+        true
+    ) {
+      return res
+        .status(200)
+        .json({
+          status:
+            "support_only",
+
+          hasAccess:
+            false,
+
+          source:
+            "company",
+
+          reason:
+            "support_only",
+
+          company: {
+            id:
+              company.id,
+
+            name:
+              company.company_name,
+
+            customerNumber:
+              company.customer_number,
+
+            seatLimit:
+              company.seat_limit,
+
+            planType:
+              company.plan_type,
+
+            platformAccess:
+              company.platform_access,
+
+            supportIncluded:
+              company.support_included,
+
+            paymentStatus:
+              company.payment_status,
+
+            paymentFailedAt:
+              company.payment_failed_at,
+
+            paymentGraceEnd:
+              company.payment_grace_end,
+          },
+        });
     }
 
     /*
     --------------------------------------------------
     INACTIVE COMPANY
     --------------------------------------------------
-
-    This includes:
-
-    - no plan purchased
-    - canceled platform subscription
-    - failed platform payment
-    - manually disabled company
-    - expired/inactive entitlement
     */
 
-    return res.status(200).json({
-      status: "inactive",
-      hasAccess: false,
-      source: "company",
-      reason: "company_inactive",
+    return res
+      .status(200)
+      .json({
+        status:
+          "inactive",
 
-      planType:
-        company?.plan_type ?? null,
+        hasAccess:
+          false,
 
-      platformAccess:
-        company?.platform_access ?? false,
+        source:
+          "company",
 
-      supportIncluded:
-        company?.support_included ?? false,
+        reason:
+          "company_inactive",
 
-      stripeCustomerId:
-        company?.stripe_customer_id ?? null,
+        company:
+          company
+            ? {
+                id:
+                  company.id,
 
-      platformSubscriptionId:
-        company?.platform_subscription_id ?? null,
+                name:
+                  company.company_name,
 
-      supportSubscriptionId:
-        company?.support_subscription_id ?? null,
+                customerNumber:
+                  company.customer_number,
 
-      company: company
-        ? {
-            id: company.id,
-            name: company.company_name,
-            customerNumber: company.customer_number,
-            seatLimit: company.seat_limit,
-            planType: company.plan_type,
-            platformAccess: company.platform_access,
-            supportIncluded: company.support_included,
-          }
-        : null,
-    });
+                seatLimit:
+                  company.seat_limit,
+
+                planType:
+                  company.plan_type,
+
+                platformAccess:
+                  company.platform_access,
+
+                supportIncluded:
+                  company.support_included,
+
+                paymentStatus:
+                  company.payment_status,
+
+                paymentFailedAt:
+                  company.payment_failed_at,
+
+                paymentGraceEnd:
+                  company.payment_grace_end,
+              }
+            : null,
+      });
   }
 
   /*
   --------------------------------------------------
   2. FALL BACK TO OLD MEMBER_ACCESS SYSTEM
   --------------------------------------------------
-
-  Existing customers who have not yet been moved
-  into the company-based structure continue working
-  exactly as they do today.
   */
 
   const {
@@ -319,58 +464,34 @@ export default async function handler(
     error: memberAccessError,
   } = await supabase
     .from("member_access")
-    .select(`
-      status,
-      stripe_customer_id,
-      stripe_subscription_id
-    `)
-    .eq("profile_id", user.id)
+    .select("status")
+    .eq(
+      "profile_id",
+      user.id
+    )
     .maybeSingle();
 
-  if (memberAccessError) {
+  if (
+    memberAccessError
+  ) {
     console.error(
       "Legacy member access lookup error:",
       memberAccessError
     );
   }
 
-  const legacyHasAccess =
-    memberAccess?.status === "active";
+  return res
+    .status(200)
+    .json({
+      status:
+        memberAccess?.status ??
+        "inactive",
 
-  return res.status(200).json({
-    status:
-      memberAccess?.status ?? "inactive",
+      hasAccess:
+        memberAccess?.status ===
+        "active",
 
-    hasAccess:
-      legacyHasAccess,
-
-    source:
-      "member_access",
-
-    reason:
-      legacyHasAccess
-        ? "legacy_active"
-        : "legacy_inactive",
-
-    planType:
-      null,
-
-    platformAccess:
-      legacyHasAccess,
-
-    supportIncluded:
-      false,
-
-    stripeCustomerId:
-      memberAccess?.stripe_customer_id ?? null,
-
-    platformSubscriptionId:
-      memberAccess?.stripe_subscription_id ?? null,
-
-    supportSubscriptionId:
-      null,
-
-    company:
-      null,
-  });
+      source:
+        "member_access",
+    });
 }
