@@ -50,11 +50,14 @@ export default async function handler(
         id,
         company_name,
         customer_number,
-        access_status,
+        plan_type,
         platform_access,
         support_included,
+        access_status,
         seat_limit,
-        plan_type
+        stripe_customer_id,
+        platform_subscription_id,
+        support_subscription_id
       )
     `)
     .eq("id", user.id)
@@ -68,8 +71,12 @@ export default async function handler(
   }
 
   /*
-    If the user belongs to a company,
-    company access becomes the source of truth.
+  --------------------------------------------------
+  COMPANY-BASED ACCOUNT
+  --------------------------------------------------
+
+  If the user belongs to a company,
+  the company becomes the source of truth.
   */
 
   if (profile?.company_id) {
@@ -90,6 +97,24 @@ export default async function handler(
         source: "company",
         reason: "user_inactive",
 
+        planType:
+          company?.plan_type ?? null,
+
+        platformAccess:
+          company?.platform_access ?? false,
+
+        supportIncluded:
+          company?.support_included ?? false,
+
+        stripeCustomerId:
+          company?.stripe_customer_id ?? null,
+
+        platformSubscriptionId:
+          company?.platform_subscription_id ?? null,
+
+        supportSubscriptionId:
+          company?.support_subscription_id ?? null,
+
         company: company
           ? {
               id: company.id,
@@ -106,28 +131,27 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    COMPANY MUST HAVE PLATFORM ACCESS
+    ACTIVE TRAINING PLATFORM ACCESS
     --------------------------------------------------
 
-    access_status tells us whether the company
-    currently has an active Rhino Wrangler plan.
+    A company must have BOTH:
 
-    platform_access specifically determines whether
-    this company is allowed into the training portal.
+    access_status = active
+    platform_access = true
+
+    to enter the training platform.
 
     Examples:
 
-    Annual:
+    Support + Website:
     access_status = active
     platform_access = true
+    support_included = true
 
-    Lifetime:
+    Lifetime Website:
     access_status = active
     platform_access = true
-
-    Support Only:
-    access_status = active
-    platform_access = false
+    support_included = false
     */
 
     if (
@@ -138,6 +162,25 @@ export default async function handler(
         status: "active",
         hasAccess: true,
         source: "company",
+        reason: "platform_active",
+
+        planType:
+          company.plan_type,
+
+        platformAccess:
+          true,
+
+        supportIncluded:
+          company.support_included === true,
+
+        stripeCustomerId:
+          company.stripe_customer_id,
+
+        platformSubscriptionId:
+          company.platform_subscription_id,
+
+        supportSubscriptionId:
+          company.support_subscription_id,
 
         company: {
           id: company.id,
@@ -153,11 +196,19 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    SUPPORT-ONLY COMPANY
+    SUPPORT ONLY
     --------------------------------------------------
 
-    They have an active relationship with Rhino
-    Wrangler, but do not have training-platform access.
+    A Support Only company has an active paid
+    relationship with Rhino Wrangler, but DOES NOT
+    have access to the training platform.
+
+    Example:
+
+    plan_type = support
+    access_status = active
+    platform_access = false
+    support_included = true
     */
 
     if (
@@ -170,6 +221,24 @@ export default async function handler(
         hasAccess: false,
         source: "company",
         reason: "support_only",
+
+        planType:
+          company.plan_type,
+
+        platformAccess:
+          false,
+
+        supportIncluded:
+          true,
+
+        stripeCustomerId:
+          company.stripe_customer_id,
+
+        platformSubscriptionId:
+          company.platform_subscription_id,
+
+        supportSubscriptionId:
+          company.support_subscription_id,
 
         company: {
           id: company.id,
@@ -187,6 +256,14 @@ export default async function handler(
     --------------------------------------------------
     INACTIVE COMPANY
     --------------------------------------------------
+
+    This includes:
+
+    - no plan purchased
+    - canceled platform subscription
+    - failed platform payment
+    - manually disabled company
+    - expired/inactive entitlement
     */
 
     return res.status(200).json({
@@ -194,6 +271,24 @@ export default async function handler(
       hasAccess: false,
       source: "company",
       reason: "company_inactive",
+
+      planType:
+        company?.plan_type ?? null,
+
+      platformAccess:
+        company?.platform_access ?? false,
+
+      supportIncluded:
+        company?.support_included ?? false,
+
+      stripeCustomerId:
+        company?.stripe_customer_id ?? null,
+
+      platformSubscriptionId:
+        company?.platform_subscription_id ?? null,
+
+      supportSubscriptionId:
+        company?.support_subscription_id ?? null,
 
       company: company
         ? {
@@ -215,7 +310,7 @@ export default async function handler(
   --------------------------------------------------
 
   Existing customers who have not yet been moved
-  to the company-based structure continue working
+  into the company-based structure continue working
   exactly as they do today.
   */
 
@@ -224,7 +319,11 @@ export default async function handler(
     error: memberAccessError,
   } = await supabase
     .from("member_access")
-    .select("status")
+    .select(`
+      status,
+      stripe_customer_id,
+      stripe_subscription_id
+    `)
     .eq("profile_id", user.id)
     .maybeSingle();
 
@@ -235,9 +334,43 @@ export default async function handler(
     );
   }
 
+  const legacyHasAccess =
+    memberAccess?.status === "active";
+
   return res.status(200).json({
-    status: memberAccess?.status ?? "inactive",
-    hasAccess: memberAccess?.status === "active",
-    source: "member_access",
+    status:
+      memberAccess?.status ?? "inactive",
+
+    hasAccess:
+      legacyHasAccess,
+
+    source:
+      "member_access",
+
+    reason:
+      legacyHasAccess
+        ? "legacy_active"
+        : "legacy_inactive",
+
+    planType:
+      null,
+
+    platformAccess:
+      legacyHasAccess,
+
+    supportIncluded:
+      false,
+
+    stripeCustomerId:
+      memberAccess?.stripe_customer_id ?? null,
+
+    platformSubscriptionId:
+      memberAccess?.stripe_subscription_id ?? null,
+
+    supportSubscriptionId:
+      null,
+
+    company:
+      null,
   });
 }
