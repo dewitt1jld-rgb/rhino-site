@@ -96,6 +96,137 @@ function getPlanLabel(
 
 /*
 --------------------------------------------------
+COMMITMENT HELPERS
+--------------------------------------------------
+*/
+
+function addOneYear(
+  startDate: Date
+) {
+  const endDate =
+    new Date(
+      startDate.getTime()
+    );
+
+  endDate.setUTCFullYear(
+    endDate.getUTCFullYear() + 1
+  );
+
+  return endDate;
+}
+
+function getCommitmentDates({
+  planType,
+  purchaseTimestamp,
+  existingStartDate,
+  existingEndDate,
+}: {
+  planType: PurchasePlan;
+  purchaseTimestamp?: number | null;
+  existingStartDate?: string | null;
+  existingEndDate?: string | null;
+}) {
+  /*
+  --------------------------------------------------
+  LIFETIME
+
+  Lifetime access does not create a recurring
+  commitment by itself.
+  --------------------------------------------------
+  */
+
+  if (planType === "lifetime") {
+    return {
+      commitmentStartDate:
+        existingStartDate ?? null,
+
+      commitmentEndDate:
+        existingEndDate ?? null,
+
+      startedNewCommitment:
+        false,
+    };
+  }
+
+  /*
+  --------------------------------------------------
+  PURCHASE DATE
+
+  Stripe timestamps are Unix seconds.
+  --------------------------------------------------
+  */
+
+  const purchaseDate =
+    purchaseTimestamp
+      ? new Date(
+          purchaseTimestamp * 1000
+        )
+      : new Date();
+
+  /*
+  --------------------------------------------------
+  PRESERVE ACTIVE COMMITMENT
+
+  If the company already has an active
+  commitment, do not restart the 12-month clock.
+
+  This is especially important when upgrading
+  Support Only -> Support + Website.
+  --------------------------------------------------
+  */
+
+  if (existingEndDate) {
+    const existingEnd =
+      new Date(
+        existingEndDate
+      );
+
+    if (
+      !Number.isNaN(
+        existingEnd.getTime()
+      ) &&
+      existingEnd >
+        purchaseDate
+    ) {
+      return {
+        commitmentStartDate:
+          existingStartDate ??
+          purchaseDate.toISOString(),
+
+        commitmentEndDate:
+          existingEndDate,
+
+        startedNewCommitment:
+          false,
+      };
+    }
+  }
+
+  /*
+  --------------------------------------------------
+  NEW 12-MONTH COMMITMENT
+  --------------------------------------------------
+  */
+
+  const endDate =
+    addOneYear(
+      purchaseDate
+    );
+
+  return {
+    commitmentStartDate:
+      purchaseDate.toISOString(),
+
+    commitmentEndDate:
+      endDate.toISOString(),
+
+    startedNewCommitment:
+      true,
+  };
+}
+
+/*
+--------------------------------------------------
 RHINO ACCESS CODE
 --------------------------------------------------
 */
@@ -152,12 +283,14 @@ async function ensureCompanyForPurchase({
   planType,
   stripeCustomerId,
   stripeSubscriptionId,
+  purchaseTimestamp,
 }: {
   profileId: string;
   companyName?: string | null;
   planType: PurchasePlan;
   stripeCustomerId: string;
   stripeSubscriptionId?: string | null;
+  purchaseTimestamp?: number | null;
 }) {
   const {
     data: profile,
@@ -208,7 +341,11 @@ async function ensureCompanyForPurchase({
         support_included,
         stripe_customer_id,
         platform_subscription_id,
-        support_subscription_id
+        support_subscription_id,
+        commitment_start_date,
+        commitment_end_date,
+        cancel_requested,
+        cancel_requested_at
       `)
       .eq(
         "id",
@@ -241,6 +378,57 @@ async function ensureCompanyForPurchase({
 
     /*
     --------------------------------------------------
+    COMMITMENT
+    --------------------------------------------------
+    */
+
+    const commitment =
+      getCommitmentDates({
+        planType,
+
+        purchaseTimestamp,
+
+        existingStartDate:
+          existingCompany
+            .commitment_start_date,
+
+        existingEndDate:
+          existingCompany
+            .commitment_end_date,
+      });
+
+    let nextCommitmentStartDate =
+      commitment.commitmentStartDate;
+
+    let nextCommitmentEndDate =
+      commitment.commitmentEndDate;
+
+    let nextCancelRequested =
+      existingCompany.cancel_requested ===
+      true;
+
+    let nextCancelRequestedAt =
+      existingCompany
+        .cancel_requested_at;
+
+    /*
+      If this begins a genuinely NEW
+      12-month commitment, clear any old
+      cancellation request.
+    */
+
+    if (
+      commitment.startedNewCommitment
+    ) {
+      nextCancelRequested =
+        false;
+
+      nextCancelRequestedAt =
+        null;
+    }
+
+    /*
+    --------------------------------------------------
     SUPPORT + WEBSITE
     --------------------------------------------------
     */
@@ -256,12 +444,12 @@ async function ensureCompanyForPurchase({
         true;
 
       nextPlatformSubscriptionId =
-        stripeSubscriptionId || null;
+        stripeSubscriptionId ||
+        null;
 
       /*
-        This plan already contains support,
-        so there should not also be a separate
-        Support Only subscription ID.
+        Support is already included in
+        this subscription.
       */
 
       nextSupportSubscriptionId =
@@ -274,27 +462,21 @@ async function ensureCompanyForPurchase({
     --------------------------------------------------
     */
 
-    if (planType === "lifetime") {
+    if (
+      planType === "lifetime"
+    ) {
       nextPlanType =
         "lifetime";
 
       nextPlatformAccess =
         true;
 
-      /*
-        Lifetime Website has no recurring
-        platform subscription.
-      */
-
       nextPlatformSubscriptionId =
         null;
 
       /*
-        IMPORTANT:
-
-        Preserve Support Only if the company
-        already has a separate active support
-        subscription.
+        Preserve a separate Support Only
+        subscription if one already exists.
       */
 
       if (
@@ -308,6 +490,16 @@ async function ensureCompanyForPurchase({
           existingCompany
             .support_subscription_id;
       }
+
+      /*
+        If there is no recurring support
+        subscription, lifetime itself does
+        not require a commitment.
+
+        Existing commitment information is
+        left untouched here so an existing
+        Support commitment is not destroyed.
+      */
     }
 
     /*
@@ -316,20 +508,25 @@ async function ensureCompanyForPurchase({
     --------------------------------------------------
     */
 
-    if (planType === "support") {
+    if (
+      planType === "support"
+    ) {
       nextSupportIncluded =
         true;
 
       nextSupportSubscriptionId =
-        stripeSubscriptionId || null;
+        stripeSubscriptionId ||
+        null;
 
       /*
-        If the company does NOT already
-        have website access, this is truly
-        Support Only.
+        If the company does not already
+        have website access, classify it
+        as Support Only.
       */
 
-      if (!nextPlatformAccess) {
+      if (
+        !nextPlatformAccess
+      ) {
         nextPlanType =
           "support";
 
@@ -341,9 +538,8 @@ async function ensureCompanyForPurchase({
       }
 
       /*
-        If they already have Lifetime Website,
-        keep their lifetime classification
-        and simply add support.
+        Lifetime + Support remains Lifetime
+        for platform classification.
       */
 
       if (
@@ -388,6 +584,18 @@ async function ensureCompanyForPurchase({
 
         support_subscription_id:
           nextSupportSubscriptionId,
+
+        commitment_start_date:
+          nextCommitmentStartDate,
+
+        commitment_end_date:
+          nextCommitmentEndDate,
+
+        cancel_requested:
+          nextCancelRequested,
+
+        cancel_requested_at:
+          nextCancelRequestedAt,
       })
       .eq(
         "id",
@@ -404,7 +612,11 @@ async function ensureCompanyForPurchase({
         support_included,
         stripe_customer_id,
         platform_subscription_id,
-        support_subscription_id
+        support_subscription_id,
+        commitment_start_date,
+        commitment_end_date,
+        cancel_requested,
+        cancel_requested_at
       `)
       .single();
 
@@ -444,13 +656,27 @@ async function ensureCompanyForPurchase({
 
   const platformSubscriptionId =
     planType === "annual"
-      ? stripeSubscriptionId || null
+      ? stripeSubscriptionId ||
+        null
       : null;
 
   const supportSubscriptionId =
     planType === "support"
-      ? stripeSubscriptionId || null
+      ? stripeSubscriptionId ||
+        null
       : null;
+
+  /*
+  --------------------------------------------------
+  NEW COMPANY COMMITMENT
+  --------------------------------------------------
+  */
+
+  const commitment =
+    getCommitmentDates({
+      planType,
+      purchaseTimestamp,
+    });
 
   const {
     data: company,
@@ -487,6 +713,20 @@ async function ensureCompanyForPurchase({
 
       support_subscription_id:
         supportSubscriptionId,
+
+      commitment_start_date:
+        commitment
+          .commitmentStartDate,
+
+      commitment_end_date:
+        commitment
+          .commitmentEndDate,
+
+      cancel_requested:
+        false,
+
+      cancel_requested_at:
+        null,
     })
     .select(`
       id,
@@ -499,7 +739,11 @@ async function ensureCompanyForPurchase({
       support_included,
       stripe_customer_id,
       platform_subscription_id,
-      support_subscription_id
+      support_subscription_id,
+      commitment_start_date,
+      commitment_end_date,
+      cancel_requested,
+      cancel_requested_at
     `)
     .single();
 
@@ -554,14 +798,6 @@ async function ensureCompanyForPurchase({
 --------------------------------------------------
 SYNC LEGACY MEMBER ACCESS
 --------------------------------------------------
-
-Company access is now the primary source
-of truth.
-
-This table remains synchronized so older
-customer accounts and older components
-continue to work.
---------------------------------------------------
 */
 
 async function syncMemberAccess({
@@ -594,14 +830,6 @@ async function syncMemberAccess({
     throw existingError;
   }
 
-  /*
-    IMPORTANT:
-
-    Support Only must be INACTIVE in
-    member_access because member_access
-    represents training-platform access.
-  */
-
   const values = {
     status:
       platformAccess
@@ -613,7 +841,8 @@ async function syncMemberAccess({
 
     stripe_subscription_id:
       platformAccess
-        ? platformSubscriptionId || null
+        ? platformSubscriptionId ||
+          null
         : null,
   };
 
@@ -678,7 +907,9 @@ async function getCompanyForProfile(
     throw profileError;
   }
 
-  if (!profile?.company_id) {
+  if (
+    !profile?.company_id
+  ) {
     return null;
   }
 
@@ -694,7 +925,11 @@ async function getCompanyForProfile(
       support_included,
       stripe_customer_id,
       platform_subscription_id,
-      support_subscription_id
+      support_subscription_id,
+      commitment_start_date,
+      commitment_end_date,
+      cancel_requested,
+      cancel_requested_at
     `)
     .eq(
       "id",
@@ -922,7 +1157,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") {
+  if (
+    req.method !== "POST"
+  ) {
     return res
       .status(405)
       .send(
@@ -996,7 +1233,9 @@ export default async function handler(
           invoice
         );
 
-      if (!subscriptionId) {
+      if (
+        !subscriptionId
+      ) {
         return res
           .status(200)
           .json({
@@ -1036,13 +1275,6 @@ export default async function handler(
           profileId
         );
 
-      /*
-        Checkout may still be processing.
-
-        If no company exists yet, allow
-        checkout.session.completed to create it.
-      */
-
       if (!company) {
         return res
           .status(200)
@@ -1061,7 +1293,9 @@ export default async function handler(
       --------------------------------------------------
       */
 
-      if (plan === "annual") {
+      if (
+        plan === "annual"
+      ) {
         const stripeCustomerId =
           typeof subscription.customer ===
           "string"
@@ -1119,7 +1353,9 @@ export default async function handler(
       --------------------------------------------------
       */
 
-      if (plan === "support") {
+      if (
+        plan === "support"
+      ) {
         const stripeCustomerId =
           typeof subscription.customer ===
           "string"
@@ -1162,11 +1398,6 @@ export default async function handler(
           )
           .throwOnError();
 
-        /*
-          Support payment never grants
-          training-platform access.
-        */
-
         await syncMemberAccess({
           profileId,
 
@@ -1176,7 +1407,8 @@ export default async function handler(
           stripeCustomerId,
 
           platformSubscriptionId:
-            company.platform_subscription_id,
+            company
+              .platform_subscription_id,
         });
       }
 
@@ -1255,7 +1487,9 @@ export default async function handler(
       --------------------------------------------------
       */
 
-      if (plan === "annual") {
+      if (
+        plan === "annual"
+      ) {
         await supabaseAdmin
           .from("companies")
           .update({
@@ -1299,7 +1533,9 @@ export default async function handler(
       --------------------------------------------------
       */
 
-      if (plan === "support") {
+      if (
+        plan === "support"
+      ) {
         const stillHasPlatform =
           company.platform_access ===
           true;
@@ -1333,7 +1569,8 @@ export default async function handler(
           stripeCustomerId,
 
           platformSubscriptionId:
-            company.platform_subscription_id,
+            company
+              .platform_subscription_id,
         });
       }
 
@@ -1451,12 +1688,6 @@ export default async function handler(
           throw error;
         }
 
-        /*
-        --------------------------------------------------
-        CUSTOMER CLASS EMAIL
-        --------------------------------------------------
-        */
-
         try {
           await sendEmail({
             to:
@@ -1494,12 +1725,6 @@ export default async function handler(
             emailError
           );
         }
-
-        /*
-        --------------------------------------------------
-        ADMIN CLASS EMAIL
-        --------------------------------------------------
-        */
 
         try {
           await sendAdminClassPurchaseEmail({
@@ -1600,12 +1825,6 @@ export default async function handler(
           }
         );
 
-        /*
-          Invalid metadata is a code/configuration
-          problem. Tell Stripe the event failed so
-          it can be retried after we correct it.
-        */
-
         return res
           .status(500)
           .json({
@@ -1616,17 +1835,7 @@ export default async function handler(
 
       /*
       --------------------------------------------------
-      RETRIEVE COMPLETE SESSION FROM STRIPE
-      --------------------------------------------------
-
-      This is important.
-
-      Do not rely only on the subscription field
-      included in the webhook event payload.
-
-      Retrieve the session directly from Stripe and
-      expand the subscription so we can reliably
-      capture the subscription ID.
+      RETRIEVE COMPLETE SESSION
       --------------------------------------------------
       */
 
@@ -1642,7 +1851,7 @@ export default async function handler(
 
       /*
       --------------------------------------------------
-      STRIPE CUSTOMER ID
+      CUSTOMER ID
       --------------------------------------------------
       */
 
@@ -1661,7 +1870,7 @@ export default async function handler(
 
       /*
       --------------------------------------------------
-      STRIPE SUBSCRIPTION ID
+      SUBSCRIPTION
       --------------------------------------------------
       */
 
@@ -1671,14 +1880,6 @@ export default async function handler(
           ? session.subscription
           : session.subscription?.id ||
             null;
-
-      /*
-        Support and Support + Website MUST
-        produce a Stripe subscription.
-
-        Lifetime is a one-time payment and
-        therefore does not have one.
-      */
 
       if (
         (
@@ -1692,6 +1893,46 @@ export default async function handler(
         );
       }
 
+      /*
+      --------------------------------------------------
+      COMMITMENT START TIMESTAMP
+      --------------------------------------------------
+
+      Prefer Stripe's subscription creation
+      timestamp for recurring plans.
+
+      Fall back to the Checkout Session creation
+      timestamp when necessary.
+      --------------------------------------------------
+      */
+
+      let purchaseTimestamp =
+        session.created;
+
+      if (
+        plan === "annual" ||
+        plan === "support"
+      ) {
+        if (
+          typeof session.subscription !==
+          "string" &&
+          session.subscription
+        ) {
+          purchaseTimestamp =
+            session.subscription.created;
+        } else if (
+          stripeSubscriptionId
+        ) {
+          const subscription =
+            await stripe.subscriptions.retrieve(
+              stripeSubscriptionId
+            );
+
+          purchaseTimestamp =
+            subscription.created;
+        }
+      }
+
       console.log(
         "Checkout subscription resolved:",
         {
@@ -1703,6 +1944,8 @@ export default async function handler(
           stripeCustomerId,
 
           stripeSubscriptionId,
+
+          purchaseTimestamp,
         }
       );
 
@@ -1770,6 +2013,8 @@ export default async function handler(
           stripeCustomerId,
 
           stripeSubscriptionId,
+
+          purchaseTimestamp,
         });
 
       /*
@@ -1797,15 +2042,13 @@ export default async function handler(
 
       /*
       --------------------------------------------------
-      VERIFY THE RESULT
-      --------------------------------------------------
-
-      These checks protect against accidentally
-      granting the wrong entitlement.
+      VERIFY RESULT
       --------------------------------------------------
       */
 
-      if (plan === "support") {
+      if (
+        plan === "support"
+      ) {
         if (
           company.support_included !==
           true
@@ -1823,14 +2066,6 @@ export default async function handler(
           );
         }
 
-        /*
-          A true Support Only customer must
-          NOT gain training access.
-
-          If they already had Lifetime Website,
-          platform_access may legitimately be true.
-        */
-
         if (
           company.plan_type ===
             "support" &&
@@ -1841,9 +2076,22 @@ export default async function handler(
             "Support Only purchase incorrectly granted platform access."
           );
         }
+
+        if (
+          !company
+            .commitment_start_date ||
+          !company
+            .commitment_end_date
+        ) {
+          throw new Error(
+            "Support purchase completed but commitment dates were not saved."
+          );
+        }
       }
 
-      if (plan === "annual") {
+      if (
+        plan === "annual"
+      ) {
         if (
           company.platform_access !==
             true ||
@@ -1856,9 +2104,22 @@ export default async function handler(
             "Support + Website purchase did not activate correctly."
           );
         }
+
+        if (
+          !company
+            .commitment_start_date ||
+          !company
+            .commitment_end_date
+        ) {
+          throw new Error(
+            "Support + Website purchase completed but commitment dates were not saved."
+          );
+        }
       }
 
-      if (plan === "lifetime") {
+      if (
+        plan === "lifetime"
+      ) {
         if (
           company.platform_access !==
           true
@@ -1872,10 +2133,6 @@ export default async function handler(
       /*
       --------------------------------------------------
       CUSTOMER EMAIL
-      --------------------------------------------------
-
-      Email failures should NOT undo a successful
-      Stripe/Supabase entitlement update.
       --------------------------------------------------
       */
 
@@ -1936,6 +2193,14 @@ export default async function handler(
                       Training Platform access is not included
                       with the Support Only plan.
                     </strong>
+                  </p>
+
+                  <p>
+                    Your recurring plan has a
+                    <strong>
+                      12-month minimum commitment
+                    </strong>
+                    and is billed every three months.
                   </p>
 
                   <p>
@@ -2003,12 +2268,6 @@ export default async function handler(
         );
       }
 
-      /*
-      --------------------------------------------------
-      SUCCESS
-      --------------------------------------------------
-      */
-
       console.log(
         "Purchase processed successfully:",
         {
@@ -2036,6 +2295,14 @@ export default async function handler(
           supportSubscriptionId:
             company
               .support_subscription_id,
+
+          commitmentStartDate:
+            company
+              .commitment_start_date,
+
+          commitmentEndDate:
+            company
+              .commitment_end_date,
         }
       );
 
@@ -2045,18 +2312,6 @@ export default async function handler(
           received: true,
         });
     } catch (error) {
-      /*
-      --------------------------------------------------
-      IMPORTANT
-
-      Do NOT return 200 here.
-
-      If Stripe Checkout succeeded but Supabase
-      failed to store the entitlement, Stripe needs
-      to know the webhook failed so it can retry.
-      --------------------------------------------------
-      */
-
       console.error(
         "Checkout processing failed:",
         error
