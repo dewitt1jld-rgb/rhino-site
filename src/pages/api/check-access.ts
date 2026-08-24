@@ -10,8 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const authHeader =
-    req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({
@@ -19,24 +18,14 @@ export default async function handler(
     });
   }
 
-  const token =
-    authHeader.replace(
-      "Bearer ",
-      ""
-    );
+  const token = authHeader.replace("Bearer ", "");
 
   const {
     data: { user },
     error: userError,
-  } =
-    await supabase.auth.getUser(
-      token
-    );
+  } = await supabase.auth.getUser(token);
 
-  if (
-    userError ||
-    !user
-  ) {
+  if (userError || !user) {
     return res.status(401).json({
       error: "No user",
     });
@@ -74,10 +63,7 @@ export default async function handler(
         payment_grace_end
       )
     `)
-    .eq(
-      "id",
-      user.id
-    )
+    .eq("id", user.id)
     .maybeSingle();
 
   if (profileError) {
@@ -93,15 +79,142 @@ export default async function handler(
   --------------------------------------------------
   */
 
-  if (
-    profile?.company_id
-  ) {
-    const company =
-      Array.isArray(
-        profile.companies
-      )
-        ? profile.companies[0]
-        : profile.companies;
+  if (profile?.company_id) {
+    const company = Array.isArray(profile.companies)
+      ? profile.companies[0]
+      : profile.companies;
+
+    /*
+    --------------------------------------------------
+    LOAD COMPANY MACHINES
+    --------------------------------------------------
+
+    Machines now come from the company_machines table
+    instead of the old companies.machine_models field.
+    --------------------------------------------------
+    */
+
+    const {
+      data: companyMachineRows,
+      error: machineError,
+    } = await supabase
+      .from("company_machines")
+      .select(`
+        id,
+        nickname,
+        serial_number,
+        is_primary,
+        is_active,
+        rhino_machine_models (
+          id,
+          model_code,
+          base_model,
+          feed_direction,
+          display_name,
+          is_active
+        )
+      `)
+      .eq("company_id", profile.company_id)
+      .eq("is_active", true);
+
+    if (machineError) {
+      console.error(
+        "Company machine lookup error:",
+        machineError
+      );
+    }
+
+    /*
+    --------------------------------------------------
+    NORMALIZE MACHINE DATA
+    --------------------------------------------------
+    */
+
+    const machines = (companyMachineRows ?? [])
+      .map((row: any) => {
+        const machineModel = Array.isArray(
+          row.rhino_machine_models
+        )
+          ? row.rhino_machine_models[0]
+          : row.rhino_machine_models;
+
+        if (!machineModel) {
+          return null;
+        }
+
+        return {
+          companyMachineId: row.id,
+
+          machineModelId: machineModel.id,
+
+          modelCode: machineModel.model_code,
+
+          baseModel: machineModel.base_model,
+
+          feedDirection: machineModel.feed_direction,
+
+          displayName: machineModel.display_name,
+
+          nickname: row.nickname,
+
+          serialNumber: row.serial_number,
+
+          isPrimary: row.is_primary,
+        };
+      })
+      .filter(Boolean);
+
+    /*
+    --------------------------------------------------
+    PRIMARY MACHINE
+    --------------------------------------------------
+    */
+
+    const primaryMachine =
+      machines.find(
+        (machine: any) =>
+          machine.isPrimary === true
+      ) ?? null;
+
+    /*
+    --------------------------------------------------
+    REUSABLE COMPANY RESPONSE
+    --------------------------------------------------
+    */
+
+    const companyResponse = company
+      ? {
+          id: company.id,
+
+          name: company.company_name,
+
+          customerNumber:
+            company.customer_number,
+
+          seatLimit: company.seat_limit,
+
+          planType: company.plan_type,
+
+          platformAccess:
+            company.platform_access,
+
+          supportIncluded:
+            company.support_included,
+
+          paymentStatus:
+            company.payment_status,
+
+          paymentFailedAt:
+            company.payment_failed_at,
+
+          paymentGraceEnd:
+            company.payment_grace_end,
+
+          machines,
+
+          primaryMachine,
+        }
+      : null;
 
     /*
     --------------------------------------------------
@@ -109,59 +222,18 @@ export default async function handler(
     --------------------------------------------------
     */
 
-    if (
-      profile.is_active === false
-    ) {
-      return res
-        .status(200)
-        .json({
-          status:
-            "inactive",
+    if (profile.is_active === false) {
+      return res.status(200).json({
+        status: "inactive",
 
-          hasAccess:
-            false,
+        hasAccess: false,
 
-          source:
-            "company",
+        source: "company",
 
-          reason:
-            "user_inactive",
+        reason: "user_inactive",
 
-          company:
-            company
-              ? {
-                  id:
-                    company.id,
-
-                  name:
-                    company.company_name,
-
-                  customerNumber:
-                    company.customer_number,
-
-                  seatLimit:
-                    company.seat_limit,
-
-                  planType:
-                    company.plan_type,
-
-                  platformAccess:
-                    company.platform_access,
-
-                  supportIncluded:
-                    company.support_included,
-
-                  paymentStatus:
-                    company.payment_status,
-
-                  paymentFailedAt:
-                    company.payment_failed_at,
-
-                  paymentGraceEnd:
-                    company.payment_grace_end,
-                }
-              : null,
-        });
+        company: companyResponse,
+      });
     }
 
     /*
@@ -179,85 +251,39 @@ export default async function handler(
     */
 
     if (
-      company?.payment_status ===
-        "past_due" &&
+      company?.payment_status === "past_due" &&
       company?.payment_grace_end
     ) {
-      const now =
-        new Date();
+      const now = new Date();
 
-      const graceEnd =
-        new Date(
-          company.payment_grace_end
-        );
+      const graceEnd = new Date(
+        company.payment_grace_end
+      );
 
-      if (
-        !Number.isNaN(
-          graceEnd.getTime()
-        )
-      ) {
+      if (!Number.isNaN(graceEnd.getTime())) {
         /*
         --------------------------------------------------
         GRACE PERIOD EXPIRED
         --------------------------------------------------
         */
 
-        if (
-          now >= graceEnd
-        ) {
-          return res
-            .status(200)
-            .json({
-              status:
-                "payment_past_due",
+        if (now >= graceEnd) {
+          return res.status(200).json({
+            status: "payment_past_due",
 
-              hasAccess:
-                false,
+            hasAccess: false,
 
-              source:
-                "company",
+            source: "company",
 
-              reason:
-                "payment_grace_expired",
+            reason: "payment_grace_expired",
 
-              company: {
-                id:
-                  company.id,
-
-                name:
-                  company.company_name,
-
-                customerNumber:
-                  company.customer_number,
-
-                seatLimit:
-                  company.seat_limit,
-
-                planType:
-                  company.plan_type,
-
-                platformAccess:
-                  company.platform_access,
-
-                supportIncluded:
-                  company.support_included,
-
-                paymentStatus:
-                  company.payment_status,
-
-                paymentFailedAt:
-                  company.payment_failed_at,
-
-                paymentGraceEnd:
-                  company.payment_grace_end,
-              },
-            });
+            company: companyResponse,
+          });
         }
 
         /*
         --------------------------------------------------
         STILL INSIDE GRACE PERIOD
-        --------------------------------------------------
 
         Continue to normal access rules below.
         --------------------------------------------------
@@ -272,64 +298,26 @@ export default async function handler(
     */
 
     if (
-      company?.access_status ===
-        "active" &&
-      company?.platform_access ===
-        true
+      company?.access_status === "active" &&
+      company?.platform_access === true
     ) {
-      return res
-        .status(200)
-        .json({
-          status:
-            company.payment_status ===
-            "past_due"
-              ? "payment_grace"
-              : "active",
+      return res.status(200).json({
+        status:
+          company.payment_status === "past_due"
+            ? "payment_grace"
+            : "active",
 
-          hasAccess:
-            true,
+        hasAccess: true,
 
-          source:
-            "company",
+        source: "company",
 
-          reason:
-            company.payment_status ===
-            "past_due"
-              ? "payment_grace"
-              : undefined,
+        reason:
+          company.payment_status === "past_due"
+            ? "payment_grace"
+            : undefined,
 
-          company: {
-            id:
-              company.id,
-
-            name:
-              company.company_name,
-
-            customerNumber:
-              company.customer_number,
-
-            seatLimit:
-              company.seat_limit,
-
-            planType:
-              company.plan_type,
-
-            platformAccess:
-              company.platform_access,
-
-            supportIncluded:
-              company.support_included,
-
-            paymentStatus:
-              company.payment_status,
-
-            paymentFailedAt:
-              company.payment_failed_at,
-
-            paymentGraceEnd:
-              company.payment_grace_end,
-          },
-        });
+        company: companyResponse,
+      });
     }
 
     /*
@@ -339,60 +327,21 @@ export default async function handler(
     */
 
     if (
-      company?.access_status ===
-        "active" &&
-      company?.platform_access !==
-        true &&
-      company?.support_included ===
-        true
+      company?.access_status === "active" &&
+      company?.platform_access !== true &&
+      company?.support_included === true
     ) {
-      return res
-        .status(200)
-        .json({
-          status:
-            "support_only",
+      return res.status(200).json({
+        status: "support_only",
 
-          hasAccess:
-            false,
+        hasAccess: false,
 
-          source:
-            "company",
+        source: "company",
 
-          reason:
-            "support_only",
+        reason: "support_only",
 
-          company: {
-            id:
-              company.id,
-
-            name:
-              company.company_name,
-
-            customerNumber:
-              company.customer_number,
-
-            seatLimit:
-              company.seat_limit,
-
-            planType:
-              company.plan_type,
-
-            platformAccess:
-              company.platform_access,
-
-            supportIncluded:
-              company.support_included,
-
-            paymentStatus:
-              company.payment_status,
-
-            paymentFailedAt:
-              company.payment_failed_at,
-
-            paymentGraceEnd:
-              company.payment_grace_end,
-          },
-        });
+        company: companyResponse,
+      });
     }
 
     /*
@@ -401,56 +350,17 @@ export default async function handler(
     --------------------------------------------------
     */
 
-    return res
-      .status(200)
-      .json({
-        status:
-          "inactive",
+    return res.status(200).json({
+      status: "inactive",
 
-        hasAccess:
-          false,
+      hasAccess: false,
 
-        source:
-          "company",
+      source: "company",
 
-        reason:
-          "company_inactive",
+      reason: "company_inactive",
 
-        company:
-          company
-            ? {
-                id:
-                  company.id,
-
-                name:
-                  company.company_name,
-
-                customerNumber:
-                  company.customer_number,
-
-                seatLimit:
-                  company.seat_limit,
-
-                planType:
-                  company.plan_type,
-
-                platformAccess:
-                  company.platform_access,
-
-                supportIncluded:
-                  company.support_included,
-
-                paymentStatus:
-                  company.payment_status,
-
-                paymentFailedAt:
-                  company.payment_failed_at,
-
-                paymentGraceEnd:
-                  company.payment_grace_end,
-              }
-            : null,
-      });
+      company: companyResponse,
+    });
   }
 
   /*
@@ -465,33 +375,22 @@ export default async function handler(
   } = await supabase
     .from("member_access")
     .select("status")
-    .eq(
-      "profile_id",
-      user.id
-    )
+    .eq("profile_id", user.id)
     .maybeSingle();
 
-  if (
-    memberAccessError
-  ) {
+  if (memberAccessError) {
     console.error(
       "Legacy member access lookup error:",
       memberAccessError
     );
   }
 
-  return res
-    .status(200)
-    .json({
-      status:
-        memberAccess?.status ??
-        "inactive",
+  return res.status(200).json({
+    status: memberAccess?.status ?? "inactive",
 
-      hasAccess:
-        memberAccess?.status ===
-        "active",
+    hasAccess:
+      memberAccess?.status === "active",
 
-      source:
-        "member_access",
-    });
+    source: "member_access",
+  });
 }
