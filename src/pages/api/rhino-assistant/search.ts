@@ -33,6 +33,14 @@ type KnowledgeResult = {
     | "high";
 };
 
+type TerminologyRecord = {
+  id: string;
+  official_term: string;
+  aliases: string[];
+  description: string | null;
+  category: string | null;
+};
+
 type ScoredKnowledgeResult =
   KnowledgeResult & {
     score: number;
@@ -179,12 +187,6 @@ function scoreRecord(
 
   let score = 0;
 
-  /*
-  --------------------------------------------------
-  EXACT KEYWORD PHRASE MATCH
-  --------------------------------------------------
-  */
-
   for (
     const keyword
     of keywords
@@ -199,12 +201,6 @@ function scoreRecord(
     }
   }
 
-  /*
-  --------------------------------------------------
-  MACHINE MODEL MATCH
-  --------------------------------------------------
-  */
-
   for (
     const machine
     of machineModels
@@ -218,12 +214,6 @@ function scoreRecord(
       score += 22;
     }
   }
-
-  /*
-  --------------------------------------------------
-  TITLE / SECTION / CONTENT WORD MATCHES
-  --------------------------------------------------
-  */
 
   for (
     const word
@@ -290,12 +280,6 @@ function scoreRecord(
       score += 1;
     }
   }
-
-  /*
-  --------------------------------------------------
-  IMPORTANT TROUBLESHOOTING PATTERNS
-  --------------------------------------------------
-  */
 
   const firstPieceLanguage =
     normalizedQuestion.includes(
@@ -421,47 +405,135 @@ function scoreRecord(
     score += 28;
   }
 
-  /*
-  --------------------------------------------------
-  PENALIZE CLEARLY UNRELATED RECORDS
-  --------------------------------------------------
-  */
-
-  const questionHasMachine =
-    /\b(5000|5600|5700)\b/.test(
-      normalizedQuestion
-    );
-
-  if (
-    questionHasMachine &&
-    machineModels.length >
-      0 &&
-    !machineModels.some(
-      (machine) =>
-        normalizedQuestion.includes(
-          machine
-        )
-    )
-  ) {
-    score -= 10;
-  }
-
   return Math.max(
     score,
     0
   );
 }
 
+function findTerminologyCandidates(
+  question: string,
+  terminology:
+    TerminologyRecord[]
+) {
+  const normalizedQuestion =
+    normalizeText(
+      question
+    );
+
+  const questionWords =
+    getQuestionWords(
+      question
+    );
+
+  return terminology
+    .map(
+      (
+        record
+      ) => {
+        const official =
+          normalizeText(
+            record.official_term
+          );
+
+        const aliases =
+          (
+            record.aliases ??
+            []
+          ).map(
+            normalizeText
+          );
+
+        let score = 0;
+        let exactAliasMatch =
+          false;
+        let exactOfficialMatch =
+          false;
+
+        if (
+          normalizedQuestion.includes(
+            official
+          )
+        ) {
+          score += 40;
+          exactOfficialMatch =
+            true;
+        }
+
+        for (
+          const alias
+          of aliases
+        ) {
+          if (
+            normalizedQuestion.includes(
+              alias
+            )
+          ) {
+            score += 35;
+            exactAliasMatch =
+              true;
+          }
+        }
+
+        for (
+          const word
+          of questionWords
+        ) {
+          if (
+            official.includes(
+              word
+            )
+          ) {
+            score += 6;
+          }
+
+          if (
+            aliases.some(
+              (
+                alias
+              ) =>
+                alias.includes(
+                  word
+                )
+            )
+          ) {
+            score += 5;
+          }
+        }
+
+        return {
+          ...record,
+          score,
+          exactAliasMatch,
+          exactOfficialMatch,
+        };
+      }
+    )
+    .filter(
+      (
+        record
+      ) =>
+        record.score >
+        0
+    )
+    .sort(
+      (
+        a,
+        b
+      ) =>
+        b.score -
+        a.score
+    )
+    .slice(
+      0,
+      3
+    );
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  /*
-  --------------------------------------------------
-  ONLY ALLOW POST
-  --------------------------------------------------
-  */
-
   if (
     req.method !==
     "POST"
@@ -475,12 +547,6 @@ export default async function handler(
   }
 
   try {
-    /*
-    --------------------------------------------------
-    VERIFY AUTHENTICATED USER
-    --------------------------------------------------
-    */
-
     const token =
       req.headers.authorization
         ?.replace(
@@ -521,12 +587,6 @@ export default async function handler(
         });
     }
 
-    /*
-    --------------------------------------------------
-    READ QUESTION
-    --------------------------------------------------
-    */
-
     const question =
       String(
         req.body
@@ -546,42 +606,56 @@ export default async function handler(
         });
     }
 
-    /*
-    --------------------------------------------------
-    LOAD APPROVED KNOWLEDGE
-    --------------------------------------------------
-    */
+    const [
+      knowledgeResponse,
+      terminologyResponse,
+    ] =
+      await Promise.all([
+        supabaseAdmin
+          .from(
+            "rhino_knowledge"
+          )
+          .select(`
+            id,
+            title,
+            section_title,
+            category,
+            subcategory,
+            machine_models,
+            keywords,
+            content,
+            warnings,
+            source_url,
+            risk_level
+          `)
+          .eq(
+            "is_active",
+            true
+          ),
 
-    const {
-      data,
-      error,
-    } =
-      await supabaseAdmin
-        .from(
-          "rhino_knowledge"
-        )
-        .select(`
-          id,
-          title,
-          section_title,
-          category,
-          subcategory,
-          machine_models,
-          keywords,
-          content,
-          warnings,
-          source_url,
-          risk_level
-        `)
-        .eq(
-          "is_active",
-          true
-        );
+        supabaseAdmin
+          .from(
+            "rhino_terminology"
+          )
+          .select(`
+            id,
+            official_term,
+            aliases,
+            description,
+            category
+          `)
+          .eq(
+            "is_active",
+            true
+          ),
+      ]);
 
-    if (error) {
+    if (
+      knowledgeResponse.error
+    ) {
       console.error(
         "Rhino knowledge query failed:",
-        error
+        knowledgeResponse.error
       );
 
       return res
@@ -592,17 +666,33 @@ export default async function handler(
         });
     }
 
+    if (
+      terminologyResponse.error
+    ) {
+      console.error(
+        "Rhino terminology query failed:",
+        terminologyResponse.error
+      );
+
+      return res
+        .status(500)
+        .json({
+          error:
+            "Unable to search Rhino Wrangler terminology.",
+        });
+    }
+
     const records =
       (
-        data ??
+        knowledgeResponse.data ??
         []
       ) as KnowledgeResult[];
 
-    /*
-    --------------------------------------------------
-    SCORE KNOWLEDGE RECORDS
-    --------------------------------------------------
-    */
+    const terminology =
+      (
+        terminologyResponse.data ??
+        []
+      ) as TerminologyRecord[];
 
     const scored:
       ScoredKnowledgeResult[] =
@@ -642,18 +732,11 @@ export default async function handler(
         5
       );
 
-    /*
-    --------------------------------------------------
-    CONSERVATIVE CONFIDENCE
-    --------------------------------------------------
-
-    We intentionally require a relatively strong
-    score before calling a match "high confidence."
-
-    "Low" does NOT mean the assistant should answer.
-    It means it may show related pages only.
-    --------------------------------------------------
-    */
+    const terminologyCandidates =
+      findTerminologyCandidates(
+        question,
+        terminology
+      );
 
     const topScore =
       topResults[0]
@@ -664,6 +747,9 @@ export default async function handler(
       topResults[1]
         ?.score ??
       0;
+
+    const topTerminology =
+      terminologyCandidates[0];
 
     let confidence:
       | "high"
@@ -699,50 +785,92 @@ export default async function handler(
         "low";
     }
 
-    /*
-    --------------------------------------------------
-    SAFETY DECISION
-    --------------------------------------------------
-
-    This tells our future conversational layer what
-    it is ALLOWED to do.
-
-    We are not generating any technical response yet.
-    --------------------------------------------------
-    */
+    let matchType:
+      | "direct"
+      | "possible_terminology"
+      | "ambiguous"
+      | "none" =
+      "none";
 
     let recommendedBehavior:
       | "answer_with_sources"
+      | "confirm_terminology"
       | "ask_clarifying_question"
       | "show_related_pages_only"
       | "no_answer" =
       "no_answer";
 
+    /*
+    --------------------------------------------------
+    DIRECT DOCUMENTED MATCH
+    --------------------------------------------------
+    */
+
     if (
       confidence ===
       "high"
     ) {
+      matchType =
+        "direct";
+
       recommendedBehavior =
         "answer_with_sources";
-    } else if (
-      confidence ===
-      "medium"
-    ) {
-      recommendedBehavior =
-        "ask_clarifying_question";
-    } else if (
-      confidence ===
-      "low"
-    ) {
-      recommendedBehavior =
-        "show_related_pages_only";
     }
 
     /*
     --------------------------------------------------
-    RETURN RETRIEVED SOURCES ONLY
+    POSSIBLE TERMINOLOGY MATCH
+
+    Only use this when we do NOT already have a
+    strong direct knowledge match.
     --------------------------------------------------
     */
+
+    else if (
+      topTerminology &&
+      topTerminology.score >=
+        5
+    ) {
+      matchType =
+        "possible_terminology";
+
+      recommendedBehavior =
+        "confirm_terminology";
+    }
+
+    /*
+    --------------------------------------------------
+    AMBIGUOUS KNOWLEDGE MATCH
+    --------------------------------------------------
+    */
+
+    else if (
+      confidence ===
+      "medium"
+    ) {
+      matchType =
+        "ambiguous";
+
+      recommendedBehavior =
+        "ask_clarifying_question";
+    }
+
+    /*
+    --------------------------------------------------
+    WEAK MATCH
+    --------------------------------------------------
+    */
+
+    else if (
+      confidence ===
+      "low"
+    ) {
+      matchType =
+        "ambiguous";
+
+      recommendedBehavior =
+        "show_related_pages_only";
+    }
 
     return res
       .status(200)
@@ -751,9 +879,34 @@ export default async function handler(
 
         question,
 
+        matchType,
+
         confidence,
 
         recommendedBehavior,
+
+        terminologySuggestion:
+          matchType ===
+            "possible_terminology" &&
+          topTerminology
+            ? {
+                officialTerm:
+                  topTerminology
+                    .official_term,
+
+                description:
+                  topTerminology
+                    .description,
+
+                category:
+                  topTerminology
+                    .category,
+
+                score:
+                  topTerminology
+                    .score,
+              }
+            : null,
 
         resultCount:
           topResults.length,
