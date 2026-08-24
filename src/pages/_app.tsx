@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import RhinoAssistant from "../components/RhinoAssistant";
 
 import "../styles/globals.css";
 
@@ -56,6 +57,8 @@ export default function App({
       ) : (
         pageContent
       )}
+
+      <RhinoAssistant />
 
       <footer
         style={{
