@@ -435,105 +435,90 @@ Machine context may strengthen an article that is
 ALREADY relevant to the user's question.
 
 Machine context must NEVER create relevance by itself.
-
-Example:
-
-"What hydraulic pressure should I use?"
-
-should not retrieve an unrelated 5600 article simply
-because the customer owns a 5600.
 --------------------------------------------------
 */
 
-const topicalScoreBeforeMachineContext =
-  score;
+  const topicalScoreBeforeMachineContext =
+    score;
 
-/*
-Only apply machine bonuses if the question already
-matched this knowledge record on its own.
-*/
-
-if (
-  topicalScoreBeforeMachineContext >=
-  8
-) {
   if (
-    selectedModelCode &&
-    machineModels.includes(
-      selectedModelCode
-    )
+    topicalScoreBeforeMachineContext >=
+    8
   ) {
-    score += 40;
-  }
-
-  if (
-    selectedBaseModel &&
-    machineModels.includes(
-      selectedBaseModel
-    )
-  ) {
-    score += 25;
-  }
-
-  if (
-    selectedBaseModel &&
-    content.includes(
-      selectedBaseModel
-    )
-  ) {
-    score += 6;
-  }
-
-  if (
-    selectedModelCode &&
-    content.includes(
-      selectedModelCode
-    )
-  ) {
-    score += 8;
-  }
-
-  /*
-  --------------------------------------------------
-  FEED DIRECTION
-  --------------------------------------------------
-  */
-
-  if (
-    selectedFeedDirection ===
-      "left" &&
-    (
-      section.includes(
-        "left"
-      ) ||
-      content.includes(
-        "left feed"
-      ) ||
-      content.includes(
-        "feeds from the left"
+    if (
+      selectedModelCode &&
+      machineModels.includes(
+        selectedModelCode
       )
-    )
-  ) {
-    score += 15;
+    ) {
+      score += 40;
+    }
+
+    if (
+      selectedBaseModel &&
+      machineModels.includes(
+        selectedBaseModel
+      )
+    ) {
+      score += 25;
+    }
+
+    if (
+      selectedBaseModel &&
+      content.includes(
+        selectedBaseModel
+      )
+    ) {
+      score += 6;
+    }
+
+    if (
+      selectedModelCode &&
+      content.includes(
+        selectedModelCode
+      )
+    ) {
+      score += 8;
+    }
+
+    if (
+      selectedFeedDirection ===
+        "left" &&
+      (
+        section.includes(
+          "left"
+        ) ||
+        content.includes(
+          "left feed"
+        ) ||
+        content.includes(
+          "feeds from the left"
+        )
+      )
+    ) {
+      score += 15;
+    }
+
+    if (
+      selectedFeedDirection ===
+        "right" &&
+      (
+        section.includes(
+          "right"
+        ) ||
+        content.includes(
+          "right feed"
+        ) ||
+        content.includes(
+          "feeds from the right"
+        )
+      )
+    ) {
+      score += 15;
+    }
   }
 
-  if (
-    selectedFeedDirection ===
-      "right" &&
-    (
-      section.includes(
-        "right"
-      ) ||
-      content.includes(
-        "right feed"
-      ) ||
-      content.includes(
-        "feeds from the right"
-      )
-    )
-  ) {
-    score += 15;
-  }
+  return score;
 }
 
 function findTerminologyCandidates(
