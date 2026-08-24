@@ -50,27 +50,57 @@ export default function RhinoAssistantTestPage() {
         return;
       }
 
-      const response =
-        await fetch(
-          "/api/rhino-assistant/search",
-          {
-            method:
-              "POST",
+const accessResponse = await fetch(
+  "/api/check-access",
+  {
+    headers: {
+      Authorization:
+        `Bearer ${session.access_token}`,
+    },
+  }
+);
 
-            headers: {
-              "Content-Type":
-                "application/json",
+const accessData =
+  await accessResponse.json();
 
-              Authorization:
-                `Bearer ${session.access_token}`,
-            },
+const primaryMachine =
+  accessData?.company?.primaryMachine ??
+  null;
 
-            body:
-              JSON.stringify({
-                question,
-              }),
-          }
-        );
+const response =
+  await fetch(
+    "/api/rhino-assistant/search",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+
+        Authorization:
+          `Bearer ${session.access_token}`,
+      },
+
+      body:
+        JSON.stringify({
+          question,
+
+          machine:
+            primaryMachine
+              ? {
+                  modelCode:
+                    primaryMachine.modelCode,
+
+                  baseModel:
+                    primaryMachine.baseModel,
+
+                  feedDirection:
+                    primaryMachine.feedDirection,
+                }
+              : null,
+        }),
+    }
+  );
 
       const data =
         await response.json();

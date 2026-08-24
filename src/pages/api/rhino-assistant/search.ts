@@ -122,10 +122,14 @@ function getQuestionWords(
         )
     );
 }
-
 function scoreRecord(
   question: string,
-  record: KnowledgeResult
+  record: KnowledgeResult,
+  machine?: {
+    modelCode?: string;
+    baseModel?: string;
+    feedDirection?: string;
+  } | null
 ) {
   const normalizedQuestion =
     normalizeText(
@@ -184,6 +188,21 @@ function scoreRecord(
     ).map(
       normalizeText
     );
+
+    const selectedModelCode =
+  normalizeText(
+    machine?.modelCode ?? ""
+  );
+
+const selectedBaseModel =
+  normalizeText(
+    machine?.baseModel ?? ""
+  );
+
+const selectedFeedDirection =
+  normalizeText(
+    machine?.feedDirection ?? ""
+  );
 
   let score = 0;
 
@@ -405,6 +424,80 @@ function scoreRecord(
     score += 28;
   }
 
+/*
+--------------------------------------------------
+COMPANY MACHINE CONTEXT
+--------------------------------------------------
+*/
+
+if (
+  selectedModelCode &&
+  machineModels.includes(
+    selectedModelCode
+  )
+) {
+  score += 40;
+}
+
+if (
+  selectedBaseModel &&
+  machineModels.includes(
+    selectedBaseModel
+  )
+) {
+  score += 25;
+}
+
+if (
+  selectedBaseModel &&
+  content.includes(
+    selectedBaseModel
+  )
+) {
+  score += 6;
+}
+
+if (
+  selectedModelCode &&
+  content.includes(
+    selectedModelCode
+  )
+) {
+  score += 8;
+}
+
+/*
+--------------------------------------------------
+FEED DIRECTION
+--------------------------------------------------
+
+Only useful when the knowledge itself
+contains left/right-specific information.
+--------------------------------------------------
+*/
+
+if (
+  selectedFeedDirection === "left" &&
+  (
+    section.includes("left") ||
+    content.includes("left feed") ||
+    content.includes("feeds from the left")
+  )
+) {
+  score += 15;
+}
+
+if (
+  selectedFeedDirection === "right" &&
+  (
+    section.includes("right") ||
+    content.includes("right feed") ||
+    content.includes("feeds from the right")
+  )
+) {
+  score += 15;
+}
+
   return Math.max(
     score,
     0
@@ -606,6 +699,30 @@ export default async function handler(
         });
     }
 
+    const machine =
+  req.body?.machine ?? null;
+
+const machineModelCode =
+  String(
+    machine?.modelCode ?? ""
+  )
+    .trim()
+    .toLowerCase();
+
+const machineBaseModel =
+  String(
+    machine?.baseModel ?? ""
+  )
+    .trim()
+    .toLowerCase();
+
+const machineFeedDirection =
+  String(
+    machine?.feedDirection ?? ""
+  )
+    .trim()
+    .toLowerCase();
+
     const [
       knowledgeResponse,
       terminologyResponse,
@@ -706,8 +823,19 @@ export default async function handler(
             score:
               scoreRecord(
                 question,
-                record
-              ),
+                record,
+                  {
+    modelCode:
+      machineModelCode,
+
+    baseModel:
+      machineBaseModel,
+
+    feedDirection:
+      machineFeedDirection,
+  }
+)
+              
           })
         )
         .filter(
@@ -878,6 +1006,17 @@ export default async function handler(
         success: true,
 
         question,
+
+            machineContext: {
+      modelCode:
+        machineModelCode || null,
+
+      baseModel:
+        machineBaseModel || null,
+
+      feedDirection:
+        machineFeedDirection || null,
+    },
 
         matchType,
 
