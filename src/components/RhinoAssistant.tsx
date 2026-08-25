@@ -790,21 +790,58 @@ export default function RhinoAssistant() {
   */
 
   function handleTerminologyYes() {
-    if (
-      !pendingTerminology
-    ) {
+    if (!pendingTerminology) {
       return;
     }
 
-    const topResult =
-      pendingTerminology
-        .results?.[0];
+    /*
+    --------------------------------------------------
+    FIND THE CONFIRMED TERMINOLOGY RESULT
+    --------------------------------------------------
 
-    if (
-      !topResult
-    ) {
+    Do NOT simply use results[0].
+
+    The first search result may be something unrelated
+    that ranked highly because of machine context.
+
+    Instead, find the knowledge section that actually
+    matches the terminology the user just confirmed.
+    --------------------------------------------------
+    */
+
+    const normalizedOfficialTerm =
+      pendingTerminology.officialTerm
+        .trim()
+        .toLowerCase();
+
+    const confirmedResult =
+      pendingTerminology.results.find(
+        (result) =>
+          result.sectionTitle
+            .trim()
+            .toLowerCase() ===
+          normalizedOfficialTerm
+      ) ??
+      pendingTerminology.results.find(
+        (result) =>
+          result.sectionTitle
+            .trim()
+            .toLowerCase()
+            .includes(
+              normalizedOfficialTerm
+            )
+      ) ??
+      null;
+
+    /*
+    --------------------------------------------------
+    NO MATCHING APPROVED KNOWLEDGE
+    --------------------------------------------------
+    */
+
+    if (!confirmedResult) {
       addAssistantMessage(
-        "Thanks for confirming. I still don't have enough documented Rhino Wrangler information to give you a reliable technical answer."
+        `Thanks for confirming that you mean ${pendingTerminology.officialTerm}. I found that terminology, but I don't have enough matching Rhino Wrangler training material to give you a reliable technical answer. I don't want to guess.`
       );
 
       setPendingTerminology(
@@ -814,16 +851,22 @@ export default function RhinoAssistant() {
       return;
     }
 
+    /*
+    --------------------------------------------------
+    CONFIRMED APPROVED RESULT
+    --------------------------------------------------
+    */
+
     addAssistantMessage(
-      `Thanks for confirming that you mean ${pendingTerminology.officialTerm}.\n\n${topResult.content}`,
+      `Thanks for confirming that you mean ${pendingTerminology.officialTerm}.\n\n${confirmedResult.content}`,
       {
         warning:
-          topResult.warnings,
+          confirmedResult.warnings,
 
         sources:
-          createSources(
-            pendingTerminology.results
-          ),
+          createSources([
+            confirmedResult,
+          ]),
       }
     );
 
