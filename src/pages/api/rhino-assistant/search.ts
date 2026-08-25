@@ -44,6 +44,7 @@ type TerminologyRecord = {
 type ScoredKnowledgeResult =
   KnowledgeResult & {
     score: number;
+    topicalScore: number;
   };
 
 function normalizeText(
@@ -518,7 +519,11 @@ Machine context must NEVER create relevance by itself.
     }
   }
 
-  return score;
+  return {
+    score,
+    topicalScore:
+      topicalScoreBeforeMachineContext,
+  };
 }
 
 function findTerminologyCandidates(
@@ -834,26 +839,33 @@ const machineFeedDirection =
         .map(
           (
             record
-          ) => ({
-            ...record,
-
-            score:
+          ) => {
+            const scoring =
               scoreRecord(
                 question,
                 record,
-                  {
-    modelCode:
-      machineModelCode,
+                {
+                  modelCode:
+                    machineModelCode,
 
-    baseModel:
-      machineBaseModel,
+                  baseModel:
+                    machineBaseModel,
 
-    feedDirection:
-      machineFeedDirection,
-  }
-)
-              
-          })
+                  feedDirection:
+                    machineFeedDirection,
+                }
+              );
+
+            return {
+              ...record,
+
+              score:
+                scoring.score,
+
+              topicalScore:
+                scoring.topicalScore,
+            };
+          }
         )
         .filter(
           (
@@ -891,6 +903,11 @@ const machineFeedDirection =
     const secondScore =
       topResults[1]
         ?.score ??
+      0;
+
+    const topTopicalScore =
+      topResults[0]
+        ?.topicalScore ??
       0;
 
     const topTerminology =
@@ -951,36 +968,48 @@ const machineFeedDirection =
     --------------------------------------------------
     */
 
-    if (
-      confidence ===
-      "high"
-    ) {
-      matchType =
-        "direct";
-
-      recommendedBehavior =
-        "answer_with_sources";
-    }
-
     /*
     --------------------------------------------------
-    POSSIBLE TERMINOLOGY MATCH
+    POSSIBLE TERMINOLOGY MATCH TAKES PRIORITY
+    WHEN TOPICAL SUPPORT IS WEAK
+    --------------------------------------------------
 
-    Only use this when we do NOT already have a
-    strong direct knowledge match.
+    Machine context can improve ranking, but it cannot
+    turn a weak topical match into a direct answer.
     --------------------------------------------------
     */
 
-    else if (
+    if (
       topTerminology &&
       topTerminology.score >=
-        5
+        5 &&
+      topTopicalScore <
+        38
     ) {
       matchType =
         "possible_terminology";
 
       recommendedBehavior =
         "confirm_terminology";
+    }
+
+    /*
+    --------------------------------------------------
+    DIRECT DOCUMENTED MATCH
+    --------------------------------------------------
+    */
+
+    else if (
+      confidence ===
+        "high" &&
+      topTopicalScore >=
+        38
+    ) {
+      matchType =
+        "direct";
+
+      recommendedBehavior =
+        "answer_with_sources";
     }
 
     /*
@@ -1104,6 +1133,9 @@ const machineFeedDirection =
 
               score:
                 result.score,
+
+              topicalScore:
+                result.topicalScore,
             })
           ),
       });
