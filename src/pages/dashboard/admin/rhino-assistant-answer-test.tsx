@@ -23,7 +23,23 @@ type ChatMessage = {
   content: string;
 };
 
+type ConversationState = {
+  machine: {
+    modelCode: string | null;
+    baseModel: string | null;
+    feedDirection: "left" | "right" | null;
+    source: "company_default" | "user_override" | null;
+  };
+
+  activeProblem: string | null;
+
+  lastClarificationQuestion: string | null;
+};
+
 type AnswerResponse = {
+
+    conversationState?: ConversationState;
+
   success: boolean;
 
   engine: string;
@@ -100,6 +116,22 @@ export default function RhinoAssistantAnswerTest() {
       ChatMessage[]
     >([]);
 
+const [
+  conversationState,
+  setConversationState,
+] = useState<ConversationState>({
+  machine: {
+    modelCode: "5600L",
+    baseModel: "5600",
+    feedDirection: "left",
+    source: "company_default",
+  },
+
+  activeProblem: null,
+
+  lastClarificationQuestion: null,
+});
+
   const [
     loading,
     setLoading,
@@ -112,6 +144,7 @@ export default function RhinoAssistantAnswerTest() {
   ] =
     useState<
       AnswerResponse | null
+      
     >(null);
 
   const [
@@ -152,24 +185,18 @@ export default function RhinoAssistantAnswerTest() {
                 "application/json",
             },
 
-            body:
-              JSON.stringify({
-                question:
-                  trimmed,
+    body:
+  JSON.stringify({
+    question:
+      trimmed,
 
-                machine: {
-                  modelCode:
-                    "5600L",
+    machine:
+      conversationState.machine,
 
-                  baseModel:
-                    "5600",
+    conversation,
 
-                  feedDirection:
-                    "left",
-                },
-
-                conversation,
-              }),
+    conversationState,
+  }),
           }
         );
 
@@ -188,6 +215,14 @@ export default function RhinoAssistantAnswerTest() {
       setResult(
         data
       );
+
+      if (
+  data.conversationState
+) {
+  setConversationState(
+    data.conversationState
+  );
+}
 
       setConversation(
         (
@@ -239,6 +274,19 @@ export default function RhinoAssistantAnswerTest() {
     setConversation(
       []
     );
+
+    setConversationState({
+  machine: {
+    modelCode: "5600L",
+    baseModel: "5600",
+    feedDirection: "left",
+    source: "company_default",
+  },
+
+  activeProblem: null,
+
+  lastClarificationQuestion: null,
+});
 
     setResult(
       null
@@ -567,6 +615,28 @@ export default function RhinoAssistantAnswerTest() {
               </div>
             )}
           </div>
+
+<h2
+  style={{
+    marginTop: "30px",
+  }}
+>
+  Conversation State
+</h2>
+
+<pre
+  style={{
+    padding: "16px",
+    background: "#f3f4f6",
+    overflowX: "auto",
+  }}
+>
+  {JSON.stringify(
+    conversationState,
+    null,
+    2
+  )}
+</pre>
 
           <h2
             style={{
