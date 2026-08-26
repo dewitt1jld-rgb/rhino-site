@@ -345,6 +345,80 @@ function buildConversationHistory(
 
 /*
 ==================================================
+BUILD CONTEXTUAL SEARCH QUERY
+
+Search V3 must understand short follow-up answers
+in the context of the troubleshooting conversation.
+
+Example:
+
+Original:
+"My parts keep coming out different lengths."
+
+Follow-ups:
+"90 degree"
+"They are all consistently off by 1/32"
+"They are all too short"
+
+Searching only "they are all too short" loses the
+actual problem.
+
+This function combines recent CUSTOMER statements
+into one retrieval query.
+
+We intentionally use user messages only so previous
+assistant suggestions do not contaminate retrieval.
+==================================================
+*/
+
+function buildContextualSearchQuery(
+  question: string,
+  conversation: ConversationMessage[],
+  machine: MachineContext
+) {
+  const recentUserMessages =
+    conversation
+      .filter(
+        (
+          message
+        ) =>
+          message.role ===
+          "user"
+      )
+      .slice(
+        -4
+      )
+      .map(
+        (
+          message
+        ) =>
+          message.content.trim()
+      )
+      .filter(
+        Boolean
+      );
+
+  const parts =
+    [
+      machine.modelCode
+        ? `Machine: ${machine.modelCode}.`
+        : "",
+
+      ...recentUserMessages,
+
+      question,
+    ]
+      .filter(
+        Boolean
+      );
+
+  return parts.join(
+    "\n"
+  );
+}
+
+/*
+==================================================
 EXTRACT RESPONSE TEXT
 ==================================================
 */
@@ -948,12 +1022,19 @@ export default async function handler(
     ------------------------------------------------
     */
 
-    const search =
-      await runSearchV3(
-        req,
-        question,
-        machine
-      );
+const contextualSearchQuery =
+  buildContextualSearchQuery(
+    question,
+    conversation,
+    machine
+  );
+
+const search =
+  await runSearchV3(
+    req,
+    contextualSearchQuery,
+    machine
+  );
 
     /*
     ------------------------------------------------
