@@ -584,127 +584,163 @@ function calculatePhraseScore(
     0;
 
   /*
-  FIRST ITEM DIFFERENT / OTHERS CORRECT
+  --------------------------------------------------
+  MACHINE TROUBLESHOOTING PATTERNS
+
+  These diagnostic symptom patterns only apply to
+  RhinoFab knowledge.
+
+  This prevents Glazier Studio pages containing
+  words like:
+
+  "stick"
+  "first"
+  "short"
+  "remaining"
+
+  from receiving machine-troubleshooting bonuses.
+  --------------------------------------------------
   */
 
-  const questionHasFirst =
-    /\b(first|initial)\b/.test(
-      q
-    );
-
-  const questionHasWrongLength =
-    /\b(short|long|undersize|oversize|small|large)\b/.test(
-      q
-    );
-
-  const questionHasOthersCorrect =
-    /\b(rest|others|other|remaining)\b/.test(
-      q
-    ) &&
-    /\b(right|correct|good|accurate)\b/.test(
-      q
-    );
-
-  const resultHasFirst =
-    /\bfirst\b/.test(
-      r
-    );
-
-  const resultHasWrongLength =
-    /\b(short|long|incorrect|error)\b/.test(
-      r
-    );
-
-  const resultHasOthersCorrect =
-    /\b(remaining|pieces 2|pieces 2 through 5|remaining pieces)\b/.test(
-      r
-    ) &&
-    /\b(correct|right)\b/.test(
-      r
-    );
+  const isRhinoFab =
+    normalize(
+      result.category
+    ) ===
+    "rhinofab";
 
   if (
-    questionHasFirst &&
-    questionHasWrongLength &&
-    questionHasOthersCorrect &&
-    resultHasFirst &&
-    resultHasWrongLength &&
-    resultHasOthersCorrect
+    isRhinoFab
   ) {
-    score +=
-      0.16;
+    /*
+    --------------------------------------------------
+    FIRST ITEM DIFFERENT / OTHERS CORRECT
+    --------------------------------------------------
+    */
 
-    matchedPatterns.push(
-      "first-item-error-others-correct"
-    );
-  }
-
-  /*
-  INCONSISTENT LENGTHS
-  */
-
-  const questionHasVariableLengths =
-    (
-      /\bdifferent lengths\b/.test(
+    const questionHasFirst =
+      /\b(first|initial)\b/.test(
         q
-      ) ||
-      /\binconsistent\b/.test(
+      );
+
+    const questionHasWrongLength =
+      /\b(short|long|undersize|oversize|small|large)\b/.test(
         q
-      )
-    );
+      );
 
-  const resultHasVariableLengths =
-    (
-      /\binconsistent cut lengths\b/.test(
+    const questionHasOthersCorrect =
+      /\b(rest|others|other|remaining)\b/.test(
+        q
+      ) &&
+      /\b(right|correct|good|accurate)\b/.test(
+        q
+      );
+
+    const resultHasFirst =
+      /\bfirst\b/.test(
         r
-      ) ||
-      /\bdifferent lengths\b/.test(
+      );
+
+    const resultHasWrongLength =
+      /\b(short|long|incorrect|error)\b/.test(
         r
-      )
-    );
+      );
 
-  if (
-    questionHasVariableLengths &&
-    resultHasVariableLengths
-  ) {
-    score +=
-      0.10;
+    const resultHasOthersCorrect =
+      /\b(remaining|pieces 2|pieces 2 through 5|remaining pieces)\b/.test(
+        r
+      ) &&
+      /\b(correct|right)\b/.test(
+        r
+      );
 
-    matchedPatterns.push(
-      "inconsistent-lengths"
-    );
-  }
+    if (
+      questionHasFirst &&
+      questionHasWrongLength &&
+      questionHasOthersCorrect &&
+      resultHasFirst &&
+      resultHasWrongLength &&
+      resultHasOthersCorrect
+    ) {
+      score +=
+        0.16;
 
-  /*
-  PRESSURE TERMINOLOGY
+      matchedPatterns.push(
+        "first-item-error-others-correct"
+      );
+    }
 
-  Deliberately small.
+    /*
+    --------------------------------------------------
+    INCONSISTENT LENGTHS
+    --------------------------------------------------
+    */
 
-  A pressure-related result may be worth showing,
-  but this signal alone must NEVER authorize a
-  technical answer.
-  */
+    const questionHasVariableLengths =
+      (
+        /\bdifferent lengths\b/.test(
+          q
+        ) ||
+        /\binconsistent\b/.test(
+          q
+        )
+      );
 
-  const questionHasPressure =
-    /\bpressure\b/.test(
-      q
-    );
+    const resultHasVariableLengths =
+      (
+        /\binconsistent cut lengths\b/.test(
+          r
+        ) ||
+        /\bdifferent lengths\b/.test(
+          r
+        )
+      );
 
-  const resultHasPressure =
-    /\bpressure\b/.test(
-      r
-    );
+    if (
+      questionHasVariableLengths &&
+      resultHasVariableLengths
+    ) {
+      score +=
+        0.10;
 
-  if (
-    questionHasPressure &&
-    resultHasPressure
-  ) {
-    score +=
-      0.04;
+      matchedPatterns.push(
+        "inconsistent-lengths"
+      );
+    }
 
-    matchedPatterns.push(
-      "pressure-related"
-    );
+    /*
+    --------------------------------------------------
+    PRESSURE TERMINOLOGY
+    --------------------------------------------------
+
+    Still deliberately weak.
+
+    Pressure similarity can suggest a related topic,
+    but it can never establish that two settings are
+    actually the same thing.
+    --------------------------------------------------
+    */
+
+    const questionHasPressure =
+      /\bpressure\b/.test(
+        q
+      );
+
+    const resultHasPressure =
+      /\bpressure\b/.test(
+        r
+      );
+
+    if (
+      questionHasPressure &&
+      resultHasPressure
+    ) {
+      score +=
+        0.04;
+
+      matchedPatterns.push(
+        "pressure-related"
+      );
+    }
   }
 
   return {
