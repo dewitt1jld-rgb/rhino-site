@@ -111,12 +111,11 @@ export default function RhinoAssistantV2Test() {
     );
 
     try {
-      const response =
-        await fetch(
-          "/api/rhino-assistant/search-v2",
-          {
-            method:
-              "POST",
+const response =
+  await fetch(
+    "/api/rhino-assistant/search-v3",
+    {
+      method: "POST",
 
             headers: {
               "Content-Type":
