@@ -3,6 +3,10 @@ import type {
   NextApiResponse,
 } from "next";
 
+import {
+  createClient,
+} from "@supabase/supabase-js";
+
 /*
 ==================================================
 RHINO WRANGLER ASSISTANT
@@ -14,10 +18,11 @@ PIPELINE:
 2. Rewrite ambiguous follow-ups into a standalone search query
 3. Call Search V3
 4. Retrieve approved Rhino Wrangler evidence
-5. Send ONLY that evidence to the answer model
-6. Require structured output
-7. Validate cited source IDs
-8. Report API token usage + estimated cost
+5. Expand Resolution Guide evidence when applicable
+6. Send ONLY approved evidence to the answer model
+7. Require structured output
+8. Validate cited source IDs
+9. Report API token usage + estimated cost
 
 IMPORTANT:
 
@@ -37,31 +42,20 @@ const OPENAI_API_KEY =
 const ANSWER_MODEL =
   "gpt-5.6-luna";
 
-/*
-For now the query rewriter uses the same model.
-
-Because the rewrite response is extremely small,
-the additional cost should remain tiny.
-
-Later we can move this to an even cheaper model
-without changing the rest of the architecture.
-*/
-
 const QUERY_REWRITE_MODEL =
   ANSWER_MODEL;
-
-/*
-Current pricing values used by the existing
-test cost estimator.
-
-Actual OpenAI billing remains the source of truth.
-*/
 
 const INPUT_COST_PER_MILLION =
   0.20;
 
 const OUTPUT_COST_PER_MILLION =
   1.20;
+
+const supabase =
+  createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
 /*
 ==================================================
@@ -416,6 +410,267 @@ async function runSearchV3(
 
 /*
 ==================================================
+RESOLUTION GUIDE EXPANSION V1
+
+If Search V3 retrieves a chunk from a Resolution
+Guide, load the remaining active chunks from that
+same page.
+
+This prevents a multi-step procedure from being
+partially hidden simply because only one section
+ranked in the global top results.
+==================================================
+*/
+
+async function expandResolutionGuideEvidence(
+  search:
+    SearchResponse
+): Promise<RetrievalResult[]> {
+  const baseResults =
+    search.results;
+
+  const resolutionResult =
+    baseResults.find(
+      (
+        result
+      ) =>
+        result.sourceUrl.includes(
+          "/dashboard/rhino-training/resolution-guides/"
+        )
+    );
+
+  /*
+  No Resolution Guide was retrieved.
+
+  Use Search V3 results exactly as returned.
+  */
+
+  if (
+    !resolutionResult
+  ) {
+    return baseResults;
+  }
+
+  const {
+    data:
+      guideChunks,
+
+    error:
+      guideError,
+  } =
+    await supabase
+      .from(
+        "rhino_knowledge_chunks"
+      )
+      .select(`
+        id,
+        page_id,
+        chunk_index,
+        topic_title,
+        section_title,
+        content,
+        source_sections,
+        machine_scope,
+        machine_models,
+        risk_level,
+        rhino_knowledge_pages!inner (
+          id,
+          title,
+          category,
+          subcategory,
+          source_url,
+          is_active
+        )
+      `)
+      .eq(
+        "page_id",
+        resolutionResult.pageId
+      )
+      .eq(
+        "is_active",
+        true
+      )
+      .eq(
+        "rhino_knowledge_pages.is_active",
+        true
+      )
+      .order(
+        "chunk_index",
+        {
+          ascending:
+            true,
+        }
+      );
+
+  if (
+    guideError
+  ) {
+    console.error(
+      "Resolution Guide expansion failed:",
+      guideError
+    );
+
+    return baseResults;
+  }
+
+  if (
+    !guideChunks ||
+    guideChunks.length ===
+      0
+  ) {
+    return baseResults;
+  }
+
+  const expanded:
+    RetrievalResult[] =
+    guideChunks
+      .map(
+        (
+          row:
+            any
+        ) => {
+          const page =
+            Array.isArray(
+              row.rhino_knowledge_pages
+            )
+              ? row.rhino_knowledge_pages[0]
+              : row.rhino_knowledge_pages;
+
+          if (
+            !page
+          ) {
+            return null;
+          }
+
+          /*
+          Preserve the real Search V3 scores for any
+          chunk that was already retrieved.
+          */
+
+          const existing =
+            baseResults.find(
+              (
+                result
+              ) =>
+                result.id ===
+                row.id
+            );
+
+          if (
+            existing
+          ) {
+            return existing;
+          }
+
+          return {
+            id:
+              row.id,
+
+            pageId:
+              row.page_id,
+
+            chunkIndex:
+              row.chunk_index,
+
+            pageTitle:
+              page.title,
+
+            category:
+              page.category,
+
+            subcategory:
+              page.subcategory ??
+              null,
+
+            topicTitle:
+              row.topic_title ??
+              null,
+
+            sectionTitle:
+              row.section_title,
+
+            content:
+              row.content,
+
+            sourceSections:
+              row.source_sections ??
+              [],
+
+            sourceUrl:
+              page.source_url,
+
+            machineScope:
+              row.machine_scope ??
+              "unknown",
+
+            machineModels:
+              row.machine_models ??
+              [],
+
+            riskLevel:
+              row.risk_level ??
+              "normal",
+
+            similarity:
+              0,
+
+            lexicalScore:
+              0,
+
+            phraseScore:
+              0,
+
+            machineScore:
+              0,
+
+            categoryScore:
+              0,
+
+            finalScore:
+              0,
+
+            matchedTerms:
+              [],
+
+            matchedPatterns:
+              [],
+
+            machineReason:
+              "resolution-guide expansion",
+          };
+        }
+      )
+      .filter(
+        Boolean
+      ) as RetrievalResult[];
+
+  /*
+  Keep unrelated search results available, but add
+  the complete Resolution Guide.
+
+  We place the expanded guide first because once a
+  Resolution Guide has been identified, its
+  procedural sections are the most important
+  evidence for the answer model.
+  */
+
+  const nonGuideResults =
+    baseResults.filter(
+      (
+        result
+      ) =>
+        result.pageId !==
+        resolutionResult.pageId
+    );
+
+  return [
+    ...expanded,
+    ...nonGuideResults,
+  ];
+}
+
+/*
+==================================================
 FORMAT RETRIEVED EVIDENCE
 ==================================================
 */
@@ -427,7 +682,7 @@ function buildEvidence(
   return results
     .slice(
       0,
-      6
+      12
     )
     .map(
       (
@@ -485,20 +740,6 @@ ${result.sourceUrl}
 /*
 ==================================================
 MACHINE CONTEXT
-
-This gives the answer model the actual resolved
-machine capabilities.
-
-This is especially important for Resolution Guides.
-
-Example:
-
-5500L:
-digitalHClampPressure = true
-digitalClutchPressure = true
-
-The answer model can therefore select the digital
-instructions rather than dumping both branches.
 ==================================================
 */
 
@@ -545,9 +786,6 @@ Digital Clutch Pressure: ${machine.digitalClutchPressure ?? "unknown"}
 /*
 ==================================================
 CONVERSATION HISTORY
-
-Keep enough history for multi-turn troubleshooting
-without sending the entire lifetime of the chat.
 ==================================================
 */
 
@@ -573,14 +811,6 @@ function buildConversationHistory(
 /*
 ==================================================
 FALLBACK CONTEXTUAL SEARCH QUERY
-
-This is the V1 method we already know works well
-for straightforward follow-up answers.
-
-It intentionally uses CUSTOMER messages only.
-
-If the AI query-rewrite step ever fails, we fall
-back to this instead of breaking retrieval.
 ==================================================
 */
 
@@ -696,39 +926,6 @@ function getOutputText(
 /*
 ==================================================
 QUERY REWRITER
-
-PURPOSE:
-
-Convert conversational follow-ups into standalone
-retrieval queries.
-
-Example:
-
-Conversation:
-Assistant:
-"Apply backward pressure to test for coasting."
-
-Customer:
-"What do I do if that test works?"
-
-Bad search query:
-"What do I do if that test works?"
-
-Good search query:
-"How to permanently correct material coasting
-causing inconsistent cut lengths after the
-backward-pressure test confirms coasting."
-
-IMPORTANT:
-
-The rewriter DOES NOT answer the customer.
-
-Assistant messages may be used to understand what
-phrases like "that test" or "that setting" refer to,
-but assistant technical claims are NOT treated as
-verified Rhino Wrangler knowledge.
-
-Search V3 still decides what evidence exists.
 ==================================================
 */
 
@@ -750,10 +947,7 @@ async function rewriteSearchQuery(
     );
 
   /*
-  No rewrite is necessary on the very first turn.
-
-  The initial customer question is already a
-  standalone query.
+  First message is already standalone.
   */
 
   if (
@@ -863,6 +1057,7 @@ RULES:
 - test being discussed
 - setting being discussed
 - symptom being diagnosed
+- named Resolution Guide the customer is asking about
 
 8. Do not add facts that were never stated.
 
@@ -1033,18 +1228,6 @@ Rewrite the latest message as one standalone search query.`;
   } catch (
     error
   ) {
-    /*
-    IMPORTANT:
-
-    Query rewriting is an enhancement.
-
-    It should never be capable of taking the entire
-    Assistant offline.
-
-    If anything goes wrong, use the existing
-    contextual query instead.
-    */
-
     console.warn(
       "Rhino Assistant query rewrite failed. Falling back to contextual search:",
       error
@@ -1156,7 +1339,7 @@ If Digital H-Clamp Pressure is true and the evidence contains both manual and di
 
 11. Do not mention retrieval scores or internal ranking logic to the customer.
 
-12. Do not claim certainty merely because SEARCH CONFIDENCE is high. Search confidence only means the retrieval engine thinks it found relevant material.
+12. Do not claim certainty merely because SEARCH CONFIDENCE is high.
 
 13. Use only SOURCE_ID values supplied in the evidence when filling usedSourceIds.
 
@@ -1183,23 +1366,17 @@ GOOD:
 
 20. Do not provide a possible fix, troubleshooting procedure, secondary question, explanation, or recommendation in the same response as a clarification question.
 
-BAD:
-"Are they consistently off or varying? If they vary, check whether the stock is separating from the pusher."
-
-GOOD:
-"Are they consistently off by the same amount, or do the lengths vary from part to part?"
-
 21. Ask the clarification question that most efficiently separates the remaining documented troubleshooting paths.
 
-22. Use RECENT CONVERSATION to determine what the customer has already told you. Do not ask for information they already provided.
+22. Use RECENT CONVERSATION to determine what the customer has already told you.
 
 23. Treat clear customer statements from the recent conversation as established facts unless the customer later corrects them.
 
-24. When the customer answers a clarification question, continue narrowing the SAME problem instead of treating their response as an unrelated new question.
+24. When the customer answers a clarification question, continue narrowing the SAME problem.
 
 25. Only provide the troubleshooting procedure once the conversation contains enough supported information to select the appropriate documented path.
 
-26. Keep clarification questions short and natural. Prefer one sentence.
+26. Keep clarification questions short and natural.
 
 27. Do not dump every possible cause onto the customer.
 
@@ -1220,15 +1397,11 @@ DIAGNOSTIC TEST VS PERMANENT FIX:
 
 34. When a Resolution Guide contains multiple machine-control branches, use MACHINE CONTEXT to select the branch that matches the customer's actual machine.
 
-35. Do not unnecessarily dump both manual and digital procedures when the machine capabilities clearly establish which one applies.
+35. Do not unnecessarily dump both manual and digital procedures when machine capabilities clearly establish which one applies.
 
-36. If the proper repair contains multiple corrective areas, it is acceptable to explain the overall plan briefly and then guide the customer through the first documented adjustment.
+36. If the proper repair contains multiple corrective areas, explain the overall plan briefly and then guide the customer through the first documented adjustment.
 
-Your job is to guide the customer toward verified Rhino Wrangler information through a natural troubleshooting conversation, not to sound confident or overwhelm them with every possible diagnostic path at once.
-
-37. When giving a diagnostic test, explain only the test and what result the customer should report back. Do not dump the permanent corrective procedure unless the customer asks for it or reports that the test confirmed the problem.
-
-Example:
+37. When giving a diagnostic test, explain only the test and what result the customer should report back.
 
 GOOD:
 "This points to a possible coasting issue. As a diagnostic test, have a second person apply backward pressure to the stock so it never separates from the pusher. If this works, let me know and I'll walk you through the potential permanent solutions."
@@ -1248,9 +1421,15 @@ GOOD:
 
 40. If Digital Clutch Pressure is true, do not provide manual poly-clutch adjustment instructions or manual resistance guidance when a documented digital clutch-pressure procedure is available.
 
-41. A manual poly-clutch resistance description such as '5 to 7 on a theoretical 1-to-10 scale' is NOT a machine setting. Never present it as a value the customer can enter into software.
+41. A manual poly-clutch resistance description such as '5 to 7 on a theoretical 1-to-10 scale' is NOT a machine setting.
 
-42. When machine capabilities clearly establish the applicable control type, use only that branch of the Resolution Guide unless the customer specifically asks about another physical component.`;
+42. When machine capabilities clearly establish the applicable control type, use only that branch of the Resolution Guide unless the customer specifically asks about another physical component.
+
+43. If the customer explicitly asks to follow or be walked through a named Resolution Guide, use the detailed steps supplied from that guide.
+
+44. When walking through a Resolution Guide, do not summarize the entire guide unless the customer asks for the complete procedure. Give the next actionable step and wait.
+
+Your job is to guide the customer toward verified Rhino Wrangler information through a natural troubleshooting conversation.`;
 
   const input =
 `CUSTOMER QUESTION:
@@ -1617,14 +1796,6 @@ export default async function handler(
       req.body?.machine ??
       {};
 
-    /*
-    Keep more history than before.
-
-    Follow-up support conversations can easily need
-    four or five exchanges before the actual problem
-    has been isolated.
-    */
-
     const conversation:
       ConversationMessage[] =
       Array.isArray(
@@ -1658,19 +1829,7 @@ export default async function handler(
     /*
     ------------------------------------------------
     STEP 1:
-    BUILD A STANDALONE RETRIEVAL QUERY
-    ------------------------------------------------
-
-    First turn:
-    use the customer's question directly.
-
-    Follow-up:
-    allow the query rewriter to resolve references
-    such as "that test", "it", and "what next?"
-
-    If rewriting fails:
-    automatically fall back to the previous
-    user-message contextual query.
+    BUILD STANDALONE RETRIEVAL QUERY
     ------------------------------------------------
     */
 
@@ -1684,7 +1843,7 @@ export default async function handler(
     /*
     ------------------------------------------------
     STEP 2:
-    RETRIEVE RHINO WRANGLER KNOWLEDGE
+    SEARCH RHINO WRANGLER KNOWLEDGE
     ------------------------------------------------
     */
 
@@ -1696,8 +1855,33 @@ export default async function handler(
       );
 
     /*
-    Calculate rewrite usage now so even a no-answer
-    response accurately reports the cost.
+    ------------------------------------------------
+    STEP 3:
+    EXPAND RESOLUTION GUIDE EVIDENCE
+    ------------------------------------------------
+    */
+
+    const expandedResults =
+      await expandResolutionGuideEvidence(
+        search
+      );
+
+    const expandedSearch:
+      SearchResponse =
+      {
+        ...search,
+
+        results:
+          expandedResults,
+
+        resultCount:
+          expandedResults.length,
+      };
+
+    /*
+    ------------------------------------------------
+    REWRITE USAGE
+    ------------------------------------------------
     */
 
     const rewriteUsage =
@@ -1713,8 +1897,14 @@ export default async function handler(
 
     /*
     ------------------------------------------------
-    STEP 3:
+    STEP 4:
     ABSOLUTELY NO MATCH
+    ------------------------------------------------
+
+    Use the ORIGINAL search assessment for this.
+
+    Guide expansion only happens after Search V3
+    already found something useful.
     ------------------------------------------------
     */
 
@@ -1760,18 +1950,21 @@ export default async function handler(
             resultCount:
               search.resultCount,
 
-            /*
-            TEST DEBUGGING
+            resolutionGuideExpanded:
+              expandedResults.length >
+              search.results.length,
 
-            This lets us see exactly what Search V3
-            searched after rewriting.
-            */
+            expandedEvidenceCount:
+              expandedResults.length,
 
             searchQuery:
               rewrite.searchQuery,
 
             queryRewriteUsed:
               rewrite.usedRewrite,
+
+            queryRewriteModel:
+              rewrite.model,
 
             queryRewriteFallbackReason:
               rewrite.fallbackReason,
@@ -1782,15 +1975,6 @@ export default async function handler(
               search.embeddingUsage
                 ?.tokens ??
               0,
-
-            /*
-            These existing fields now represent
-            TOTAL model usage:
-            rewrite + answer.
-
-            In a no-answer case, only rewrite usage
-            exists.
-            */
 
             modelInputTokens:
               rewriteUsage.inputTokens,
@@ -1804,20 +1988,28 @@ export default async function handler(
             estimatedModelCost:
               rewriteCost.totalCost,
 
-            /*
-            Additional test/debug fields.
-            */
-
             rewriteInputTokens:
               rewriteUsage.inputTokens,
 
             rewriteOutputTokens:
               rewriteUsage.outputTokens,
 
+            rewriteTotalTokens:
+              rewriteUsage.totalTokens,
+
             answerInputTokens:
               0,
 
             answerOutputTokens:
+              0,
+
+            answerTotalTokens:
+              0,
+
+            estimatedRewriteCost:
+              rewriteCost.totalCost,
+
+            estimatedAnswerCost:
               0,
           },
         });
@@ -1825,7 +2017,7 @@ export default async function handler(
 
     /*
     ------------------------------------------------
-    STEP 4:
+    STEP 5:
     GROUNDED ANSWER / CLARIFICATION
     ------------------------------------------------
     */
@@ -1835,13 +2027,13 @@ export default async function handler(
         question,
         machine,
         conversation,
-        search
+        expandedSearch
       );
 
     const sources =
       validateSources(
         generated.answer,
-        search
+        expandedSearch
       );
 
     /*
@@ -1878,10 +2070,7 @@ export default async function handler(
       answerCost.totalCost;
 
     /*
-    If the model says "answer" but cites nothing,
-    downgrade it.
-
-    A technical answer needs evidence.
+    Technical answers must cite retrieved evidence.
     */
 
     let action =
@@ -1904,6 +2093,12 @@ export default async function handler(
       message =
         "I found related Rhino Wrangler information, but I couldn't verify enough supporting material to give you a reliable technical answer.";
     }
+
+    /*
+    ------------------------------------------------
+    RESPONSE
+    ------------------------------------------------
+    */
 
     return res
       .status(
@@ -1958,18 +2153,23 @@ export default async function handler(
           recommendedBehavior:
             search.recommendedBehavior,
 
+          /*
+          Original Search V3 count.
+          */
+
           resultCount:
             search.resultCount,
 
           /*
-          TEST DEBUGGING
-
-          This is extremely useful while we're tuning
-          conversational retrieval.
-
-          We'll probably remove it from the production
-          customer response later.
+          Resolution Guide expansion debugging.
           */
+
+          resolutionGuideExpanded:
+            expandedResults.length >
+            search.results.length,
+
+          expandedEvidenceCount:
+            expandedResults.length,
 
           searchQuery:
             rewrite.searchQuery,
@@ -1982,6 +2182,12 @@ export default async function handler(
 
           queryRewriteFallbackReason:
             rewrite.fallbackReason,
+
+          /*
+          Keep these as ORIGINAL Search V3 results
+          so we can see what semantic retrieval
+          actually ranked.
+          */
 
           topResults:
             search.results
@@ -2014,13 +2220,6 @@ export default async function handler(
               ?.tokens ??
             0,
 
-          /*
-          Preserve the fields the frontend already
-          expects.
-
-          These now represent TOTAL model usage.
-          */
-
           modelInputTokens:
             totalModelInputTokens,
 
@@ -2032,10 +2231,6 @@ export default async function handler(
 
           estimatedModelCost:
             totalModelCost,
-
-          /*
-          Additional debugging information.
-          */
 
           rewriteInputTokens:
             rewriteUsage.inputTokens,
