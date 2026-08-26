@@ -204,11 +204,13 @@ export default function InconsistentCutLengthsCoastingPage() {
                 Use the top ring on the roller to tighten or loosen the
                 resistance.
               </Step>
-
-              <Step number={5}>
-                On a scale from 1 to 10, aim for approximately{" "}
-                <strong>5 to 7</strong> in resistance.
-              </Step>
+<Step number={5}>
+  There is no numbered setting on these manual rollers. When judging
+  the resistance by hand, you generally want moderate resistance.
+  If you imagined the resistance on a scale from 1 to 10, with 1
+  being nearly free spinning and 10 being locked in place, roughly
+  5 to 7 is a useful target for how the roller should feel.
+</Step>
 
               <Step number={6}>
                 On that scale, 1 represents nearly free spinning and 10
@@ -340,17 +342,7 @@ export default function InconsistentCutLengthsCoastingPage() {
               </Step>
             </div>
 
-            <div className="callout warning">
-              <h3>Door Rollers Are Still Manual</h3>
-
-              <p>
-                Even on machines with digitally controlled clutch pressure, the
-                orange door rollers are still manually adjusted. Use the top
-                ring to tighten or loosen the roller. On a scale from 1 to 10,
-                aim for approximately 5 to 7 in resistance.
-              </p>
-            </div>
-
+        
             <h3 className="sectionTitle">
               3. Slow the Infeed Horizontal Lift Rollers
             </h3>
