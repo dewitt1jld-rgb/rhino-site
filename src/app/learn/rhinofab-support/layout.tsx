@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "RhinoFab Support | Rhino Fab Machine Help & Training",
 
   description:
-    "RhinoFab support for Rhino Fab machines, Rhino 5000, Rhino 5600, Rhino 5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, calibration, troubleshooting, and CNC glass fabrication teams.",
+    "RhinoFab support for Rhino Fab machines, Rhino 5000, Rhino 5500, Rhino 5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, calibration, troubleshooting, and CNC glass fabrication teams.",
 
   alternates: {
     canonical: "https://therhinowrangler.com/learn/rhinofab-support",

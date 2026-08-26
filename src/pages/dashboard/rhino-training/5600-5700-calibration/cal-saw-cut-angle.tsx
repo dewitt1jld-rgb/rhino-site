@@ -16,7 +16,7 @@ export default function CalSawCutAnglePage() {
       <TrainingLayout>
         <div className="pageWrap">
           <section className="heroCard">
-            <p className="eyebrow">5600 / 5700 Calibration</p>
+            <p className="eyebrow">5500 / 5700 Calibration</p>
             <h1>Calibrate Saw Cut Angle</h1>
             <p>
               This screen is designed as a second option for getting the two saw

@@ -199,7 +199,7 @@ export default function IncorrectPartLengthPage() {
         <section className="panel">
   <div className="panelHeader">
     <p className="eyebrow">5000 Series Machines</p>
-    <h2>Incorrect Part Lengths on 5000, 5600 & 5700 Machines</h2>
+    <h2>Incorrect Part Lengths on 5000, 5500 & 5700 Machines</h2>
 
     <p>
       Correcting part length on a 5000 Series machine is slightly different
@@ -220,7 +220,7 @@ export default function IncorrectPartLengthPage() {
   </div>
 
   <p className="helperText">
-    This procedure applies to the RhinoFab 5000, 5600, and 5700 machines.
+    This procedure applies to the RhinoFab 5000, 5500, and 5700 machines.
   </p>
 </section>
 

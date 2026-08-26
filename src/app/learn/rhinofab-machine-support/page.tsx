@@ -7,7 +7,7 @@ export default function RhinoFabSupportPage() {
 const schema = {
   "@context": "https://schema.org",
   "@type": "Course",
-  name: "RhinoFab Machine Support | Rhino 900, 950, 1100, 1150, 1250, 1350, 5000, 5600, 5700, 9500, 9600 and more",
+  name: "RhinoFab Machine Support | Rhino 900, 950, 1100, 1150, 1250, 1350, 5000, 5500, 5700, 9500, 9600 and more",
   description:
     "RhinoFab machine support, calibration, troubleshooting, training, and setup resources for Rhino 900, Rhino 950, Rhino 5700, Rhino 9500, Rhino 9600, and CNC glass fabrication equipment.",
   provider: {
@@ -31,7 +31,7 @@ const schema = {
           workflows, machine setup, and CNC glass fabrication problems.
         </p>
         <p className="lead secondaryLead">
-          Get support for RhinoFab, Rhino Fab, Rhino 5000, Rhino 5600, Rhino
+          Get support for RhinoFab, Rhino Fab, Rhino 5000, Rhino 5500, Rhino
           5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, saw and drill
           workflows, coolant problems, photo eyes, tool index issues, and common
           production problems.
@@ -58,7 +58,7 @@ const schema = {
   "Rhino 950",
   "Rhino 1100",
   "Rhino 1150",
-  "Rhino 5600",
+  "Rhino 5500",
   "Rhino 5500",
   "Rhino 9700",
   "Rhino 9600",

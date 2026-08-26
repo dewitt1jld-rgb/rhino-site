@@ -10,7 +10,7 @@ export default function CalToolRackPage() {
       <TrainingLayout>
         <div className="pageWrap">
           <section className="heroPanel">
-            <p className="eyebrow">5600 / 5700 Calibration</p>
+            <p className="eyebrow">5500 / 5700 Calibration</p>
             <h1>Calibrate Tool Rack</h1>
             <p>
               This screen calibrates the drill to the fixed tool rack locations.

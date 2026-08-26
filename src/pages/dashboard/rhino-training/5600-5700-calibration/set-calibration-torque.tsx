@@ -10,7 +10,7 @@ export default function SetCalibrationTorquesPage() {
       <TrainingLayout>
         <div className="pageWrap">
           <section className="heroPanel">
-            <p className="eyebrow">5600 / 5700 Calibration</p>
+            <p className="eyebrow">5500 / 5700 Calibration</p>
             <h1>Set Calibration Torques</h1>
             <p>
               This screen is designed to find the minimum amount of torque each

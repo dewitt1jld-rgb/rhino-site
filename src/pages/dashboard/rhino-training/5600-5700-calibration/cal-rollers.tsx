@@ -10,7 +10,7 @@ export default function CalRollersPage() {
       <TrainingLayout>
         <div className="pageWrap">
           <section className="heroPanel">
-            <p className="eyebrow">5600 / 5700 Calibration</p>
+            <p className="eyebrow">5500 / 5700 Calibration</p>
             <h1>Calibrate Rollers</h1>
             <p>
               This screen looks more complicated than it actually is. Follow the

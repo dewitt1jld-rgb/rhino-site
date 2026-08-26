@@ -10,7 +10,7 @@ export default function CalPusherPage() {
       <TrainingLayout>
         <div className="pageWrap">
           <section className="heroPanel">
-            <p className="eyebrow">5600 / 5700 Calibration</p>
+            <p className="eyebrow">5500 / 5700 Calibration</p>
             <h1>Calibrate Pusher</h1>
             <p>
               This test is used to find the MIN/DIM, or minimum dimension, of

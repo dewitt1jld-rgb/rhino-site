@@ -133,10 +133,10 @@ const response =
                 */
                 machine: {
                   modelCode:
-                    "5600L",
+                    "5500L",
 
                   baseModel:
-                    "5600",
+                    "5500",
 
                   feedDirection:
                     "left",

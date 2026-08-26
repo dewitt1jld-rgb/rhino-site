@@ -10,7 +10,7 @@ export default function CalMiterCutLengthPage() {
       <TrainingLayout>
         <div className="pageWrap">
           <section className="heroPanel">
-            <p className="eyebrow">5600 / 5700 Calibration</p>
+            <p className="eyebrow">5500 / 5700 Calibration</p>
             <h1>Calibrate Miter Cut Length</h1>
             <p>
               This screen has 3–4 different tabs depending on your machine model.

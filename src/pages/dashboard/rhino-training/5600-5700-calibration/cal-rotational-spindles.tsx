@@ -64,7 +64,7 @@ export default function CalRotationalSpindlesPage() {
     <RequireActiveAccess>
       <TrainingLayout>
         <div className="breadcrumb">
-          Rhino Training / 5600-5700 Calibration
+          Rhino Training / 5500-5700 Calibration
         </div>
 
         <section className="heroPanel">

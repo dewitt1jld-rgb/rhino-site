@@ -118,44 +118,44 @@ export const RhinoTrainingMenu: SidebarItem[] = [
 
 
     {
-    title: "5600/5700 Calibration",
-    slug: "/dashboard/rhino-training/5600-5700-calibration",
+    title: "5500/5700 Calibration",
+    slug: "/dashboard/rhino-training/5500-5700-calibration",
     children: [
       {
         title: "Cal. Rotational Spindles",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-rotational-spindles",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/cal-rotational-spindles",
       },
       {
         title: "Cal. Saw Cut Angle",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-saw-cut-angle",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/cal-saw-cut-angle",
       },
       {
         title: "Cal. Pusher",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-pusher",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/cal-pusher",
       },
       {
         title: "Cal. Miter Cut Length",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-miter-cut-length",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/cal-miter-cut-length",
       },
       {
         title: "Cal. Tool Rack",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-tool-rack",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/cal-tool-rack",
       },
       {
         title: "Set Calibration Torque",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/set-calibration-torque",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/set-calibration-torque",
       },
       {
         title: "Cal. Drills",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-drills",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/cal-drills",
       },
       {
         title: "Cal. Rollers",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/cal-rollers",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/cal-rollers",
       },
       {
         title: "How a Dial Ind. Works",
-        slug: "/dashboard/rhino-training/5600-5700-calibration/how-a-dial-ind-works",
+        slug: "/dashboard/rhino-training/5500-5700-calibration/how-a-dial-ind-works",
       },
     ],
   },

@@ -395,7 +395,7 @@ function rankForMachine(
 
   /*
   Base model:
-  5600L -> 5600
+  5500L -> 5500
   */
 
   if (

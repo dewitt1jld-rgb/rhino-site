@@ -121,8 +121,8 @@ const [
   setConversationState,
 ] = useState<ConversationState>({
   machine: {
-    modelCode: "5600L",
-    baseModel: "5600",
+    modelCode: "5500L",
+    baseModel: "5500",
     feedDirection: "left",
     source: "company_default",
   },
@@ -277,8 +277,8 @@ const [
 
     setConversationState({
   machine: {
-    modelCode: "5600L",
-    baseModel: "5600",
+    modelCode: "5500L",
+    baseModel: "5500",
     feedDirection: "left",
     source: "company_default",
   },
