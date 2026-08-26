@@ -1,6 +1,28 @@
 import {
+  useEffect,
   useState,
 } from "react";
+
+import {
+  createClient,
+} from "@supabase/supabase-js";
+
+/*
+--------------------------------------------------
+SUPABASE CLIENT
+--------------------------------------------------
+*/
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+/*
+--------------------------------------------------
+SOURCE
+--------------------------------------------------
+*/
 
 type Source = {
   id: string;
@@ -15,6 +37,12 @@ type Source = {
   sourceUrl: string;
 };
 
+/*
+--------------------------------------------------
+CHAT MESSAGE
+--------------------------------------------------
+*/
+
 type ChatMessage = {
   role:
     | "user"
@@ -23,22 +51,186 @@ type ChatMessage = {
   content: string;
 };
 
-type ConversationState = {
-  machine: {
-    modelCode: string | null;
-    baseModel: string | null;
-    feedDirection: "left" | "right" | null;
-    source: "company_default" | "user_override" | null;
-  };
+/*
+--------------------------------------------------
+RESOLVED MACHINE PROFILE
+--------------------------------------------------
 
-  activeProblem: string | null;
+This mirrors the resolved machine object returned
+by /api/check-access.
 
-  lastClarificationQuestion: string | null;
+The fields are nullable because we intentionally
+do not guess when a capability cannot be resolved.
+--------------------------------------------------
+*/
+
+type ResolvedMachine = {
+  companyMachineId:
+    string | null;
+
+  machineModelId:
+    string | null;
+
+  modelCode:
+    string | null;
+
+  baseModel:
+    string | null;
+
+  feedDirection:
+    "left"
+    | "right"
+    | null;
+
+  displayName:
+    string | null;
+
+  nickname:
+    string | null;
+
+  serialNumber:
+    string | null;
+
+  isPrimary:
+    boolean;
+
+  capabilitiesResolved:
+    boolean;
+
+  motorSize:
+    string | null;
+
+  slideSize:
+    string | null;
+
+  sawType:
+    string | null;
+
+  pieceLoadDirection:
+    string | null;
+
+  cut90:
+    boolean | null;
+
+  cutMiter:
+    boolean | null;
+
+  cutBevel:
+    boolean | null;
+
+  cutCompound:
+    boolean | null;
+
+  hasRotationalOffset:
+    boolean | null;
+
+  frontDrill:
+    string | null;
+
+  topDrill:
+    string | null;
+
+  bottomDrill:
+    string | null;
+
+  backDrill:
+    string | null;
+
+  drillAssemblyCount:
+    number | null;
+
+  drillConfiguration:
+    string | null;
+
+  hasRobot:
+    boolean | null;
+
+  hasStationaryToolChanger:
+    boolean | null;
+
+  hasRobotToolChanger:
+    boolean | null;
+
+  hasLinearEncoder:
+    boolean | null;
+
+  fluidCooledMotors:
+    boolean | null;
+
+  doorCapable:
+    boolean | null;
+
+  digitalHClampPressure:
+    boolean | null;
+
+  digitalClutchPressure:
+    boolean | null;
+
+  supportedForAI:
+    boolean | null;
+
+  overrides:
+    Record<
+      string,
+      unknown
+    >;
 };
 
-type AnswerResponse = {
+/*
+--------------------------------------------------
+CONVERSATION MACHINE
+--------------------------------------------------
 
-    conversationState?: ConversationState;
+This is the machine context we send to the
+Assistant.
+
+It contains the full resolved machine profile
+plus information about where the machine choice
+came from.
+
+company_default =
+the machine came from the customer's account.
+
+user_override =
+the customer explicitly changed machines during
+the conversation.
+--------------------------------------------------
+*/
+
+type ConversationMachine =
+  ResolvedMachine & {
+    source:
+      "company_default"
+      | "user_override"
+      | null;
+  };
+
+/*
+--------------------------------------------------
+CONVERSATION STATE
+--------------------------------------------------
+*/
+
+type ConversationState = {
+  machine:
+    ConversationMachine | null;
+
+  activeProblem:
+    string | null;
+
+  lastClarificationQuestion:
+    string | null;
+};
+
+/*
+--------------------------------------------------
+ANSWER RESPONSE
+--------------------------------------------------
+*/
+
+type AnswerResponse = {
+  conversationState?:
+    ConversationState;
 
   success: boolean;
 
@@ -99,6 +291,69 @@ type AnswerResponse = {
   };
 };
 
+/*
+--------------------------------------------------
+CHECK ACCESS RESPONSE
+--------------------------------------------------
+*/
+
+type CheckAccessResponse = {
+  status:
+    string;
+
+  hasAccess:
+    boolean;
+
+  source:
+    string;
+
+  reason?:
+    string;
+
+  company?: {
+    id:
+      string;
+
+    name:
+      string;
+
+    machines:
+      ResolvedMachine[];
+
+    primaryMachine:
+      ResolvedMachine | null;
+  } | null;
+
+  error?:
+    string;
+};
+
+/*
+--------------------------------------------------
+EMPTY CONVERSATION STATE
+--------------------------------------------------
+*/
+
+function createEmptyConversationState():
+  ConversationState {
+  return {
+    machine:
+      null,
+
+    activeProblem:
+      null,
+
+    lastClarificationQuestion:
+      null,
+  };
+}
+
+/*
+--------------------------------------------------
+PAGE
+--------------------------------------------------
+*/
+
 export default function RhinoAssistantAnswerTest() {
   const [
     question,
@@ -116,21 +371,53 @@ export default function RhinoAssistantAnswerTest() {
       ChatMessage[]
     >([]);
 
-const [
-  conversationState,
-  setConversationState,
-] = useState<ConversationState>({
-  machine: {
-    modelCode: "5500L",
-    baseModel: "5500",
-    feedDirection: "left",
-    source: "company_default",
-  },
+  const [
+    conversationState,
+    setConversationState,
+  ] =
+    useState<ConversationState>(
+      createEmptyConversationState()
+    );
 
-  activeProblem: null,
+  /*
+  --------------------------------------------------
+  COMPANY / MACHINE LOADING STATE
+  --------------------------------------------------
+  */
 
-  lastClarificationQuestion: null,
-});
+  const [
+    machineLoading,
+    setMachineLoading,
+  ] =
+    useState(true);
+
+  const [
+    companyName,
+    setCompanyName,
+  ] =
+    useState<
+      string | null
+    >(null);
+
+  const [
+    companyMachines,
+    setCompanyMachines,
+  ] =
+    useState<
+      ResolvedMachine[]
+    >([]);
+
+  const [
+    machineLoadError,
+    setMachineLoadError,
+  ] =
+    useState("");
+
+  /*
+  --------------------------------------------------
+  ANSWER STATE
+  --------------------------------------------------
+  */
 
   const [
     loading,
@@ -144,7 +431,6 @@ const [
   ] =
     useState<
       AnswerResponse | null
-      
     >(null);
 
   const [
@@ -153,14 +439,217 @@ const [
   ] =
     useState("");
 
+  /*
+  --------------------------------------------------
+  LOAD COMPANY MACHINE ON PAGE LOAD
+  --------------------------------------------------
+
+  The Assistant no longer assumes a hard-coded
+  machine.
+
+  We:
+
+  1. Get the logged-in Supabase session
+  2. Send the access token to /api/check-access
+  3. Read company.primaryMachine
+  4. Store the FULL resolved machine profile
+     in conversation state
+  --------------------------------------------------
+  */
+
+  useEffect(
+    () => {
+      loadCompanyMachine();
+    },
+    []
+  );
+
+  async function loadCompanyMachine() {
+    setMachineLoading(
+      true
+    );
+
+    setMachineLoadError(
+      ""
+    );
+
+    try {
+      /*
+      ----------------------------------------------
+      GET LOGGED-IN SESSION
+      ----------------------------------------------
+      */
+
+      const {
+        data: {
+          session,
+        },
+        error:
+          sessionError,
+      } =
+        await supabase.auth.getSession();
+
+      if (
+        sessionError
+      ) {
+        throw sessionError;
+      }
+
+      if (
+        !session
+      ) {
+        throw new Error(
+          "No active Supabase session was found."
+        );
+      }
+
+      /*
+      ----------------------------------------------
+      CALL CHECK-ACCESS
+      ----------------------------------------------
+      */
+
+      const response =
+        await fetch(
+          "/api/check-access",
+          {
+            method:
+              "GET",
+
+            headers: {
+              Authorization:
+                `Bearer ${session.access_token}`,
+            },
+          }
+        );
+
+      const data:
+        CheckAccessResponse =
+        await response.json();
+
+      if (
+        !response.ok
+      ) {
+        throw new Error(
+          data?.error ||
+            "Unable to load company access."
+        );
+      }
+
+      /*
+      ----------------------------------------------
+      SAVE COMPANY INFORMATION
+      ----------------------------------------------
+      */
+
+      setCompanyName(
+        data.company
+          ?.name ??
+          null
+      );
+
+      setCompanyMachines(
+        data.company
+          ?.machines ??
+          []
+      );
+
+      /*
+      ----------------------------------------------
+      PRIMARY MACHINE
+      ----------------------------------------------
+
+      Most companies have one machine.
+
+      Their primary machine becomes the default
+      machine for the conversation.
+
+      We do NOT guess if no machine exists.
+      ----------------------------------------------
+      */
+
+      const primaryMachine =
+        data.company
+          ?.primaryMachine ??
+        null;
+
+      if (
+        !primaryMachine
+      ) {
+        setConversationState(
+          createEmptyConversationState()
+        );
+
+        throw new Error(
+          "This company does not have a primary machine configured."
+        );
+      }
+
+      /*
+      ----------------------------------------------
+      STORE FULL RESOLVED PROFILE
+      ----------------------------------------------
+      */
+
+      setConversationState({
+        machine: {
+          ...primaryMachine,
+
+          source:
+            "company_default",
+        },
+
+        activeProblem:
+          null,
+
+        lastClarificationQuestion:
+          null,
+      });
+    } catch (
+      err
+    ) {
+      console.error(
+        "Machine profile load failed:",
+        err
+      );
+
+      setMachineLoadError(
+        err instanceof Error
+          ? err.message
+          : "Unable to load machine profile."
+      );
+    } finally {
+      setMachineLoading(
+        false
+      );
+    }
+  }
+
+  /*
+  --------------------------------------------------
+  SEND QUESTION
+  --------------------------------------------------
+  */
+
   async function sendQuestion() {
     const trimmed =
       question.trim();
 
     if (
       !trimmed ||
-      loading
+      loading ||
+      machineLoading
     ) {
+      return;
+    }
+
+    if (
+      !conversationState.machine
+    ) {
+      setError(
+        "No machine profile is available for this conversation."
+      );
+
       return;
     }
 
@@ -185,18 +674,30 @@ const [
                 "application/json",
             },
 
-    body:
-  JSON.stringify({
-    question:
-      trimmed,
+            body:
+              JSON.stringify({
+                question:
+                  trimmed,
 
-    machine:
-      conversationState.machine,
+                /*
+                Full resolved machine profile.
+                */
 
-    conversation,
+                machine:
+                  conversationState.machine,
 
-    conversationState,
-  }),
+                /*
+                Previous messages.
+                */
+
+                conversation,
+
+                /*
+                Persistent diagnostic state.
+                */
+
+                conversationState,
+              }),
           }
         );
 
@@ -216,13 +717,34 @@ const [
         data
       );
 
+      /*
+      ----------------------------------------------
+      ACCEPT UPDATED CONVERSATION STATE
+      ----------------------------------------------
+
+      answer-v1 can change the active machine later
+      when the user explicitly identifies another
+      machine.
+
+      Example:
+
+      Company default = 5500L
+
+      User:
+      "Actually I'm working on our 900R."
+
+      The API can return a new machine with
+      source = user_override.
+      ----------------------------------------------
+      */
+
       if (
-  data.conversationState
-) {
-  setConversationState(
-    data.conversationState
-  );
-}
+        data.conversationState
+      ) {
+        setConversationState(
+          data.conversationState
+        );
+      }
 
       setConversation(
         (
@@ -270,23 +792,25 @@ const [
     }
   }
 
-  function resetConversation() {
+  /*
+  --------------------------------------------------
+  RESET CONVERSATION
+  --------------------------------------------------
+
+  IMPORTANT:
+
+  Reset no longer hard-codes 5500L.
+
+  It clears the conversation and reloads the
+  company's CURRENT primary machine through
+  check-access.
+  --------------------------------------------------
+  */
+
+  async function resetConversation() {
     setConversation(
       []
     );
-
-    setConversationState({
-  machine: {
-    modelCode: "5500L",
-    baseModel: "5500",
-    feedDirection: "left",
-    source: "company_default",
-  },
-
-  activeProblem: null,
-
-  lastClarificationQuestion: null,
-});
 
     setResult(
       null
@@ -299,7 +823,19 @@ const [
     setError(
       ""
     );
+
+    setConversationState(
+      createEmptyConversationState()
+    );
+
+    await loadCompanyMachine();
   }
+
+  /*
+  --------------------------------------------------
+  PAGE
+  --------------------------------------------------
+  */
 
   return (
     <main
@@ -344,9 +880,120 @@ const [
           Testing only:
         </strong>{" "}
         This page is evaluating answer quality,
-        clarification behavior, sources, and API
-        cost.
+        clarification behavior, sources, API
+        cost, and resolved machine context.
       </div>
+
+      {/*
+      ------------------------------------------------
+      COMPANY MACHINE STATUS
+      ------------------------------------------------
+      */}
+
+      <div
+        style={{
+          marginTop:
+            "18px",
+
+          padding:
+            "14px",
+
+          background:
+            "#f3f4f6",
+
+          borderRadius:
+            "10px",
+
+          border:
+            "1px solid #d1d5db",
+        }}
+      >
+        <strong>
+          Machine Context:
+        </strong>{" "}
+
+        {machineLoading
+          ? "Loading company machine..."
+          : conversationState.machine
+          ? `${conversationState.machine.displayName ?? conversationState.machine.modelCode ?? "Unknown machine"}`
+          : "No machine loaded"}
+
+        {companyName && (
+          <>
+            {" "}
+            — {companyName}
+          </>
+        )}
+
+        {conversationState.machine
+          ?.source && (
+          <>
+            {" "}
+            (
+            {
+              conversationState.machine
+                .source
+            }
+            )
+          </>
+        )}
+      </div>
+
+      {machineLoadError && (
+        <div
+          style={{
+            marginTop:
+              "14px",
+
+            color:
+              "#b91c1c",
+
+            fontWeight:
+              700,
+          }}
+        >
+          Machine load error:{" "}
+          {
+            machineLoadError
+          }
+        </div>
+      )}
+
+      {/*
+      ------------------------------------------------
+      COMPANY MACHINE DEBUG
+      ------------------------------------------------
+      */}
+
+      {companyMachines.length >
+        1 && (
+        <div
+          style={{
+            marginTop:
+              "12px",
+
+            fontSize:
+              "14px",
+
+            color:
+              "#4b5563",
+          }}
+        >
+          Company has{" "}
+          {
+            companyMachines.length
+          }{" "}
+          active machines. The primary machine
+          is being used as the conversation
+          default.
+        </div>
+      )}
+
+      {/*
+      ------------------------------------------------
+      CONVERSATION
+      ------------------------------------------------
+      */}
 
       {conversation.length >
         0 && (
@@ -417,6 +1064,12 @@ const [
         </div>
       )}
 
+      {/*
+      ------------------------------------------------
+      QUESTION INPUT
+      ------------------------------------------------
+      */}
+
       <div
         style={{
           display:
@@ -473,7 +1126,9 @@ const [
             }
             disabled={
               loading ||
-              !question.trim()
+              machineLoading ||
+              !question.trim() ||
+              !conversationState.machine
             }
             style={{
               padding:
@@ -486,7 +1141,9 @@ const [
                 "pointer",
             }}
           >
-            {loading
+            {machineLoading
+              ? "Loading Machine..."
+              : loading
               ? "Thinking..."
               : "Ask Rhino Assistant"}
           </button>
@@ -495,6 +1152,9 @@ const [
             type="button"
             onClick={
               resetConversation
+            }
+            disabled={
+              machineLoading
             }
           >
             Reset Conversation
@@ -515,6 +1175,12 @@ const [
           {error}
         </div>
       )}
+
+      {/*
+      ------------------------------------------------
+      RESULT
+      ------------------------------------------------
+      */}
 
       {result && (
         <section
@@ -616,27 +1282,45 @@ const [
             )}
           </div>
 
-<h2
-  style={{
-    marginTop: "30px",
-  }}
->
-  Conversation State
-</h2>
+          {/*
+          ------------------------------------------------
+          CONVERSATION STATE DEBUG
+          ------------------------------------------------
+          */}
 
-<pre
-  style={{
-    padding: "16px",
-    background: "#f3f4f6",
-    overflowX: "auto",
-  }}
->
-  {JSON.stringify(
-    conversationState,
-    null,
-    2
-  )}
-</pre>
+          <h2
+            style={{
+              marginTop:
+                "30px",
+            }}
+          >
+            Conversation State
+          </h2>
+
+          <pre
+            style={{
+              padding:
+                "16px",
+
+              background:
+                "#f3f4f6",
+
+              overflowX:
+                "auto",
+            }}
+          >
+            {JSON.stringify(
+              conversationState,
+              null,
+              2
+            )}
+          </pre>
+
+          {/*
+          ------------------------------------------------
+          RETRIEVAL DEBUG
+          ------------------------------------------------
+          */}
 
           <h2
             style={{
@@ -665,6 +1349,12 @@ const [
               2
             )}
           </pre>
+
+          {/*
+          ------------------------------------------------
+          API USAGE
+          ------------------------------------------------
+          */}
 
           <h2>
             API Usage
