@@ -85,6 +85,29 @@ export default function ResolutionGuidesPage() {
                 Open Resolution Guide →
               </div>
             </Link>
+
+            <Link
+  href="/dashboard/rhino-training/resolution-guides/inconsistent-cut-lengths-coasting"
+  className="guideCard"
+>
+  <div className="guideNumber">
+    Resolution Guide 03
+  </div>
+
+  <h2>
+    Inconsistent Cut Lengths Caused by Coasting
+  </h2>
+
+  <p>
+    Diagnose inconsistent part lengths and correct material coasting by
+    adjusting H-clamp pressure, poly-clutch resistance, and infeed roller
+    resistance.
+  </p>
+
+  <div className="guideLink">
+    Open Resolution Guide →
+  </div>
+</Link>v
           </div>
         </section>
       </TrainingLayout>
