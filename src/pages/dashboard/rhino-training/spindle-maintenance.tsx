@@ -1,29 +1,57 @@
 import TrainingLayout from "@/components/TrainingLayout";
 import RequireActiveAccess from "@/components/RequireActiveAccess";
+import TrainingPageHeader from "@/components/TrainingPageHeader";
+
+import {
+  useTrainingLanguage,
+} from "@/hooks/useTrainingLanguage";
 
 const videoUrl =
   "https://rhino-training-cdn.b-cdn.net/spindle-maintinance/video/spindle%20maintenance.mp4";
 
 export default function SpindleMaintenancePage() {
+  const {
+    language,
+    isSpanish,
+    changeLanguage,
+  } = useTrainingLanguage();
+
   return (
     <RequireActiveAccess>
       <TrainingLayout>
         <div className="pageWrap">
+          <TrainingPageHeader
+            breadcrumb="Rhino Training / All Rhino Machines"
+            language={language}
+            onLanguageChange={changeLanguage}
+          />
+
           <section className="heroPanel">
-            <p className="eyebrow">Rhino Training</p>
+            <p className="eyebrow">
+              Rhino Training
+            </p>
+
             <h1>Spindle Maintenance</h1>
+
             <p>
-              Proper spindle maintenance is extremely important for spindle life,
-              tool retention, and overall machine performance.
+              {isSpanish
+                ? "El mantenimiento adecuado del spindle es extremadamente importante para la vida útil del spindle, la retención de tools y el rendimiento general de la máquina."
+                : "Proper spindle maintenance is extremely important for spindle life, tool retention, and overall machine performance."}
             </p>
           </section>
 
           <section className="panel">
             <div className="panelHeader">
-              <h2>Spindle Cleaning Video</h2>
+              <h2>
+                {isSpanish
+                  ? "Video de limpieza del Spindle"
+                  : "Spindle Cleaning Video"}
+              </h2>
+
               <p>
-                Follow along with the walkthrough below for proper spindle
-                cleaning and maintenance procedures.
+                {isSpanish
+                  ? "Siga el video a continuación para realizar correctamente los procedimientos de limpieza y mantenimiento del spindle."
+                  : "Follow along with the walkthrough below for proper spindle cleaning and maintenance procedures."}
               </p>
             </div>
 
@@ -37,10 +65,16 @@ export default function SpindleMaintenancePage() {
           </section>
 
           <section className="callout warning">
-            <h3>Important</h3>
+            <h3>
+              {isSpanish
+                ? "Importante"
+                : "Important"}
+            </h3>
+
             <p>
-              Dirty spindle tapers and tool holders can cause poor tool seating,
-              vibration, premature wear, and spindle damage.
+              {isSpanish
+                ? "Los Spindle Tapers y Tool Holders sucios pueden causar un mal asentamiento de la tool, vibración, desgaste prematuro y daños al spindle."
+                : "Dirty spindle tapers and tool holders can cause poor tool seating, vibration, premature wear, and spindle damage."}
             </p>
           </section>
         </div>
