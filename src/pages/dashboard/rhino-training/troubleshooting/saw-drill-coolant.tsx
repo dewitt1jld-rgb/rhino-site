@@ -1,5 +1,10 @@
 import TrainingLayout from "@/components/TrainingLayout";
 import RequireActiveAccess from "@/components/RequireActiveAccess";
+import TrainingPageHeader from "@/components/TrainingPageHeader";
+
+import {
+  useTrainingLanguage,
+} from "@/hooks/useTrainingLanguage";
 
 const leftImage =
   "https://rhino-training-cdn.b-cdn.net/troubleshooting/saw-drill-coolant/images/saw-drill-coolant-01-left.png";
@@ -17,45 +22,71 @@ const toolLibraryImage =
   "https://rhino-training-cdn.b-cdn.net/troubleshooting/saw-drill-coolant/images/saw-drill-coolant-05-tool-library.png";
 
 export default function SawDrillCoolantPage() {
+  const {
+    language,
+    isSpanish,
+    changeLanguage,
+  } = useTrainingLanguage();
+
   return (
     <RequireActiveAccess>
       <TrainingLayout>
         <div className="pageWrap">
+          <TrainingPageHeader
+            breadcrumb="Rhino Training / Troubleshooting / Saw / Drill Coolant"
+            language={language}
+            onLanguageChange={changeLanguage}
+          />
+
           <section className="heroPanel">
-            <p className="eyebrow">Troubleshooting</p>
+            <p className="eyebrow">
+              Troubleshooting
+            </p>
 
             <h1>Saw / Drill Coolant</h1>
 
             <p>
-              Understanding and properly adjusting the UNIST coolant system for
-              the drills and saw.
+              {isSpanish
+                ? "Cómo entender y ajustar correctamente el sistema de coolant UNIST para los Drills y la Saw."
+                : "Understanding and properly adjusting the UNIST coolant system for the drills and saw."}
             </p>
           </section>
 
           <section className="panel center">
             <div className="imageGrid">
-              <img src={leftImage} alt="UNIST coolant system left side" />
-              <img src={rightImage} alt="UNIST coolant system right side" />
+              <img
+                src={leftImage}
+                alt="UNIST coolant system left side"
+              />
+
+              <img
+                src={rightImage}
+                alt="UNIST coolant system right side"
+              />
             </div>
 
             <p className="helperText">
-              This is the UNIST pump system that the Rhino uses to distribute
-              cutting fluid to the drills and saw.
+              {isSpanish
+                ? "Este es el sistema de pump UNIST que Rhino utiliza para distribuir cutting fluid a los Drills y la Saw."
+                : "This is the UNIST pump system that the Rhino uses to distribute cutting fluid to the drills and saw."}
             </p>
 
-            <h3 className="warningText">ONLY USE MULTIDRAW 73</h3>
+            <h3 className="warningText">
+              ONLY USE MULTIDRAW 73
+            </h3>
           </section>
 
           <section className="callout warning">
             <p>
-              I do not work for DeMichele Group and you can buy parts wherever
-              you want, but this is one thing I strongly recommend buying from
-              them.
+              {isSpanish
+                ? "No trabajo para DeMichele Group y puede comprar parts donde quiera, pero esta es una de las cosas que recomiendo fuertemente comprar directamente con ellos."
+                : "I do not work for DeMichele Group and you can buy parts wherever you want, but this is one thing I strongly recommend buying from them."}
             </p>
 
             <p>
-              This fluid evaporates cleanly and does not leave residue on the
-              machine or parts. Cheaper oils can damage the machine over time.
+              {isSpanish
+                ? "Este fluid se evapora limpiamente y no deja residuos en la máquina ni en las parts. Los oils más baratos pueden dañar la máquina con el tiempo."
+                : "This fluid evaporates cleanly and does not leave residue on the machine or parts. Cheaper oils can damage the machine over time."}
             </p>
           </section>
 
@@ -69,7 +100,11 @@ export default function SawDrillCoolantPage() {
               </div>
 
               <div className="legendBox">
-                <h3>Color Reference</h3>
+                <h3>
+                  {isSpanish
+                    ? "Referencia de colores"
+                    : "Color Reference"}
+                </h3>
 
                 <ul>
                   <li>
@@ -106,19 +141,28 @@ export default function SawDrillCoolantPage() {
               </div>
 
               <div className="textColumn">
-                <h2>Adjusting Saw Oil</h2>
+                <h2>
+                  {isSpanish
+                    ? "Ajustando Saw Oil"
+                    : "Adjusting Saw Oil"}
+                </h2>
 
                 <p>
-                  All drill oil settings are regulated in the software under
-                  the Tool Library.
+                  {isSpanish
+                    ? "Todas las configuraciones de Drill Oil se controlan dentro del software en Tool Library."
+                    : "All drill oil settings are regulated in the software under the Tool Library."}
                 </p>
 
                 <p>
-                  The saw oil is NOT regulated through the software.
+                  {isSpanish
+                    ? "El Saw Oil NO se controla a través del software."
+                    : "The saw oil is NOT regulated through the software."}
                 </p>
 
                 <p>
-                  To adjust the saw oil, go to:
+                  {isSpanish
+                    ? "Para ajustar el Saw Oil, vaya a:"
+                    : "To adjust the saw oil, go to:"}
                 </p>
 
                 <p className="highlight">
@@ -126,31 +170,65 @@ export default function SawDrillCoolantPage() {
                 </p>
 
                 <p>
-                  Fire the <strong>Oil Saw</strong> output and listen to how
-                  fast the piston is firing.
+                  {isSpanish ? (
+                    <>
+                      Active el output <strong>Oil Saw</strong> y escuche qué tan
+                      rápido está disparando el piston.
+                    </>
+                  ) : (
+                    <>
+                      Fire the <strong>Oil Saw</strong> output and listen to how
+                      fast the piston is firing.
+                    </>
+                  )}
                 </p>
 
                 <p>
-                  The saw oil should pulse about 1–2 times per second.
+                  {isSpanish ? (
+                    <>
+                      El Saw Oil debe hacer aproximadamente{" "}
+                      <strong>1–2 pulsos por segundo</strong>.
+                    </>
+                  ) : (
+                    <>
+                      The saw oil should pulse about 1–2 times per second.
+                    </>
+                  )}
                 </p>
 
                 <p>
-                  If it is too slow or too fast, adjust the dial circled in
-                  red.
+                  {isSpanish
+                    ? "Si está demasiado lento o demasiado rápido, ajuste el dial marcado en rojo."
+                    : "If it is too slow or too fast, adjust the dial circled in red."}
                 </p>
 
                 <div className="dangerBox">
-                  THE NUMBERS ON THE DIAL DO NOT MEAN ANYTHING.
-                  <br />
-                  Ignore the numbers completely and adjust based on the sound of
-                  the piston firing.
+                  {isSpanish ? (
+                    <>
+                      LOS NÚMEROS DEL DIAL NO SIGNIFICAN NADA.
+                      <br />
+                      Ignore completamente los números y haga el ajuste
+                      basándose en el sonido del piston al disparar.
+                    </>
+                  ) : (
+                    <>
+                      THE NUMBERS ON THE DIAL DO NOT MEAN ANYTHING.
+                      <br />
+                      Ignore the numbers completely and adjust based on the
+                      sound of the piston firing.
+                    </>
+                  )}
                 </div>
               </div>
             </div>
           </section>
 
           <section className="panel center">
-            <h2>Regulating Drill Oil</h2>
+            <h2>
+              {isSpanish
+                ? "Regulando Drill Oil"
+                : "Regulating Drill Oil"}
+            </h2>
 
             <img
               src={toolLibraryImage}
@@ -159,26 +237,67 @@ export default function SawDrillCoolantPage() {
 
             <div className="oilInfo">
               <p>
-                First navigate to the Databases tab and then open the Tool
-                Library screen.
+                {isSpanish ? (
+                  <>
+                    Primero vaya al tab <strong>Databases</strong> y después abra
+                    la pantalla <strong>Tool Library</strong>.
+                  </>
+                ) : (
+                  <>
+                    First navigate to the Databases tab and then open the Tool
+                    Library screen.
+                  </>
+                )}
               </p>
 
               <p>
-                Each tool can be set with a different oil parameter.
+                {isSpanish
+                  ? "Cada tool puede configurarse con un parámetro de oil diferente."
+                  : "Each tool can be set with a different oil parameter."}
               </p>
 
               <p>
-                Look at the column labeled <strong>OIL PPM</strong>.
+                {isSpanish ? (
+                  <>
+                    Busque la columna llamada <strong>OIL PPM</strong>.
+                  </>
+                ) : (
+                  <>
+                    Look at the column labeled <strong>OIL PPM</strong>.
+                  </>
+                )}
               </p>
 
               <p>
-                PPM stands for <strong>Pulses Per Minute</strong>.
+                {isSpanish ? (
+                  <>
+                    PPM significa <strong>Pulses Per Minute</strong>.
+                  </>
+                ) : (
+                  <>
+                    PPM stands for <strong>Pulses Per Minute</strong>.
+                  </>
+                )}
               </p>
 
               <div className="ppmBox">
-                <p>Drill bits are usually in the 10–20 PPM range.</p>
-                <p>End mills are usually in the 40–60 PPM range.</p>
-                <p>Countersinks are usually in the 20–40 PPM range.</p>
+                <p>
+                  {isSpanish
+                    ? "Los Drill Bits normalmente están en el rango de 10–20 PPM."
+                    : "Drill bits are usually in the 10–20 PPM range."}
+                </p>
+
+                <p>
+                  {isSpanish
+                    ? "Los End Mills normalmente están en el rango de 40–60 PPM."
+                    : "End mills are usually in the 40–60 PPM range."}
+                </p>
+
+                <p>
+                  {isSpanish
+                    ? "Los Countersinks normalmente están en el rango de 20–40 PPM."
+                    : "Countersinks are usually in the 20–40 PPM range."}
+                </p>
               </div>
             </div>
           </section>

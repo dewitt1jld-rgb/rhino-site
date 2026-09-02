@@ -1,5 +1,10 @@
 import TrainingLayout from "@/components/TrainingLayout";
 import RequireActiveAccess from "@/components/RequireActiveAccess";
+import TrainingPageHeader from "@/components/TrainingPageHeader";
+
+import {
+  useTrainingLanguage,
+} from "@/hooks/useTrainingLanguage";
 
 const img1 =
   "https://rhino-training-cdn.b-cdn.net/troubleshooting/loading-drill-bits/images/loading-tool-bits-01-colllet-left.png";
@@ -34,30 +39,48 @@ const videoUrl =
   "https://rhino-training-cdn.b-cdn.net/troubleshooting/loading-drill-bits/video/loading-drill-bit-01-video.mp4";
 
 export default function LoadingDrillBitsPage() {
+  const {
+    language,
+    isSpanish,
+    changeLanguage,
+  } = useTrainingLanguage();
+
   return (
     <RequireActiveAccess>
       <TrainingLayout>
         <div className="pageWrap">
-          <div className="breadcrumb">
-            Rhino Training / Troubleshooting / Loading Drill Bits
-          </div>
+          <TrainingPageHeader
+            breadcrumb="Rhino Training / Troubleshooting / Loading Drill Bits"
+            language={language}
+            onLanguageChange={changeLanguage}
+          />
 
           <section className="heroPanel">
-            <p className="eyebrow">Troubleshooting</p>
+            <p className="eyebrow">
+              Troubleshooting
+            </p>
+
             <h1>Loading Drill Bits</h1>
+
             <p>
-              While each machine may use different sized drill bits, collets,
-              and tool holders, the loading process is generally the same.
+              {isSpanish
+                ? "Aunque cada máquina puede utilizar diferentes tamaños de drill bits, collets y tool holders, el proceso para cargarlos generalmente es el mismo."
+                : "While each machine may use different sized drill bits, collets, and tool holders, the loading process is generally the same."}
             </p>
           </section>
 
           <section className="panel">
             <div className="panelHeader">
-              <h2>1. Get the Drill Bit, Collet, and Tool Holder</h2>
+              <h2>
+                {isSpanish
+                  ? "1. Consiga el Drill Bit, Collet y Tool Holder"
+                  : "1. Get the Drill Bit, Collet, and Tool Holder"}
+              </h2>
+
               <p>
-                Every time you load a tool, you need all three items. The Rhino
-                load tool screen will tell you exactly what tool and collet are
-                required.
+                {isSpanish
+                  ? "Cada vez que cargue un tool, necesita los tres elementos. La pantalla Load Tool de Rhino le indicará exactamente cuál tool y cuál collet necesita."
+                  : "Every time you load a tool, you need all three items. The Rhino load tool screen will tell you exactly what tool and collet are required."}
               </p>
             </div>
 
@@ -79,172 +102,271 @@ export default function LoadingDrillBitsPage() {
             </div>
 
             <p className="helperText">
-              The collets have the size printed on the top face. If they have
-              been used a lot, the print can wear off and become difficult to
-              see.
+              {isSpanish
+                ? "Los collets tienen el tamaño impreso en la cara superior. Si se han utilizado mucho, la impresión puede desgastarse y ser difícil de ver."
+                : "The collets have the size printed on the top face. If they have been used a lot, the print can wear off and become difficult to see."}
             </p>
           </section>
 
           <section className="panel center">
             <div className="panelHeader">
-              <h2>2. Load the Tool Holder Into the Stationary Base</h2>
+              <h2>
+                {isSpanish
+                  ? "2. Coloque el Tool Holder en la Stationary Base"
+                  : "2. Load the Tool Holder Into the Stationary Base"}
+              </h2>
+
               <p>
-                All machines come with a base that keeps the tool holder from
-                spinning. These may be installed on the toolbox or outfeed rail,
-                but they all do the same thing.
+                {isSpanish
+                  ? "Todas las máquinas vienen con una base que evita que el Tool Holder gire. Puede estar instalada en la toolbox o en el outfeed rail, pero todas hacen la misma función."
+                  : "All machines come with a base that keeps the tool holder from spinning. These may be installed on the toolbox or outfeed rail, but they all do the same thing."}
               </p>
             </div>
 
-            <img src={img4} alt="Tool holder loaded into stationary base" />
+            <img
+              src={img4}
+              alt="Tool holder loaded into stationary base"
+            />
           </section>
 
           <section className="panel">
             <div className="panelHeader">
-              <h2>3. Fit the Collet Into the Tool Holder Head</h2>
+              <h2>
+                {isSpanish
+                  ? "3. Coloque el Collet en el Tool Holder Head"
+                  : "3. Fit the Collet Into the Tool Holder Head"}
+              </h2>
             </div>
 
             <div className="imageGrid">
-              <img src={img5} alt="Tool holder head" />
-              <img src={img6} alt="Collet close up" />
+              <img
+                src={img5}
+                alt="Tool holder head"
+              />
+
+              <img
+                src={img6}
+                alt="Collet close up"
+              />
             </div>
 
             <p className="helperText">
-              Each tool holder head has a small half-moon shape carved inside
-              it. Snap the collet in at a slight angle away from the moon, then
-              snap it toward the moon shape.
+              {isSpanish
+                ? "Cada Tool Holder Head tiene una pequeña forma de media luna tallada en el interior. Inserte el collet en un ligero ángulo alejándolo de la media luna, y después presiónelo hacia la forma de media luna hasta que encaje."
+                : "Each tool holder head has a small half-moon shape carved inside it. Snap the collet in at a slight angle away from the moon, then snap it toward the moon shape."}
             </p>
 
             <p className="helperText">
-              After the collet is snapped in, start hand-threading it onto the
-              base of the tool holder. Do not tighten it more than a couple
-              turns yet because the drill bit still needs to load into the
-              collet.
+              {isSpanish
+                ? "Después de que el collet encaje, comience a enroscarlo a mano sobre la base del Tool Holder. No lo apriete más de un par de vueltas todavía porque el drill bit aún necesita entrar en el collet."
+                : "After the collet is snapped in, start hand-threading it onto the base of the tool holder. Do not tighten it more than a couple turns yet because the drill bit still needs to load into the collet."}
             </p>
           </section>
 
           <section className="panel">
             <div className="panelHeader">
-              <h2>4. Put the Drill Bit Into the Collet</h2>
+              <h2>
+                {isSpanish
+                  ? "4. Coloque el Drill Bit dentro del Collet"
+                  : "4. Put the Drill Bit Into the Collet"}
+              </h2>
             </div>
 
             <div className="splitLayout">
-              <img src={img7} alt="Tool holder set screw" />
+              <img
+                src={img7}
+                alt="Tool holder set screw"
+              />
 
               <div>
                 <p className="helperText">
-                  Each tool holder has a set screw in the base. These set screws
-                  are preset at a specific height and need to stay where they
-                  are.
+                  {isSpanish
+                    ? "Cada Tool Holder tiene un Set Screw en la base. Estos Set Screws están preajustados a una altura específica y deben permanecer donde están."
+                    : "Each tool holder has a set screw in the base. These set screws are preset at a specific height and need to stay where they are."}
                 </p>
 
                 <div className="callout danger">
-                  <h3>Do Not Mess With These Set Screws</h3>
+                  <h3>
+                    {isSpanish
+                      ? "No cambie estos Set Screws"
+                      : "Do Not Mess With These Set Screws"}
+                  </h3>
+
                   <p>
-                    Changing this height will throw off calibrations. Push the
-                    drill bit as low as it can go. Do not try to pull the bit up
-                    to make it longer.In the video below you will see that I take 
-                    and push the drill bit as low as it can go. There is no need to 
-                    measure anything and definitely DO NOT try to pull the drill bit 
-                    up to "make it longer". The machine knows the exact length of 
-                    every bit, If you "make it longer" the drill will still move to 
-                    the same position and still crash into the tongue of the curtain wall.
- <p></p>
-(trust me, I've done it.)
+                    {isSpanish
+                      ? "Cambiar esta altura alterará las calibrations. Empuje el drill bit hacia abajo hasta donde llegue. No intente levantar el bit para hacerlo más largo."
+                      : "Changing this height will throw off calibrations. Push the drill bit as low as it can go. Do not try to pull the bit up to make it longer."}
+                  </p>
+
+                  <p>
+                    {isSpanish
+                      ? 'En el video de abajo verá que empujo el drill bit completamente hacia abajo. No necesita medir nada y definitivamente NO debe intentar levantar el drill bit para "hacerlo más largo". La máquina conoce la longitud exacta de cada bit.'
+                      : 'In the video below you will see that I push the drill bit as low as it can go. There is no need to measure anything, and definitely DO NOT try to pull the drill bit up to "make it longer." The machine knows the exact length of every bit.'}
+                  </p>
+
+                  <p>
+                    {isSpanish
+                      ? 'Si usted "lo hace más largo", el drill seguirá moviéndose exactamente a la misma posición y todavía puede chocar contra el tongue del Curtain Wall.'
+                      : 'If you "make it longer," the drill will still move to the same position and can still crash into the tongue of the curtain wall.'}
+                  </p>
+
+                  <p>
+                    {isSpanish
+                      ? "(Confíe en mí, ya lo hice.)"
+                      : "(Trust me, I've done it.)"}
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="videoWrap">
-              <video src={videoUrl} controls />
+              <video
+                src={videoUrl}
+                controls
+              />
             </div>
           </section>
 
           <section className="callout warning">
-            <h3>Remove the Green Protective Coating</h3>
+            <h3>
+              {isSpanish
+                ? "Quite el recubrimiento protector verde"
+                : "Remove the Green Protective Coating"}
+            </h3>
+
             <p>
-              Drill bits often come with a green protective coating. Remove it
-              before loading the bit. It can prevent the drill bit from dropping
-              down and bottoming out on the depth set screw.
+              {isSpanish
+                ? "Los drill bits frecuentemente vienen con un recubrimiento protector verde. Quítelo antes de cargar el bit. Este recubrimiento puede impedir que el drill bit baje completamente hasta tocar el Depth Set Screw."
+                : "Drill bits often come with a green protective coating. Remove it before loading the bit. It can prevent the drill bit from dropping down and bottoming out on the depth set screw."}
             </p>
           </section>
 
           <section className="panel center">
-            <img className="smallImage" src={img8} alt="Do not load drill bit with protective coating" />
+            <img
+              className="smallImage"
+              src={img8}
+              alt="Do not load drill bit with protective coating"
+            />
           </section>
 
           <section className="panel center">
             <div className="panelHeader">
-              <h2>5. Tighten It More Than You Think</h2>
+              <h2>
+                {isSpanish
+                  ? "5. Apriételo más de lo que cree"
+                  : "5. Tighten It More Than You Think"}
+              </h2>
+
               <p>
-                Make sure the tool holder is tightened completely. End mills can
-                slip out of the collet if they are not tightened all the way.
+                {isSpanish
+                  ? "Asegúrese de que el Tool Holder quede completamente apretado. Los End Mills pueden salirse del collet si no se aprietan completamente."
+                  : "Make sure the tool holder is tightened completely. End mills can slip out of the collet if they are not tightened all the way."}
               </p>
             </div>
           </section>
 
           <section className="panel">
             <div className="panelHeader">
-              <h2>6. Loading It Into the Drill</h2>
+              <h2>
+                {isSpanish
+                  ? "6. Cómo cargarlo en el Drill"
+                  : "6. Loading It Into the Drill"}
+              </h2>
             </div>
 
             <div className="correctGrid">
               <div>
                 <div className="imageGrid overlapGrid">
-                  <img src={img9} alt="Incorrect drill bit loading example 1" />
-                  <img src={img10} alt="Incorrect drill bit loading example 2" />
+                  <img
+                    src={img9}
+                    alt="Incorrect drill bit loading example 1"
+                  />
+
+                  <img
+                    src={img10}
+                    alt="Incorrect drill bit loading example 2"
+                  />
                 </div>
-                <h3 className="badLabel">Incorrect</h3>
+
+                <h3 className="badLabel">
+                  {isSpanish
+                    ? "Incorrecto"
+                    : "Incorrect"}
+                </h3>
               </div>
 
               <div>
-                <img src={img11} alt="Correct drill bit loading orientation" />
-                <h3 className="goodLabel">Correct</h3>
+                <img
+                  src={img11}
+                  alt="Correct drill bit loading orientation"
+                />
+
+                <h3 className="goodLabel">
+                  {isSpanish
+                    ? "Correcto"
+                    : "Correct"}
+                </h3>
               </div>
             </div>
 
             <p className="helperText">
-              The tool holder will only load one way. The small hole needs to
-              face the same direction as the hole in the gold ring on the drill.
-              If the collet has a large circle, or two circles side by side, it
-              is upside down and needs to be rotated 180 degrees.
+              {isSpanish
+                ? "El Tool Holder solamente entra de una manera. El agujero pequeño debe apuntar en la misma dirección que el agujero del gold ring del drill. Si el collet muestra un círculo grande, o dos círculos uno al lado del otro, está al revés y debe girarse 180 grados."
+                : "The tool holder will only load one way. The small hole needs to face the same direction as the hole in the gold ring on the drill. If the collet has a large circle, or two circles side by side, it is upside down and needs to be rotated 180 degrees."}
             </p>
           </section>
 
           <section className="panel">
             <div className="imageGrid">
-              <img src={img12} alt="Allen wrench loading tool holder" />
-              <img src={img13} alt="Gold ring hole close up" />
+              <img
+                src={img12}
+                alt="Allen wrench loading tool holder"
+              />
+
+              <img
+                src={img13}
+                alt="Gold ring hole close up"
+              />
             </div>
 
             <p className="helperText">
-              When loading the tool holder into the drill, the 2.5mm or 3mm
-              Allen wrench needs to be removed from the drill first. Slide the
-              tool holder fully back into the drill, then the Allen wrench will
-              drop through the gold ring and into a small set screw.
+              {isSpanish
+                ? "Cuando cargue el Tool Holder en el drill, primero debe retirar la Allen wrench de 2.5mm o 3mm del drill. Deslice el Tool Holder completamente hacia atrás dentro del drill. Después, la Allen wrench podrá pasar a través del gold ring y entrar en un pequeño Set Screw."
+                : "When loading the tool holder into the drill, the 2.5mm or 3mm Allen wrench needs to be removed from the drill first. Slide the tool holder fully back into the drill, then the Allen wrench will drop through the gold ring and into a small set screw."}
             </p>
 
             <div className="callout warning">
-              <h3>Do Not Over-Tighten</h3>
+              <h3>
+                {isSpanish
+                  ? "No apriete demasiado"
+                  : "Do Not Over-Tighten"}
+              </h3>
+
               <p>
-                These do not need to be extremely tight. Use two fingers on the
-                handle. Once you feel the tool flex, that is tight enough.
+                {isSpanish
+                  ? "Estos no necesitan quedar extremadamente apretados. Use solamente dos dedos sobre el mango. Cuando sienta que el tool comienza a flexionarse, ya está suficientemente apretado."
+                  : "These do not need to be extremely tight. Use two fingers on the handle. Once you feel the tool flex, that is tight enough."}
               </p>
             </div>
           </section>
 
           <section className="panel center">
-            <img className="smallImage" src={img14} alt="Allen wrench" />
+            <img
+              className="smallImage"
+              src={img14}
+              alt="Allen wrench"
+            />
 
             <p className="helperText">
-              If the Allen wrench slips or does not seem to bite into the set
-              screw, check the end of the Allen wrench. If the edges are rounded
-              out, replace it.
+              {isSpanish
+                ? "Si la Allen wrench se resbala o parece que no entra correctamente en el Set Screw, revise la punta de la Allen wrench. Si las esquinas están redondeadas, reemplácela."
+                : "If the Allen wrench slips or does not seem to bite into the set screw, check the end of the Allen wrench. If the edges are rounded out, replace it."}
             </p>
 
             <p className="helperText">
-              900s and 1100s use a 2.5mm Allen. 950s, 1150s, 1350s, and most
-              other machines ending in 50 use a 3mm Allen.
+              {isSpanish
+                ? "Las máquinas 900 y 1100 utilizan una Allen de 2.5mm. Las 950, 1150, 1350 y la mayoría de las demás máquinas que terminan en 50 utilizan una Allen de 3mm."
+                : "900s and 1100s use a 2.5mm Allen. 950s, 1150s, 1350s, and most other machines ending in 50 use a 3mm Allen."}
             </p>
           </section>
         </div>
