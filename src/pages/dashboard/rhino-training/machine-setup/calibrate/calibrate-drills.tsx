@@ -1,28 +1,50 @@
 import RequireActiveAccess from "@/components/RequireActiveAccess";
 import TrainingLayout from "@/components/TrainingLayout";
 import TrainingImage from "@/components/TrainingImage";
+import TrainingPageHeader from "@/components/TrainingPageHeader";
+
+import {
+  useTrainingLanguage,
+} from "@/hooks/useTrainingLanguage";
 
 export default function CalibrateDrillsPage() {
+  const {
+    language,
+    isSpanish,
+    changeLanguage,
+  } = useTrainingLanguage();
+
   return (
     <RequireActiveAccess>
       <TrainingLayout>
-        <div className="breadcrumb">Rhino Training / Machine Setup / Calibrate</div>
+        <TrainingPageHeader
+          breadcrumb="Rhino Training / Machine Setup / Calibrate"
+          language={language}
+          onLanguageChange={changeLanguage}
+        />
 
         <section className="heroPanel">
           <h1>Calibrate Drills</h1>
+
           <p>
-            This page walks through how to properly calibrate drill positions.
-            Understanding the relationship between the top, front, bottom, and back
-            drills is key to getting accurate hole placement.
+            {isSpanish
+              ? "Esta página explica cómo calibrar correctamente las posiciones de los drills. Comprender la relación entre los top, front, bottom y back drills es clave para obtener una ubicación precisa de los agujeros."
+              : "This page walks through how to properly calibrate drill positions. Understanding the relationship between the top, front, bottom, and back drills is key to getting accurate hole placement."}
           </p>
         </section>
 
         <section className="panel">
           <div className="panelHeader">
-            <h2>Main Calibration Screen</h2>
+            <h2>
+              {isSpanish
+                ? "Pantalla principal de Calibration"
+                : "Main Calibration Screen"}
+            </h2>
+
             <p>
-              I like to view this page in three different sections. Each colored
-              section represents a different part of the calibration process.
+              {isSpanish
+                ? "Me gusta dividir esta página en tres secciones diferentes. Cada sección de color representa una parte diferente del proceso de calibration."
+                : "I like to view this page in three different sections. Each colored section represents a different part of the calibration process."}
             </p>
           </div>
 
@@ -34,40 +56,69 @@ export default function CalibrateDrillsPage() {
             />
 
             <p className="helperText">
-              Start by filling out the middle section, shown in blue. This data is
-              also used in the top section. Starting from the left side, enter the
-              stock length, part height, part depth, trim, cut length, and repeat.
+              {isSpanish
+                ? "Comience completando la sección central, mostrada en azul. Estos datos también se utilizan en la sección superior. Comenzando desde el lado izquierdo, ingrese stock length, part height, part depth, trim, cut length y repeat."
+                : "Start by filling out the middle section, shown in blue. This data is also used in the top section. Starting from the left side, enter the stock length, part height, part depth, trim, cut length, and repeat."}
             </p>
 
             <p className="helperText">
-              For cut length, 5&quot; typically works really well. I also usually leave
-              repeat at 1 because I want to make changes between each time I run
-              the test.
+              {isSpanish ? (
+                <>
+                  Para <strong>cut length</strong>, normalmente{" "}
+                  <strong>5&quot;</strong> funciona muy bien. También suelo dejar{" "}
+                  <strong>repeat</strong> en 1 porque quiero hacer cambios entre
+                  cada vez que ejecuto la prueba.
+                </>
+              ) : (
+                <>
+                  For cut length, 5&quot; typically works really well. I also
+                  usually leave repeat at 1 because I want to make changes
+                  between each time I run the test.
+                </>
+              )}
             </p>
           </div>
         </section>
 
         <section className="panel">
           <div className="panelHeader">
-            <h2>Fill Out the Drill Setup</h2>
+            <h2>
+              {isSpanish
+                ? "Complete la configuración de los Drills"
+                : "Fill Out the Drill Setup"}
+            </h2>
+
             <p>
-              Once the middle section is filled out, start on the top section. The
-              top section is what you want the part to do. The bottom section is
-              what the part actually did.
+              {isSpanish
+                ? "Una vez que haya completado la sección central, comience con la sección superior. La sección superior representa lo que usted quiere que haga la pieza. La sección inferior representa lo que la pieza realmente hizo."
+                : "Once the middle section is filled out, start on the top section. The top section is what you want the part to do. The bottom section is what the part actually did."}
             </p>
           </div>
 
           <div className="panelContent">
             <p className="helperText">
-              Start by selecting the drill bit you want to use on each drill. I
-              recommend using the D09-A because it makes measuring much easier in
-              the lower section.
+              {isSpanish
+                ? "Comience seleccionando el drill bit que desea utilizar en cada drill. Recomiendo utilizar el D09-A porque facilita mucho las mediciones en la sección inferior."
+                : "Start by selecting the drill bit you want to use on each drill. I recommend using the D09-A because it makes measuring much easier in the lower section."}
             </p>
 
             <p className="helperText">
-              After choosing the drill bits, set the X, Y, and Z for each drill.
-              On each surface, the drill should be 1&quot; away from the back fence or
-              X, 1&quot; away from the lead edge or Y, and 1&quot; up on the table or Z.
+              {isSpanish ? (
+                <>
+                  Después de seleccionar los drill bits, configure X, Y y Z para
+                  cada drill. En cada superficie, el drill debe estar a{" "}
+                  <strong>1&quot;</strong> de la back fence o X,{" "}
+                  <strong>1&quot;</strong> del lead edge o Y, y{" "}
+                  <strong>1&quot;</strong> hacia arriba de la table o Z.
+                </>
+              ) : (
+                <>
+                  After choosing the drill bits, set the X, Y, and Z for each
+                  drill. On each surface, the drill should be 1&quot; away from
+                  the back fence or X, 1&quot; away from the lead edge or Y, and
+                  1&quot; up on the table or Z.
+                </>
+              )}
             </p>
 
             <TrainingImage
@@ -106,46 +157,89 @@ export default function CalibrateDrillsPage() {
             </div>
 
             <p className="helperText">
-              This example uses a perfect 4.5&quot; x 2&quot; tube with no tongue, pocket,
-              or lips. A perfect tube makes calibration much easier because you do
-              not have to line the drills up to a specific surface.
+              {isSpanish ? (
+                <>
+                  Este ejemplo utiliza un tubo perfecto de{" "}
+                  <strong>4.5&quot; x 2&quot;</strong> sin tongue, pocket ni
+                  lips. Un tubo perfecto hace que la calibration sea mucho más
+                  fácil porque no tiene que alinear los drills con una
+                  superficie específica.
+                </>
+              ) : (
+                <>
+                  This example uses a perfect 4.5&quot; x 2&quot; tube with no
+                  tongue, pocket, or lips. A perfect tube makes calibration much
+                  easier because you do not have to line the drills up to a
+                  specific surface.
+                </>
+              )}
             </p>
           </div>
         </section>
 
         <section className="panel">
           <div className="panelHeader">
-            <h2>How the Values Work</h2>
+            <h2>
+              {isSpanish
+                ? "Cómo funcionan los valores"
+                : "How the Values Work"}
+            </h2>
+
             <p>
-              These values are based on the first surface each drill contacts on a
-              4.5&quot; x 2&quot; tube.
+              {isSpanish ? (
+                <>
+                  Estos valores se basan en la primera superficie que toca cada
+                  drill en un tubo de <strong>4.5&quot; x 2&quot;</strong>.
+                </>
+              ) : (
+                <>
+                  These values are based on the first surface each drill contacts
+                  on a 4.5&quot; x 2&quot; tube.
+                </>
+              )}
             </p>
           </div>
 
           <div className="panelContent">
             <p className="helperText">
-              The front X is 4.5&quot; because the tube itself is 4.5&quot;, and that is
-              the first surface the front drill hits. The top Z is 2&quot; because the
-              part height is 2&quot;, and that is the first surface the drill hits when
-              it comes down into the part.
+              {isSpanish ? (
+                <>
+                  El <strong>Front X</strong> es 4.5&quot; porque el tubo mide
+                  4.5&quot;, y esa es la primera superficie que toca el front
+                  drill. El <strong>Top Z</strong> es 2&quot; porque el part
+                  height es 2&quot;, y esa es la primera superficie que toca el
+                  drill cuando baja hacia la pieza.
+                </>
+              ) : (
+                <>
+                  The front X is 4.5&quot; because the tube itself is 4.5&quot;,
+                  and that is the first surface the front drill hits. The top Z
+                  is 2&quot; because the part height is 2&quot;, and that is the
+                  first surface the drill hits when it comes down into the part.
+                </>
+              )}
             </p>
 
             <p className="helperText">
-              The bottom Z is 0&quot; because when the bottom drill comes up from under
-              the machine, the first surface it hits is the bottom of the part,
-              which is sitting on the bottom of the table. If you have a back drill,
-              the concept is the same: the back X is 0 because that is the first
-              surface the drill hits.
+              {isSpanish
+                ? 'El Bottom Z es 0" porque cuando el bottom drill sube desde debajo de la máquina, la primera superficie que toca es la parte inferior de la pieza, que está apoyada sobre la parte inferior de la table. Si tiene un back drill, el concepto es el mismo: Back X es 0 porque esa es la primera superficie que toca el drill.'
+                : 'The bottom Z is 0" because when the bottom drill comes up from under the machine, the first surface it hits is the bottom of the part, which is sitting on the bottom of the table. If you have a back drill, the concept is the same: the back X is 0 because that is the first surface the drill hits.'}
             </p>
           </div>
         </section>
 
         <section className="panel">
           <div className="panelHeader">
-            <h2>Run the Test Cycle</h2>
+            <h2>
+              {isSpanish
+                ? "Ejecute el Test Cycle"
+                : "Run the Test Cycle"}
+            </h2>
+
             <p>
-              Once all the information is filled out, run the test and let the
-              machine create the drilled hole and dimple for measurement.
+              {isSpanish
+                ? "Una vez que haya completado toda la información, ejecute la prueba y permita que la máquina cree el drilled hole y el dimple que se utilizarán para las mediciones."
+                : "Once all the information is filled out, run the test and let the machine create the drilled hole and dimple for measurement."}
             </p>
           </div>
 
@@ -153,37 +247,80 @@ export default function CalibrateDrillsPage() {
             <div className="stepList">
               <div className="stepCard">
                 <div className="stepNumber">1</div>
+
                 <p>
-                  Press <strong>Start</strong> and let the machine run. If the tap
-                  function is turned on, the machine will slowly reach out and
-                  touch the part without the drill bit spinning.
+                  {isSpanish ? (
+                    <>
+                      Presione <strong>Start</strong> y deje que la máquina
+                      ejecute el ciclo. Si la función <strong>tap</strong> está
+                      activada, la máquina avanzará lentamente hasta tocar la
+                      pieza sin que el drill bit esté girando.
+                    </>
+                  ) : (
+                    <>
+                      Press <strong>Start</strong> and let the machine run. If
+                      the tap function is turned on, the machine will slowly
+                      reach out and touch the part without the drill bit
+                      spinning.
+                    </>
+                  )}
                 </p>
               </div>
 
               <div className="stepCard">
                 <div className="stepNumber">2</div>
+
                 <p>
-                  The machine will drill a through hole and create a dimple roughly
-                  1/2&quot; away from the hole. This is normal and helps you measure
-                  where the part is sitting.
+                  {isSpanish ? (
+                    <>
+                      La máquina perforará un through hole y creará un dimple
+                      aproximadamente a <strong>1/2&quot;</strong> del agujero.
+                      Esto es normal y le ayuda a medir dónde está posicionada la
+                      pieza.
+                    </>
+                  ) : (
+                    <>
+                      The machine will drill a through hole and create a dimple
+                      roughly 1/2&quot; away from the hole. This is normal and
+                      helps you measure where the part is sitting.
+                    </>
+                  )}
                 </p>
               </div>
 
               <div className="stepCard">
                 <div className="stepNumber">3</div>
+
                 <p>
-                  After each drill has calibrated, the part will move over to the
-                  saw. The machine will make a lead cut and then make the 5&quot; cut.
+                  {isSpanish ? (
+                    <>
+                      Después de que cada drill haya terminado su calibration, la
+                      pieza se moverá hacia la saw. La máquina realizará un lead
+                      cut y luego realizará el corte de{" "}
+                      <strong>5&quot;</strong>.
+                    </>
+                  ) : (
+                    <>
+                      After each drill has calibrated, the part will move over to
+                      the saw. The machine will make a lead cut and then make the
+                      5&quot; cut.
+                    </>
+                  )}
                 </p>
               </div>
             </div>
 
             <div className="callout warning">
-              <h3>Important</h3>
+              <h3>
+                {isSpanish
+                  ? "Importante"
+                  : "Important"}
+              </h3>
+
               <p>
-                If you are drilling on all four surfaces of the part, mark the top
-                of the part with a Sharpie before running the test. This helps you
-                identify the correct surface after the part is cut off.
+                {isSpanish
+                  ? "Si está perforando las cuatro superficies de la pieza, marque la parte superior con un Sharpie antes de ejecutar la prueba. Esto le ayudará a identificar la superficie correcta después de que la pieza haya sido cortada."
+                  : "If you are drilling on all four surfaces of the part, mark the top of the part with a Sharpie before running the test. This helps you identify the correct surface after the part is cut off."}
               </p>
             </div>
           </div>
@@ -191,10 +328,16 @@ export default function CalibrateDrillsPage() {
 
         <section className="panel">
           <div className="panelHeader">
-            <h2>Measure the Results</h2>
+            <h2>
+              {isSpanish
+                ? "Mida los resultados"
+                : "Measure the Results"}
+            </h2>
+
             <p>
-              Measure each required dimension carefully and enter the measured
-              values back into the lower section of the screen.
+              {isSpanish
+                ? "Mida cuidadosamente cada dimensión requerida e ingrese los valores medidos nuevamente en la sección inferior de la pantalla."
+                : "Measure each required dimension carefully and enter the measured values back into the lower section of the screen."}
             </p>
           </div>
 
@@ -205,58 +348,107 @@ export default function CalibrateDrillsPage() {
             />
 
             <p className="helperText">
-              Measure from the edge of the part to the edge of the hole, not the
-              center. It is difficult and inaccurate to guess where the center of
-              the circle is.
+              {isSpanish
+                ? "Mida desde el borde de la pieza hasta el borde del agujero, no hasta el centro. Es difícil e impreciso intentar calcular dónde se encuentra el centro del círculo."
+                : "Measure from the edge of the part to the edge of the hole, not the center. It is difficult and inaccurate to guess where the center of the circle is."}
             </p>
 
             <p className="helperText">
-              This is why the D09-A drill is helpful. It has a diameter of .201&quot;.
-              If you measure from the edge of the part to the edge of the hole, all
-              you have to do is add half of the drill bit diameter. In this case,
-              half of the drill bit diameter is roughly .1&quot;.
+              {isSpanish ? (
+                <>
+                  Por eso el drill <strong>D09-A</strong> es útil. Tiene un
+                  diámetro de <strong>.201&quot;</strong>. Si mide desde el borde
+                  de la pieza hasta el borde del agujero, solamente tiene que
+                  sumar la mitad del diámetro del drill bit. En este caso, la
+                  mitad del diámetro es aproximadamente{" "}
+                  <strong>.1&quot;</strong>.
+                </>
+              ) : (
+                <>
+                  This is why the D09-A drill is helpful. It has a diameter of
+                  .201&quot;. If you measure from the edge of the part to the
+                  edge of the hole, all you have to do is add half of the drill
+                  bit diameter. In this case, half of the drill bit diameter is
+                  roughly .1&quot;.
+                </>
+              )}
             </p>
           </div>
         </section>
 
         <section className="panel">
           <div className="panelHeader">
-            <h2>Adjust Each Drill Surface</h2>
+            <h2>
+              {isSpanish
+                ? "Ajuste cada Drill Surface"
+                : "Adjust Each Drill Surface"}
+            </h2>
+
             <p>
-              Start with one drill surface, enter the measured values, and then
-              repeat the same process for the remaining surfaces.
+              {isSpanish
+                ? "Comience con una drill surface, ingrese los valores medidos y luego repita el mismo proceso para las superficies restantes."
+                : "Start with one drill surface, enter the measured values, and then repeat the same process for the remaining surfaces."}
             </p>
           </div>
 
           <div className="panelContent">
             <p className="helperText">
-              For the top drill, the Z is automatically calibrated when the machine
-              taps the part. You only need to measure the X and Y. Measure from the
-              back of the part to the edge of the hole for X, add .1&quot;, and enter
-              that value into the lower section of the screen.
+              {isSpanish ? (
+                <>
+                  Para el top drill, Z se calibra automáticamente cuando la
+                  máquina hace tap sobre la pieza. Solamente necesita medir X e
+                  Y. Mida desde la parte posterior de la pieza hasta el borde del
+                  agujero para X, agregue <strong>.1&quot;</strong> e ingrese ese
+                  valor en la sección inferior de la pantalla.
+                </>
+              ) : (
+                <>
+                  For the top drill, the Z is automatically calibrated when the
+                  machine taps the part. You only need to measure the X and Y.
+                  Measure from the back of the part to the edge of the hole for
+                  X, add .1&quot;, and enter that value into the lower section of
+                  the screen.
+                </>
+              )}
             </p>
 
             <p className="helperText">
-              Then measure the Y from the lead edge of the part to the edge of the
-              hole, add .1&quot;, and enter that value as well. Please use a calculator;
-              it makes this much easier.
+              {isSpanish ? (
+                <>
+                  Luego mida Y desde el lead edge de la pieza hasta el borde del
+                  agujero, agregue <strong>.1&quot;</strong> e ingrese también
+                  ese valor. Utilice una calculadora; hace que este proceso sea
+                  mucho más fácil.
+                </>
+              ) : (
+                <>
+                  Then measure the Y from the lead edge of the part to the edge
+                  of the hole, add .1&quot;, and enter that value as well. Please
+                  use a calculator; it makes this much easier.
+                </>
+              )}
             </p>
 
             <p className="helperText">
-              Repeat these same steps for the remaining surfaces. For the top and
-              bottom drills, Z is automatically calibrated and you only measure X
-              and Y. For the front and back drills, X is automatically calibrated,
-              so you only measure Y and Z.
+              {isSpanish
+                ? "Repita estos mismos pasos para las superficies restantes. Para los top y bottom drills, Z se calibra automáticamente y solamente necesita medir X e Y. Para los front y back drills, X se calibra automáticamente, por lo que solamente necesita medir Y y Z."
+                : "Repeat these same steps for the remaining surfaces. For the top and bottom drills, Z is automatically calibrated and you only measure X and Y. For the front and back drills, X is automatically calibrated, so you only measure Y and Z."}
             </p>
           </div>
         </section>
 
         <section className="panel completionPanel">
           <div className="completionBox">
-            <h3>Calibration Complete</h3>
+            <h3>
+              {isSpanish
+                ? "Calibration completada"
+                : "Calibration Complete"}
+            </h3>
+
             <p>
-              Repeat the process for each drill surface. Adjust values as needed
-              until all hole locations are consistent and accurate.
+              {isSpanish
+                ? "Repita el proceso para cada drill surface. Ajuste los valores según sea necesario hasta que todas las ubicaciones de los agujeros sean consistentes y precisas."
+                : "Repeat the process for each drill surface. Adjust values as needed until all hole locations are consistent and accurate."}
             </p>
           </div>
         </section>
