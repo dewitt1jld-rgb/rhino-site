@@ -1,109 +1,27 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
 import RequireActiveAccess from "@/components/RequireActiveAccess";
 import TrainingLayout from "@/components/TrainingLayout";
 import TrainingImage from "@/components/TrainingImage";
+import TrainingPageHeader from "@/components/TrainingPageHeader";
 
-type Language =
-  | "en"
-  | "es";
+import {
+  useTrainingLanguage,
+} from "@/hooks/useTrainingLanguage";
 
 export default function PartsLibraryPage() {
-  const [
+  const {
     language,
-    setLanguage,
-  ] =
-    useState<Language>(
-      "en"
-    );
-
-  useEffect(
-    () => {
-      const savedLanguage =
-        localStorage.getItem(
-          "rhino-training-language"
-        );
-
-      if (
-        savedLanguage ===
-          "es" ||
-        savedLanguage ===
-          "en"
-      ) {
-        setLanguage(
-          savedLanguage
-        );
-      }
-    },
-    []
-  );
-
-  function changeLanguage(
-    nextLanguage:
-      Language
-  ) {
-    setLanguage(
-      nextLanguage
-    );
-
-    localStorage.setItem(
-      "rhino-training-language",
-      nextLanguage
-    );
-  }
-
-  const isSpanish =
-    language ===
-    "es";
+    isSpanish,
+    changeLanguage,
+  } = useTrainingLanguage();
 
   return (
     <RequireActiveAccess>
       <TrainingLayout>
-
-        <div className="topRow">
-          <div className="breadcrumb">
-            Rhino Training / Machine Setup / Databases
-          </div>
-
-          <div className="languageToggle">
-            <button
-              type="button"
-              onClick={() =>
-                changeLanguage(
-                  "en"
-                )
-              }
-              className={
-                language ===
-                "en"
-                  ? "active"
-                  : ""
-              }
-            >
-              English
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                changeLanguage(
-                  "es"
-                )
-              }
-              className={
-                language ===
-                "es"
-                  ? "active"
-                  : ""
-              }
-            >
-              Español
-            </button>
-          </div>
-        </div>
+        <TrainingPageHeader
+          breadcrumb="Rhino Training / Machine Setup / Databases"
+          language={language}
+          onLanguageChange={changeLanguage}
+        />
 
         {/* HERO */}
         <section className="heroPanel">
@@ -204,87 +122,25 @@ export default function PartsLibraryPage() {
           </p>
 
           <p>
-            {isSpanish
-              ? (
-                  <>
-                    En máquinas para puertas, asegúrese de que la opción{" "}
-                    <strong>
-                      "Use Eye to Measure"
-                    </strong>{" "}
-                    esté activada para todos los stock lengths. El photo eye
-                    mide la longitud del stock, mientras que el measuring
-                    cylinder se utiliza para las puertas.
-                  </>
-                )
-              : (
-                  <>
-                    On door machines, make sure the{" "}
-                    <strong>
-                      "Use Eye to Measure"
-                    </strong>{" "}
-                    setting is enabled for all stock lengths. The photo eye
-                    measures stock length, while the measuring cylinder is used
-                    for doors.
-                  </>
-                )}
+            {isSpanish ? (
+              <>
+                En máquinas para puertas, asegúrese de que la opción{" "}
+                <strong>"Use Eye to Measure"</strong>{" "}
+                esté activada para todos los stock lengths. El photo eye mide la
+                longitud del stock, mientras que el measuring cylinder se utiliza
+                para las puertas.
+              </>
+            ) : (
+              <>
+                On door machines, make sure the{" "}
+                <strong>"Use Eye to Measure"</strong>{" "}
+                setting is enabled for all stock lengths. The photo eye measures
+                stock length, while the measuring cylinder is used for doors.
+              </>
+            )}
           </p>
         </div>
-
       </TrainingLayout>
-
-      <style jsx>{`
-        .topRow {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-          margin-bottom: 18px;
-        }
-
-        .breadcrumb {
-          color: rgba(255, 255, 255, 0.62);
-          font-size: 13px;
-        }
-
-        .languageToggle {
-          display: inline-flex;
-          align-items: center;
-          padding: 4px;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.14);
-        }
-
-        .languageToggle button {
-          border: 0;
-          background: transparent;
-          color: rgba(255, 255, 255, 0.72);
-          padding: 8px 14px;
-          border-radius: 999px;
-          font-size: 13px;
-          font-weight: 800;
-          cursor: pointer;
-          transition:
-            background 150ms ease,
-            color 150ms ease;
-        }
-
-        .languageToggle button.active {
-          background: #ffffff;
-          color: #111827;
-        }
-
-        .languageToggle button:hover:not(.active) {
-          color: #ffffff;
-        }
-
-        @media (max-width: 700px) {
-          .topRow {
-            align-items: flex-start;
-            flex-direction: column;
-          }
-        }
-      `}</style>
     </RequireActiveAccess>
   );
 }
