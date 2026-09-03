@@ -9,7 +9,7 @@ const supabaseAdmin = createSupabaseClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-type CheckoutPlan = "annual" | "lifetime" | "support";
+type CheckoutPlan = "lifetime";
 
 export default async function handler(
   req: NextApiRequest,
@@ -56,24 +56,12 @@ export default async function handler(
       plan?: CheckoutPlan;
     };
 
-    if (
-      plan !== "annual" &&
-      plan !== "lifetime" &&
-      plan !== "support"
-    ) {
+    if (plan !== "lifetime") {
       return res.status(400).json({
-        error: "Please select a valid purchase plan.",
+        error:
+          "Lifetime Access is the only purchase option currently available.",
       });
     }
-
-    const isSubscription =
-      plan === "annual" || plan === "support";
-
-    const platformAccess =
-      plan === "annual" || plan === "lifetime";
-
-    const supportIncluded =
-      plan === "annual" || plan === "support";
 
     /*
     --------------------------------------------------
@@ -176,49 +164,19 @@ export default async function handler(
       });
     }
 
+    /*
+    --------------------------------------------------
+    PREVENT DUPLICATE PLATFORM PURCHASES
+    --------------------------------------------------
+    */
+
     const alreadyHasPlatform =
       company?.platform_access === true;
 
-    const alreadyHasSupport =
-      company?.support_included === true;
-
-    /*
-    --------------------------------------------------
-    PREVENT DUPLICATE / CONFLICTING PLANS
-    --------------------------------------------------
-    */
-
-    if (plan === "support" && alreadyHasSupport) {
-      return res.status(409).json({
-        error:
-          "Your company already has active Rhino Wrangler support.",
-      });
-    }
-
-    if (plan === "lifetime" && alreadyHasPlatform) {
+    if (alreadyHasPlatform) {
       return res.status(409).json({
         error:
           "Your company already has training platform access.",
-      });
-    }
-
-    /*
-      Annual is intended as the complete
-      Platform + Support package.
-
-      If the company already owns either
-      entitlement, handle the conversion
-      manually so we don't create duplicate
-      subscriptions.
-    */
-
-    if (
-      plan === "annual" &&
-      (alreadyHasPlatform || alreadyHasSupport)
-    ) {
-      return res.status(409).json({
-        error:
-          "Your company already has an existing Rhino Wrangler plan. Please contact support to switch to the Annual Membership.",
       });
     }
 
@@ -228,31 +186,17 @@ export default async function handler(
     --------------------------------------------------
     */
 
-    let priceId: string | undefined;
-
-    if (plan === "annual") {
-      priceId =
-        process.env.STRIPE_ANNUAL_PRICE_ID;
-    }
-
-    if (plan === "lifetime") {
-      priceId =
-        process.env.STRIPE_LIFETIME_PRICE_ID;
-    }
-
-    if (plan === "support") {
-      priceId =
-        process.env.STRIPE_SUPPORT_PRICE_ID;
-    }
+    const priceId =
+      process.env.STRIPE_LIFETIME_PRICE_ID;
 
     if (!priceId) {
       console.error(
-        `Missing Stripe price ID for ${plan}.`
+        "Missing STRIPE_LIFETIME_PRICE_ID."
       );
 
       return res.status(500).json({
         error:
-          "This purchase option is not configured correctly. Please contact support.",
+          "Lifetime Access is not configured correctly. Please contact us.",
       });
     }
 
@@ -287,13 +231,11 @@ export default async function handler(
       company_name:
         user.user_metadata?.company_name || "",
 
-      plan,
+      plan: "lifetime",
 
-      platform_access:
-        platformAccess ? "true" : "false",
+      platform_access: "true",
 
-      support_included:
-        supportIncluded ? "true" : "false",
+      support_included: "false",
     };
 
     /*
@@ -309,7 +251,7 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    CREATE CHECKOUT
+    CREATE LIFETIME CHECKOUT
     --------------------------------------------------
     */
 
@@ -317,16 +259,11 @@ export default async function handler(
       await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
 
-        mode: isSubscription
-          ? "subscription"
-          : "payment",
+        mode: "payment",
 
         /*
-          Reuse the existing Stripe Customer
-          when possible.
-
-          This is important when a Lifetime
-          customer later purchases Support.
+        Reuse the existing Stripe Customer
+        when possible.
         */
 
         ...(existingCustomerId
@@ -337,12 +274,8 @@ export default async function handler(
               customer_email:
                 user.email || undefined,
 
-              ...(!isSubscription
-                ? {
-                    customer_creation:
-                      "always" as const,
-                  }
-                : {}),
+              customer_creation:
+                "always" as const,
             }),
 
         allow_promotion_codes: true,
@@ -356,35 +289,15 @@ export default async function handler(
 
         metadata,
 
-        /*
-        --------------------------------------------------
-        RECURRING PLANS
-        --------------------------------------------------
-        */
+        payment_intent_data: {
+          receipt_email:
+            user.email || undefined,
 
-        ...(isSubscription
-          ? {
-              subscription_data: {
-                metadata,
-              },
-            }
-          : {
-              /*
-              --------------------------------------------------
-              LIFETIME PAYMENT
-              --------------------------------------------------
-              */
-
-              payment_intent_data: {
-                receipt_email:
-                  user.email || undefined,
-
-                metadata,
-              },
-            }),
+          metadata,
+        },
 
         success_url:
-          `${baseUrl}/welcome?plan=${plan}`,
+          `${baseUrl}/welcome?plan=lifetime`,
 
         cancel_url:
           `${baseUrl}/pricing?canceled=true`,

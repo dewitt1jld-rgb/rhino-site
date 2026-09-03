@@ -51,16 +51,8 @@ export default function AccountInactivePage() {
   /*
   --------------------------------------------------
   NORMALIZE ACCESS VALUES
-
-  check-access may return some values at the
-  top level and others inside company.
   --------------------------------------------------
   */
-
-  const planType =
-    access?.company?.planType ??
-    access?.planType ??
-    null;
 
   const platformAccess =
     access?.company?.platformAccess ??
@@ -75,11 +67,6 @@ export default function AccountInactivePage() {
   const paymentStatus =
     access?.company?.paymentStatus ??
     access?.paymentStatus ??
-    null;
-
-  const paymentFailedAt =
-    access?.company?.paymentFailedAt ??
-    access?.paymentFailedAt ??
     null;
 
   const paymentGraceEnd =
@@ -166,10 +153,6 @@ export default function AccountInactivePage() {
         /*
         --------------------------------------------------
         ACTIVE ACCESS
-
-        payment_grace is still allowed access,
-        so it should also send the customer
-        back to the dashboard.
         --------------------------------------------------
         */
 
@@ -346,79 +329,6 @@ export default function AccountInactivePage() {
 
   /*
   --------------------------------------------------
-  UPGRADE SUPPORT ONLY
-  --------------------------------------------------
-  */
-
-  async function handleSupportUpgrade() {
-    try {
-      setLoading(true);
-
-      const {
-        data: { session },
-      } =
-        await supabase.auth.getSession();
-
-      if (!session) {
-        alert(
-          "Please log in first."
-        );
-
-        setLoading(false);
-        return;
-      }
-
-      const confirmed =
-        window.confirm(
-          "Upgrade to Support + Website for $600 every 3 months? Your existing Support Only subscription will be upgraded rather than creating a second subscription."
-        );
-
-      if (!confirmed) {
-        setLoading(false);
-        return;
-      }
-
-      const response =
-        await fetch(
-          "/api/upgrade-support-plan",
-          {
-            method: "POST",
-
-            headers: {
-              Authorization:
-                `Bearer ${session.access_token}`,
-            },
-          }
-        );
-
-      const data =
-        await response.json();
-
-      if (!response.ok) {
-        alert(
-          data.error ||
-            "Unable to upgrade your plan."
-        );
-
-        setLoading(false);
-        return;
-      }
-
-      window.location.href =
-        "/dashboard";
-    } catch (error) {
-      console.error(error);
-
-      alert(
-        "Something went wrong while upgrading your plan."
-      );
-
-      setLoading(false);
-    }
-  }
-
-  /*
-  --------------------------------------------------
   FORMAT GRACE DATE
   --------------------------------------------------
   */
@@ -470,7 +380,7 @@ export default function AccountInactivePage() {
         : isPaymentGrace
           ? "Payment Grace Period"
           : isSupportOnly
-            ? "Support Plan Active"
+            ? "Legacy Support Plan Active"
             : "Access Required";
 
   const pageTitle =
@@ -492,7 +402,7 @@ export default function AccountInactivePage() {
         : isPaymentGrace
           ? "Your latest subscription payment was unsuccessful."
           : isSupportOnly
-            ? "Your Rhino Wrangler Support Only plan is currently active."
+            ? "Your existing Rhino Wrangler Support Only plan is currently active."
             : "Your Rhino Wrangler training access is currently inactive.";
 
   const bodyText =
@@ -505,10 +415,10 @@ export default function AccountInactivePage() {
             ? `Your account is still active during the payment grace period. Please update your payment method and resolve the outstanding payment before ${formattedGraceEnd} to avoid interruption of your training access.`
             : "Your account is still active during the payment grace period. Please update your payment method and resolve the outstanding payment to avoid interruption of your training access."
           : isSupportOnly
-            ? "Your current plan includes specialized Rhino Wrangler support, but it does not include access to the training platform. If you would like access to the website, you can upgrade your plan at any time."
+            ? "Your existing support plan does not include access to the Rhino Wrangler training platform. Lifetime Training Access is now sold separately as a one-time purchase."
             : hasStripeCustomer
-              ? "Your training access is currently inactive. Use the billing portal below to review your subscription or billing information."
-              : "Your account has been created, but training access has not been purchased yet. Complete your initial purchase to activate your account.";
+              ? "Your training access is currently inactive. Use the billing portal below to review your existing billing information."
+              : "Your account has been created, but training access has not been purchased yet. Purchase Lifetime Access to activate your account.";
 
   return (
     <main className="page">
@@ -566,13 +476,13 @@ export default function AccountInactivePage() {
               </strong>
 
               <span>
-                Your subscription is still associated with your account,
-                but your most recent payment was not completed.
+                Your existing subscription is still associated with your
+                account, but the most recent payment was not completed.
               </span>
 
               <span>
                 Update your payment method and pay the outstanding invoice.
-                Once Stripe confirms the payment, your Rhino Wrangler training
+                Once Stripe confirms the payment, any applicable Rhino Wrangler
                 access will be restored automatically.
               </span>
             </div>
@@ -611,7 +521,7 @@ export default function AccountInactivePage() {
 
         {/*
         --------------------------------------------------
-        SUPPORT ONLY NOTICE
+        LEGACY SUPPORT ONLY NOTICE
         --------------------------------------------------
         */}
 
@@ -626,21 +536,21 @@ export default function AccountInactivePage() {
               </strong>
 
               <span>
-                Upgrade to the
+                New training-platform purchases
+                are available through
                 <strong>
-                  {" "}Support + Website{" "}
+                  {" "}Lifetime Access{" "}
                 </strong>
-                plan to keep your specialized
-                support and add full access to
-                The Rhino Wrangler training
-                platform.
+                only.
               </span>
 
               <span>
-                Your existing Support Only
-                subscription will be upgraded
-                rather than creating a second
-                recurring subscription.
+                Purchasing Lifetime Access will
+                give your company permanent access
+                to the Rhino Wrangler training
+                platform. Your existing support
+                plan can continue to be managed
+                separately.
               </span>
             </div>
           )}
@@ -664,8 +574,14 @@ export default function AccountInactivePage() {
 
               <span>
                 Use the billing portal to review
-                your payment method or resolve
-                your subscription status.
+                your existing billing information.
+              </span>
+
+              <span>
+                If your company does not currently
+                have training-platform access,
+                Lifetime Access can be purchased
+                separately.
               </span>
             </div>
           )}
@@ -690,8 +606,9 @@ export default function AccountInactivePage() {
               <span>
                 Your account has been created,
                 but training access has not been
-                purchased yet. Choose a plan to
-                activate training access.
+                purchased yet. Purchase Lifetime
+                Access to activate the training
+                platform.
               </span>
             </div>
           )}
@@ -763,7 +680,7 @@ export default function AccountInactivePage() {
 
           {/*
           --------------------------------------------------
-          SUPPORT ONLY
+          LEGACY SUPPORT ONLY
           --------------------------------------------------
           */}
 
@@ -773,18 +690,12 @@ export default function AccountInactivePage() {
             !isPaymentPastDue &&
             !isPaymentGrace && (
               <>
-                <button
-                  type="button"
-                  onClick={
-                    handleSupportUpgrade
-                  }
-                  disabled={loading}
-                  className="primaryButton upgradeButton"
+                <a
+                  href="/pricing"
+                  className="primaryButton lifetimeButton"
                 >
-                  {loading
-                    ? "Upgrading Plan..."
-                    : "Upgrade to Support + Website"}
-                </button>
+                  Purchase Lifetime Access
+                </a>
 
                 <button
                   type="button"
@@ -796,7 +707,7 @@ export default function AccountInactivePage() {
                 >
                   {loading
                     ? "Opening Billing Portal..."
-                    : "Manage Support Plan"}
+                    : "Manage Existing Support Plan"}
                 </button>
               </>
             )}
@@ -813,18 +724,27 @@ export default function AccountInactivePage() {
             !isPaymentPastDue &&
             !isPaymentGrace &&
             hasStripeCustomer && (
-              <button
-                type="button"
-                onClick={
-                  handleRestoreAccess
-                }
-                disabled={loading}
-                className="primaryButton"
-              >
-                {loading
-                  ? "Opening Billing Portal..."
-                  : "Restore Access"}
-              </button>
+              <>
+                <a
+                  href="/pricing"
+                  className="primaryButton lifetimeButton"
+                >
+                  Purchase Lifetime Access
+                </a>
+
+                <button
+                  type="button"
+                  onClick={
+                    handleRestoreAccess
+                  }
+                  disabled={loading}
+                  className="billingButton"
+                >
+                  {loading
+                    ? "Opening Billing Portal..."
+                    : "Manage Existing Billing"}
+                </button>
+              </>
             )}
 
           {/*
@@ -841,9 +761,9 @@ export default function AccountInactivePage() {
             !hasStripeCustomer && (
               <a
                 href="/pricing"
-                className="primaryButton"
+                className="primaryButton lifetimeButton"
               >
-                View Plans
+                Purchase Lifetime Access
               </a>
             )}
 
@@ -872,7 +792,7 @@ export default function AccountInactivePage() {
             href="mailto:landon@therhinowrangler.com"
             className="secondaryButton"
           >
-            Contact Support
+            Contact Us
           </a>
         </div>
       </section>
@@ -1191,7 +1111,7 @@ export default function AccountInactivePage() {
             );
         }
 
-        .upgradeButton {
+        .lifetimeButton {
           background: #f59e0b;
 
           color: #111827;
