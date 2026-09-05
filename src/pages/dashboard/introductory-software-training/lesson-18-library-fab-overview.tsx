@@ -28,7 +28,7 @@ const img = {
   main: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_18/library%20fab%20main%20screen.png",
   cad: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_18/door_prep_butt_hinge.png",
   onDoor:
-    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_18/98_99_rim_panic.png",
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_18/98_99_rim_panic_2.png",
 };
 
 export default function LessonEighteenLibraryFabOverviewPage() {

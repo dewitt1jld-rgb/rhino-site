@@ -66,20 +66,6 @@ export default function LessonEighteenFormulasReferencesPage() {
         doors.
       </div>
 
-      <div className="lessonText">
-        <p>
-          In the previous step, we built a butt hinge preparation and learned
-          how the individual operations can be positioned around an imaginary
-          reference point.
-        </p>
-
-        <p>
-          We do not need to go through that concept again. Instead, we are
-          going to finish reviewing the remaining settings that control how a
-          saved Library Fab behaves when it is used later.
-        </p>
-      </div>
-
       <div className="calloutBox">
         <strong>
           The fabrication is already built. Now we are telling the software how
@@ -93,7 +79,7 @@ export default function LessonEighteenFormulasReferencesPage() {
 
       <div className="lessonText">
         <p>
-          Near the top of the Fab Rules Library screen are several settings that
+          Near the bottom of the Fab Rules Library screen are several settings that
           are easy to overlook.
         </p>
 
@@ -157,8 +143,7 @@ export default function LessonEighteenFormulasReferencesPage() {
             </strong>
 
             <p>
-              Categorizes the preparation so it can be filtered and found more
-              easily later.
+              Categorizes the preparation so it knows which side of the door to apply to. 
             </p>
           </div>
         </div>
@@ -183,7 +168,10 @@ export default function LessonEighteenFormulasReferencesPage() {
       <div className="lessonText">
         <p>
           <strong>Use Y Loc Ref.</strong> should be checked when the Library Fab
-          needs to be applied at different Y locations.
+          needs to be applied at different Y locations. When looking at a door, 
+          the y location will move the prep closer or further away from the top of the door. 
+          This is beacuse the door will lay down and run through the machine flat making the 
+          top and bottom of the door the new Y direction. 
         </p>
 
         <p>
@@ -193,7 +181,7 @@ export default function LessonEighteenFormulasReferencesPage() {
         <p>
           We built the hinge preparation once around its reference point, but
           the actual hinge may need to be placed at several different locations
-          on the finished door.
+          from the finished door or bottom of door. 
         </p>
       </div>
 
@@ -271,8 +259,8 @@ export default function LessonEighteenFormulasReferencesPage() {
 
         <p>
           This becomes useful when a preparation may need to be placed at
-          different horizontal locations depending on the part, door style, or
-          hardware configuration.
+          different backset locations depending on the part, door style, or
+          hardware configuration. (the X loc is rarely used. its a pretty safe bet to leave this unchecked.)
         </p>
       </div>
 
@@ -283,12 +271,12 @@ export default function LessonEighteenFormulasReferencesPage() {
           </p>
 
           <strong>
-            Allow the Y reference to change
+            Allow the Y values to change
           </strong>
 
           <p>
             Use this when the same preparation needs to be applied at different
-            Y locations.
+            heights.
           </p>
 
           <span>
@@ -302,16 +290,15 @@ export default function LessonEighteenFormulasReferencesPage() {
           </p>
 
           <strong>
-            Allow the X reference to change
+            Allow the backset to change
           </strong>
 
           <p>
-            Use this when the same preparation needs to be applied at different
-            X locations.
+            Use this when the same preparation needs to be applied at diffrent backsets from the edge of the door. 
           </p>
 
           <span>
-            Example: hardware that changes position between door styles
+            Example: Nightlatch or lock cylindar (I prefer making a prep for each backset type rather then having to remember to change the X value.)
           </span>
         </div>
       </div>
@@ -339,62 +326,14 @@ export default function LessonEighteenFormulasReferencesPage() {
         </p>
 
         <p>
-          When the preparation belongs to a specific hardware manufacturer,
-          select the vendor associated with that hardware.
+          When the prep belongs to a specific hardware manufacturer,
+          type in the vendor associated with that hardware.
         </p>
 
         <p>
-          For example, if you create a preparation specifically for a piece of
-          hardware from one manufacturer, assigning that manufacturer as the
-          vendor makes the prep much easier to find later.
+         This option is not a drop down menu. you can type whatever you want into this section. 
+         I personally like to use this tab as a verified or testing box. that way I know which fabs have been tested and approved and which ones havn&apos;t..
         </p>
-      </div>
-
-      <div className="organizationFlow">
-        <div>
-          <span>1</span>
-
-          <strong>
-            Identify the Hardware
-          </strong>
-
-          <p>
-            Determine which manufacturer or vendor the hardware preparation
-            belongs to.
-          </p>
-        </div>
-
-        <div className="flowArrow">
-          →
-        </div>
-
-        <div>
-          <span>2</span>
-
-          <strong>
-            Select the Vendor
-          </strong>
-
-          <p>
-            Assign that vendor to the Library Fab.
-          </p>
-        </div>
-
-        <div className="flowArrow">
-          →
-        </div>
-
-        <div>
-          <span>3</span>
-
-          <strong>
-            Find It Later
-          </strong>
-
-          <p>
-            Use the Vendor filter later to narrow the Library Fab list.
-          </p>
-        </div>
       </div>
 
       <div className="calloutBox">
@@ -405,7 +344,7 @@ export default function LessonEighteenFormulasReferencesPage() {
         <p>
           A Library Fab may make perfect sense to the person who created it,
           but months later another employee may need to find it. Correctly
-          assigning the vendor makes that search much easier.
+          naming the prep and giving it a good description makes that search much easier.
         </p>
       </div>
 
@@ -415,58 +354,15 @@ export default function LessonEighteenFormulasReferencesPage() {
 
       <div className="lessonText">
         <p>
-          <strong>Fab Type</strong> gives you another way to organize and
-          filter saved Library Fabrications.
+          <strong>Fab Type</strong> Tells the prep which side of the door to apply the prep on. 
         </p>
 
         <p>
-          Instead of identifying who makes the hardware, Fab Type identifies
-          the type or category of preparation you are creating.
+         For example if you build a push/pull handel you should identify this prep 
+         as a lock prep as it goes on the lock side of the door. You can also set the fab type inside the operations tab per each line item. 
         </p>
 
-        <p>
-          Choose the Fab Type that most accurately describes the preparation
-          so that users can narrow the list when they need to find it later.
-        </p>
-      </div>
-
-      <div className="sectionBox">
-        <p className="sectionLabel">
-          Vendor vs. Fab Type
-        </p>
-
-        <div className="twoColumnGrid">
-          <div>
-            <strong>
-              Vendor
-            </strong>
-
-            <p>
-              Helps identify the manufacturer or vendor associated with the
-              hardware preparation.
-            </p>
-
-            <span>
-              Think: Who does this hardware belong to?
-            </span>
           </div>
-
-          <div>
-            <strong>
-              Fab Type
-            </strong>
-
-            <p>
-              Helps identify the category of fabrication so similar
-              preparations can be grouped together.
-            </p>
-
-            <span>
-              Think: What kind of prep is this?
-            </span>
-          </div>
-        </div>
-      </div>
 
       <div className="calloutBox warningCallout">
         <strong>
@@ -575,70 +471,24 @@ export default function LessonEighteenFormulasReferencesPage() {
       </figure>
 
       <h3>
-        Using FW
+        Using FW and FD
       </h3>
 
       <div className="lessonText">
         <p>
-          One useful formula reference is <strong>FW</strong>.
+          One useful formula reference is <strong>FW</strong> and <strong>FD</strong>.
         </p>
 
         <p>
-          In the example above, FW is used so the preparation can center itself
-          on framing members with different widths.
+          FW stand for Framing Width and FW stands Framing Depth. 
         </p>
 
         <p>
-          Instead of manually changing the value every time the framing width
-          changes, the formula allows the preparation to calculate the required
-          position from the framing width.
+          When building a library prep for door frame you can use formulas like FW or FD rather then typing in the part height or depth. 
+          This is usefull when you build a prep that applies to both 1.75" and 2" framing material. Rather then building a prep
+          for both of the diffrent sizes you could simply make the Z location say FW and the prep will recognize the part parameters and auto adjust 
+          to the diffrent part sizes. 
         </p>
-      </div>
-
-      <div className="comparisonGrid">
-        <div>
-          <p className="sectionLabel">
-            Fixed Number
-          </p>
-
-          <strong>
-            Works for one known condition
-          </strong>
-
-          <p>
-            A fixed number remains the same regardless of changes to the part.
-          </p>
-        </div>
-
-        <div>
-          <p className="sectionLabel">
-            Location Reference
-          </p>
-
-          <strong>
-            Position supplied when applied
-          </strong>
-
-          <p>
-            The prep stays the same, but you provide a new reference location
-            when you use it.
-          </p>
-        </div>
-
-        <div>
-          <p className="sectionLabel">
-            Formula
-          </p>
-
-          <strong>
-            Position calculated automatically
-          </strong>
-
-          <p>
-            The value is calculated from dimensions or information available in
-            the software.
-          </p>
-        </div>
       </div>
 
       <h3>
@@ -698,13 +548,11 @@ export default function LessonEighteenFormulasReferencesPage() {
 
       <div className="calloutBox warningCallout">
         <strong>
-          Always verify a formula before using it on production material.
+         Do not worry about how to apply or use these formulas right now. 
         </strong>
 
         <p>
-          Formulas make a Library Fab flexible, but an incorrect formula can
-          also move a fabrication to the wrong location. Verify the calculated
-          result before the part reaches the machine.
+          I simply want you to see that they exist and understand that there are huundreds of diffrent ways to build preps and make them fit your needs. 
         </p>
       </div>
 
@@ -712,67 +560,6 @@ export default function LessonEighteenFormulasReferencesPage() {
         Step 3 Review
       </h3>
 
-      <div className="reviewGrid">
-        <div>
-          <span>1</span>
-
-          <div>
-            <strong>
-              Set the Location References
-            </strong>
-
-            <p>
-              Use X Loc Ref. and Y Loc Ref. when the saved preparation needs to
-              be repositioned when it is applied.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>2</span>
-
-          <div>
-            <strong>
-              Assign the Vendor
-            </strong>
-
-            <p>
-              Organize the preparation by the hardware manufacturer or vendor
-              associated with it.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>3</span>
-
-          <div>
-            <strong>
-              Set the Fab Type
-            </strong>
-
-            <p>
-              Categorize the preparation so it can be filtered and found more
-              easily later.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>4</span>
-
-          <div>
-            <strong>
-              Use Formulas When Needed
-            </strong>
-
-            <p>
-              Allow fabrication values to react to changing part or door
-              dimensions.
-            </p>
-          </div>
-        </div>
-      </div>
 
       <div className="calloutBox">
         <strong>

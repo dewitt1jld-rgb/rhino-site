@@ -281,7 +281,7 @@ export default function LessonEighteenCreateLibraryFabPage() {
 
       <div>
         <h4>
-          Create the Routed Hinge Pocket
+          Create the Rectangular Hinge Pocket
         </h4>
 
         <p>
@@ -382,9 +382,8 @@ export default function LessonEighteenCreateLibraryFabPage() {
 
     <p>
       The routed hinge pocket centers itself at 36&quot;. The positive drill
-      holes move 3&quot; and 3.5&quot; away from that new center location, and
-      the negative drill holes move -3&quot; and -3.5&quot; in the opposite
-      direction.
+      holes move 3&quot; and 3.5&quot; upwards from that new center location, and
+      the negative drill holes move -3&quot; and -3.5&quot; downwards by the same amount. 
     </p>
   </div>
 
@@ -609,13 +608,13 @@ export default function LessonEighteenCreateLibraryFabPage() {
         }
 
         .largeFigure {
-  width: 120%;
+  width: 140%;
   max-width: none;
   margin-left: -10%;
 }
 
 .largeFigure img {
-  width: 100%;
+  width: 120%;
   height: auto;
 }
 

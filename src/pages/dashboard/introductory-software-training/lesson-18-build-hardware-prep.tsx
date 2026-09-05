@@ -25,7 +25,7 @@ const steps = [
 ];
 
 const img = {
-  cad: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/doors-and-library-fab/library-fab/images/library-fab-03-cad-butt-hinge.png",
+  cad: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_18/door_prep_butt_hinge_v2.png",
 
   onDoor:
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/doors-and-library-fab/library-fab/images/library-fab-04-on-door.png",
