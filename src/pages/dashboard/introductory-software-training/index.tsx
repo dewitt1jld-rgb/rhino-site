@@ -264,46 +264,44 @@ const courseModules: CourseModule[] = [
 },
 
 
-  {
-    number: "07",
-    title: "Doors",
-    description:
-      "Configure door hardware, create door preparations, and apply complete entrance packages to projects.",
-    lessons: [
-      {
-        number: "19",
-        title: "Library Fabrications",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Learn how reusable fabrication records are created, organized, and prepared for use with door hardware and assemblies.",
-      },
-      {
-        number: "20",
-        title: "Door Hardware & Components",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Enter and organize locks, pivots, closers, exit devices, strikes, handles, and other common door hardware.",
-      },
-      {
-        number: "21",
-        title: "Door Fabrication",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Use the Door Fabrication screen to create and manage the preparations required for door hardware.",
-      },
-      {
-        number: "22",
-        title: "Applying Hardware & Door Packages",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Apply individual hardware items and complete door packages to doors, entrances, and regular door frames.",
-      },
-    ],
-  },
+{
+  number: "07",
+  title: "Doors",
+  description:
+    "Learn how reusable hardware preparations are created, understand common door hardware, and use Door Fabrication to prepare doors for production.",
+  lessons: [
+    {
+      number: "18",
+      title: "Library Fabrications",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 4,
+      description:
+        "Learn how reusable fabrication records are created, organized, positioned, and prepared for use with door hardware and other fabrication workflows.",
+      href: "/dashboard/introductory-software-training/lesson-18-library-fab-overview",
+    },
+    {
+      number: "19",
+      title: "Door Hardware & Components",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 4,
+      description:
+        "Learn how common door hardware is organized, what information matters for fabrication, and how hardware records connect to door preparations.",
+      href: "/dashboard/introductory-software-training/lesson-19-hardware-overview",
+    },
+    {
+      number: "20",
+      title: "Door Fabrication",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 4,
+      description:
+        "Use the Door Fabrication screen to add hardware preparations, position fabrications, verify machining, and output completed doors to the Rhino.",
+      href: "/dashboard/introductory-software-training/lesson-20-door-fabrication-overview",
+    },
+  ],
+},
 
   {
     number: "08",
