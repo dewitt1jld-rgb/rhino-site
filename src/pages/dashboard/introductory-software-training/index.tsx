@@ -268,27 +268,27 @@ const courseModules: CourseModule[] = [
   number: "07",
   title: "Doors",
   description:
-    "Learn how reusable hardware preparations are created, understand common door hardware, and use Door Fabrication to prepare doors for production.",
+    "Learn common door hardware, create reusable hardware preparations, and use Door Fabrication to prepare doors for production.",
   lessons: [
     {
       number: "18",
-      title: "Library Fabrications",
-      time: "45–60 min",
-      status: "Available",
-      stepCount: 4,
-      description:
-        "Learn how reusable fabrication records are created, organized, positioned, and prepared for use with door hardware and other fabrication workflows.",
-      href: "/dashboard/introductory-software-training/lesson-18-library-fab-overview",
-    },
-    {
-      number: "19",
       title: "Door Hardware & Components",
       time: "45–60 min",
       status: "Available",
       stepCount: 4,
       description:
         "Learn how common door hardware is organized, what information matters for fabrication, and how hardware records connect to door preparations.",
-      href: "/dashboard/introductory-software-training/lesson-19-hardware-overview",
+      href: "/dashboard/introductory-software-training/lesson-18-hardware-overview",
+    },
+    {
+      number: "19",
+      title: "Library Fabrications",
+      time: "45–60 min",
+      status: "Available",
+      stepCount: 4,
+      description:
+        "Learn how reusable fabrication records are created, organized, positioned, and prepared for use with door hardware and other fabrication workflows.",
+      href: "/dashboard/introductory-software-training/lesson-19-library-fab-overview",
     },
     {
       number: "20",

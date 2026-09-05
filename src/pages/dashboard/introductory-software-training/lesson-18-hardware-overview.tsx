@@ -5,30 +5,30 @@ const steps = [
   {
     number: 1,
     title: "Door Hardware Overview",
-    href: "/dashboard/introductory-software-training/lesson-19-hardware-overview",
+    href: "/dashboard/introductory-software-training/lesson-18-hardware-overview",
   },
   {
     number: 2,
     title: "Common Hardware Components",
-    href: "/dashboard/introductory-software-training/lesson-19-common-hardware",
+    href: "/dashboard/introductory-software-training/lesson-18-common-hardware",
   },
   {
     number: 3,
     title: "Hardware Prep Requirements",
-    href: "/dashboard/introductory-software-training/lesson-19-hardware-prep-requirements",
+    href: "/dashboard/introductory-software-training/lesson-18-hardware-prep-requirements",
   },
   {
     number: 4,
     title: "Organizing Hardware",
-    href: "/dashboard/introductory-software-training/lesson-19-organizing-hardware",
+    href: "/dashboard/introductory-software-training/lesson-18-organizing-hardware",
   },
 ];
 
 export default function LessonNineteenHardwareOverviewPage() {
   return (
     <AcademyLessonLayout
-      lessonNumber="19"
-      lessonTitle="Door Hardware & Components"
+      lessonNumber="18"
+lessonTitle="Door Hardware & Components"
       lessonDescription="Learn how common door hardware is organized, what information matters for fabrication, and how hardware records connect to door preparations."
       currentStep={1}
       steps={steps}

@@ -1,26 +1,25 @@
 import Link from "next/link";
 import AcademyLessonLayout from "../../../components/AcademyLessonLayout";
-
 const steps = [
   {
     number: 1,
     title: "Library Fabrication Overview",
-    href: "/dashboard/introductory-software-training/lesson-18-library-fab-overview",
+    href: "/dashboard/introductory-software-training/lesson-19-library-fab-overview",
   },
   {
     number: 2,
     title: "Creating a Library Fabrication",
-    href: "/dashboard/introductory-software-training/lesson-18-create-library-fab",
+    href: "/dashboard/introductory-software-training/lesson-19-create-library-fab",
   },
   {
     number: 3,
     title: "Formulas & Location References",
-    href: "/dashboard/introductory-software-training/lesson-18-formulas-references",
+    href: "/dashboard/introductory-software-training/lesson-19-formulas-references",
   },
   {
     number: 4,
     title: "Build a Hardware Prep",
-    href: "/dashboard/introductory-software-training/lesson-18-build-hardware-prep",
+    href: "/dashboard/introductory-software-training/lesson-19-build-hardware-prep",
   },
 ];
 
@@ -45,7 +44,7 @@ export default function LessonEighteenFormulasReferencesPage() {
   return (
     <AcademyLessonLayout
       lessonNumber="18"
-      lessonTitle="Library Fabrications"
+lessonTitle="Library Fabrications"
       lessonDescription="Learn how reusable fabrication rules are created, saved, positioned, and reused for door hardware and other fabrication workflows."
       currentStep={3}
       steps={steps}

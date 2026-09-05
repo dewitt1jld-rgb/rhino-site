@@ -5,22 +5,22 @@ const steps = [
   {
     number: 1,
     title: "Library Fabrication Overview",
-    href: "/dashboard/introductory-software-training/lesson-18-library-fab-overview",
+    href: "/dashboard/introductory-software-training/lesson-19-library-fab-overview",
   },
   {
     number: 2,
     title: "Creating a Library Fabrication",
-    href: "/dashboard/introductory-software-training/lesson-18-create-library-fab",
+    href: "/dashboard/introductory-software-training/lesson-19-create-library-fab",
   },
   {
     number: 3,
     title: "Formulas & Location References",
-    href: "/dashboard/introductory-software-training/lesson-18-formulas-references",
+    href: "/dashboard/introductory-software-training/lesson-19-formulas-references",
   },
   {
     number: 4,
     title: "Build a Hardware Prep",
-    href: "/dashboard/introductory-software-training/lesson-18-build-hardware-prep",
+    href: "/dashboard/introductory-software-training/lesson-19-build-hardware-prep",
   },
 ];
 
@@ -40,7 +40,7 @@ export default function LessonEighteenBuildHardwarePrepPage() {
   return (
     <AcademyLessonLayout
       lessonNumber="18"
-      lessonTitle="Library Fabrications"
+lessonTitle="Library Fabrications"
       lessonDescription="Learn how reusable fabrication rules are created, saved, positioned, and reused for door hardware and other fabrication workflows."
       currentStep={4}
       steps={steps}
@@ -73,8 +73,8 @@ export default function LessonEighteenBuildHardwarePrepPage() {
         </p>
 
         <p>
-          For this example, we will use a{" "}
-          <strong>butt hinge preparation</strong>.
+          For this example, we will use an actual{" "}
+          <strong>butt hinge preparation</strong>. Start a new prep in the fab rules library and give it a good name and description. 
         </p>
       </div>
 
@@ -150,10 +150,10 @@ export default function LessonEighteenBuildHardwarePrepPage() {
             <span>3</span>
 
             <div>
-              <strong>Find the centerline</strong>
+              <strong>assign an imaginary centerline</strong>
 
               <p>
-                Decide where the Library Fab&apos;s reference point should be.
+                Decide where the Library Fab&apos;s reference point should be. (usually center of the prep)
               </p>
             </div>
           </div>
@@ -179,19 +179,9 @@ export default function LessonEighteenBuildHardwarePrepPage() {
 
       <div className="lessonText">
         <p>
-          Before entering the operations, establish a predictable reference
-          point for the prep.
+          Before entering the operations, determine whether the prep must be located in the Y direction or the X direction. 
         </p>
 
-        <p>
-          For a symmetrical hinge preparation, the center of the hinge is a
-          useful reference point.
-        </p>
-
-        <p>
-          That center can be treated as{" "}
-          <strong>Y = 0</strong>.
-        </p>
       </div>
 
       <figure className="lessonFigure">
@@ -206,23 +196,6 @@ export default function LessonEighteenBuildHardwarePrepPage() {
         </figcaption>
       </figure>
 
-      <div className="referenceBox">
-        <div>
-          <span>Negative</span>
-          <strong>Y Values</strong>
-        </div>
-
-        <div className="centerReference">
-          <span>Reference</span>
-          <strong>Y = 0</strong>
-        </div>
-
-        <div>
-          <span>Positive</span>
-          <strong>Y Values</strong>
-        </div>
-      </div>
-
       <div className="calloutBox">
         <strong>
           Build around the reference point.
@@ -233,6 +206,38 @@ export default function LessonEighteenBuildHardwarePrepPage() {
           the operations as one machining pattern positioned around the
           Library Fab&apos;s zero point.
         </p>
+      </div>
+
+            <div className="referenceGrid">
+        <div className="referenceCard">
+          <p className="sectionLabel">
+            Use Y Loc Ref.
+          </p>
+
+          <strong>
+            Use when the prep changes height.
+          </strong>
+
+          <p>
+            This is commonly useful for hinges because the same hinge prep may
+            be placed at several vertical locations.
+          </p>
+        </div>
+
+        <div className="referenceCard">
+          <p className="sectionLabel">
+            Use X Loc Ref.
+          </p>
+
+          <strong>
+            Use when the prep changes horizontally.
+          </strong>
+
+          <p>
+            This is useful when the hardware preparation may move left or right
+            depending on the door or hardware configuration.
+          </p>
+        </div>
       </div>
 
       <h3>
@@ -275,14 +280,14 @@ export default function LessonEighteenBuildHardwarePrepPage() {
           <div>
             <strong>Depth</strong>
             <span>
-              Enter the required machining depth for the hinge pocket.
+              Enter the required machining depth for the hinge pocket. The image above does not give us a depth so for this example use .25" for the rectangle depth. 
             </span>
           </div>
 
           <div>
             <strong>Tool / Operation</strong>
             <span>
-              Select the appropriate routing operation for the machine.
+              Select the appropriate routing operation for the machine. (typically an EM11-A works well for butt hinges)
             </span>
           </div>
         </div>
@@ -295,7 +300,8 @@ export default function LessonEighteenBuildHardwarePrepPage() {
       <div className="lessonText">
         <p>
           Next, create the drill operations required for the hinge mounting
-          holes.
+          holes. If you have a tool changing machine, you can use a countersink bit here. 
+          If your machine can not do a tool change you must drill a hole with the same bit doing the recangle milling opperation (EM11-A)
         </p>
 
         <p>
@@ -304,8 +310,9 @@ export default function LessonEighteenBuildHardwarePrepPage() {
         </p>
 
         <p>
-          Holes on one side of the centerline will typically use positive
-          values while the matching holes on the other side use negative
+          This drawing shows us that the left side of the stick is the bottom of the door rail. 
+          That means that holes on the left side of the centerline should be negative
+          values while the matching holes on the right side use positive
           values.
         </p>
       </div>
@@ -335,71 +342,7 @@ export default function LessonEighteenBuildHardwarePrepPage() {
       </div>
 
       <h3>
-        Step 5: Decide Which Location References to Use
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Now decide whether the prep needs to move when it is applied to the
-          door.
-        </p>
-
-        <p>
-          A hinge preparation usually needs to appear at several different
-          heights, even though the machining pattern itself stays the same.
-        </p>
-
-        <p>
-          That makes a vertical location reference especially useful.
-        </p>
-      </div>
-
-      <div className="referenceGrid">
-        <div className="referenceCard">
-          <p className="sectionLabel">
-            Use Y Loc Ref.
-          </p>
-
-          <strong>
-            Use when the prep changes height.
-          </strong>
-
-          <p>
-            This is commonly useful for hinges because the same hinge prep may
-            be placed at several vertical locations.
-          </p>
-        </div>
-
-        <div className="referenceCard">
-          <p className="sectionLabel">
-            Use X Loc Ref.
-          </p>
-
-          <strong>
-            Use when the prep changes horizontally.
-          </strong>
-
-          <p>
-            This is useful when the hardware preparation may move left or right
-            depending on the door or hardware configuration.
-          </p>
-        </div>
-      </div>
-
-      <div className="calloutBox">
-        <strong>
-          Only use the references the prep actually needs.
-        </strong>
-
-        <p>
-          If the preparation only changes vertically, you may only need the Y
-          location reference. If it can move in both directions, both
-          references may be required.
-        </p>
-      </div>
-
-      <h3>
-        Step 6: Save the Library Fabrication
+        Step 5: Save the Library Fabrication
       </h3>
 
       <div className="lessonText">
@@ -409,7 +352,7 @@ export default function LessonEighteenBuildHardwarePrepPage() {
         </p>
 
         <p>
-          Use a clear name that identifies the hardware or preparation so it
+          Ensure you used a clear name that identifies the hardware or preparation so it
           can easily be found later.
         </p>
       </div>
@@ -451,7 +394,7 @@ export default function LessonEighteenBuildHardwarePrepPage() {
       </div>
 
       <h3>
-        Step 7: Apply the Prep to a Door
+        Step 6: Apply the Prep to a Door
       </h3>
 
       <div className="lessonText">
@@ -467,46 +410,6 @@ export default function LessonEighteenBuildHardwarePrepPage() {
         </p>
       </div>
 
-      <figure className="lessonFigure">
-        <img
-          src={img.onDoor}
-          alt="Saved butt hinge Library Fabrication positioned on a door"
-        />
-
-        <figcaption>
-          The same saved hinge preparation can be applied to different
-          locations without rebuilding the machining operations.
-        </figcaption>
-      </figure>
-
-      <div className="exampleBox">
-        <p className="sectionLabel">
-          Example Workflow
-        </p>
-
-        <div className="locationGrid">
-          <div>
-            <strong>Hinge 1</strong>
-            <span>
-              Apply the saved prep at the first required height.
-            </span>
-          </div>
-
-          <div>
-            <strong>Hinge 2</strong>
-            <span>
-              Apply the same prep at the second required height.
-            </span>
-          </div>
-
-          <div>
-            <strong>Hinge 3</strong>
-            <span>
-              Apply the same prep at the third required height.
-            </span>
-          </div>
-        </div>
-      </div>
 
       <div className="calloutBox">
         <strong>
@@ -520,96 +423,10 @@ export default function LessonEighteenBuildHardwarePrepPage() {
       </div>
 
       <h3>
-        Verify Before Fabricating
+        Applying the prep to the door will be taught in the next lesson. 
       </h3>
 
-      <div className="lessonText">
-        <p>
-          Before sending a door or part to the machine, verify that the
-          preparation is positioned correctly.
-        </p>
-
-        <p>
-          Compare the calculated locations against the hardware schedule,
-          manufacturer drawing, shop drawings, and actual door requirements.
-        </p>
-      </div>
-
-      <div className="calloutBox warningCallout">
-        <strong>
-          Never test a new hardware prep for the first time on expensive
-          production material.
-        </strong>
-
-        <p>
-          When possible, verify a newly created Library Fab on scrap or test
-          material before relying on it for a live project.
-        </p>
-      </div>
-
-      <h3>
-        Lesson 18 Review
-      </h3>
-
-      <div className="reviewGrid">
-        <div>
-          <span>1</span>
-
-          <div>
-            <strong>
-              Build it once
-            </strong>
-
-            <p>
-              Create all machining operations required for the hardware prep.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>2</span>
-
-          <div>
-            <strong>
-              Establish a reference
-            </strong>
-
-            <p>
-              Build the operations around a predictable zero point.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>3</span>
-
-          <div>
-            <strong>
-              Add flexibility
-            </strong>
-
-            <p>
-              Use formulas and location references where the prep needs to
-              move.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>4</span>
-
-          <div>
-            <strong>
-              Save and reuse
-            </strong>
-
-            <p>
-              Apply the same saved hardware prep wherever it is needed.
-            </p>
-          </div>
-        </div>
-      </div>
-
+     
       <div className="sectionBox completionBox">
         <p className="sectionLabel">
           Lesson 18 Complete
@@ -639,12 +456,12 @@ export default function LessonEighteenBuildHardwarePrepPage() {
           ← Previous: Formulas &amp; References
         </Link>
 
-        <Link
-          href="/dashboard/introductory-software-training"
-          className="primary"
-        >
-          Complete Lesson 18 →
-        </Link>
+   <Link
+  href="/dashboard/introductory-software-training/lesson-20-door-fabrication-overview"
+  className="primary"
+>
+  Next: Door Fabrication →
+</Link>
       </div>
 
       <style jsx>{`
