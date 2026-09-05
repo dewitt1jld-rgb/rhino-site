@@ -25,10 +25,10 @@ const steps = [
 ];
 
 const img = {
-  main: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/doors-and-library-fab/library-fab/images/library-fab-01-main-screen.png",
-  cad: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/doors-and-library-fab/library-fab/images/library-fab-03-cad-butt-hinge.png",
+  main: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_18/library%20fab%20main%20screen.png",
+  cad: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_18/door_prep_butt_hinge.png",
   onDoor:
-    "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/doors-and-library-fab/library-fab/images/library-fab-04-on-door.png",
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_18/98_99_rim_panic.png",
 };
 
 export default function LessonEighteenLibraryFabOverviewPage() {
@@ -205,19 +205,18 @@ export default function LessonEighteenLibraryFabOverviewPage() {
       </div>
 
       <h3>
-        Example: A Butt Hinge
+        Example: Butt Hinge Prep / Panic Prep
       </h3>
 
       <div className="lessonText">
         <p>
           A butt hinge is a good example because one hinge preparation may need
-          to appear several times on the same door.
+          to appear several times on the same door while A Panic prep may be placed at diffrent heights or locations depending on door size or customer requirements.
         </p>
 
         <p>
-          Instead of creating three separate hinge fabrications, you can create
-          the hinge prep once and then apply that same Library Fab at three
-          different locations.
+          Instead of creating three separate hinge fabrications or multiple Panic preps at diffrent heights, you can create
+          the hinge/Panic prep once and then apply that same Library Fab at any locations.
         </p>
       </div>
 
@@ -253,9 +252,10 @@ export default function LessonEighteenLibraryFabOverviewPage() {
         </strong>
 
         <p>
-          This distinction is extremely important. The Library Fab defines what
-          the machine needs to manufacture. The location information tells the
-          software where that fabrication belongs.
+         When we build a library fab we build them around an imaginary 0 point. Lets use the butt hinge as an example here, 
+         we would make 1 hinge based off a 0 point that we can later take and locate on the door or frame. Untill it is applied to a member this prep has no physical dimensions. 
+         We will get into this in the next lesson.  
+
         </p>
       </div>
 

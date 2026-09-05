@@ -55,338 +55,126 @@ export default function LessonEighteenFormulasReferencesPage() {
       </p>
 
       <h2>
-        Formulas &amp; Location References
+        Fab Rules Settings, Formulas &amp; Location References
       </h2>
 
       <div className="goalBox">
         <strong>Goal:</strong>{" "}
-        Understand how Library Fabrications use X, Y, and Z locations,
-        formulas, and location references to position the same saved
-        fabrication in different locations.
+        Finish learning the important settings on the Fab Rules Library screen,
+        understand when to use X and Y location references, and learn how
+        formulas allow the same fabrication to work on different parts and
+        doors.
       </div>
 
       <div className="lessonText">
         <p>
-          Creating the machining operations is only one part of building a
-          useful Library Fabrication.
+          In the previous step, we built a butt hinge preparation and learned
+          how the individual operations can be positioned around an imaginary
+          reference point.
         </p>
 
         <p>
-          The next question is:
-          <strong>
-            {" "}where should the fabrication be located?
-          </strong>
-        </p>
-
-        <p>
-          This is where formulas and location references become important.
-          They allow the same saved fabrication to move to different locations
-          without rebuilding the machining operations.
+          We do not need to go through that concept again. Instead, we are
+          going to finish reviewing the remaining settings that control how a
+          saved Library Fab behaves when it is used later.
         </p>
       </div>
 
       <div className="calloutBox">
         <strong>
-          Remember the difference:
+          The fabrication is already built. Now we are telling the software how
+          that fabrication should be organized and how it is allowed to move.
         </strong>
-
-        <p>
-          The Library Fab defines what the machine needs to manufacture.
-          Location references help determine where that fabrication belongs.
-        </p>
       </div>
 
       <h3>
-        Understanding X, Y, and Z
+        The Remaining Library Fab Settings
       </h3>
 
       <div className="lessonText">
         <p>
-          X, Y, and Z are still used to position machining operations inside
-          the Library Fabrication.
+          Near the top of the Fab Rules Library screen are several settings that
+          are easy to overlook.
         </p>
 
         <p>
-          X and Z should already be familiar from the other fabrication
-          screens. The biggest difference to understand in the Fab Rules
-          Library is how the <strong>Y location</strong> is referenced.
+          The four settings we are going to focus on are:
         </p>
       </div>
 
-      <div className="axisGrid">
-        <div className="axisCard">
-          <span>X</span>
+      <div className="settingGrid">
+        <div className="settingCard">
+          <span>1</span>
 
           <div>
-            <strong>X Location</strong>
+            <strong>
+              Use Y Loc Ref.
+            </strong>
 
             <p>
-              Positions the operation along the length of the part.
+              Allows the saved preparation to be supplied with a different Y
+              location when it is applied.
             </p>
           </div>
         </div>
 
-        <div className="axisCard">
-          <span>Y</span>
+        <div className="settingCard">
+          <span>2</span>
 
           <div>
-            <strong>Y Location</strong>
+            <strong>
+              Use X Loc Ref.
+            </strong>
 
             <p>
-              Positions the operation relative to the Library Fab&apos;s
-              imaginary center reference.
+              Allows the saved preparation to be supplied with a different X
+              location when it is applied.
             </p>
           </div>
         </div>
 
-        <div className="axisCard">
-          <span>Z</span>
+        <div className="settingCard">
+          <span>3</span>
 
           <div>
-            <strong>Z Location</strong>
+            <strong>
+              Vendor
+            </strong>
 
             <p>
-              Controls the position or depth of the operation based on the
-              orientation of the preparation.
+              Organizes the preparation by the hardware manufacturer or vendor
+              associated with the prep.
+            </p>
+          </div>
+        </div>
+
+        <div className="settingCard">
+          <span>4</span>
+
+          <div>
+            <strong>
+              Fab Type
+            </strong>
+
+            <p>
+              Categorizes the preparation so it can be filtered and found more
+              easily later.
             </p>
           </div>
         </div>
       </div>
 
-      <h3>
-        The Y Location Uses an Imaginary Zero
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          One of the most important concepts in Library Fabrications is the
-          imaginary zero point used for the Y location.
-        </p>
-
-        <p>
-          Think of the center of the hardware preparation as{" "}
-          <strong>Y = 0</strong>.
-        </p>
-
-        <p>
-          Features on one side of that centerline use positive Y values, while
-          features on the opposite side use negative Y values.
-        </p>
-      </div>
-
-      <div className="zeroBox">
-        <div className="negativeSide">
-          <strong>Negative Y</strong>
-          <span>←</span>
-        </div>
-
-        <div className="zeroPoint">
-          <strong>Y = 0</strong>
-          <span>Prep Center</span>
-        </div>
-
-        <div className="positiveSide">
-          <span>→</span>
-          <strong>Positive Y</strong>
-        </div>
-      </div>
-
-      <div className="calloutBox">
-        <strong>
-          The zero point belongs to the Library Fab.
-        </strong>
-
-        <p>
-          You are building the machining pattern around a reference point.
-          Later, that reference point can be positioned where the hardware
-          belongs on the actual part.
-        </p>
-      </div>
-
-      <h3>
-        Example: 4.5-Inch Butt Hinge
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          A butt hinge is a useful example because the preparation is centered
-          around a predictable reference point.
-        </p>
-
-        <p>
-          The routed rectangle can be centered around Y = 0. Mounting holes on
-          one side of the centerline will have positive Y values, while the
-          corresponding holes on the other side will have negative Y values.
-        </p>
-      </div>
-
-      <figure className="lessonFigure">
+      <figure className="lessonFigure largeFigure">
         <img
           src={img.xyLoc}
-          alt="Library Fabrication X and Y location example"
+          alt="Fab Rules Library location reference and organization settings"
         />
 
         <figcaption>
-          Library Fabrication operations can be positioned around the
-          preparation&apos;s reference point using positive and negative
-          location values.
+          These settings control how the saved Library Fab can be positioned
+          and how it will be organized when you search for it later.
         </figcaption>
       </figure>
-
-      <div className="sectionBox">
-        <p className="sectionLabel">
-          Why This Matters
-        </p>
-
-        <div className="conceptGrid">
-          <div>
-            <strong>Build around zero</strong>
-
-            <p>
-              Create the preparation around a consistent reference point.
-            </p>
-          </div>
-
-          <div>
-            <strong>Move the reference</strong>
-
-            <p>
-              Position that reference point where the hardware belongs.
-            </p>
-          </div>
-
-          <div>
-            <strong>Keep the pattern</strong>
-
-            <p>
-              The machining operations stay together as one reusable prep.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <h3>
-        Using Formulas
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Formulas allow a fabrication to react to the dimensions of the part
-          it is being applied to.
-        </p>
-
-        <p>
-          Instead of entering a fixed value that only works for one part size,
-          a formula can calculate the required position from information
-          available in the software.
-        </p>
-      </div>
-
-      <figure className="lessonFigure">
-        <img
-          src={img.formula}
-          alt="Library Fabrication X and Y location formula reference"
-        />
-
-        <figcaption>
-          Formula references can be used when a fabrication needs to calculate
-          its location instead of relying only on a fixed dimension.
-        </figcaption>
-      </figure>
-
-      <h3>
-        Using FW
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          One useful formula reference is{" "}
-          <strong>FW</strong>.
-        </p>
-
-        <p>
-          FW can be used when a preparation needs to react to the width of the
-          framing member instead of using one fixed location.
-        </p>
-
-        <p>
-          This is especially useful when the same Library Fab may be applied to
-          parts with different widths.
-        </p>
-      </div>
-
-      <div className="calloutBox">
-        <strong>
-          Why use a formula?
-        </strong>
-
-        <p>
-          If a preparation needs to stay centered or maintain the same
-          relationship to different framing widths, a formula can prevent you
-          from manually changing the fabrication every time the part size
-          changes.
-        </p>
-      </div>
-
-      <h3>
-        Door Formula References
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Doors introduce additional dimensions that can be useful when
-          positioning hardware.
-        </p>
-
-        <p>
-          Hardware locations may depend on dimensions such as the door width,
-          door height, finished floor location, or other dimensions associated
-          with the door opening.
-        </p>
-
-        <p>
-          The available formula references allow you to build Library Fabs that
-          can adapt when those dimensions change.
-        </p>
-      </div>
-
-      <figure className="lessonFigure">
-        <img
-          src={img.formulaDoors}
-          alt="Door formula references for Library Fabrications"
-        />
-
-        <figcaption>
-          Door-related formula references can be used when the hardware
-          location depends on dimensions from the door or opening.
-        </figcaption>
-      </figure>
-
-      <div className="imageGrid">
-        <figure className="lessonFigure">
-          <img
-            src={img.assembled}
-            alt="Assembled door leaf formula reference"
-          />
-
-          <figcaption>
-            The assembled door view helps explain how door dimensions relate to
-            the finished entrance.
-          </figcaption>
-        </figure>
-
-        <figure className="lessonFigure">
-          <img
-            src={img.exploded}
-            alt="Exploded door leaf formula reference"
-          />
-
-          <figcaption>
-            The exploded view provides another reference for understanding the
-            dimensions available when building door-related formulas.
-          </figcaption>
-        </figure>
-      </div>
 
       <h3>
         Use Y Loc Ref.
@@ -394,50 +182,79 @@ export default function LessonEighteenFormulasReferencesPage() {
 
       <div className="lessonText">
         <p>
-          Check <strong>Use Y Loc Ref.</strong> when the fabrication needs to
-          be placed at different vertical locations when it is applied.
+          <strong>Use Y Loc Ref.</strong> should be checked when the Library Fab
+          needs to be applied at different Y locations.
         </p>
 
         <p>
-          Hinges are a good example.
+          Our butt hinge preparation is a perfect example.
         </p>
 
         <p>
-          The actual hinge prep remains the same, but the hinge may need to be
-          placed at several different heights on the door.
+          We built the hinge preparation once around its reference point, but
+          the actual hinge may need to be placed at several different locations
+          on the finished door.
         </p>
       </div>
 
       <div className="exampleBox">
         <p className="sectionLabel">
-          Example
-        </p>
-
-        <p>
-          Imagine the same hinge prep being applied at:
+          Butt Hinge Example
         </p>
 
         <div className="locationGrid">
           <div>
-            <strong>19&quot;</strong>
-            <span>from the bottom</span>
+            <strong>
+              8&quot;
+            </strong>
+
+            <span>
+              First hinge location
+            </span>
           </div>
 
           <div>
-            <strong>42&quot;</strong>
-            <span>from the bottom</span>
+            <strong>
+              36&quot;
+            </strong>
+
+            <span>
+              Second hinge location
+            </span>
           </div>
 
           <div>
-            <strong>65&quot;</strong>
-            <span>from the bottom</span>
+            <strong>
+              58&quot;
+            </strong>
+
+            <span>
+              Third hinge location
+            </span>
           </div>
         </div>
 
         <p>
-          The machining pattern does not need to be rebuilt three times. The
-          Y location reference allows the same preparation to be positioned at
-          each required location.
+          We do not need three separate hinge preparations. The same Library
+          Fab can be used three times and supplied with a different location
+          each time.
+        </p>
+
+        <p>
+          Each time the reference location changes, all of the operations
+          inside the preparation maintain the relationship we built in the
+          previous step.
+        </p>
+      </div>
+
+      <div className="calloutBox">
+        <strong>
+          For a hinge prep like this, Use Y Loc Ref. is what allows us to move
+          the entire saved preparation to a new location.
+        </strong>
+
+        <p>
+          The prep stays the same. Only its reference location changes.
         </p>
       </div>
 
@@ -447,14 +264,15 @@ export default function LessonEighteenFormulasReferencesPage() {
 
       <div className="lessonText">
         <p>
-          Check <strong>Use X Loc Ref.</strong> when the fabrication may need
-          to move horizontally when it is applied.
+          <strong>Use X Loc Ref.</strong> works on the same general principle,
+          but it allows the Library Fab&apos;s X reference location to change
+          when the prep is applied.
         </p>
 
         <p>
-          For example, a lock or cylinder preparation may remain at the same
-          vertical height while its horizontal position changes depending on
-          the door style or hardware configuration.
+          This becomes useful when a preparation may need to be placed at
+          different horizontal locations depending on the part, door style, or
+          hardware configuration.
         </p>
       </div>
 
@@ -465,16 +283,16 @@ export default function LessonEighteenFormulasReferencesPage() {
           </p>
 
           <strong>
-            Vertical position can change
+            Allow the Y reference to change
           </strong>
 
           <p>
-            Use this when the same preparation needs to appear at different
-            heights.
+            Use this when the same preparation needs to be applied at different
+            Y locations.
           </p>
 
           <span>
-            Example: hinge locations
+            Example: multiple hinge locations
           </span>
         </div>
 
@@ -484,93 +302,409 @@ export default function LessonEighteenFormulasReferencesPage() {
           </p>
 
           <strong>
-            Horizontal position can change
+            Allow the X reference to change
           </strong>
 
           <p>
-            Use this when the same preparation needs to move horizontally on
-            the part.
+            Use this when the same preparation needs to be applied at different
+            X locations.
           </p>
 
           <span>
-            Example: lock or cylinder location
+            Example: hardware that changes position between door styles
           </span>
         </div>
       </div>
 
       <div className="calloutBox">
         <strong>
-          Sometimes you will use both.
+          You can check both when necessary.
         </strong>
 
         <p>
-          If a fabrication may need to move both vertically and horizontally,
-          both X and Y location references can be used.
+          If a Library Fab may need a different X location and a different Y
+          location when it is applied, both location reference options can be
+          used.
         </p>
       </div>
 
       <h3>
-        Fixed Dimensions vs. Location References
+        Setting the Vendor
       </h3>
 
+      <div className="lessonText">
+        <p>
+          The <strong>Vendor</strong> setting is primarily used to keep your
+          Library Fabs organized.
+        </p>
+
+        <p>
+          When the preparation belongs to a specific hardware manufacturer,
+          select the vendor associated with that hardware.
+        </p>
+
+        <p>
+          For example, if you create a preparation specifically for a piece of
+          hardware from one manufacturer, assigning that manufacturer as the
+          vendor makes the prep much easier to find later.
+        </p>
+      </div>
+
+      <div className="organizationFlow">
+        <div>
+          <span>1</span>
+
+          <strong>
+            Identify the Hardware
+          </strong>
+
+          <p>
+            Determine which manufacturer or vendor the hardware preparation
+            belongs to.
+          </p>
+        </div>
+
+        <div className="flowArrow">
+          →
+        </div>
+
+        <div>
+          <span>2</span>
+
+          <strong>
+            Select the Vendor
+          </strong>
+
+          <p>
+            Assign that vendor to the Library Fab.
+          </p>
+        </div>
+
+        <div className="flowArrow">
+          →
+        </div>
+
+        <div>
+          <span>3</span>
+
+          <strong>
+            Find It Later
+          </strong>
+
+          <p>
+            Use the Vendor filter later to narrow the Library Fab list.
+          </p>
+        </div>
+      </div>
+
+      <div className="calloutBox">
+        <strong>
+          Think ahead to the person applying the prep.
+        </strong>
+
+        <p>
+          A Library Fab may make perfect sense to the person who created it,
+          but months later another employee may need to find it. Correctly
+          assigning the vendor makes that search much easier.
+        </p>
+      </div>
+
+      <h3>
+        Setting the Fab Type
+      </h3>
+
+      <div className="lessonText">
+        <p>
+          <strong>Fab Type</strong> gives you another way to organize and
+          filter saved Library Fabrications.
+        </p>
+
+        <p>
+          Instead of identifying who makes the hardware, Fab Type identifies
+          the type or category of preparation you are creating.
+        </p>
+
+        <p>
+          Choose the Fab Type that most accurately describes the preparation
+          so that users can narrow the list when they need to find it later.
+        </p>
+      </div>
+
       <div className="sectionBox">
-        <div className="comparisonGrid">
-          <div>
-            <p className="sectionLabel">
-              Fixed Value
-            </p>
+        <p className="sectionLabel">
+          Vendor vs. Fab Type
+        </p>
 
+        <div className="twoColumnGrid">
+          <div>
             <strong>
-              The position stays the same.
+              Vendor
             </strong>
 
             <p>
-              Use a fixed value when the operation&apos;s position should not
-              change when the Library Fab is applied.
+              Helps identify the manufacturer or vendor associated with the
+              hardware preparation.
             </p>
+
+            <span>
+              Think: Who does this hardware belong to?
+            </span>
           </div>
 
           <div>
-            <p className="sectionLabel">
-              Location Reference
-            </p>
-
             <strong>
-              The position can be supplied later.
+              Fab Type
             </strong>
 
             <p>
-              Use a location reference when the same fabrication needs to be
-              positioned differently depending on where it is used.
-            </p>
-          </div>
-
-          <div>
-            <p className="sectionLabel">
-              Formula
+              Helps identify the category of fabrication so similar
+              preparations can be grouped together.
             </p>
 
-            <strong>
-              The software calculates the position.
-            </strong>
-
-            <p>
-              Use a formula when the location should react to dimensions from
-              the part, framing member, door, or opening.
-            </p>
+            <span>
+              Think: What kind of prep is this?
+            </span>
           </div>
         </div>
       </div>
 
       <div className="calloutBox warningCallout">
         <strong>
-          Verify formulas before using them on production material.
+          Be consistent when creating Library Fabs.
         </strong>
 
         <p>
-          A formula can make a Library Fab extremely flexible, but an incorrect
-          formula can also move a fabrication to the wrong location. Review the
-          calculated dimensions before sending the part to the machine.
+          Vendor and Fab Type are only useful if your company uses them
+          consistently. A well-organized library becomes much easier to search
+          as more hardware preparations are added over time.
+        </p>
+      </div>
+
+      <h3>
+        Why These Settings Matter Later
+      </h3>
+
+      <div className="lessonText">
+        <p>
+          Later, when you add Library Fabs to an actual door, the list may
+          contain many different preparations.
+        </p>
+
+        <p>
+          Vendor and Fab Type can be used to narrow that list, while the X and Y
+          location references determine whether the selected preparation can be
+          moved to the required location.
+        </p>
+      </div>
+
+      <div className="settingPurposeGrid">
+        <div>
+          <p className="sectionLabel">
+            Find It
+          </p>
+
+          <strong>
+            Vendor
+          </strong>
+
+          <p>
+            Narrow the list by hardware manufacturer or vendor.
+          </p>
+        </div>
+
+        <div>
+          <p className="sectionLabel">
+            Categorize It
+          </p>
+
+          <strong>
+            Fab Type
+          </strong>
+
+          <p>
+            Narrow the list by the type of fabrication.
+          </p>
+        </div>
+
+        <div>
+          <p className="sectionLabel">
+            Position It
+          </p>
+
+          <strong>
+            X / Y Loc Ref.
+          </strong>
+
+          <p>
+            Allow the selected preparation to be positioned where it is needed.
+          </p>
+        </div>
+      </div>
+
+      <h3>
+        Using Formulas
+      </h3>
+
+      <div className="lessonText">
+        <p>
+          Location references are useful when you want to supply a different
+          location later.
+        </p>
+
+        <p>
+          <strong>Formulas</strong> solve a different problem.
+        </p>
+
+        <p>
+          A formula allows a Library Fab to calculate a value from information
+          already available in the software instead of relying only on one
+          fixed number.
+        </p>
+      </div>
+
+      <figure className="lessonFigure">
+        <img
+          src={img.formula}
+          alt="Library Fabrication formula reference"
+        />
+
+        <figcaption>
+          Formula references allow fabrication values to react to information
+          from the part instead of requiring one fixed dimension.
+        </figcaption>
+      </figure>
+
+      <h3>
+        Using FW
+      </h3>
+
+      <div className="lessonText">
+        <p>
+          One useful formula reference is <strong>FW</strong>.
+        </p>
+
+        <p>
+          In the example above, FW is used so the preparation can center itself
+          on framing members with different widths.
+        </p>
+
+        <p>
+          Instead of manually changing the value every time the framing width
+          changes, the formula allows the preparation to calculate the required
+          position from the framing width.
+        </p>
+      </div>
+
+      <div className="comparisonGrid">
+        <div>
+          <p className="sectionLabel">
+            Fixed Number
+          </p>
+
+          <strong>
+            Works for one known condition
+          </strong>
+
+          <p>
+            A fixed number remains the same regardless of changes to the part.
+          </p>
+        </div>
+
+        <div>
+          <p className="sectionLabel">
+            Location Reference
+          </p>
+
+          <strong>
+            Position supplied when applied
+          </strong>
+
+          <p>
+            The prep stays the same, but you provide a new reference location
+            when you use it.
+          </p>
+        </div>
+
+        <div>
+          <p className="sectionLabel">
+            Formula
+          </p>
+
+          <strong>
+            Position calculated automatically
+          </strong>
+
+          <p>
+            The value is calculated from dimensions or information available in
+            the software.
+          </p>
+        </div>
+      </div>
+
+      <h3>
+        Door Formula References
+      </h3>
+
+      <div className="lessonText">
+        <p>
+          Door preparations can also use formula references tied to dimensions
+          from the door or opening.
+        </p>
+
+        <p>
+          These references become useful when a preparation needs to react to
+          information such as door width, door height, finished floor, or other
+          door-opening dimensions.
+        </p>
+      </div>
+
+      <figure className="lessonFigure">
+        <img
+          src={img.formulaDoors}
+          alt="Door formula references for Library Fabrications"
+        />
+
+        <figcaption>
+          Door formula references provide dimensions that can be used when a
+          hardware prep needs to react to the size or configuration of a door.
+        </figcaption>
+      </figure>
+
+      <div className="stackedFigures">
+        <figure className="lessonFigure">
+          <img
+            src={img.assembled}
+            alt="Assembled door leaf formula reference"
+          />
+
+          <figcaption>
+            The assembled door reference shows dimensions as they relate to the
+            completed entrance.
+          </figcaption>
+        </figure>
+
+        <figure className="lessonFigure">
+          <img
+            src={img.exploded}
+            alt="Exploded door leaf formula reference"
+          />
+
+          <figcaption>
+            The exploded door reference provides additional dimensions that may
+            be available when building door-related formulas.
+          </figcaption>
+        </figure>
+      </div>
+
+      <div className="calloutBox warningCallout">
+        <strong>
+          Always verify a formula before using it on production material.
+        </strong>
+
+        <p>
+          Formulas make a Library Fab flexible, but an incorrect formula can
+          also move a fabrication to the wrong location. Verify the calculated
+          result before the part reaches the machine.
         </p>
       </div>
 
@@ -584,11 +718,12 @@ export default function LessonEighteenFormulasReferencesPage() {
 
           <div>
             <strong>
-              Establish the prep
+              Set the Location References
             </strong>
 
             <p>
-              Build the machining pattern around a predictable reference point.
+              Use X Loc Ref. and Y Loc Ref. when the saved preparation needs to
+              be repositioned when it is applied.
             </p>
           </div>
         </div>
@@ -598,12 +733,12 @@ export default function LessonEighteenFormulasReferencesPage() {
 
           <div>
             <strong>
-              Understand Y = 0
+              Assign the Vendor
             </strong>
 
             <p>
-              Use positive and negative values to position operations around
-              the preparation.
+              Organize the preparation by the hardware manufacturer or vendor
+              associated with it.
             </p>
           </div>
         </div>
@@ -613,12 +748,12 @@ export default function LessonEighteenFormulasReferencesPage() {
 
           <div>
             <strong>
-              Use formulas when needed
+              Set the Fab Type
             </strong>
 
             <p>
-              Allow the preparation to react to changing part or door
-              dimensions.
+              Categorize the preparation so it can be filtered and found more
+              easily later.
             </p>
           </div>
         </div>
@@ -628,11 +763,12 @@ export default function LessonEighteenFormulasReferencesPage() {
 
           <div>
             <strong>
-              Choose location references
+              Use Formulas When Needed
             </strong>
 
             <p>
-              Use X Loc Ref. and Y Loc Ref. when the saved prep needs to move.
+              Allow fabrication values to react to changing part or door
+              dimensions.
             </p>
           </div>
         </div>
@@ -640,12 +776,13 @@ export default function LessonEighteenFormulasReferencesPage() {
 
       <div className="calloutBox">
         <strong>
-          Next, we will put everything together.
+          Your Library Fab now has both machining information and behavior.
         </strong>
 
         <p>
-          In Step 4, we will use these concepts to walk through building a
-          complete hardware preparation from beginning to end.
+          The operations define what gets fabricated. Vendor and Fab Type make
+          the prep easy to find. Location references and formulas determine how
+          the prep can adapt when it is used.
         </p>
       </div>
 
@@ -689,25 +826,18 @@ export default function LessonEighteenFormulasReferencesPage() {
           line-height: 1.6;
         }
 
-        .imageGrid {
+        .largeFigure img {
+          max-width: 1000px;
+        }
+
+        .settingGrid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 22px;
-          margin: 22px 0 34px;
-        }
-
-        .imageGrid .lessonFigure {
-          margin: 0;
-        }
-
-        .axisGrid {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 16px;
+          gap: 14px;
           margin: 24px 0 32px;
         }
 
-        .axisCard {
+        .settingCard {
           display: flex;
           gap: 14px;
           padding: 20px;
@@ -716,103 +846,25 @@ export default function LessonEighteenFormulasReferencesPage() {
           border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .axisCard > span {
+        .settingCard > span {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
-          flex: 0 0 40px;
+          width: 36px;
+          height: 36px;
+          flex: 0 0 36px;
           border-radius: 999px;
           background: rgba(245, 158, 11, 0.14);
           border: 1px solid rgba(245, 158, 11, 0.3);
           color: #f59e0b;
-          font-size: 18px;
           font-weight: 900;
         }
 
-        .axisCard strong {
+        .settingCard strong {
           color: #ffffff;
         }
 
-        .axisCard p {
-          margin: 7px 0 0;
-          color: rgba(255, 255, 255, 0.67);
-          line-height: 1.55;
-        }
-
-        .zeroBox {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: center;
-          gap: 18px;
-          margin: 26px 0 34px;
-          padding: 24px;
-          border-radius: 18px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(245, 158, 11, 0.18);
-        }
-
-        .negativeSide,
-        .positiveSide {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          color: rgba(255, 255, 255, 0.72);
-        }
-
-        .negativeSide {
-          justify-content: flex-end;
-        }
-
-        .positiveSide {
-          justify-content: flex-start;
-        }
-
-        .negativeSide span,
-        .positiveSide span {
-          color: #f59e0b;
-          font-size: 24px;
-        }
-
-        .zeroPoint {
-          display: grid;
-          gap: 4px;
-          min-width: 110px;
-          padding: 14px;
-          text-align: center;
-          border-radius: 14px;
-          background: rgba(245, 158, 11, 0.14);
-          border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .zeroPoint strong {
-          color: #f59e0b;
-        }
-
-        .zeroPoint span {
-          color: rgba(255, 255, 255, 0.65);
-          font-size: 13px;
-        }
-
-        .conceptGrid {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 14px;
-        }
-
-        .conceptGrid > div {
-          padding: 17px;
-          border-radius: 14px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .conceptGrid strong {
-          color: #f59e0b;
-        }
-
-        .conceptGrid p {
+        .settingCard p {
           margin: 7px 0 0;
           color: rgba(255, 255, 255, 0.68);
           line-height: 1.55;
@@ -892,10 +944,114 @@ export default function LessonEighteenFormulasReferencesPage() {
           font-weight: 800;
         }
 
+        .organizationFlow {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr auto 1fr;
+          align-items: stretch;
+          gap: 12px;
+          margin: 24px 0 32px;
+        }
+
+        .organizationFlow > div:not(.flowArrow) {
+          padding: 18px;
+          border-radius: 15px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .organizationFlow > div:not(.flowArrow) > span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 30px;
+          height: 30px;
+          margin-bottom: 12px;
+          border-radius: 999px;
+          background: rgba(245, 158, 11, 0.14);
+          color: #f59e0b;
+          font-weight: 900;
+        }
+
+        .organizationFlow strong {
+          color: #ffffff;
+        }
+
+        .organizationFlow p {
+          margin: 7px 0 0;
+          color: rgba(255, 255, 255, 0.68);
+          line-height: 1.55;
+        }
+
+        .flowArrow {
+          align-self: center;
+          color: #f59e0b;
+          font-size: 26px;
+          font-weight: 900;
+        }
+
+        .twoColumnGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        .twoColumnGrid > div {
+          padding: 20px;
+          border-radius: 15px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .twoColumnGrid strong {
+          display: block;
+          margin-bottom: 8px;
+          color: #f59e0b;
+          font-size: 18px;
+        }
+
+        .twoColumnGrid p {
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.6;
+        }
+
+        .twoColumnGrid span {
+          display: block;
+          color: rgba(255, 255, 255, 0.52);
+          font-size: 13px;
+          font-weight: 800;
+        }
+
+        .settingPurposeGrid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 14px;
+          margin: 24px 0 34px;
+        }
+
+        .settingPurposeGrid > div {
+          padding: 18px;
+          border-radius: 15px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .settingPurposeGrid strong {
+          display: block;
+          margin: 8px 0;
+          color: #ffffff;
+        }
+
+        .settingPurposeGrid p:not(.sectionLabel) {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.68);
+          line-height: 1.55;
+        }
+
         .comparisonGrid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 14px;
+          margin: 24px 0 34px;
         }
 
         .comparisonGrid > div {
@@ -905,16 +1061,27 @@ export default function LessonEighteenFormulasReferencesPage() {
           border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .comparisonGrid > div > strong {
+        .comparisonGrid strong {
           display: block;
           margin: 8px 0;
           color: #ffffff;
         }
 
-        .comparisonGrid > div > p:not(.sectionLabel) {
+        .comparisonGrid p:not(.sectionLabel) {
           margin: 0;
           color: rgba(255, 255, 255, 0.68);
           line-height: 1.6;
+        }
+
+        .stackedFigures {
+          display: flex;
+          flex-direction: column;
+          gap: 26px;
+          margin: 26px 0 34px;
+        }
+
+        .stackedFigures .lessonFigure {
+          margin: 0;
         }
 
         .reviewGrid {
@@ -962,28 +1129,28 @@ export default function LessonEighteenFormulasReferencesPage() {
           background: rgba(245, 158, 11, 0.08);
         }
 
-        @media (max-width: 800px) {
-          .axisGrid,
-          .conceptGrid,
-          .comparisonGrid {
+        @media (max-width: 850px) {
+          .organizationFlow {
             grid-template-columns: 1fr;
           }
 
-          .imageGrid,
-          .referenceGrid,
-          .reviewGrid {
+          .flowArrow {
+            text-align: center;
+            transform: rotate(90deg);
+          }
+
+          .settingPurposeGrid,
+          .comparisonGrid {
             grid-template-columns: 1fr;
           }
         }
 
-        @media (max-width: 600px) {
-          .zeroBox {
+        @media (max-width: 700px) {
+          .settingGrid,
+          .referenceGrid,
+          .twoColumnGrid,
+          .reviewGrid {
             grid-template-columns: 1fr;
-          }
-
-          .negativeSide,
-          .positiveSide {
-            justify-content: center;
           }
 
           .locationGrid {

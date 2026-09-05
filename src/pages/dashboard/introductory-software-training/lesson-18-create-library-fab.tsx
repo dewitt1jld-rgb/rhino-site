@@ -58,16 +58,11 @@ export default function LessonEighteenCreateLibraryFabPage() {
       <div className="lessonText">
         <p>
           Once you understand what a Library Fab is, the next step is learning
-          how to create one.
+          how to create one. Feel free to build this test butt hinge along with the lesson. 
+          Start a new prep and name it like the image below. We will break down what each option means. 
         </p>
 
-        <p>
-          A Library Fabrication is built from the same basic machining
-          operations you have already seen in other fabrication screens. The
-          difference is that the fabrication is saved as a reusable rule instead
-          of being tied directly to one specific part.
-        </p>
-      </div>
+        </div>
 
       <figure className="lessonFigure">
         <img
@@ -92,19 +87,32 @@ export default function LessonEighteenCreateLibraryFabPage() {
         </p>
 
         <p>
-          Use the white sheet icon in the upper-left area of the screen to begin
+          Use the white sheet icon in the upper-right area of the screen to begin
           a new fabrication record.
+        </p>
+      </div>
+
+            <div className="lessonText">
+        <p>
+          As your Fab Rules Library grows, it can quickly contain a large number
+          of hardware preparations.
+        </p>
+
+        <p>
+          Use clear names and organize the fabrication so someone else can
+          identify what hardware the prep belongs to without opening every
+          operation.You can also use an underscore at the begining of the prep name to move it to the top of the list
         </p>
       </div>
 
       <div className="calloutBox">
         <strong>
-          A new Library Fab starts as an empty record.
+          A new Library Fab starts completly blank. 
         </strong>
 
         <p>
-          You will define what the preparation is, add the required machining
-          operations, and then save it so it can be reused later.
+         This is one screen I recomend building from scratch and NOT 
+          copying another fab unless you intentionally want some of those fabrications.
         </p>
       </div>
 
@@ -114,21 +122,17 @@ export default function LessonEighteenCreateLibraryFabPage() {
 
       <div className="lessonText">
         <p>
-          After creating the record, add the operations required to manufacture
-          the preparation.
+          After creating the record, click the "operations" button to open a fab editor that looks very similar to the other screens we have worked with. 
         </p>
 
-        <p>
-          The operations screen works very similarly to the fabrication screens
-          you have already used elsewhere in Glazier Studio.
-        </p>
+
       </div>
 
-      <figure className="lessonFigure">
-        <img
-          src={img.operations}
-          alt="Library Fabrication operations screen"
-        />
+<figure className="lessonFigure largeFigure">
+  <img
+    src={img.operations}
+    alt="Library Fabrication operations screen"
+  />
 
         <figcaption>
           Each operation defines a portion of the machining required for the
@@ -146,8 +150,7 @@ export default function LessonEighteenCreateLibraryFabPage() {
             <strong>X Location</strong>
 
             <p>
-              Controls the position of the operation along the length of the
-              part.
+              Controls the position of the operation forward and backwards from the back fence. 
             </p>
           </div>
 
@@ -156,7 +159,7 @@ export default function LessonEighteenCreateLibraryFabPage() {
 
             <p>
               Controls the side-to-side position of the operation relative to
-              the Library Fab&apos;s reference point.
+              the Library Fab&apos;s "0" reference point. 
             </p>
           </div>
 
@@ -164,7 +167,7 @@ export default function LessonEighteenCreateLibraryFabPage() {
             <strong>Z Location</strong>
 
             <p>
-              Controls the depth or orientation position used by the machining
+              Controls the up and down position used by the machining
               operation.
             </p>
           </div>
@@ -182,7 +185,7 @@ export default function LessonEighteenCreateLibraryFabPage() {
 
       <div className="calloutBox">
         <strong>
-          X and Z should feel familiar.
+          X and Z should feel familiar those work the same as in other screens. 
         </strong>
 
         <p>
@@ -199,45 +202,41 @@ export default function LessonEighteenCreateLibraryFabPage() {
       <div className="lessonText">
         <p>
           The easiest way to build a hardware prep is to work from the actual
-          dimensions of the hardware or manufacturer template.
+          dimensions of the hardware or use of the manufacturer template.
         </p>
 
+    
         <p>
-          For example, a butt hinge prep may include a routed rectangle along
-          with several drilled or countersunk holes.
-        </p>
-
-        <p>
-          Each of those features becomes one or more machining operations
-          inside the Library Fabrication.
+          For this example I have drawn out a simplified butt hinge in autocad. 
+          I will have examples later on using actual hardware but for now this lesson is to simply understand the concept. 
         </p>
       </div>
 
-      <div className="imageGrid">
-        <figure className="lessonFigure">
-          <img
-            src={img.cad}
-            alt="Butt hinge CAD dimensions"
-          />
+<div className="stackedImageGrid">
+  <figure className="lessonFigure">
+    <img
+      src={img.cad}
+      alt="Butt hinge CAD dimensions"
+    />
 
-          <figcaption>
-            Hardware drawings or CAD dimensions give you the information needed
-            to build the preparation.
-          </figcaption>
-        </figure>
+    <figcaption>
+      Hardware drawings or CAD dimensions give you the information needed
+      to build the preparation.
+    </figcaption>
+  </figure>
 
-        <figure className="lessonFigure">
-          <img
-            src={img.data}
-            alt="Library Fabrication data values"
-          />
+  <figure className="lessonFigure largeDataFigure">
+    <img
+      src={img.data}
+      alt="Library Fabrication data values"
+    />
 
-          <figcaption>
-            Those dimensions are then translated into machining data inside the
-            Library Fabrication.
-          </figcaption>
-        </figure>
-      </div>
+    <figcaption>
+      Those dimensions are then translated into machining data inside the
+      Library Fabrication.
+    </figcaption>
+  </figure>
+</div>
 
       <h3>
         One Prep Can Contain Multiple Operations
@@ -250,74 +249,213 @@ export default function LessonEighteenCreateLibraryFabPage() {
         </p>
 
         <p>
-          One saved prep can contain every machining operation required for the
-          complete piece of hardware.
+          One saved library prep can contain every machining operation required for the
+          complete piece of hardware. Keep in mind that if your machine may be limited to using one tool at a time. 
+          If thats the case, do not make a prep that utelizes multiple tools on the same surface. 
         </p>
       </div>
 
-      <div className="exampleBox">
-        <p className="sectionLabel">
-          Example: Butt Hinge Prep
-        </p>
+<div className="exampleBox">
+  <p className="sectionLabel">
+    Example: Building a Butt Hinge Prep
+  </p>
 
-        <div className="exampleList">
-          <div>
-            <span>1</span>
-            <p>
-              Create the routed hinge pocket.
-            </p>
-          </div>
+  <div className="lessonText">
+    <p>
+      The CAD image above does not show every fabrication value required to
+      complete this prep, but it gives us enough information to understand the
+      most important concept for this example:
+      <strong> how the Y locations are built around a centerline.</strong>
+    </p>
 
-          <div>
-            <span>2</span>
-            <p>
-              Add the required mounting holes.
-            </p>
-          </div>
+    <p>
+      The rest of the fabrication information should already feel familiar at
+      this point, so for this example we are going to focus almost entirely on
+      the Y values.
+    </p>
+  </div>
 
-          <div>
-            <span>3</span>
-            <p>
-              Add any countersink or additional machining operations.
-            </p>
-          </div>
+  <div className="exampleList">
+    <div>
+      <span>1</span>
 
-          <div>
-            <span>4</span>
-            <p>
-              Save all of the operations together as one reusable Library Fab.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="calloutBox">
-        <strong>
-          Build the complete hardware prep.
-        </strong>
+      <div>
+        <h4>
+          Create the Routed Hinge Pocket
+        </h4>
 
         <p>
-          The goal is to create one saved Library Fab that contains everything
-          the machine needs to manufacture that preparation correctly.
+          Notice in the image above that there is a centerline running directly
+          through the middle of the hinge preparation.
+        </p>
+
+        <p>
+          We are going to treat that centerline as our imaginary
+          <strong> Y = 0 location.</strong>
+        </p>
+
+        <p>
+          Because the routed rectangle is centered directly on that 0
+          centerline, its Y location is simply:
+        </p>
+
+        <div className="formulaValue">
+          Y = 0
+        </div>
+
+        <p>
+          This gives the entire preparation a central reference point that the
+          remaining operations can be built around.
         </p>
       </div>
+    </div>
+
+    <div>
+      <span>2</span>
+
+      <div>
+        <h4>
+          Add the Four Drill Holes
+        </h4>
+
+        <p>
+          Now look at the four drill holes surrounding the routed hinge pocket.
+        </p>
+
+        <p>
+          Two of the drill holes are positioned on the positive side of our
+          centerline, while the other two are positioned on the negative side.
+        </p>
+
+        <p>
+          Those Y values are:
+        </p>
+
+        <div className="locationValues">
+          <div>
+            <strong>Positive Y</strong>
+            <span>+3.000&quot;</span>
+            <span>+3.500&quot;</span>
+          </div>
+
+          <div>
+            <strong>Negative Y</strong>
+            <span>-3.000&quot;</span>
+            <span>-3.500&quot;</span>
+          </div>
+        </div>
+
+        <p>
+          Each one of these values is measured from the same imaginary
+          <strong> Y = 0 centerline.</strong>
+        </p>
+
+        <p>
+          The positive values move in one direction away from center, while the
+          negative values move in the opposite direction.
+        </p>
+
+        <p>
+          Instead of thinking of each drill hole as having a completely
+          independent location, think of the entire hinge prep as being built
+          around one central reference point.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div className="calloutBox">
+    <strong>
+      The entire prep moves together.
+    </strong>
+
+    <p>
+      Later, when this Library Fab is applied to a door, you will give the prep
+      a new location — for example, <strong>36&quot;</strong>.
+    </p>
+
+    <p>
+      At that point, the prep replaces its original imaginary
+      <strong> 0 location</strong> with the new
+      <strong> 36&quot; location</strong>.
+    </p>
+
+    <p>
+      The routed hinge pocket centers itself at 36&quot;. The positive drill
+      holes move 3&quot; and 3.5&quot; away from that new center location, and
+      the negative drill holes move -3&quot; and -3.5&quot; in the opposite
+      direction.
+    </p>
+  </div>
+
+  <div className="sectionBox">
+    <p className="sectionLabel">
+      Why This Matters
+    </p>
+
+    <h3>
+      One Prep Can Be Reused at Multiple Locations
+    </h3>
+
+    <div className="lessonText">
+      <p>
+        This is the general idea behind Library Fabrications.
+      </p>
+
+      <p>
+        Once the butt hinge prep has been built around its Y = 0 reference
+        point, the same prep can be applied anywhere on the door without
+        rebuilding every operation.
+      </p>
+
+      <p>
+        For example, the same butt hinge prep could be applied at:
+      </p>
+    </div>
+
+    <div className="hingeLocations">
+      <div>
+        <span>8&quot;</span>
+        <p>
+          The routed pocket centers at 8&quot;, and all four drill holes build
+          themselves around that location.
+        </p>
+      </div>
+
+      <div>
+        <span>36&quot;</span>
+        <p>
+          The routed pocket centers at 36&quot;, and the same positive and
+          negative offsets are reused.
+        </p>
+      </div>
+
+      <div>
+        <span>58&quot;</span>
+        <p>
+          The routed pocket centers at 58&quot;, and the entire prep builds
+          itself around that new location.
+        </p>
+      </div>
+    </div>
+
+    <div className="calloutBox">
+      <strong>
+        Build the relationship once. Change the reference location later.
+      </strong>
+
+      <p>
+        The individual operations do not need to be recreated every time the
+        hinge moves. Their relationship to the centerline stays the same while
+        the centerline itself moves to the new hinge location.
+      </p>
+    </div>
+  </div>
+</div>
 
       <h3>
         Naming and Organization Matter
       </h3>
-
-      <div className="lessonText">
-        <p>
-          As your Fab Rules Library grows, it can quickly contain a large number
-          of hardware preparations.
-        </p>
-
-        <p>
-          Use clear names and organize the fabrication so someone else can
-          identify what hardware the prep belongs to without opening every
-          operation.
-        </p>
-      </div>
 
       <div className="sectionBox">
         <p className="sectionLabel">
@@ -470,6 +608,166 @@ export default function LessonEighteenCreateLibraryFabPage() {
           gap: 16px;
         }
 
+        .largeFigure {
+  width: 120%;
+  max-width: none;
+  margin-left: -10%;
+}
+
+.largeFigure img {
+  width: 100%;
+  height: auto;
+}
+
+
+.stackedImageGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin: 24px 0 34px;
+}
+
+.stackedImageGrid .lessonFigure {
+  width: 100%;
+  margin: 0;
+}
+
+.stackedImageGrid .lessonFigure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Make the Library Fabrication data image larger */
+.largeDataFigure {
+  width: 120% !important;
+  max-width: none;
+  margin-left: -10% !important;
+}
+
+.largeDataFigure img {
+  width: 100%;
+  height: auto;
+}
+
+.exampleList {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.exampleList > div {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 16px;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.exampleList > div > span {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
+  font-weight: 900;
+}
+
+.exampleList h4 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.exampleList p {
+  margin: 0 0 12px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.65;
+}
+
+.formulaValue {
+  display: inline-block;
+  margin: 4px 0 16px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  color: #fbbf24;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.locationValues {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 14px 0 18px;
+}
+
+.locationValues > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.locationValues strong {
+  color: #ffffff;
+}
+
+.locationValues span {
+  color: #fbbf24;
+  font-weight: 800;
+}
+
+.hingeLocations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px 0 24px;
+}
+
+.hingeLocations > div {
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hingeLocations > div > span {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #f59e0b;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.hingeLocations p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+  .locationValues,
+  .hingeLocations {
+    grid-template-columns: 1fr;
+  }
+
+  .exampleList > div {
+    grid-template-columns: 1fr;
+  }
+}
         .fieldCard {
           padding: 18px;
           border-radius: 14px;
