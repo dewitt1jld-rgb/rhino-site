@@ -937,14 +937,14 @@ lessonTitle="Door Hardware & Components"
 
       <div className="navButtons">
         <Link
-          href="/dashboard/introductory-software-training/lesson-19-common-hardware"
+          href="/dashboard/introductory-software-training/lesson-18-common-hardware"
           className="secondary"
         >
           ← Previous: Common Hardware
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-19-organizing-hardware"
+          href="/dashboard/introductory-software-training/lesson-18-organizing-hardware"
           className="primary"
         >
           Next: Organizing Hardware →

@@ -574,14 +574,14 @@ lessonTitle="Library Fabrications"
 
       <div className="navButtons">
         <Link
-          href="/dashboard/introductory-software-training/lesson-18-create-library-fab"
+          href="/dashboard/introductory-software-training/lesson-19-create-library-fab"
           className="secondary"
         >
           ← Previous: Creating a Library Fab
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-18-build-hardware-prep"
+          href="/dashboard/introductory-software-training/lesson-19-build-hardware-prep"
           className="primary"
         >
           Next: Build a Hardware Prep →

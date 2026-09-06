@@ -560,7 +560,7 @@ lessonTitle="Door Hardware & Components"
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-19-common-hardware"
+          href="/dashboard/introductory-software-training/lesson-18-common-hardware"
           className="primary"
         >
           Next: Common Hardware Components →

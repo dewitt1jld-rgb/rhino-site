@@ -552,14 +552,14 @@ lessonTitle="Library Fabrications"
 
       <div className="navButtons">
         <Link
-          href="/dashboard/introductory-software-training/lesson-18-library-fab-overview"
+          href="/dashboard/introductory-software-training/lesson-19-library-fab-overview"
           className="secondary"
         >
           ← Previous: Overview
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-18-formulas-references"
+          href="/dashboard/introductory-software-training/lesson-19-formulas-references"
           className="primary"
         >
           Next: Formulas &amp; References →

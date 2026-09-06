@@ -450,7 +450,7 @@ lessonTitle="Library Fabrications"
 
       <div className="navButtons">
         <Link
-          href="/dashboard/introductory-software-training/lesson-18-formulas-references"
+          href="/dashboard/introductory-software-training/lesson-19-formulas-references"
           className="secondary"
         >
           ← Previous: Formulas &amp; References

@@ -735,7 +735,7 @@ lessonTitle="Door Hardware & Components"
 
       <div className="navButtons">
         <Link
-          href="/dashboard/introductory-software-training/lesson-19-hardware-prep-requirements"
+          href="/dashboard/introductory-software-training/lesson-18-hardware-prep-requirements"
           className="secondary"
         >
           ← Previous: Hardware Prep Requirements

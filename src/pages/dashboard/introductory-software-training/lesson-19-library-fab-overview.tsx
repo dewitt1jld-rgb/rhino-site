@@ -416,7 +416,7 @@ lessonTitle="Library Fabrications"
 </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-18-create-library-fab"
+          href="/dashboard/introductory-software-training/lesson-19-create-library-fab"
           className="primary"
         >
           Next: Create a Library Fab →

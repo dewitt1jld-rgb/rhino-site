@@ -625,7 +625,7 @@ export default function LessonNineteenCommonHardwarePage() {
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-19-hardware-prep-requirements"
+          href="/dashboard/introductory-software-training/lesson-18-hardware-prep-requirements"
           className="primary"
         >
           Next: Hardware Prep Requirements →
