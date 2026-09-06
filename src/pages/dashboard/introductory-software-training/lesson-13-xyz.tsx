@@ -291,7 +291,7 @@ export default function LessonThirteenXYZPage() {
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-13-fabrication-options"
+          href="/dashboard/introductory-software-training/lesson-14-weep-anchor-basics"
           className="primary"
         >
           Next: Operations, Tools & Options →

@@ -1199,7 +1199,7 @@ export default function LessonFourteenCreateWeepHolesPage() {
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training"
+          href="/dashboard/introductory-software-training/lesson-15-metal-fabrication-basics"
           className="primary"
         >
           Finish Lesson 14 →

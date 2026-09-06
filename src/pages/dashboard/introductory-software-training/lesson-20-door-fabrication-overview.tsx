@@ -114,6 +114,36 @@ export default function LessonTwentyDoorFabricationOverviewPage() {
       </figure>
 
       <h3>
+        Check Machine Orientation
+      </h3>
+
+      <div className="lessonText">
+        <p>
+          Before you begin positioning hardware preparations, verify the
+          machine orientation shown in the Door Fabrication screen.
+        </p>
+
+        <p>
+          The orientation tells you how the door relates to the machine. This
+          matters because the same hardware preparation can be physically wrong
+          if it is placed on the wrong side, edge, or orientation of the door.
+        </p>
+      </div>
+
+    <figure className="trainingFigure">
+  <img
+    src={img.orientation}
+    alt="Machine orientation shown in Door Fabrication"
+    style={{
+      width: "60%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+    }}
+  />
+</figure>
+
+      <h3>
         Bring Doors in From the Project
       </h3>
 
@@ -208,7 +238,7 @@ export default function LessonTwentyDoorFabricationOverviewPage() {
 
         <p>
           For most users, it is safer and easier to create the entrance and
-          establish the correct door size before reaching this screen.
+          establish the correct door size in the frame builder before reaching this screen.
         </p>
 
         <p>
@@ -368,27 +398,21 @@ export default function LessonTwentyDoorFabricationOverviewPage() {
 
       <div className="lessonText">
         <p>
-          One of the most important concepts in this lesson is that the
-          hardware preparations used for machining the door need to be added
-          through the Door Fabrication workflow.
+          Doors pulled into this screen are BLANK. Even if you went through in the frame builder and 
+          told this door it had but hinges, a closer and panic, the door is still blank. 
+          All of those choices are for estimating only and do not apply hardware to the door. 
         </p>
 
         <p>
-          Do not assume that because the door hardware has been identified
-          elsewhere in the project, every machining operation will
-          automatically appear here.
+          We will apply the preps we previously built in door fabrication. 
         </p>
 
-        <p>
-          You still need to make sure the correct fabrication preparations are
-          applied to the door.
-        </p>
       </div>
 
       <div className="connectionFlow">
         <div>
           <p className="sectionLabel">
-            Lesson 19
+            Lesson 18
           </p>
 
           <strong>
@@ -406,15 +430,15 @@ export default function LessonTwentyDoorFabricationOverviewPage() {
 
         <div>
           <p className="sectionLabel">
-            Lesson 18
+            Lesson 19
           </p>
 
           <strong>
-            Library Fabrication
+            Create Hardware
           </strong>
 
           <p>
-            Have a verified reusable machining prep available.
+            use Fab rules library to build preps 
           </p>
         </div>
 
@@ -448,42 +472,14 @@ export default function LessonTwentyDoorFabricationOverviewPage() {
         </p>
       </div>
 
-      <h3>
-        Check Machine Orientation
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Before you begin positioning hardware preparations, verify the
-          machine orientation shown in the Door Fabrication screen.
-        </p>
-
-        <p>
-          The orientation tells you how the door relates to the machine. This
-          matters because the same hardware preparation can be physically wrong
-          if it is placed on the wrong side, edge, or orientation of the door.
-        </p>
-      </div>
-
-      <figure className="trainingFigure">
-        <img
-          src={img.orientation}
-          alt="Machine orientation shown in Door Fabrication"
-        />
-
-        <figcaption>
-          Verify the machine orientation before relying on fabrication
-          locations.
-        </figcaption>
-      </figure>
-
+      
       <div className="orientationChecklist">
         <div>
           <span>01</span>
 
           <div>
             <strong>
-              Identify the Door
+              Identify the Door sizing 
             </strong>
 
             <p>
@@ -515,7 +511,7 @@ export default function LessonTwentyDoorFabricationOverviewPage() {
             </strong>
 
             <p>
-              Understand how the door will be positioned for fabrication.
+              Understand how the door will be positioned for fabrication. Front drills will never be used on a full door. 
             </p>
           </div>
         </div>
@@ -536,75 +532,15 @@ export default function LessonTwentyDoorFabricationOverviewPage() {
         </div>
       </div>
 
-      <div className="calloutBox warningCallout">
-        <strong>
-          Orientation is not something to check only at the end.
-        </strong>
-
-        <p>
-          Check it before adding the hardware preparations, and verify it again
-          before outputting the door.
-        </p>
-      </div>
 
       <h3>
-        What You Are Building Toward
+        In the Next lesson we will apply the hardware we built
       </h3>
 
-      <div className="lessonText">
-        <p>
-          By the time a door is ready to output, you should have the correct
-          door selected, understand its orientation, and have every required
-          hardware preparation correctly positioned.
-        </p>
-
-        <p>
-          The next three steps will walk through that process.
-        </p>
-      </div>
-
-      <div className="roadmapGrid">
-        <div>
-          <span>Step 2</span>
-
-          <strong>
-            Adding Hardware Preparations
-          </strong>
-
-          <p>
-            Add individual operations and reusable Library Fabs to the door.
-          </p>
-        </div>
-
-        <div>
-          <span>Step 3</span>
-
-          <strong>
-            Reviewing &amp; Verifying
-          </strong>
-
-          <p>
-            Review the machining, dimensions, orientation, and detailed door
-            view.
-          </p>
-        </div>
-
-        <div>
-          <span>Step 4</span>
-
-          <strong>
-            Outputting Doors
-          </strong>
-
-          <p>
-            Perform the final checks and send the completed door for
-            fabrication.
-          </p>
-        </div>
-      </div>
+      
 
       <h3>
-        Step 1 Review
+        Review
       </h3>
 
       <div className="reviewGrid">

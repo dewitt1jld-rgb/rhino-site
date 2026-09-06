@@ -83,92 +83,17 @@ export default function LessonTwentyOutputtingDoorsPage() {
         </p>
       </div>
 
-      <h3>
-        Final Door Check
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Before creating the output file, verify that the correct door is
-          selected and that the fabrication matches the actual hardware
-          requirements for that door.
-        </p>
-      </div>
-
-      <div className="finalCheckGrid">
-        <div>
-          <span>1</span>
-
-          <div>
-            <strong>
-              Correct Project
-            </strong>
-
-            <p>
-              Confirm you are working in the correct project before outputting
-              the door.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>2</span>
-
-          <div>
-            <strong>
-              Correct Door
-            </strong>
-
-            <p>
-              Verify the correct door leaf is selected.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>3</span>
-
-          <div>
-            <strong>
-              Correct Orientation
-            </strong>
-
-            <p>
-              Make sure the door orientation matches the way it will be
-              fabricated on the machine.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>4</span>
-
-          <div>
-            <strong>
-              Correct Hardware Preps
-            </strong>
-
-            <p>
-              Confirm all required machining is present and correctly located.
-            </p>
-          </div>
-        </div>
-      </div>
-
+    
       <h3>
         Make Sure the Rhino Is Ready
       </h3>
 
       <div className="lessonText">
         <p>
-          Before outputting the job, make sure the Rhino is powered on and
-          ready to receive the fabrication file.
+          Before outputting the job, make sure the Rhino is powered on to receive the fabrication file.
         </p>
 
-        <p>
-          Also make sure you are using the correct output path for the machine
-          you intend to run.
-        </p>
+     
       </div>
 
       <div className="machineReadyGrid">
@@ -194,12 +119,12 @@ export default function LessonTwentyOutputtingDoorsPage() {
 
         <div>
           <strong>
-            Correct Project
+            Correct Project Name
           </strong>
 
           <p>
             Double-check that the file you are outputting belongs to the job
-            you intend to fabricate.
+            you intend to fabricate and the name is distinct and recognizable for the operator. 
           </p>
         </div>
 
@@ -214,16 +139,6 @@ export default function LessonTwentyOutputtingDoorsPage() {
         </div>
       </div>
 
-      <div className="calloutBox warningCallout">
-        <strong>
-          Be careful when multiple machines or output locations are available.
-        </strong>
-
-        <p>
-          Sending the correct door to the wrong output path can create confusion
-          on the shop floor and may cause the wrong machine to receive the job.
-        </p>
-      </div>
 
       <h3>
         Click Output
@@ -345,111 +260,7 @@ export default function LessonTwentyOutputtingDoorsPage() {
         </figcaption>
       </figure>
 
-      <div className="calloutBox warningCallout">
-        <strong>
-          The correct fabrication is only useful if the machine receives the
-          correct file type.
-        </strong>
 
-        <p>
-          If a 5000 Series machine is not receiving or recognizing the expected
-          door output, verify the DAT output configuration.
-        </p>
-      </div>
-
-      <h3>
-        Do Not Skip the Final Verification
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Door hardware machining can be much less forgiving than many simple
-          frame fabrications.
-        </p>
-
-        <p>
-          A lock prep, hinge prep, exit device pattern, or other hardware
-          preparation may contain several operations. If one of those
-          operations is wrong, the finished door may no longer accept the
-          intended hardware.
-        </p>
-
-        <p>
-          Spend the extra few seconds reviewing the door before outputting it.
-        </p>
-      </div>
-
-      <div className="verificationSequence">
-        <div>
-          <p className="sectionLabel">
-            Check 1
-          </p>
-
-          <strong>
-            Hardware
-          </strong>
-
-          <span>
-            Is this the correct hardware for this door?
-          </span>
-        </div>
-
-        <div>
-          <p className="sectionLabel">
-            Check 2
-          </p>
-
-          <strong>
-            Prep
-          </strong>
-
-          <span>
-            Is the correct Library Fab or machining pattern applied?
-          </span>
-        </div>
-
-        <div>
-          <p className="sectionLabel">
-            Check 3
-          </p>
-
-          <strong>
-            Location
-          </strong>
-
-          <span>
-            Are all hardware locations correct?
-          </span>
-        </div>
-
-        <div>
-          <p className="sectionLabel">
-            Check 4
-          </p>
-
-          <strong>
-            Orientation
-          </strong>
-
-          <span>
-            Is the machining on the correct face and side of the door?
-          </span>
-        </div>
-
-        <div>
-          <p className="sectionLabel">
-            Check 5
-          </p>
-
-          <strong>
-            Output
-          </strong>
-
-          <span>
-            Is the file going to the correct machine?
-          </span>
-        </div>
-      </div>
 
       <h3>
         Door Fabrication Workflow</h3>
@@ -465,26 +276,26 @@ export default function LessonTwentyOutputtingDoorsPage() {
           <span>01</span>
 
           <div>
-            <strong>
-              Import the Door
-            </strong>
-
-            <p>
-              Bring the correct door into Door Fabrication from the project.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>02</span>
-
-          <div>
+             <div>
             <strong>
               Verify Orientation
             </strong>
 
             <p>
               Understand how the door is represented relative to the machine.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <span>02</span>
+            <div>
+            <strong>
+              Import the Door
+            </strong>
+
+            <p>
+              Bring the correct door into Door Fabrication from the project.
             </p>
           </div>
         </div>
@@ -575,16 +386,7 @@ export default function LessonTwentyOutputtingDoorsPage() {
         </div>
       </div>
 
-      <div className="calloutBox successCallout">
-        <strong>
-          The goal is not simply to make the software output a file.
-        </strong>
-
-        <p>
-          The goal is to make sure the file describes the exact door you intend
-          to manufacture.
-        </p>
-      </div>
+  
 
       <h3>
         Lesson 20 Review

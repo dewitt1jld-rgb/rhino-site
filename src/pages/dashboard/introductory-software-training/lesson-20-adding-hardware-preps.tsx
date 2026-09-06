@@ -62,66 +62,9 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
       <div className="lessonText">
         <p>
           Once the correct door is selected and its machine orientation has
-          been verified, you can begin adding the machining required for the
-          door hardware.
+          been verified, you can begin adding the preps by clicking on the add opperation box (blue square with 3 dots)
         </p>
 
-        <p>
-          Door Fabrication gives you two main ways to add machining:
-          <strong> Add Operation</strong> and <strong>Add Library Fabs</strong>.
-        </p>
-
-        <p>
-          Which one you use depends on whether you are creating individual
-          machining operations or applying a reusable preparation that has
-          already been built in the Fab Rules Library.
-        </p>
-      </div>
-
-      <div className="methodGrid">
-        <div>
-          <p className="sectionLabel">
-            Option 1
-          </p>
-
-          <h3>
-            Add Operation
-          </h3>
-
-          <p>
-            Add an individual machining operation directly to the selected
-            door.
-          </p>
-        </div>
-
-        <div>
-          <p className="sectionLabel">
-            Option 2
-          </p>
-
-          <h3>
-            Add Library Fabs
-          </h3>
-
-          <p>
-            Select a reusable preparation from the Fab Rules Library and place
-            it on the door.
-          </p>
-        </div>
-      </div>
-
-      <div className="calloutBox">
-        <strong>
-          For common hardware, Library Fabs are usually the more efficient
-          workflow.
-        </strong>
-
-        <p>
-          If a verified prep already exists, you can reuse the full machining
-          pattern instead of rebuilding every route and drill operation each
-          time.
-        </p>
-      </div>
 
       <h3>
         Add Operation
@@ -138,10 +81,6 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
           seen in other areas of the software.
         </p>
 
-        <p>
-          This option is useful when you need to create a specific machining
-          operation rather than applying a complete reusable hardware prep.
-        </p>
       </div>
 
       <figure className="trainingFigure">
@@ -156,32 +95,16 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
         </figcaption>
       </figure>
 
-      <div className="calloutBox">
-        <strong>
-          Remember the difference:
-        </strong>
 
-        <p>
-          <strong>Add Operation</strong> adds individual machining.{" "}
-          <strong>Add Library Fabs</strong> applies a previously created group
-          of machining operations.
-        </p>
-      </div>
 
       <h3>
         Add Library Fabs
       </h3>
 
       <div className="lessonText">
+   
         <p>
-          For hardware preparations that have already been created in the Fab
-          Rules Library, use <strong>Add Library Fabs</strong>.
-        </p>
-
-        <p>
-          This opens the Library Fab selection screen where you can find the
-          correct hardware prep and then determine where it should be placed on
-          the door.
+          In the lower left hand corner of the screen click on "ADD LIBRARY FAB"
         </p>
       </div>
 
@@ -385,7 +308,7 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
 
           <p>
             Hardware schedules may specify locations relative to finished
-            floor.
+            floor. This is helfull when you are trying to match up door and frame preps. 
           </p>
         </div>
       </div>
@@ -397,8 +320,7 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
         </strong>
 
         <p>
-          Make sure you understand the dimension before entering the hardware
-          location.
+          Finished floor will account for the bottom door gap where Bottom of door will not. 
         </p>
       </div>
 
@@ -541,7 +463,7 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
       <div className="lessonText">
         <p>
           Once the correct Library Fab has been selected and all required
-          locations have been added, use <strong>Apply</strong> to place the
+          locations have been added, use <strong>OK</strong> to place the
           fabrication onto the door.
         </p>
 
@@ -551,45 +473,7 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
         </p>
       </div>
 
-      <div className="applyFlow">
-        <div>
-          <strong>
-            Select
-          </strong>
-
-          <span>
-            Choose the correct Library Fab.
-          </span>
-        </div>
-
-        <div className="flowArrow">
-          →
-        </div>
-
-        <div>
-          <strong>
-            Position
-          </strong>
-
-          <span>
-            Enter and add each required location.
-          </span>
-        </div>
-
-        <div className="flowArrow">
-          →
-        </div>
-
-        <div>
-          <strong>
-            Apply
-          </strong>
-
-          <span>
-            Add the complete preparation to the door.
-          </span>
-        </div>
-      </div>
+     
 
       <div className="calloutBox">
         <strong>
@@ -603,86 +487,10 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
         </p>
       </div>
 
-      <h3>
-        Hardware Prep Workflow
-      </h3>
-
-      <div className="workflowChecklist">
-        <div>
-          <span>01</span>
-
-          <p>
-            Select the correct door.
-          </p>
-        </div>
-
-        <div>
-          <span>02</span>
-
-          <p>
-            Verify the machine orientation.
-          </p>
-        </div>
-
-        <div>
-          <span>03</span>
-
-          <p>
-            Choose Add Operation or Add Library Fabs.
-          </p>
-        </div>
-
-        <div>
-          <span>04</span>
-
-          <p>
-            Select the exact hardware preparation.
-          </p>
-        </div>
-
-        <div>
-          <span>05</span>
-
-          <p>
-            Determine the correct hardware location.
-          </p>
-        </div>
-
-        <div>
-          <span>06</span>
-
-          <p>
-            Enter the location and click ADD.
-          </p>
-        </div>
-
-        <div>
-          <span>07</span>
-
-          <p>
-            Repeat for additional locations when necessary.
-          </p>
-        </div>
-
-        <div>
-          <span>08</span>
-
-          <p>
-            Click Apply.
-          </p>
-        </div>
-
-        <div>
-          <span>09</span>
-
-          <p>
-            Review the resulting fabrication before output.
-          </p>
-        </div>
-      </div>
+ 
 
       <h3>
-        Step 2 Review
+        Review
       </h3>
 
       <div className="reviewGrid">

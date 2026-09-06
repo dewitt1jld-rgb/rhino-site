@@ -249,9 +249,8 @@ lessonTitle="Library Fabrications"
         </p>
 
         <p>
-          Enter the dimensions required to create the routed hinge pocket,
-          including the location, size, and depth required by the hardware
-          drawing.
+         In the Hardware image above we will be referancing the upper image as that is how we will be running the door through the machine. 
+         Also notice that the Z location is not explicitly stated for the rectangle cut out. Many preps will require some math to figure out the mid point of the opperation. 
         </p>
       </div>
 
@@ -273,7 +272,7 @@ lessonTitle="Library Fabrications"
           <div>
             <strong>Width / Length</strong>
             <span>
-              Match the hardware drawing or manufacturer template.
+              Remember, Width is in the Y direction (left and right) and height is the other direction. 
             </span>
           </div>
 

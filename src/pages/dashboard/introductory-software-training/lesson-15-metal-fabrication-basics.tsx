@@ -10,7 +10,7 @@ const steps = [
   {
     number: 2,
     title: "Fabrication Modifications",
-    href: "/dashboard/introductory-software-training/lesson-15-fabrication-modifications",
+    href: "/dashboard/introductory-software-training/lesson-15-modifying-checking-operations",
   },
 ];
 
@@ -461,7 +461,7 @@ export default function LessonFifteenMetalFabricationBasicsPage() {
 
         <p>
           For now, I want you to pay the most attention to the columns starting
-          around <strong>Part ID</strong> and continuing through the stick-angle
+          around <strong>Part ID</strong> and continuing through the <strong>stick-angle</strong>
           information.
         </p>
 
@@ -691,7 +691,7 @@ export default function LessonFifteenMetalFabricationBasicsPage() {
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-15-fabrication-modifications"
+          href="/dashboard/introductory-software-training/lesson-15-modifying-checking-operations"
           className="primary"
         >
           Next: Fabrication Modifications →

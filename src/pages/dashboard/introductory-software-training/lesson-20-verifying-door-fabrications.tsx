@@ -188,7 +188,7 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
       <div className="lessonText">
         <p>
           The X, Y, and Z information is one of the most important things to
-          review before fabrication.
+          review before sending the job to the machine.
         </p>
 
         <p>
@@ -198,7 +198,7 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
 
         <p>
           If the numbers are correct, but the graphical preview looks slightly
-          unusual, the actual fabrication data is generally the more important
+          unusual, the actual fabrication data is the more important
           information to trust.
         </p>
       </div>
@@ -210,11 +210,11 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
           </p>
 
           <strong>
-            Horizontal Position
+            Distance from back fence (often 0 when using the back drill)
           </strong>
 
           <p>
-            Verify the operation is positioned correctly across the door.
+            (often 0 when using the back drill)
           </p>
         </div>
 
@@ -224,11 +224,11 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
           </p>
 
           <strong>
-            Vertical Position
+            Left and Right Position
           </strong>
 
           <p>
-            Verify the operation is at the correct hardware height or location.
+            Verify the operation is at the correct location.
           </p>
         </div>
 
@@ -238,12 +238,12 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
           </p>
 
           <strong>
-            Depth / Surface Relationship
+            Distance above the table
           </strong>
 
           <p>
-            Confirm the operation is machining the correct depth and side of
-            the material.
+            Confirm the operation is machining at the correct height up and down. 
+            If you are using a 1.75" door, make sure your Z on any top drills also says 1.75"
           </p>
         </div>
       </div>
@@ -319,7 +319,7 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
 
       <div className="lessonText">
         <p>
-          The <strong>Detail View</strong> gives you a more realistic
+          The <strong>Detail View</strong> checkbox can be found in the lower left hand corner and gives you a more realistic
           representation of the door and its applied fabrications.
         </p>
 
@@ -327,6 +327,11 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
           This is especially helpful when checking hardware orientation,
           lock-side locations, hinge relationships, and other preparations that
           are easier to understand visually in three dimensions.
+        </p>
+
+                <p>
+          sometimes if the finish is dark it can be hard to see the fabrications. There is a visibility scale at the bottom center of the screen. 
+          Turning this down will make it easier to see fabrications. 
         </p>
       </div>
 
@@ -342,22 +347,6 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
         </figcaption>
       </figure>
 
-      <h3>
-        Use Draw Fabs
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Within the detailed door view, use <strong>Draw Fabs</strong> to
-          display the applied machining on the door.
-        </p>
-
-        <p>
-          This gives you another visual check before output and can make it
-          easier to catch a prep that has been placed on the wrong side or at
-          the wrong location.
-        </p>
-      </div>
 
       <div className="detailBenefits">
         <div>
@@ -404,7 +393,7 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
 
       <div className="calloutBox">
         <strong>
-          Use both the table and the detailed view.
+          Use both the X, Y and Z and the detailed view.
         </strong>
 
         <p>
@@ -413,21 +402,6 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
         </p>
       </div>
 
-      <h3>
-        Verify Repeated Preparations
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Hardware such as hinges may use the same Library Fab several times on
-          one door.
-        </p>
-
-        <p>
-          Make sure every intended location was added and that no extra
-          locations were accidentally included.
-        </p>
-      </div>
 
       <div className="repeatChecklist">
         <div>
@@ -479,51 +453,7 @@ export default function LessonTwentyVerifyingDoorFabricationsPage() {
         </p>
       </div>
 
-      <div className="orientationFlow">
-        <div>
-          <span>1</span>
 
-          <strong>
-            Door Handing
-          </strong>
-
-          <p>
-            Confirm which way the door is intended to swing.
-          </p>
-        </div>
-
-        <div className="flowArrow">
-          →
-        </div>
-
-        <div>
-          <span>2</span>
-
-          <strong>
-            Machine Orientation
-          </strong>
-
-          <p>
-            Confirm how the door is represented relative to the machine.
-          </p>
-        </div>
-
-        <div className="flowArrow">
-          →
-        </div>
-
-        <div>
-          <span>3</span>
-
-          <strong>
-            Fabrication Locations
-          </strong>
-
-          <p>
-            Confirm each prep matches that orientation.
-          </p>
-        </div>
-      </div>
 
       <div className="calloutBox warningCallout">
         <strong>
