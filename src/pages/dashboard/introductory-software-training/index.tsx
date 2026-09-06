@@ -228,7 +228,7 @@ const courseModules: CourseModule[] = [
   number: "06",
   title: "Metal Fabrication",
   description:
-    "Learn how to navigate the Metal Fabrication screen, import and correct project fabrications, and troubleshoot secondary fabrications before sending a job to production.",
+    "Learn how to navigate Metal Fabrication, import and review project data, identify fabrication problems, and understand how secondary fabrications transfer between framing members.",
   lessons: [
     {
       number: "15",
@@ -237,18 +237,18 @@ const courseModules: CourseModule[] = [
       status: "Available",
       stepCount: 2,
       description:
-        "Learn how to navigate the Metal Fabrication screen, understand the project and stick information, and review the fabrication operations used to prepare material for production.",
+        "Learn how to navigate the Metal Fabrication screen, understand project and stick information, review fabrication operations, and use important Metal Fabrication tools and features.",
       href: "/dashboard/introductory-software-training/lesson-15-metal-fabrication-basics",
     },
     {
       number: "16",
-      title: "Import and Fix Our Test Project",
+      title: "Importing & Reviewing Projects",
       time: "45–60 min",
       status: "Available",
       stepCount: 3,
       description:
-        "Import the test project we have been building throughout the course, review the generated fabrications, identify problems, and make the corrections needed before production.",
-      href: "/dashboard/introductory-software-training/lesson-16-import-fix-project",
+        "Import the test project, review fabrication warnings, use Reports and Optimize, and learn how to identify the source of missing or incorrectly positioned fabrications.",
+      href: "/dashboard/introductory-software-training/lesson-16-import-test-frame",
     },
     {
       number: "17",
@@ -257,12 +257,11 @@ const courseModules: CourseModule[] = [
       status: "Available",
       stepCount: 3,
       description:
-        "Learn how secondary fabrications transfer from one member to another and how to identify and correct screw spline, shear block, and other transferred fabrication problems.",
+        "Learn how secondary fabrications transfer between framing members, how to measure them using X, Y, and Z locations, and how Metal Group keywords such as BOH and FW create reusable fabrication rules.",
       href: "/dashboard/introductory-software-training/lesson-17-secondary-fabrications",
     },
   ],
 },
-
 
 {
   number: "07",
