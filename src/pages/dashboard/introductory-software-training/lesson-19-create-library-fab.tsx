@@ -195,6 +195,23 @@ lessonTitle="Library Fabrications"
         </p>
       </div>
 
+            <h3>
+        One Prep Can Contain Multiple Operations
+      </h3>
+
+      <div className="lessonText">
+        <p>
+          A Library Fabrication is not limited to a single drill hole or router
+          operation.
+        </p>
+
+        <p>
+          One saved library prep can contain every machining operation required for the
+          complete piece of hardware. Keep in mind that if your machine may be limited to using one tool at a time. 
+          If thats the case, do not make a prep that utelizes multiple tools on the same surface. 
+        </p>
+      </div>
+
       <h3>
         Build the Prep From the Hardware Dimensions
       </h3>
@@ -237,23 +254,6 @@ lessonTitle="Library Fabrications"
     </figcaption>
   </figure>
 </div>
-
-      <h3>
-        One Prep Can Contain Multiple Operations
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          A Library Fabrication is not limited to a single drill hole or router
-          operation.
-        </p>
-
-        <p>
-          One saved library prep can contain every machining operation required for the
-          complete piece of hardware. Keep in mind that if your machine may be limited to using one tool at a time. 
-          If thats the case, do not make a prep that utelizes multiple tools on the same surface. 
-        </p>
-      </div>
 
 <div className="exampleBox">
   <p className="sectionLabel">
@@ -334,8 +334,8 @@ lessonTitle="Library Fabrications"
         <div className="locationValues">
           <div>
             <strong>Positive Y</strong>
-            <span>+3.000&quot;</span>
-            <span>+3.500&quot;</span>
+            <span>3.000&quot;</span>
+            <span>3.500&quot;</span>
           </div>
 
           <div>
@@ -509,8 +509,8 @@ lessonTitle="Library Fabrications"
 
         <p>
           At this point you have created the machining pattern itself. The next
-          step is understanding how formulas and location references control
-          where that preparation is positioned.
+          step is understanding Y and X LOC and how to use formulas to make preps 
+          useful on diffrent size material rather then locking one prep to one size door. 
         </p>
       </div>
 
@@ -608,7 +608,7 @@ lessonTitle="Library Fabrications"
         }
 
         .largeFigure {
-  width: 140%;
+  width: 120%;
   max-width: none;
   margin-left: -10%;
 }

@@ -14,11 +14,6 @@ const steps = [
   },
   {
     number: 3,
-    title: "Hardware Prep Requirements",
-    href: "/dashboard/introductory-software-training/lesson-18-hardware-prep-requirements",
-  },
-  {
-    number: 4,
     title: "Organizing Hardware",
     href: "/dashboard/introductory-software-training/lesson-18-organizing-hardware",
   },
@@ -28,7 +23,7 @@ const hardwareExamples = [
   {
     name: "Hinges & Pivots",
     purpose:
-      "Support the door and allow it to swing while controlling the relationship between the door and frame.",
+      "Support the door and allow it to swing while controlling the connection between the door and frame.",
     prep:
       "May require routed pockets, drilled holes, countersinks, or pivot-specific machining depending on the hardware.",
     note:
@@ -41,7 +36,7 @@ const hardwareExamples = [
     prep:
       "May require lock-body routing, cylinder holes, spindle holes, mounting holes, or related machining.",
     note:
-      "Different lock families can require very different preparations even when they serve the same general purpose.",
+      "Different lock families can require very different backsets even when they serve the same general purpose.",
   },
   {
     name: "Strikes",
@@ -372,8 +367,7 @@ export default function LessonNineteenCommonHardwarePage() {
           </strong>
 
           <p>
-            Locks, cylinders, pulls, exit devices, hinges, pivots, and other
-            hardware may require machining directly into the door.
+            Fabrications often use all 3 drills as doors will have hardware holes on the top, bottom and side of the door. 
           </p>
         </div>
 
@@ -387,8 +381,7 @@ export default function LessonNineteenCommonHardwarePage() {
           </strong>
 
           <p>
-            Strikes, hinge locations, pivots, closer-related mounting, and
-            other hardware may require preparation in framing members.
+            Frame preps often are only located on the top of the jamb as the jams lay flat while running through the machine. 
           </p>
         </div>
       </div>
@@ -399,148 +392,15 @@ export default function LessonNineteenCommonHardwarePage() {
         </strong>
 
         <p>
-          Identifying the correct hardware is only half the job. You also need
-          to know which part of the entrance actually receives the machining.
+          Identifying the correct hardware is only half the job. 
+          Just because you made a Butt hinge that works perfect on the side of a door, 
+          does not mean it will work on the top of a jamb. The data points and drill locations must all be shifted. 
+          Often times you will have a door prep and a frame prep for the same piece of harware. 
         </p>
       </div>
 
       <h3>
-        Hardware Preps You Will Commonly Reuse
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          Some hardware preparations are used repeatedly across many projects.
-          These are excellent candidates for reusable Library Fabrications.
-        </p>
-
-        <p>
-          Once a prep has been carefully built and verified, reusing it can
-          improve consistency and reduce the amount of manual fabrication setup
-          required on future jobs.
-        </p>
-      </div>
-
-      <div className="reuseGrid">
-        <div>
-          <strong>
-            Hinge Prep
-          </strong>
-
-          <span>
-            Often repeated several times on one door.
-          </span>
-        </div>
-
-        <div>
-          <strong>
-            Lock Prep
-          </strong>
-
-          <span>
-            Common preparation tied to a specific lock family or model.
-          </span>
-        </div>
-
-        <div>
-          <strong>
-            Strike Prep
-          </strong>
-
-          <span>
-            Reusable when the same strike and frame configuration are used.
-          </span>
-        </div>
-
-        <div>
-          <strong>
-            Pull Prep
-          </strong>
-
-          <span>
-            Simple repeated drilling pattern when dimensions are consistent.
-          </span>
-        </div>
-      </div>
-
-      <h3>
-        Additional Hardware Examples
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          This section is intentionally left open so additional real-world
-          hardware preparations can be added to the course over time.
-        </p>
-
-        <p>
-          When possible, use actual hardware drawings or completed fabrication
-          examples so students can see how the physical hardware turns into a
-          machining pattern.
-        </p>
-      </div>
-
-      <div className="additionalGrid">
-        <div className="placeholderCard">
-          <p className="sectionLabel">
-            Additional Example 1
-          </p>
-
-          <h3>
-            Add Hardware Prep Here
-          </h3>
-
-          <p>
-            Add a real hardware example, manufacturer drawing, preparation
-            screenshot, and a short explanation of the machining required.
-          </p>
-        </div>
-
-        <div className="placeholderCard">
-          <p className="sectionLabel">
-            Additional Example 2
-          </p>
-
-          <h3>
-            Add Hardware Prep Here
-          </h3>
-
-          <p>
-            Use this space for another commonly used hardware prep from your
-            normal fabrication workflow.
-          </p>
-        </div>
-
-        <div className="placeholderCard">
-          <p className="sectionLabel">
-            Additional Example 3
-          </p>
-
-          <h3>
-            Add Hardware Prep Here
-          </h3>
-
-          <p>
-            This can be used for a more advanced or less common hardware
-            preparation once you decide what example will be most useful.
-          </p>
-        </div>
-      </div>
-
-      <div className="calloutBox instructorCallout">
-        <strong>
-          Instructor Expansion Area
-        </strong>
-
-        <p>
-          The three cards above are intentionally easy to replace later. We
-          can add actual images, hardware names, dimensions, and preparation
-          explanations without changing the rest of the lesson.
-        </p>
-      </div>
-
-      <h3>
-        Step 2 Review
+        Review
       </h3>
 
       <div className="reviewGrid">
@@ -625,7 +485,7 @@ export default function LessonNineteenCommonHardwarePage() {
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-18-hardware-prep-requirements"
+          href="/dashboard/introductory-software-training/lesson-18-organizing-hardware"
           className="primary"
         >
           Next: Hardware Prep Requirements →

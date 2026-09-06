@@ -30,7 +30,7 @@ const img = {
   onDoor:
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/doors-and-library-fab/library-fab/images/library-fab-04-on-door.png",
 
-  data: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/doors-and-library-fab/library-fab/images/library-fab-05-data.png",
+  data: "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_19/butt_hinge_prpr_complete.png",
 
   xyLoc:
     "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/doors-and-library-fab/library-fab/images/library-fab-10-xy-loc.png",
@@ -191,8 +191,7 @@ lessonTitle="Library Fabrications"
         />
 
         <figcaption>
-          Build the preparation around a consistent reference point so the
-          complete machining pattern can later be moved as one unit.
+         This is just a generic image highlighting X and Y loc. make sure you name your prep better and give it a good description. 
         </figcaption>
       </figure>
 
@@ -246,7 +245,7 @@ lessonTitle="Library Fabrications"
 
       <div className="lessonText">
         <p>
-          Begin by creating the main routed portion of the hardware prep.
+          Begin by opening the opperations tab and creating the main routed portion of the hardware prep.
         </p>
 
         <p>
@@ -265,8 +264,9 @@ lessonTitle="Library Fabrications"
           <div>
             <strong>Location</strong>
             <span>
-              Position the routed area relative to the Library Fab reference
-              point.
+              This prep is going on the side of a door. when laying down in the machine, 
+              the machine will utilize the back drill to do these preps. 
+              That being said, we know our X should be "0" for all of these operations. 
             </span>
           </div>
 
@@ -310,7 +310,7 @@ lessonTitle="Library Fabrications"
         </p>
 
         <p>
-          This drawing shows us that the left side of the stick is the bottom of the door rail. 
+          This hardware drawing above shows us that the left side of the stick is the bottom of the door rail. 
           That means that holes on the left side of the centerline should be negative
           values while the matching holes on the right side use positive
           values.
@@ -324,8 +324,7 @@ lessonTitle="Library Fabrications"
         />
 
         <figcaption>
-          Translate the hardware dimensions into the operation data required by
-          the Library Fabrication.
+          This is what the prep sohuld look like once you are finished. 
         </figcaption>
       </figure>
 

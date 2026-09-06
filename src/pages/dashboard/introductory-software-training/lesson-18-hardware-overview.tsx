@@ -414,73 +414,22 @@ lessonTitle="Door Hardware & Components"
       </div>
 
       <h3>
-        Hardware Does Not Automatically Mean Fabrication
+        Doors start off blank, all hardware must be manually applied
       </h3>
 
       <div className="lessonText">
         <p>
-          One important concept to understand is that knowing which hardware is
-          being used does not automatically mean the machine knows what to cut.
+          One important concept to understand is that hardware does not automatically get 
+          applied to the door even if you chose "butt hinge" when building the door in the frame builder. 
         </p>
 
-        <p>
-          The fabrication preparation still needs to exist and be correctly
-          applied.
+           <p>
+          You will see in lesson 21 that the doors pull in completly blank and you must add each library fabrication or hardware to the door.
         </p>
 
-        <p>
-          This is why the Library Fabrications from Lesson 18 are so important.
-          They give you a reusable machining prep that can be selected when a
-          particular piece of hardware is required.
-        </p>
       </div>
 
-      <div className="connectionBox">
-        <p className="sectionLabel">
-          How Lesson 18 Connects to Lesson 19
-        </p>
-
-        <div className="connectionFlow">
-          <div>
-            <strong>
-              Hardware
-            </strong>
-
-            <span>
-              Identify what is being installed.
-            </span>
-          </div>
-
-          <div className="connectionArrow">
-            →
-          </div>
-
-          <div>
-            <strong>
-              Library Fab
-            </strong>
-
-            <span>
-              Select or create the correct prep.
-            </span>
-          </div>
-
-          <div className="connectionArrow">
-            →
-          </div>
-
-          <div>
-            <strong>
-              Door Fabrication
-            </strong>
-
-            <span>
-              Apply the prep to the actual door.
-            </span>
-          </div>
-        </div>
-      </div>
-
+      
       <div className="calloutBox warningCallout">
         <strong>
           Never assume two similar pieces of hardware use the same prep.

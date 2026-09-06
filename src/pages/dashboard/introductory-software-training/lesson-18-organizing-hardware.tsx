@@ -14,11 +14,6 @@ const steps = [
   },
   {
     number: 3,
-    title: "Hardware Prep Requirements",
-    href: "/dashboard/introductory-software-training/lesson-18-hardware-prep-requirements",
-  },
-  {
-    number: 4,
     title: "Organizing Hardware",
     href: "/dashboard/introductory-software-training/lesson-18-organizing-hardware",
   },
@@ -735,7 +730,7 @@ lessonTitle="Door Hardware & Components"
 
       <div className="navButtons">
         <Link
-          href="/dashboard/introductory-software-training/lesson-18-hardware-prep-requirements"
+          href="/dashboard/introductory-software-training/lesson-18-common-hardware"
           className="secondary"
         >
           ← Previous: Hardware Prep Requirements
