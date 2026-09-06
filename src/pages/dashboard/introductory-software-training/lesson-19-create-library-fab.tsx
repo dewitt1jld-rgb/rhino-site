@@ -35,7 +35,7 @@ const img = {
 export default function LessonEighteenCreateLibraryFabPage() {
   return (
     <AcademyLessonLayout
-      lessonNumber="18"
+      lessonNumber="19"
 lessonTitle="Library Fabrications"
       lessonDescription="Learn how reusable fabrication rules are created, saved, positioned, and reused for door hardware and other fabrication workflows."
       currentStep={2}

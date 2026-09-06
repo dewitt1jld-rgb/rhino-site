@@ -618,7 +618,7 @@ export default function LessonNineteenCommonHardwarePage() {
 
       <div className="navButtons">
         <Link
-          href="/dashboard/introductory-software-training/lesson-19-hardware-overview"
+          href="/dashboard/introductory-software-training/lesson-18-hardware-overview"
           className="secondary"
         >
           ← Previous: Hardware Overview
