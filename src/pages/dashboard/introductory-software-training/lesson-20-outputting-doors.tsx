@@ -271,35 +271,34 @@ export default function LessonTwentyOutputtingDoorsPage() {
         </p>
       </div>
 
-      <div className="fullWorkflow">
-        <div>
-          <span>01</span>
+<div className="fullWorkflow">
+  <div>
+    <span>01</span>
 
-          <div>
-             <div>
-            <strong>
-              Verify Orientation
-            </strong>
+    <div>
+      <strong>
+        Verify Orientation
+      </strong>
 
-            <p>
-              Understand how the door is represented relative to the machine.
-            </p>
-          </div>
-        </div>
+      <p>
+        Understand how the door is represented relative to the machine.
+      </p>
+    </div>
+  </div>
 
-        <div>
-          <span>02</span>
-            <div>
-            <strong>
-              Import the Door
-            </strong>
+  <div>
+    <span>02</span>
 
-            <p>
-              Bring the correct door into Door Fabrication from the project.
-            </p>
-          </div>
-        </div>
+    <div>
+      <strong>
+        Import the Door
+      </strong>
 
+      <p>
+        Bring the correct door into Door Fabrication from the project.
+      </p>
+    </div>
+  </div>
         <div>
           <span>03</span>
 

@@ -59,16 +59,17 @@ export default function LessonTwentyAddingHardwarePrepsPage() {
         applying them.
       </div>
 
-      <div className="lessonText">
-        <p>
-          Once the correct door is selected and its machine orientation has
-          been verified, you can begin adding the preps by clicking on the add opperation box (blue square with 3 dots)
-        </p>
+<div className="lessonText">
+  <p>
+    Once the correct door is selected and its machine orientation has
+    been verified, you can begin adding the preps by clicking on the add
+    operation box (blue square with 3 dots)
+  </p>
+</div>
 
-
-      <h3>
-        Add Operation
-      </h3>
+<h3>
+  Add Operation
+</h3>
 
       <div className="lessonText">
         <p>
