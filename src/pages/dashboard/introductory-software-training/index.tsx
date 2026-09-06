@@ -250,16 +250,16 @@ const courseModules: CourseModule[] = [
         "Import the test project, review fabrication warnings, use Reports and Optimize, and learn how to identify the source of missing or incorrectly positioned fabrications.",
       href: "/dashboard/introductory-software-training/lesson-16-import-test-frame",
     },
-    {
-      number: "17",
-      title: "Secondary Fabrications",
-      time: "45–60 min",
-      status: "Available",
-      stepCount: 3,
-      description:
-        "Learn how secondary fabrications transfer between framing members, how to measure them using X, Y, and Z locations, and how Metal Group keywords such as BOH and FW create reusable fabrication rules.",
-      href: "/dashboard/introductory-software-training/lesson-17-secondary-fabrications",
-    },
+{
+  number: "17",
+  title: "Secondary Fabrications",
+  time: "45–60 min",
+  status: "Available",
+  stepCount: 3,
+  description:
+    "Learn how secondary fabrications transfer between framing members, how to measure and correct them, and how Metal Group Keywords determine which fabrication rules are applied to a project.",
+  href: "/dashboard/introductory-software-training/lesson-17-secondary-fabrications",
+},
   ],
 },
 

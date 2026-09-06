@@ -151,18 +151,17 @@ export default function LessonSeventeenMeasuringSecondaryFabsPage() {
           <strong>Where along the member?</strong>
 
           <p>
-            Y is where secondary fabrications begin to work differently.
+            Y is where secondary fabrications begin to work differently. Uses a BOH+ number. 
           </p>
         </div>
 
         <div>
           <span>Z</span>
 
-          <strong>Where through the framing depth?</strong>
+          <strong>What is the system depth?</strong>
 
           <p>
-            Z can use a framing reference so the same rule works across
-            different systems.
+            Z is not calculated in secondary fabs, instead we put the system depth here. usually 1.75" or 2"
           </p>
         </div>
       </div>
@@ -206,12 +205,7 @@ export default function LessonSeventeenMeasuringSecondaryFabsPage() {
           more interesting.
         </p>
 
-        <p>
-          We usually do not want to enter one fixed Y location for the
-          fabrication.
-        </p>
-
-        <p>
+           <p>
           The same horizontal member might appear near the bottom of one frame,
           in the middle of another frame, or at a completely different height
           on a different project.
@@ -382,11 +376,10 @@ export default function LessonSeventeenMeasuringSecondaryFabsPage() {
       </div>
 
       <div className="criticalBox">
-        <p className="sectionLabel">Classroom Rule</p>
+        <p className="sectionLabel">Tip</p>
 
         <h3>
-          Measure the fabrication from the horizontal, not from the finished
-          vertical.
+          Measure the fabrication from the horizontal side profile in autocad, Do not measure the vertical profile. 
         </h3>
 
         <p>
@@ -436,18 +429,6 @@ export default function LessonSeventeenMeasuringSecondaryFabsPage() {
         </p>
       </div>
 
-      <div className="axisCallout">
-        <span>Z</span>
-
-        <div>
-          <strong>Think: how deep is the receiving member?</strong>
-
-          <p>
-            FW gives the program a framing-width reference it can use while
-            positioning the fabrication.
-          </p>
-        </div>
-      </div>
 
       <h3>Put X, Y, and Z Together</h3>
 
@@ -473,7 +454,7 @@ export default function LessonSeventeenMeasuringSecondaryFabsPage() {
         <div>
           <strong>Z</strong>
           <span>How the operation relates to framing depth</span>
-          <span>FW or another appropriate depth value</span>
+          <span>FW or another appropriate height value</span>
         </div>
       </div>
 
@@ -564,9 +545,8 @@ export default function LessonSeventeenMeasuringSecondaryFabsPage() {
         </p>
 
         <p>
-          As long as the rules and orientation are correct, the program can
-          account for those differences and place the fabrication where it
-          belongs.
+          Fab rules are designed to work for both machine orientations and the software flips things based off of the machine orientation in metal fabrication.
+          When programing secondary fabs you do not need to think about stick orientation. It only cares about BOH + offset (Y loc) and back of fence out (X loc)
         </p>
       </div>
 
@@ -589,23 +569,11 @@ export default function LessonSeventeenMeasuringSecondaryFabsPage() {
         </p>
 
         <p>
-          The 9000 Series is an exception and may use a different orientation.
+          The 9000 Series is an exception and all parts are loaded backwards of what I just explained.
         </p>
       </div>
 
-      <div className="calloutBox">
-        <strong>
-          You do not need to memorize every orientation right now.
-        </strong>
-
-        <p>
-          What matters is understanding that orientation affects how the
-          software interprets the fabrication once it transfers onto the
-          vertical.
-        </p>
-      </div>
-
-      <h3>Classroom Example</h3>
+      <h3>Example</h3>
 
       <div className="exampleBox">
         <p className="sectionLabel">Work Through the Logic</p>

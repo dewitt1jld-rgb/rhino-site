@@ -20,12 +20,14 @@ const steps = [
 ];
 
 const img = {
-  data: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/metal-group%26catalog-parts/secondary-fabs/images/secondary-fabs-02-data.png",
+  keywords:
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_16/key_words.png",
 
-  shearBlock:
-    "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/metal-group%26catalog-parts/secondary-fabs/images/secondary-fabs-03-shear-block.png",
+  keywordsHighlighted:
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_16/key_words_highlighted.png",
 
-  fabs: "https://rhino-training-cdn.b-cdn.net/gs-ppak-training/metal-group%26catalog-parts/secondary-fabs/images/secondary-fabs-04-fabs.png",
+  screwSplineOutsideUp:
+    "https://rhino-training-cdn.b-cdn.net/zero_2_hero/lesson_16/screspline_outside_up.png",
 };
 
 export default function LessonSeventeenMetalGroupKeywordsPage() {
@@ -33,7 +35,7 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
     <AcademyLessonLayout
       lessonNumber="17"
       lessonTitle="Secondary Fabrications"
-      lessonDescription="Learn how secondary fabrications pass machining information from one framing member to another, how to measure those relationships, and how Metal Group keywords allow fabrication rules to react to different framing conditions."
+      lessonDescription="Learn how secondary fabrications transfer between framing members, how they are measured, and how Metal Group Keywords determine which fabrication rules are applied to a project."
       currentStep={3}
       steps={steps}
     >
@@ -43,490 +45,292 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
 
       <div className="goalBox">
         <strong>Goal:</strong>{" "}
-        Understand why Metal Group fabrication rules use keywords and formulas
-        instead of only fixed numbers, and learn how BOH and FW allow secondary
-        fabrications to adapt to different frame conditions.
+        Understand how Metal Group Keywords control which primary and
+        secondary fabrication rules are actually applied when a project is
+        imported into Metal Fabrication.
       </div>
 
       <div className="lessonText">
         <p>
-          In Step 2, we learned how to measure a secondary fabrication using X,
-          Y, and Z values.
+          I&apos;m sure you&apos;ve noticed that when you open the Secondary
+          Fabrications screen for a horizontal member, you may see a lot of
+          fabrication line items.
         </p>
 
         <p>
-          Now we need to understand one of the things that makes Metal Groups
-          powerful:
+          In some cases, you may see as many as{" "}
+          <strong>10 different fabrication holes</strong>.
         </p>
 
         <p>
-          We do not always have to give the program one fixed number.
+          The important thing to understand is that the program is not
+          necessarily going to use all of them.
         </p>
 
         <p>
-          Instead, we can use <strong>keywords and formulas</strong> that tell
-          the program to calculate a value based on the frame being built.
+          Depending on the Metal Group you are using, only two or three of
+          those fabrication rules may actually apply.
         </p>
       </div>
 
       <div className="criticalBox">
-        <p className="sectionLabel">The Big Idea</p>
+        <p className="sectionLabel">The Big Question</p>
 
         <h3>
-          A fixed number describes one condition. A keyword can describe many
-          conditions.
+          If there are 10 fabrication rules available, how does the program
+          know which ones to use?
         </h3>
 
         <p>
-          Keywords allow the fabrication rule to react to the actual frame
-          dimensions instead of forcing you to create a different rule for
-          every possible situation.
+          That is where <strong>Metal Group Keywords</strong> come into play.
         </p>
       </div>
 
-      <h3>Fixed Values vs. Keywords</h3>
-
-      <div className="comparisonGrid">
-        <div className="fixedCard">
-          <p className="sectionLabel">Fixed Value</p>
-
-          <strong>Example: 6.000</strong>
-
-          <p>
-            The software uses exactly that number every time the rule is
-            applied.
-          </p>
-
-          <p>
-            This works well when the location should never change.
-          </p>
-        </div>
-
-        <div className="keywordCard">
-          <p className="sectionLabel">Keyword / Formula</p>
-
-          <strong>Example: BOH + 0.5937</strong>
-
-          <p>
-            The software first determines the current Bottom of Horizontal,
-            then adds the required offset.
-          </p>
-
-          <p>
-            The final location can change automatically from frame to frame.
-          </p>
-        </div>
-      </div>
-
-      <div className="calloutBox">
-        <strong>
-          This is why Metal Group rules can be reused across many projects.
-        </strong>
-
-        <p>
-          The fabrication relationship stays the same even when the overall
-          frame dimensions change.
-        </p>
-      </div>
-
-      <h3>Keyword #1: BOH</h3>
-
-      <div className="keywordDefinition">
-        <span>BOH</span>
-
-        <div>
-          <p className="sectionLabel">Bottom of Horizontal</p>
-
-          <h3>
-            A reference to the location of the bottom of the horizontal member.
-          </h3>
-
-          <p>
-            When the frame is built, the software already knows where the
-            horizontal is located.
-          </p>
-
-          <p>
-            BOH allows the secondary fabrication rule to use that location as
-            its reference point.
-          </p>
-        </div>
-      </div>
+      <h3>Find the Metal Group Keywords</h3>
 
       <div className="lessonText">
         <p>
-          This is especially useful for screw spline and shear block holes.
+          Navigate back to the <strong>Metal Group</strong> screen and select
+          the test Metal Group we created earlier in the course.
         </p>
 
         <p>
-          Instead of telling the program that a hole belongs at one fixed
-          location on the vertical, we tell it how far that hole is located
-          relative to the horizontal.
-        </p>
-      </div>
-
-      <div className="formulaExample">
-        <div>
-          <p className="sectionLabel">Formula</p>
-
-          <strong>BOH + 0.5937</strong>
-        </div>
-
-        <div className="equalsArrow">→</div>
-
-        <div>
-          <p className="sectionLabel">Meaning</p>
-
-          <strong>
-            0.5937&quot; above the Bottom of Horizontal
-          </strong>
-        </div>
-      </div>
-
-      <div className="lessonText">
-        <p>
-          If the horizontal moves higher in the frame, BOH moves with it.
-        </p>
-
-        <p>
-          The 0.5937&quot; relationship stays the same, so the hole pattern
-          moves with the horizontal automatically.
-        </p>
-      </div>
-
-      <div className="positionExampleGrid">
-        <div>
-          <p className="sectionLabel">Frame A</p>
-
-          <strong>BOH = 24&quot;</strong>
-
-          <p>
-            The program starts at 24&quot; and adds the fabrication offset.
-          </p>
-        </div>
-
-        <div>
-          <p className="sectionLabel">Frame B</p>
-
-          <strong>BOH = 48&quot;</strong>
-
-          <p>
-            The same rule now begins at 48&quot; without changing the Metal
-            Group.
-          </p>
-        </div>
-
-        <div>
-          <p className="sectionLabel">Frame C</p>
-
-          <strong>BOH = 72&quot;</strong>
-
-          <p>
-            The pattern moves again while keeping the same relationship.
-          </p>
-        </div>
-      </div>
-
-      <div className="criticalBox">
-        <p className="sectionLabel">Remember</p>
-
-        <h3>
-          BOH does not describe the hole itself.
-        </h3>
-
-        <p>
-          BOH gives us the reference point. The number added to BOH tells us
-          where the individual operation belongs relative to that point.
-        </p>
-      </div>
-
-      <h3>Multiple Operations Can Use the Same Keyword</h3>
-
-      <div className="lessonText">
-        <p>
-          A single connection often requires more than one fabrication.
-        </p>
-
-        <p>
-          Each operation can use the same BOH reference but have a different
-          offset.
-        </p>
-      </div>
-
-      <div className="operationGrid">
-        <div>
-          <span>1</span>
-
-          <strong>BOH + 0.5937</strong>
-
-          <p>
-            First hole in the connection pattern.
-          </p>
-        </div>
-
-        <div>
-          <span>2</span>
-
-          <strong>BOH + 1.8125</strong>
-
-          <p>
-            Second hole in the connection pattern.
-          </p>
-        </div>
-      </div>
-
-      <div className="lessonText">
-        <p>
-          Both holes move together because both are tied to the same Bottom of
-          Horizontal reference.
-        </p>
-
-        <p>
-          This is the numerical version of the &quot;stamp&quot; analogy from
-          Step 1.
+          Inside the Metal Group, you will see a section for{" "}
+          <strong>Keywords</strong>.
         </p>
       </div>
 
       <figure className="lessonFigure largeFigure">
         <img
-          src={img.data}
-          alt="Secondary fabrication data using formulas and location values"
+          src={img.keywords}
+          alt="Metal Group screen showing the Keywords section"
         />
 
         <figcaption>
-          Secondary fabrication rules can combine references and offsets to
-          create a reusable machining pattern.
+          The Keywords section contains information the program uses to
+          determine which fabrication rules belong to this Metal Group.
         </figcaption>
       </figure>
 
-      <h3>Keyword #2: FW</h3>
-
-      <div className="keywordDefinition">
-        <span>FW</span>
-
-        <div>
-          <p className="sectionLabel">Framing Width</p>
-
-          <h3>
-            A reference to the width of the framing system being used.
-          </h3>
-
-          <p>
-            Instead of typing one exact framing depth into the fabrication
-            rule, FW tells the program to look at the framing width for the
-            current system.
-          </p>
-        </div>
-      </div>
-
       <div className="lessonText">
         <p>
-          FW is especially useful when the same basic fabrication relationship
-          may be used with more than one framing depth.
+          Click the <strong>blue square with the three dots</strong> next to
+          the Keywords section.
         </p>
 
         <p>
-          If you hard-code one exact depth, the rule may only work correctly
-          for that one condition.
-        </p>
-
-        <p>
-          Using FW allows the program to reference the actual framing width
-          instead.
+          You should see a screen similar to the one below.
         </p>
       </div>
 
-      <div className="comparisonGrid">
-        <div className="fixedCard">
-          <p className="sectionLabel">Fixed Z</p>
+      <figure className="lessonFigure largeFigure">
+        <img
+          src={img.keywordsHighlighted}
+          alt="Metal Group Keywords screen with important keywords highlighted"
+        />
 
-          <strong>Exact Number</strong>
+        <figcaption>
+          These Keywords describe important characteristics of the Metal Group.
+        </figcaption>
+      </figure>
+
+      <h3>The Three Keywords We Care About</h3>
+
+      <div className="keywordGrid">
+        <div>
+          <span>01</span>
+
+          <p className="sectionLabel">Glazing Style</p>
+
+          <strong>Outside</strong>
 
           <p>
-            Works when the fabrication depth should always remain exactly the
-            same.
-          </p>
-        </div>
-
-        <div className="keywordCard">
-          <p className="sectionLabel">FW</p>
-
-          <strong>System-Based Value</strong>
-
-          <p>
-            Allows the fabrication rule to use the framing width associated
-            with the current system.
-          </p>
-        </div>
-      </div>
-
-      <div className="axisSummary">
-        <div>
-          <span>Y</span>
-
-          <div>
-            <strong>BOH helps locate the fabrication vertically.</strong>
-
-            <p>
-              The fabrication follows the horizontal wherever that horizontal
-              appears in the frame.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <span>Z</span>
-
-          <div>
-            <strong>FW helps account for framing width.</strong>
-
-            <p>
-              The fabrication can reference the system instead of relying only
-              on one hard-coded depth.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <h3>Why This Matters When Troubleshooting</h3>
-
-      <div className="lessonText">
-        <p>
-          Think back to the two problems we identified in Lesson 16:
-        </p>
-      </div>
-
-      <div className="problemGrid">
-        <div>
-          <p className="sectionLabel">Problem 1</p>
-
-          <strong>Fabrication Is Missing</strong>
-
-          <p>
-            The secondary fabrication rule may not be passing the required
-            operation to the receiving member.
+            This tells us the glazing style being used by this Metal Group.
           </p>
         </div>
 
         <div>
-          <p className="sectionLabel">Problem 2</p>
+          <span>02</span>
 
-          <strong>Fabrication Is in the Wrong Location</strong>
+          <p className="sectionLabel">Fab Style</p>
+
+          <strong>Screw Spline</strong>
 
           <p>
-            The rule may exist, but the formula, reference, offset, or
-            orientation may need to be reviewed.
+            This tells us the fabrication or connection style being used.
+          </p>
+        </div>
+
+        <div>
+          <span>03</span>
+
+          <p className="sectionLabel">Stop Position</p>
+
+          <strong>Stops Up</strong>
+
+          <p>
+            This tells us the stop position associated with this Metal Group.
           </p>
         </div>
       </div>
 
       <div className="criticalBox">
-        <p className="sectionLabel">Troubleshooting Rule</p>
+        <p className="sectionLabel">Our Test Metal Group</p>
 
         <h3>
-          Do not immediately replace a keyword with a number.
+          Screw Spline + Outside Glazed + Stops Up
         </h3>
 
         <p>
-          First understand what the keyword is supposed to represent. The
-          formula may already be correct and only need a small adjustment to
-          the offset or another part of the rule.
+          Those three characteristics tell the program which fabrication rules
+          match the Metal Group we are currently using.
         </p>
       </div>
 
-      <h3>Read the Formula Like a Sentence</h3>
+      <h3>Keywords Control Which Fabrications Get Used</h3>
 
       <div className="lessonText">
         <p>
-          A good way to make formulas less intimidating is to read them in
-          plain English.
+          These Keywords directly correlate with the fabrications stored in
+          Primary and Secondary Fabrications.
+        </p>
+
+        <p>
+          If you build a{" "}
+          <strong>Screw Spline, Outside Glazed, Stops Up</strong> Metal Group,
+          the program looks for fabrication rules with those same
+          designations.
+        </p>
+
+        <p>
+          Those are the fabrication rules that get used when the frame is
+          imported into Metal Fabrication.
         </p>
       </div>
 
-      <div className="sentenceGrid">
+      <div className="selectionFlow">
         <div>
-          <p className="sectionLabel">Formula</p>
+          <p className="sectionLabel">Metal Group</p>
 
-          <strong>BOH + 0.5937</strong>
+          <strong>Screw Spline</strong>
+          <strong>Outside</strong>
+          <strong>Stops Up</strong>
+        </div>
+
+        <div className="flowArrow">→</div>
+
+        <div>
+          <p className="sectionLabel">Fabrication Rules</p>
+
+          <strong>Find Matching Keywords</strong>
 
           <p>
-            Start at the Bottom of Horizontal and move 0.5937&quot; farther.
+            The program looks through the available fabrication rules.
           </p>
         </div>
 
-        <div>
-          <p className="sectionLabel">Keyword</p>
+        <div className="flowArrow">→</div>
 
-          <strong>FW</strong>
+        <div>
+          <p className="sectionLabel">Metal Fabrication</p>
+
+          <strong>Matching Fabs Applied</strong>
 
           <p>
-            Use the framing width associated with this system.
+            The appropriate fabrication rules are applied to the project.
           </p>
         </div>
+      </div>
+
+      <figure className="lessonFigure extraLargeFigure">
+        <img
+          src={img.screwSplineOutsideUp}
+          alt="Secondary fabrication rules matching Screw Spline Outside Stops Up keywords"
+        />
+
+        <figcaption>
+          There may be many fabrication rules in the list, but the Metal Group
+          Keywords tell us which rules apply to our current system.
+        </figcaption>
+      </figure>
+
+      <div className="lessonText">
+        <p>
+          Look closely at the image above.
+        </p>
+
+        <p>
+          There are quite a few fabrications in this screen, but based on the
+          Keywords from our Metal Group, we can determine that{" "}
+          <strong>only the two matching line items are being used</strong>.
+        </p>
       </div>
 
       <div className="calloutBox">
         <strong>
-          You do not need to memorize formulas as random letters.
+          This is why you should not start changing every fabrication you see.
         </strong>
 
         <p>
-          Understand what each reference means and the rule becomes much easier
-          to troubleshoot.
+          First determine which fabrication rules your Metal Group is actually
+          calling for.
         </p>
       </div>
 
-      <h3>Look at the Entire Pattern</h3>
+      <h3>Now We Can Solve the Problems From Lesson 16</h3>
 
       <div className="lessonText">
         <p>
-          When you troubleshoot secondary fabrications, do not look at only one
-          line item.
+          At this point, Lessons 16 and 17 come together.
         </p>
 
         <p>
-          Remember that several rows may work together to create one complete
-          screw spline or shear block pattern.
+          In Lesson 16, we learned how to identify two common problems:
         </p>
       </div>
 
-      <div className="imagePair">
-        <figure className="lessonFigure">
-          <img
-            src={img.shearBlock}
-            alt="Shear block connection used to create a secondary fabrication pattern"
-          />
+      <div className="problemGrid">
+        <div>
+          <span>01</span>
 
-          <figcaption>
-            Start by understanding the physical connection you are trying to
-            create.
-          </figcaption>
-        </figure>
+          <strong>Incorrect Fabrications</strong>
 
-        <figure className="lessonFigure">
-          <img
-            src={img.fabs}
-            alt="Secondary fabrication rows that combine to create a machining pattern"
-          />
+          <p>
+            The holes exist, but the hole pattern or location is incorrect.
+          </p>
+        </div>
 
-          <figcaption>
-            Then review all of the fabrication rows that work together to
-            create that connection.
-          </figcaption>
-        </figure>
+        <div>
+          <span>02</span>
+
+          <strong>Missing Fabrications</strong>
+
+          <p>
+            The fabrication rules needed by the Metal Group are missing
+            entirely.
+          </p>
+        </div>
       </div>
 
-      <h3>A Good Troubleshooting Process</h3>
+      <h3>Fixing an Incorrect Hole Pattern or Location</h3>
 
-      <div className="troubleshootingSteps">
+      <div className="lessonText">
+        <p>
+          If the fabrication exists but the hole pattern or location is wrong,
+          use the following process.
+        </p>
+      </div>
+
+      <div className="workflowBox">
         <div>
           <span>1</span>
 
           <div>
-            <strong>Identify the Physical Problem</strong>
+            <strong>Identify the Problem</strong>
 
             <p>
-              Which holes are missing, misplaced, or oriented incorrectly?
+              Determine what is wrong and identify the member that is passing
+              the fabrications.
             </p>
           </div>
         </div>
@@ -535,11 +339,11 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           <span>2</span>
 
           <div>
-            <strong>Find the Source Member</strong>
+            <strong>Open the Parts Library</strong>
 
             <p>
-              Determine which horizontal is supposed to pass the secondary
-              fabrication.
+              Once you have found the correct member, click the part and press{" "}
+              <strong>FN + F2</strong> to access the Parts Library.
             </p>
           </div>
         </div>
@@ -548,10 +352,11 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           <span>3</span>
 
           <div>
-            <strong>Open the Secondary Fabrication Rules</strong>
+            <strong>Open Secondary Fabrications</strong>
 
             <p>
-              Review the operations assigned to that member.
+              Navigate to the <strong>Secondary Fabrications</strong> screen
+              for that part.
             </p>
           </div>
         </div>
@@ -560,10 +365,11 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           <span>4</span>
 
           <div>
-            <strong>Read the Keywords</strong>
+            <strong>Find the Fabrications Being Used</strong>
 
             <p>
-              Understand what BOH, FW, and any offsets are trying to accomplish.
+              Reference the Metal Group Keywords and locate the two or three
+              line items your Metal Group is actually calling for.
             </p>
           </div>
         </div>
@@ -572,39 +378,65 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           <span>5</span>
 
           <div>
-            <strong>Make the Smallest Necessary Correction</strong>
+            <strong>Determine What Needs to Change</strong>
 
             <p>
-              Avoid rebuilding working rules when only one value needs to be
-              adjusted.
+              Use AutoCAD or physically measure the part to determine which way
+              the X or Y value needs to change.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <span>6</span>
+
+          <div>
+            <strong>Make the Change and Save</strong>
+
+            <p>
+              Correct the required value and make sure you press{" "}
+              <strong>Save</strong>.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="calloutBox warningCallout">
-        <strong>
-          Most secondary fabrication rules should already be close.
-        </strong>
+      <div className="criticalBox">
+        <p className="sectionLabel">Do Not Skip This</p>
+
+        <h3>Make sure you press Save.</h3>
 
         <p>
-          In many cases, you are not creating a system from scratch. You are
-          correcting or fine-tuning an existing Metal Group.
+          If you leave the screen without saving the change, the corrected
+          fabrication rule will not be available when you re-import the
+          project.
         </p>
       </div>
 
-      <h3>Lesson 17 Review</h3>
+      <h3>Fixing Completely Missing Fabrications</h3>
 
-      <div className="reviewGrid">
+      <div className="lessonText">
+        <p>
+          If the fabrication is completely missing, the troubleshooting process
+          is almost identical.
+        </p>
+
+        <p>
+          The difference is that instead of correcting an existing prep, you
+          are going to <strong>build the missing fabrication rules</strong>.
+        </p>
+      </div>
+
+      <div className="workflowBox">
         <div>
           <span>1</span>
 
           <div>
-            <strong>Secondary Fabs Transfer</strong>
+            <strong>Identify the Problem</strong>
 
             <p>
-              One member contains the rules while another member receives the
-              machining.
+              Determine what is missing and identify the member that should be
+              passing the fabrications.
             </p>
           </div>
         </div>
@@ -613,10 +445,11 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           <span>2</span>
 
           <div>
-            <strong>BOH Controls the Relationship</strong>
+            <strong>Open the Parts Library</strong>
 
             <p>
-              Bottom of Horizontal gives the rule a moving reference point.
+              Click the correct member and press{" "}
+              <strong>FN + F2</strong>.
             </p>
           </div>
         </div>
@@ -625,11 +458,10 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           <span>3</span>
 
           <div>
-            <strong>FW References Framing Width</strong>
+            <strong>Open Secondary Fabrications</strong>
 
             <p>
-              It allows the rule to react to the framing system instead of one
-              fixed depth.
+              Navigate to the Secondary Fabrications screen for the part.
             </p>
           </div>
         </div>
@@ -638,35 +470,226 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           <span>4</span>
 
           <div>
-            <strong>Several Rules Can Form One Pattern</strong>
+            <strong>Create the Missing Fab Line Items</strong>
 
             <p>
-              Each individual operation may be one line item in the complete
-              secondary fabrication.
+              If the screen is empty or the required fabrications are missing,
+              begin creating new fabrication line items by entering the
+              required data into each column.
             </p>
           </div>
+        </div>
+
+        <div>
+          <span>5</span>
+
+          <div>
+            <strong>Determine X, Y, and Z</strong>
+
+            <p>
+              Use AutoCAD or physically measure the part to determine the X, Y,
+              and Z values.
+            </p>
+
+            <p className="workflowNote">
+              Remember: the Y Location will use a{" "}
+              <strong>BOH + value</strong> formula.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <span>6</span>
+
+          <div>
+            <strong>Finish the Fab and Save</strong>
+
+            <p>
+              Complete the required fabrication data and make sure you press{" "}
+              <strong>Save</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Your Existing Project Is Not Fixed Yet</h3>
+
+      <div className="lessonText">
+        <p>
+          There is one final step that is extremely important.
+        </p>
+
+        <p>
+          Just because you changed the Secondary Fabrication rules does{" "}
+          <strong>not</strong> mean the project that is already sitting in
+          Metal Fabrication has been updated.
+        </p>
+
+        <p>
+          That project was imported using the old fabrication data.
+        </p>
+      </div>
+
+      <div className="criticalBox">
+        <p className="sectionLabel">Important</p>
+
+        <h3>You must re-import the project.</h3>
+
+        <p>
+          Re-importing the project causes the program to pull in the new
+          fabrication rules you just created or corrected.
+        </p>
+      </div>
+
+      <div className="reimportFlow">
+        <div>
+          <span>1</span>
+
+          <strong>Correct the Rule</strong>
+
+          <p>
+            Change or create the secondary fabrication and save it.
+          </p>
+        </div>
+
+        <div className="flowArrow">→</div>
+
+        <div>
+          <span>2</span>
+
+          <strong>Re-Import Project</strong>
+
+          <p>
+            Bring the project back into Metal Fabrication.
+          </p>
+        </div>
+
+        <div className="flowArrow">→</div>
+
+        <div>
+          <span>3</span>
+
+          <strong>New Data Is Applied</strong>
+
+          <p>
+            The project is rebuilt using the corrected fabrication rules.
+          </p>
+        </div>
+      </div>
+
+      <h3>Override or Create a New Project?</h3>
+
+      <div className="lessonText">
+        <p>
+          When you re-import the project, you have a choice.
+        </p>
+      </div>
+
+      <div className="choiceGrid">
+        <div>
+          <p className="sectionLabel">Option 1</p>
+
+          <strong>Override the Existing Project</strong>
+
+          <p>
+            Replace the old Metal Fabrication project with the newly imported
+            version.
+          </p>
+        </div>
+
+        <div>
+          <p className="sectionLabel">Option 2</p>
+
+          <strong>Change the Name</strong>
+
+          <p>
+            Import the corrected version under a different name so both
+            versions can exist in Metal Fabrication.
+          </p>
+        </div>
+      </div>
+
+      <div className="calloutBox warningCallout">
+        <strong>Keep track of which project is correct.</strong>
+
+        <p>
+          Keeping multiple versions can be useful while troubleshooting, but
+          it can also get messy very quickly.
+        </p>
+
+        <p>
+          Make sure you and the machine operator know which project contains
+          the corrected fabrication data.
+        </p>
+      </div>
+
+      <h3>The Complete Troubleshooting Process</h3>
+
+      <div className="lessonText">
+        <p>
+          We have now connected everything from Lessons 16 and 17.
+        </p>
+      </div>
+
+      <div className="finalFlow">
+        <div>
+          <span>1</span>
+          <strong>Identify the Problem</strong>
+          <p>Find the missing or incorrect fabrication.</p>
+        </div>
+
+        <div>
+          <span>2</span>
+          <strong>Trace the Source</strong>
+          <p>Determine which member is passing the fabrication.</p>
+        </div>
+
+        <div>
+          <span>3</span>
+          <strong>Check Keywords</strong>
+          <p>Determine which fabrication rules the Metal Group is using.</p>
+        </div>
+
+        <div>
+          <span>4</span>
+          <strong>Measure</strong>
+          <p>Use AutoCAD or the physical part to determine the correct data.</p>
+        </div>
+
+        <div>
+          <span>5</span>
+          <strong>Correct or Create</strong>
+          <p>Modify the existing rules or build the missing fabrication.</p>
+        </div>
+
+        <div>
+          <span>6</span>
+          <strong>Save</strong>
+          <p>Save the corrected fabrication data.</p>
+        </div>
+
+        <div>
+          <span>7</span>
+          <strong>Re-Import</strong>
+          <p>Import the project again so the new rules are applied.</p>
         </div>
       </div>
 
       <div className="sectionBox completionBox">
         <p className="sectionLabel">Lesson 17 Complete</p>
 
-        <h3>
-          You now understand how to identify and troubleshoot secondary
-          fabrication relationships.
-        </h3>
+        <h3>You now understand secondary fabrications.</h3>
 
         <p>
-          You have learned how secondary fabrications transfer between members,
-          how X, Y, and Z values describe those operations, and how keywords
-          such as BOH and FW allow the rules to adapt to the frame being built.
+          You have learned how secondary fabrications pass from one member to
+          another, how to measure them, how Metal Group Keywords determine
+          which fabrication rules are used, and how to correct missing or
+          incorrect fabrication data.
         </p>
 
         <p>
-          From here, you should be able to approach a missing or incorrectly
-          positioned fabrication by tracing it back to the source member,
-          understanding the existing rule, and determining what actually needs
-          to change.
+          Next, we will move away from frame and metal fabrication and begin
+          learning about <strong>door hardware and Library Fabrications</strong>.
         </p>
       </div>
 
@@ -695,7 +718,7 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
         .lessonFigure img {
           display: block;
           width: 100%;
-          max-width: 850px;
+          max-width: 900px;
           height: auto;
           margin: 0 auto;
           border-radius: 16px;
@@ -703,7 +726,7 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
         }
 
         .lessonFigure figcaption {
-          max-width: 760px;
+          max-width: 780px;
           margin: 12px auto 0;
           color: rgba(255, 255, 255, 0.58);
           font-size: 14px;
@@ -712,6 +735,10 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
 
         .largeFigure img {
           max-width: 1000px;
+        }
+
+        .extraLargeFigure img {
+          max-width: 1100px;
         }
 
         .criticalBox {
@@ -735,158 +762,204 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           line-height: 1.65;
         }
 
-        .comparisonGrid,
-        .problemGrid,
-        .sentenceGrid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 16px;
-          margin: 24px 0 34px;
-        }
-
-        .comparisonGrid > div,
-        .problemGrid > div,
-        .sentenceGrid > div {
-          padding: 21px;
-          border-radius: 16px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .comparisonGrid strong,
-        .problemGrid strong,
-        .sentenceGrid strong {
-          display: block;
-          color: #ffffff;
-          font-size: 18px;
-        }
-
-        .comparisonGrid p:not(.sectionLabel),
-        .problemGrid p:not(.sectionLabel),
-        .sentenceGrid p:not(.sectionLabel) {
-          margin: 8px 0 0;
-          color: rgba(255, 255, 255, 0.68);
-          line-height: 1.6;
-        }
-
-        .fixedCard {
-          border-color: rgba(255, 255, 255, 0.11) !important;
-        }
-
-        .keywordCard {
-          border-color: rgba(245, 158, 11, 0.3) !important;
-        }
-
-        .keywordDefinition {
-          display: grid;
-          grid-template-columns: 100px minmax(0, 1fr);
-          gap: 22px;
-          align-items: center;
-          margin: 26px 0 34px;
-          padding: 24px;
-          border-radius: 18px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(245, 158, 11, 0.22);
-        }
-
-        .keywordDefinition > span {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 82px;
-          height: 82px;
-          border-radius: 20px;
-          background: rgba(245, 158, 11, 0.14);
-          border: 1px solid rgba(245, 158, 11, 0.3);
-          color: #f59e0b;
-          font-size: 24px;
-          font-weight: 900;
-        }
-
-        .keywordDefinition h3 {
-          margin: 7px 0 10px;
-          color: #ffffff;
-          font-size: 20px;
-        }
-
-        .keywordDefinition p:not(.sectionLabel) {
-          margin: 8px 0 0;
-          color: rgba(255, 255, 255, 0.7);
-          line-height: 1.6;
-        }
-
-        .formulaExample {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          gap: 18px;
-          align-items: center;
-          margin: 24px 0 34px;
-        }
-
-        .formulaExample > div:not(.equalsArrow) {
-          padding: 22px;
-          border-radius: 16px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(245, 158, 11, 0.18);
-        }
-
-        .formulaExample strong {
-          display: block;
-          color: #ffffff;
-          font-size: 18px;
-        }
-
-        .equalsArrow {
-          color: #f59e0b;
-          font-size: 28px;
-          font-weight: 900;
-        }
-
-        .positionExampleGrid {
+        .keywordGrid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 14px;
           margin: 24px 0 34px;
         }
 
-        .positionExampleGrid > div {
+        .keywordGrid > div {
+          padding: 20px;
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .keywordGrid > div > span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+          margin-bottom: 12px;
+          border-radius: 999px;
+          background: rgba(245, 158, 11, 0.14);
+          border: 1px solid rgba(245, 158, 11, 0.3);
+          color: #f59e0b;
+          font-size: 12px;
+          font-weight: 900;
+        }
+
+        .keywordGrid strong {
+          display: block;
+          color: #ffffff;
+          font-size: 19px;
+        }
+
+        .keywordGrid p:not(.sectionLabel) {
+          margin: 8px 0 0;
+          color: rgba(255, 255, 255, 0.68);
+          line-height: 1.55;
+        }
+
+        .selectionFlow,
+        .reimportFlow {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr auto 1fr;
+          align-items: center;
+          gap: 14px;
+          margin: 24px 0 34px;
+        }
+
+        .selectionFlow > div:not(.flowArrow),
+        .reimportFlow > div:not(.flowArrow) {
+          padding: 20px;
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(245, 158, 11, 0.18);
+        }
+
+        .selectionFlow strong {
+          display: block;
+          margin: 4px 0;
+          color: #ffffff;
+        }
+
+        .selectionFlow p:not(.sectionLabel),
+        .reimportFlow p {
+          margin: 7px 0 0;
+          color: rgba(255, 255, 255, 0.68);
+          line-height: 1.55;
+        }
+
+        .reimportFlow > div:not(.flowArrow) > span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+          margin-bottom: 10px;
+          border-radius: 999px;
+          background: rgba(245, 158, 11, 0.14);
+          border: 1px solid rgba(245, 158, 11, 0.3);
+          color: #f59e0b;
+          font-weight: 900;
+        }
+
+        .reimportFlow strong {
+          color: #ffffff;
+        }
+
+        .flowArrow {
+          color: #f59e0b;
+          font-size: 28px;
+          font-weight: 900;
+        }
+
+        .problemGrid,
+        .choiceGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+          margin: 24px 0 34px;
+        }
+
+        .problemGrid > div,
+        .choiceGrid > div {
+          padding: 21px;
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .problemGrid > div > span {
+          display: block;
+          margin-bottom: 8px;
+          color: #f59e0b;
+          font-size: 13px;
+          font-weight: 900;
+        }
+
+        .problemGrid strong,
+        .choiceGrid strong {
+          display: block;
+          color: #ffffff;
+          font-size: 18px;
+        }
+
+        .problemGrid p,
+        .choiceGrid p:not(.sectionLabel) {
+          margin: 8px 0 0;
+          color: rgba(255, 255, 255, 0.68);
+          line-height: 1.6;
+        }
+
+        .workflowBox {
+          display: grid;
+          gap: 11px;
+          margin: 24px 0 36px;
+        }
+
+        .workflowBox > div {
+          display: flex;
+          gap: 15px;
           padding: 18px;
           border-radius: 15px;
           background: rgba(255, 255, 255, 0.035);
           border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .positionExampleGrid strong {
+        .workflowBox > div > span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          flex: 0 0 36px;
+          border-radius: 999px;
+          background: rgba(245, 158, 11, 0.14);
+          border: 1px solid rgba(245, 158, 11, 0.3);
+          color: #f59e0b;
+          font-weight: 900;
+        }
+
+        .workflowBox strong {
           color: #ffffff;
         }
 
-        .positionExampleGrid p:not(.sectionLabel) {
-          margin: 7px 0 0;
+        .workflowBox p {
+          margin: 6px 0 0;
           color: rgba(255, 255, 255, 0.68);
-          line-height: 1.55;
+          line-height: 1.6;
         }
 
-        .operationGrid {
+        .workflowNote {
+          color: #fbbf24 !important;
+          font-weight: 700;
+        }
+
+        .finalFlow {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 16px;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 12px;
           margin: 24px 0 34px;
         }
 
-        .operationGrid > div {
-          padding: 20px;
-          border-radius: 16px;
+        .finalFlow > div {
+          padding: 17px;
+          border-radius: 14px;
           background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(245, 158, 11, 0.18);
+          border: 1px solid rgba(245, 158, 11, 0.16);
         }
 
-        .operationGrid span {
+        .finalFlow span {
           display: flex;
           align-items: center;
           justify-content: center;
           width: 32px;
           height: 32px;
-          margin-bottom: 11px;
+          margin-bottom: 10px;
           border-radius: 999px;
           background: rgba(245, 158, 11, 0.14);
           border: 1px solid rgba(245, 158, 11, 0.3);
@@ -894,129 +967,14 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           font-weight: 900;
         }
 
-        .operationGrid strong {
+        .finalFlow strong {
           color: #ffffff;
         }
 
-        .operationGrid p {
+        .finalFlow p {
           margin: 7px 0 0;
           color: rgba(255, 255, 255, 0.68);
-          line-height: 1.55;
-        }
-
-        .axisSummary {
-          display: grid;
-          gap: 14px;
-          margin: 24px 0 34px;
-        }
-
-        .axisSummary > div {
-          display: grid;
-          grid-template-columns: 58px 1fr;
-          gap: 16px;
-          align-items: center;
-          padding: 20px;
-          border-radius: 16px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(245, 158, 11, 0.18);
-        }
-
-        .axisSummary > div > span {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 48px;
-          height: 48px;
-          border-radius: 14px;
-          background: rgba(245, 158, 11, 0.14);
-          border: 1px solid rgba(245, 158, 11, 0.3);
-          color: #f59e0b;
-          font-size: 21px;
-          font-weight: 900;
-        }
-
-        .axisSummary strong {
-          color: #ffffff;
-        }
-
-        .axisSummary p {
-          margin: 6px 0 0;
-          color: rgba(255, 255, 255, 0.68);
-          line-height: 1.55;
-        }
-
-        .imagePair {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 20px;
-          margin: 24px 0 34px;
-          align-items: start;
-        }
-
-        .imagePair .lessonFigure {
-          margin: 0;
-        }
-
-        .imagePair .lessonFigure img {
-          max-width: none;
-        }
-
-        .troubleshootingSteps {
-          display: grid;
-          gap: 11px;
-          margin: 24px 0 34px;
-        }
-
-        .troubleshootingSteps > div {
-          display: flex;
-          gap: 14px;
-          padding: 17px;
-          border-radius: 14px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .troubleshootingSteps span,
-        .reviewGrid > div > span {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 34px;
-          height: 34px;
-          flex: 0 0 34px;
-          border-radius: 999px;
-          background: rgba(245, 158, 11, 0.14);
-          border: 1px solid rgba(245, 158, 11, 0.3);
-          color: #f59e0b;
-          font-weight: 900;
-        }
-
-        .troubleshootingSteps strong,
-        .reviewGrid strong {
-          color: #ffffff;
-        }
-
-        .troubleshootingSteps p,
-        .reviewGrid p {
-          margin: 6px 0 0;
-          color: rgba(255, 255, 255, 0.68);
-          line-height: 1.55;
-        }
-
-        .reviewGrid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 14px;
-          margin: 22px 0 32px;
-        }
-
-        .reviewGrid > div {
-          display: flex;
-          gap: 14px;
-          padding: 18px;
-          border-radius: 14px;
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          line-height: 1.5;
         }
 
         .completionBox {
@@ -1040,32 +998,32 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
           background: rgba(245, 158, 11, 0.08);
         }
 
-        @media (max-width: 900px) {
-          .positionExampleGrid {
+        @media (max-width: 950px) {
+          .finalFlow {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .keywordGrid {
             grid-template-columns: 1fr;
           }
         }
 
-        @media (max-width: 750px) {
-          .comparisonGrid,
-          .problemGrid,
-          .sentenceGrid,
-          .operationGrid,
-          .imagePair,
-          .reviewGrid {
+        @media (max-width: 850px) {
+          .selectionFlow,
+          .reimportFlow {
             grid-template-columns: 1fr;
           }
 
-          .formulaExample {
-            grid-template-columns: 1fr;
-          }
-
-          .equalsArrow {
+          .flowArrow {
             text-align: center;
             transform: rotate(90deg);
           }
+        }
 
-          .keywordDefinition {
+        @media (max-width: 700px) {
+          .problemGrid,
+          .choiceGrid,
+          .finalFlow {
             grid-template-columns: 1fr;
           }
         }

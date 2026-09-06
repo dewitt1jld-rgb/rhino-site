@@ -410,9 +410,28 @@ export default function LessonSeventeenSecondaryFabricationsPage() {
 
       <div className="navigationGrid">
         <div>
-          <span>Option 1</span>
+          <span>Option 1 (RECOMENDED)</span>
 
-          <strong>From the Metal Group</strong>
+  <strong>From Metal Fabrication</strong>
+
+          <ol>
+            <li>Find the member you believe is passing the fabrication.</li>
+            <li>Select the product code.</li>
+            <li>
+              Press <strong>FN+F2</strong>.
+            </li>
+            <li>Open the Secondary Fabrication tab.</li>
+          </ol>
+
+          <p className="keyboardNote">
+            If you do not have an FN key, just press F2
+          </p>
+        </div>
+
+        <div>
+          <span>Option 2</span>
+
+           <strong>From the  metal group screen</strong>
 
           <ol>
             <li>Open the Metal Group being used for the project.</li>
@@ -420,33 +439,13 @@ export default function LessonSeventeenSecondaryFabricationsPage() {
             <li>Locate the member you want to inspect.</li>
             <li>Click the part number.</li>
             <li>
-              Press <strong>F2</strong>.
+              Press <strong>FN+F2</strong>.
             </li>
             <li>Open the Secondary Fabrication tab.</li>
           </ol>
 
           <p className="keyboardNote">
-            If F2 does not work by itself, try holding FN and pressing F2.
-          </p>
-        </div>
-
-        <div>
-          <span>Option 2</span>
-
-          <strong>From Metal Fabrication</strong>
-
-          <ol>
-            <li>Find the member you believe is passing the fabrication.</li>
-            <li>Select the part.</li>
-            <li>
-              Press <strong>F2</strong>.
-            </li>
-            <li>Open the Secondary Fabrication tab.</li>
-          </ol>
-
-          <p className="keyboardNote">
-            This is especially useful while troubleshooting because you can
-            move directly from the problem job to the Catalog Parts screen.
+            You may also go directly to catalog parts and search for the part you want to change. 
           </p>
         </div>
       </div>
@@ -465,61 +464,7 @@ export default function LessonSeventeenSecondaryFabricationsPage() {
         </p>
       </div>
 
-      <h3>Orientation Still Matters</h3>
-
-      <div className="lessonText">
-        <p>
-          There is one more concept we need to keep in mind before we start
-          measuring secondary fabrications: the vertical eventually has to run
-          through the Rhino.
-        </p>
-
-        <p>
-          That means the software has to understand which end of the member
-          leads into the machine and which face of the member needs to be
-          fabricated.
-        </p>
-      </div>
-
-      <figure className="lessonFigure largeFigure">
-        <img
-          src={img.vertsFall}
-          alt="Vertical member orientation as members run through the machine"
-        />
-
-        <figcaption>
-          Vertical members can fall in different directions depending on their
-          position in the frame. Orientation determines how the resulting
-          fabrication is presented to the machine.
-        </figcaption>
-      </figure>
-
-      <div className="calloutBox warningCallout">
-        <strong>
-          The example above assumes a Right-to-Left machine.
-        </strong>
-
-        <p>
-          A Left-to-Right machine will have the opposite starting relationship.
-          We will spend more time on this when we measure the actual
-          fabrications.
-        </p>
-      </div>
-
-      <div className="lessonText">
-        <p>
-          For now, you do not need to memorize how every jamb or intermediate
-          vertical falls.
-        </p>
-
-        <p>
-          I simply want you to understand that the software has to account for
-          orientation when it transfers a fabrication from a horizontal onto a
-          vertical.
-        </p>
-      </div>
-
-      <h3>Before Moving On</h3>
+          <h3>Before Moving On</h3>
 
       <div className="knowledgeCheck">
         <div>
