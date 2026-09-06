@@ -12,13 +12,9 @@ const steps = [
     title: "Common Hardware Components",
     href: "/dashboard/introductory-software-training/lesson-18-common-hardware",
   },
+
   {
     number: 3,
-    title: "Hardware Prep Requirements",
-    href: "/dashboard/introductory-software-training/lesson-18-hardware-prep-requirements",
-  },
-  {
-    number: 4,
     title: "Organizing Hardware",
     href: "/dashboard/introductory-software-training/lesson-18-organizing-hardware",
   },

@@ -76,81 +76,6 @@ lessonTitle="Door Hardware & Components"
       </div>
 
       <h3>
-        Start With the Hardware Schedule
-      </h3>
-
-      <div className="lessonText">
-        <p>
-          On a typical project, your hardware schedule or hardware information
-          should be your starting point.
-        </p>
-
-        <p>
-          Work through the hardware assigned to each entrance and identify the
-          exact items that may require fabrication.
-        </p>
-      </div>
-
-      <div className="workflowGrid">
-        <div className="workflowCard">
-          <span>1</span>
-
-          <div>
-            <strong>
-              Review the Hardware
-            </strong>
-
-            <p>
-              Determine what hardware has been specified for the entrance.
-            </p>
-          </div>
-        </div>
-
-        <div className="workflowCard">
-          <span>2</span>
-
-          <div>
-            <strong>
-              Identify the Exact Model
-            </strong>
-
-            <p>
-              Verify manufacturer, series, size, handing, and configuration.
-            </p>
-          </div>
-        </div>
-
-        <div className="workflowCard">
-          <span>3</span>
-
-          <div>
-            <strong>
-              Find the Prep
-            </strong>
-
-            <p>
-              Search for an existing Library Fab that matches the hardware.
-            </p>
-          </div>
-        </div>
-
-        <div className="workflowCard">
-          <span>4</span>
-
-          <div>
-            <strong>
-              Verify or Create
-            </strong>
-
-            <p>
-              Confirm the existing prep is correct or create a new one if
-              necessary.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <h3>
         Use Clear Naming
       </h3>
 
@@ -285,86 +210,17 @@ lessonTitle="Door Hardware & Components"
           The goal is simply to include enough information to distinguish the
           prep from other similar hardware.
         </p>
+
+             <p>
+          Make sure you use both the Name field and the description Field to include as much information as possible about the prep.
+        </p>
       </div>
 
       <h3>
         Organize by Hardware Type
       </h3>
 
-      <div className="lessonText">
-        <p>
-          Hardware can also be easier to manage when similar preparations are
-          grouped together.
-        </p>
-
-        <p>
-          Depending on how your company manages the Fab Rules Library, you may
-          find it useful to think of the library in major hardware categories.
-        </p>
-      </div>
-
-      <div className="categoryGrid">
-        <div>
-          <strong>
-            Hinges &amp; Pivots
-          </strong>
-
-          <p>
-            Reusable swing and support hardware preparations.
-          </p>
-        </div>
-
-        <div>
-          <strong>
-            Locks &amp; Cylinders
-          </strong>
-
-          <p>
-            Lock-body, cylinder, spindle, and related preparations.
-          </p>
-        </div>
-
-        <div>
-          <strong>
-            Strikes
-          </strong>
-
-          <p>
-            Frame-side latch and locking preparations.
-          </p>
-        </div>
-
-        <div>
-          <strong>
-            Exit Devices
-          </strong>
-
-          <p>
-            Panic hardware and related mounting patterns.
-          </p>
-        </div>
-
-        <div>
-          <strong>
-            Closers
-          </strong>
-
-          <p>
-            Closer and arm mounting preparations.
-          </p>
-        </div>
-
-        <div>
-          <strong>
-            Pulls &amp; Handles
-          </strong>
-
-          <p>
-            Reusable drilling patterns based on mounting dimensions.
-          </p>
-        </div>
-      </div>
-
+    
       <h3>
         Avoid Duplicate Preparations
       </h3>
@@ -429,13 +285,11 @@ lessonTitle="Door Hardware & Components"
 
       <div className="calloutBox warningCallout">
         <strong>
-          Do not create a duplicate just because you do not recognize the
-          existing name.
+         If you are unsure if an existing prep in the catalog is correct, feel free to create your own!
         </strong>
 
         <p>
-          Open the existing prep and verify what it was built for before
-          deciding whether another preparation is necessary.
+          In my opinion I would not trust any of the pre-existing preps. i would build all of my preps from scratch so I know they are 100% correct. 
         </p>
       </div>
 
