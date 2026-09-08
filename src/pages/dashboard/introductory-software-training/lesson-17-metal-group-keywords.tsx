@@ -535,7 +535,7 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
       <div className="criticalBox">
         <p className="sectionLabel">Important</p>
 
-        <h3>You must re-import the project.</h3>
+        <h3>You must re-import the project into the metal fabrication screen.</h3>
 
         <p>
           Re-importing the project causes the program to pull in the new
