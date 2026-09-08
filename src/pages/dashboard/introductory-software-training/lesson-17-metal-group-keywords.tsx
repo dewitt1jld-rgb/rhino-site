@@ -123,16 +123,18 @@ export default function LessonSeventeenMetalGroupKeywordsPage() {
         </p>
       </div>
 
-      <figure className="lessonFigure largeFigure">
-        <img
-          src={img.keywordsHighlighted}
-          alt="Metal Group Keywords screen with important keywords highlighted"
-        />
-
-        <figcaption>
-          These Keywords describe important characteristics of the Metal Group.
-        </figcaption>
-      </figure>
+<figure className="lessonFigure largeFigure">
+  <img
+    src={img.keywordsHighlighted}
+    alt="Metal Group Keywords screen with important keywords highlighted"
+    style={{
+      width: "60%",
+      height: "auto",
+      display: "block",
+      margin: "0 auto",
+    }}
+  />
+</figure>
 
       <h3>The Three Keywords We Care About</h3>
 
