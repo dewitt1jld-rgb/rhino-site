@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "RhinoFab Training | Rhino 5000, 5600 & 5700 Training",
+    "RhinoFab Training | Rhino 5000, 5500 & 5700 Training",
 
   description:
-    "Professional RhinoFab training, Rhino 5000 training, Rhino 5600 training, Rhino 5700 training, calibration guides, troubleshooting, tutorial videos, and live virtual classes.",
+    "Professional RhinoFab training, Rhino 5000 training, Rhino 5500 training, Rhino 5700 training, calibration guides, troubleshooting, tutorial videos, and live virtual classes.",
 
   alternates: {
     canonical:

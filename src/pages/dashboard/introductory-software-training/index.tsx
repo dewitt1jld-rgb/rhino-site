@@ -165,142 +165,138 @@ const courseModules: CourseModule[] = [
     ],
   },
 
-{
-  number: "04",
-  title: "Profiles & Components",
-  description:
-    "Understand how aluminum systems and individual parts are organized inside the software.",
-  lessons: [
-    {
-      number: "11",
-      title: "Catalog Parts",
-      time: "45–60 min",
-      status: "Available",
-      stepCount: 3,
-      description:
-        "Learn how to navigate Catalog Parts, create custom parts, understand assemblies, and control the individual components used throughout Glazier Studio.",
-      href: "/dashboard/introductory-software-training/lesson-11-catalog-part-basics",
-    },
-{
-  number: "12",
-  title: "Understanding Metal Groups",
-  time: "60–90 min",
-  status: "Available",
-  stepCount: 3,
-  description:
-    "Learn how metal groups organize framing systems, create your own project-specific metal groups, and configure the fabrication options that control how frames are built.",
-  href: "/dashboard/introductory-software-training/lesson-12-metal-group-basics",
-},
-  ],
-},
+  {
+    number: "04",
+    title: "Profiles & Components",
+    description:
+      "Understand how aluminum systems and individual parts are organized inside the software.",
+    lessons: [
+      {
+        number: "11",
+        title: "Catalog Parts",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 3,
+        description:
+          "Learn how to navigate Catalog Parts, create custom parts, understand assemblies, and control the individual components used throughout Glazier Studio.",
+        href: "/dashboard/introductory-software-training/lesson-11-catalog-part-basics",
+      },
+      {
+        number: "12",
+        title: "Understanding Metal Groups",
+        time: "60–90 min",
+        status: "Available",
+        stepCount: 3,
+        description:
+          "Learn how metal groups organize framing systems, create your own project-specific metal groups, and configure the fabrication options that control how frames are built.",
+        href: "/dashboard/introductory-software-training/lesson-12-metal-group-basics",
+      },
+    ],
+  },
 
+  {
+    number: "05",
+    title: "Fabrications & Hole Placement",
+    description:
+      "Understand how fabrication screens work, how operations are positioned, and how automatic weep and anchor holes are created.",
+    lessons: [
+      {
+        number: "13",
+        title: "Understanding Fabrications",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 3,
+        description:
+          "Learn how fabrication screens are organized, understand X, Y, and Z locations, and review the operations, tools, directions, and conditions used throughout Glazier Studio and PartnerPak.",
+        href: "/dashboard/introductory-software-training/lesson-13-fabrication-basics",
+      },
+      {
+        number: "14",
+        title: "Weep & Anchor Holes",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 3,
+        description:
+          "Learn what weep holes and anchor holes are, understand how fabrication formulas determine their locations, and build your own weep-hole setup inside a training metal group.",
+        href: "/dashboard/introductory-software-training/lesson-14-weep-anchor-basics",
+      },
+    ],
+  },
 
-{
-  number: "05",
-  title: "Fabrications & Hole Placement",
-  description:
-    "Understand how fabrication screens work, how operations are positioned, and how automatic weep and anchor holes are created.",
-  lessons: [
-    {
-      number: "13",
-      title: "Understanding Fabrications",
-      time: "45–60 min",
-      status: "Available",
-      stepCount: 3,
-      description:
-        "Learn how fabrication screens are organized, understand X, Y, and Z locations, and review the operations, tools, directions, and conditions used throughout Glazier Studio and PartnerPak.",
-      href: "/dashboard/introductory-software-training/lesson-13-fabrication-basics",
-    },
-{
-  number: "14",
-  title: "Weep & Anchor Holes",
-  time: "45–60 min",
-  status: "Available",
-  stepCount: 3,
-  description:
-    "Learn what weep holes and anchor holes are, understand how fabrication formulas determine their locations, and build your own weep-hole setup inside a training metal group.",
-  href: "/dashboard/introductory-software-training/lesson-14-weep-anchor-basics",
-},
-  ],
-},
-
-{
-  number: "06",
-  title: "Metal Fabrication",
-  description:
-    "Learn how to navigate the Metal Fabrication screen, import and correct project fabrications, and troubleshoot secondary fabrications before sending a job to production.",
-  lessons: [
-    {
-      number: "15",
-      title: "Introduction to Metal Fabrication",
-      time: "45–60 min",
-      status: "Available",
-      stepCount: 2,
-      description:
-        "Learn how to navigate the Metal Fabrication screen, understand the project and stick information, and review the fabrication operations used to prepare material for production.",
-      href: "/dashboard/introductory-software-training/lesson-15-metal-fabrication-basics",
-    },
-    {
-      number: "16",
-      title: "Import and Fix Our Test Project",
-      time: "45–60 min",
-      status: "Available",
-      stepCount: 3,
-      description:
-        "Import the test project we have been building throughout the course, review the generated fabrications, identify problems, and make the corrections needed before production.",
-      href: "/dashboard/introductory-software-training/lesson-16-import-fix-project",
-    },
-    {
-      number: "17",
-      title: "Secondary Fabrications",
-      time: "45–60 min",
-      status: "Available",
-      stepCount: 3,
-      description:
-        "Learn how secondary fabrications transfer from one member to another and how to identify and correct screw spline, shear block, and other transferred fabrication problems.",
-      href: "/dashboard/introductory-software-training/lesson-17-secondary-fabrications",
-    },
-  ],
-},
-
+  {
+    number: "06",
+    title: "Metal Fabrication",
+    description:
+      "Learn how to navigate Metal Fabrication, import and review project data, identify fabrication problems, and understand how secondary fabrications transfer between framing members.",
+    lessons: [
+      {
+        number: "15",
+        title: "Introduction to Metal Fabrication",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 2,
+        description:
+          "Learn how to navigate the Metal Fabrication screen, understand project and stick information, review fabrication operations, and use important Metal Fabrication tools and features.",
+        href: "/dashboard/introductory-software-training/lesson-15-metal-fabrication-basics",
+      },
+      {
+        number: "16",
+        title: "Importing & Reviewing Projects",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 3,
+        description:
+          "Import the test project, review fabrication warnings, use Reports and Optimize, and learn how to identify the source of missing or incorrectly positioned fabrications.",
+        href: "/dashboard/introductory-software-training/lesson-16-import-test-frame",
+      },
+      {
+        number: "17",
+        title: "Secondary Fabrications",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 3,
+        description:
+          "Learn how secondary fabrications transfer between framing members, how to measure and correct them, and how Metal Group Keywords determine which fabrication rules are applied to a project.",
+        href: "/dashboard/introductory-software-training/lesson-17-secondary-fabrications",
+      },
+    ],
+  },
 
   {
     number: "07",
     title: "Doors",
     description:
-      "Configure door hardware, create door preparations, and apply complete entrance packages to projects.",
+      "Learn common door hardware, create reusable hardware preparations, and use Door Fabrication to prepare doors for production.",
     lessons: [
+      {
+        number: "18",
+        title: "Door Hardware & Components",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 4,
+        description:
+          "Learn how common door hardware is organized, what information matters for fabrication, and how hardware records connect to door preparations.",
+        href: "/dashboard/introductory-software-training/lesson-18-hardware-overview",
+      },
       {
         number: "19",
         title: "Library Fabrications",
-        time: "Coming soon",
-        status: "In Production",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 4,
         description:
-          "Learn how reusable fabrication records are created, organized, and prepared for use with door hardware and assemblies.",
+          "Learn how reusable fabrication records are created, organized, positioned, and prepared for use with door hardware and other fabrication workflows.",
+        href: "/dashboard/introductory-software-training/lesson-19-library-fab-overview",
       },
       {
         number: "20",
-        title: "Door Hardware & Components",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Enter and organize locks, pivots, closers, exit devices, strikes, handles, and other common door hardware.",
-      },
-      {
-        number: "21",
         title: "Door Fabrication",
-        time: "Coming soon",
-        status: "In Production",
+        time: "45–60 min",
+        status: "Available",
+        stepCount: 4,
         description:
-          "Use the Door Fabrication screen to create and manage the preparations required for door hardware.",
-      },
-      {
-        number: "22",
-        title: "Applying Hardware & Door Packages",
-        time: "Coming soon",
-        status: "In Production",
-        description:
-          "Apply individual hardware items and complete door packages to doors, entrances, and regular door frames.",
+          "Use the Door Fabrication screen to add hardware preparations, position fabrications, verify machining, and output completed doors to the Rhino.",
+        href: "/dashboard/introductory-software-training/lesson-20-door-fabrication-overview",
       },
     ],
   },
@@ -395,7 +391,7 @@ function LessonCard({
     completedSteps.filter(
       (item) =>
         item.lesson_number ===
-        numericLesson &&
+          numericLesson &&
         item.completed
     ).length;
 
@@ -560,6 +556,11 @@ export default function IntroductorySoftwareTrainingPage() {
   const [progressError, setProgressError] =
     useState("");
 
+  const [
+    resettingProgress,
+    setResettingProgress,
+  ] = useState(false);
+
   useEffect(() => {
     loadProgress();
   }, []);
@@ -658,6 +659,99 @@ export default function IntroductorySoftwareTrainingPage() {
       );
     } finally {
       setLoadingProgress(false);
+    }
+  }
+
+  async function resetCourseProgress() {
+    const confirmed =
+      window.confirm(
+        "Reset all course progress?\n\nThis will mark every Academy lesson as incomplete and return you to the beginning of the course.\n\nThis cannot be undone."
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setResettingProgress(true);
+      setProgressError("");
+
+      const supabase =
+        createClient();
+
+      const {
+        data: { session },
+      } =
+        await supabase.auth.getSession();
+
+      if (!session) {
+        router.replace("/login");
+        return;
+      }
+
+      const response =
+        await fetch(
+          "/api/academy-progress",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                `Bearer ${session.access_token}`,
+            },
+
+            body: JSON.stringify({
+              action: "reset",
+            }),
+          }
+        );
+
+      const responseText =
+        await response.text();
+
+      let result: any = {};
+
+      try {
+        result =
+          responseText
+            ? JSON.parse(responseText)
+            : {};
+      } catch {
+        throw new Error(
+          responseText ||
+            "Invalid reset response."
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          result.error ||
+            "Unable to reset course progress."
+        );
+      }
+
+      /*
+      Immediately clear the progress
+      shown on this page.
+
+      The API has already removed the
+      user's saved Academy progress
+      from Supabase.
+      */
+
+      setCompletedSteps([]);
+      setCourseProgress(null);
+      setOpenModule("");
+    } catch (error: any) {
+      setProgressError(
+        error?.message ||
+          "Unable to reset course progress."
+      );
+    } finally {
+      setResettingProgress(false);
     }
   }
 
@@ -834,6 +928,10 @@ export default function IntroductorySoftwareTrainingPage() {
     currentLessonInfo?.href ||
     "/dashboard/introductory-software-training/lesson-1-glazing-basics";
 
+  const hasSavedProgress =
+    completedSteps.length > 0 ||
+    courseProgress !== null;
+
   return (
     <main className="page">
       <section className="hero">
@@ -896,11 +994,11 @@ export default function IntroductorySoftwareTrainingPage() {
                 Complete
               </h2>
 
-    <p>
-  {completedLessonCount} of{" "}
-  {lessonCount} total lessons
-  complete.
-</p>
+              <p>
+                {completedLessonCount} of{" "}
+                {lessonCount} total lessons
+                complete.
+              </p>
             </div>
 
             <div className="progressNumbers">
@@ -910,6 +1008,7 @@ export default function IntroductorySoftwareTrainingPage() {
                     completedLessonCount
                   }
                 </strong>
+
                 <span>
                   Lessons Complete
                 </span>
@@ -921,6 +1020,7 @@ export default function IntroductorySoftwareTrainingPage() {
                     availableLessonCount
                   }
                 </strong>
+
                 <span>
                   Available Lessons
                 </span>
@@ -937,86 +1037,112 @@ export default function IntroductorySoftwareTrainingPage() {
             />
           </div>
 
-{allAvailableLessonsComplete ? (
-  <div className="caughtUpBox">
-    <div className="caughtUpIcon">
-      ✓
-    </div>
+          {allAvailableLessonsComplete ? (
+            <div className="caughtUpBox">
+              <div className="caughtUpIcon">
+                ✓
+              </div>
 
-    <div className="caughtUpContent">
-      <p className="continueLabel">
-        You&apos;re All Caught Up
-      </p>
+              <div className="caughtUpContent">
+                <p className="continueLabel">
+                  You&apos;re All Caught Up
+                </p>
 
-      <h3>
-        All Available Lessons Complete
-      </h3>
+                <h3>
+                  All Available Lessons Complete
+                </h3>
 
-      <p>
-        You have completed all{" "}
-        {availableLessonCount} lessons
-        currently available. More lessons
-        are being added weekly as the
-        Rhino Wrangler Academy continues
-        to grow.
-      </p>
-    </div>
-  </div>
-) : courseProgress &&
-  currentLessonInfo ? (
-  <div className="continueTraining">
-    <div>
-      <p className="continueLabel">
-        Continue Where You Left Off
-      </p>
+                <p>
+                  You have completed all{" "}
+                  {availableLessonCount} lessons
+                  currently available. More lessons
+                  are being added weekly as the
+                  Rhino Wrangler Academy continues
+                  to grow.
+                </p>
+              </div>
+            </div>
+          ) : courseProgress &&
+            currentLessonInfo ? (
+            <div className="continueTraining">
+              <div>
+                <p className="continueLabel">
+                  Continue Where You Left Off
+                </p>
 
-      <h3>
-        Lesson{" "}
-        {String(
-          currentLesson
-        ).padStart(2, "0")}
-        :{" "}
-        {currentLessonInfo.title}
-      </h3>
+                <h3>
+                  Lesson{" "}
+                  {String(
+                    currentLesson
+                  ).padStart(2, "0")}
+                  :{" "}
+                  {currentLessonInfo.title}
+                </h3>
 
-      <p>
-        Current position: Step{" "}
-        {currentStep}
-      </p>
-    </div>
+                <p>
+                  Current position: Step{" "}
+                  {currentStep}
+                </p>
+              </div>
 
-    <Link
-      href={continueHref}
-      className="continueButton"
-    >
-      Continue Training →
-    </Link>
-  </div>
-) : (
-  <div className="continueTraining">
-    <div>
-      <p className="continueLabel">
-        Ready to Begin?
-      </p>
+              <Link
+                href={continueHref}
+                className="continueButton"
+              >
+                Continue Training →
+              </Link>
+            </div>
+          ) : (
+            <div className="continueTraining">
+              <div>
+                <p className="continueLabel">
+                  Ready to Begin?
+                </p>
 
-      <h3>
-        Start Lesson 01
-      </h3>
+                <h3>
+                  Start Lesson 01
+                </h3>
 
-      <p>
-        Begin with the fundamentals of
-        the commercial glass industry.
-      </p>
-    </div>
+                <p>
+                  Begin with the fundamentals of
+                  the commercial glass industry.
+                </p>
+              </div>
 
-    <Link
-      href="/dashboard/introductory-software-training/lesson-1-glazing-basics"
-      className="continueButton"
-    >
-      Start Training →
-    </Link>
-  </div>
-)}
+              <Link
+                href="/dashboard/introductory-software-training/lesson-1-glazing-basics"
+                className="continueButton"
+              >
+                Start Training →
+              </Link>
+            </div>
+          )}
+
+          {hasSavedProgress && (
+            <div className="resetProgressRow">
+              <div>
+                <strong>
+                  Want to take the course again?
+                </strong>
+
+                <p>
+                  Reset your Academy progress and
+                  start again from Lesson 01.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="resetProgressButton"
+                onClick={resetCourseProgress}
+                disabled={resettingProgress}
+              >
+                {resettingProgress
+                  ? "Resetting..."
+                  : "Reset Progress"}
+              </button>
+            </div>
+          )}
         </section>
       )}
 
@@ -1393,52 +1519,67 @@ export default function IntroductorySoftwareTrainingPage() {
           text-transform: uppercase;
         }
 
-
         .caughtUpBox {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-top: 24px;
-  padding-top: 22px;
-  border-top: 1px solid
-    rgba(255, 255, 255, 0.08);
-}
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          margin-top: 24px;
+          padding-top: 22px;
+          border-top: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.08
+            );
+        }
 
-.caughtUpIcon {
-  width: 54px;
-  height: 54px;
-  flex: 0 0 54px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 16px;
-  background: rgba(34, 197, 94, 0.16);
-  border: 1px solid
-    rgba(34, 197, 94, 0.32);
-  color: #86efac;
-  font-size: 26px;
-  font-weight: 950;
-}
+        .caughtUpIcon {
+          width: 54px;
+          height: 54px;
+          flex: 0 0 54px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 16px;
+          background: rgba(
+            34,
+            197,
+            94,
+            0.16
+          );
+          border: 1px solid
+            rgba(
+              34,
+              197,
+              94,
+              0.32
+            );
+          color: #86efac;
+          font-size: 26px;
+          font-weight: 950;
+        }
 
-.caughtUpContent h3 {
-  margin: 0 0 6px;
-  color: white;
-  font-size: 21px;
-}
+        .caughtUpContent h3 {
+          margin: 0 0 6px;
+          color: white;
+          font-size: 21px;
+        }
 
-.caughtUpContent p:not(
-    .continueLabel
-  ) {
-  max-width: 720px;
-  margin: 0;
-  color: rgba(
-    255,
-    255,
-    255,
-    0.6
-  );
-  line-height: 1.6;
-}
+        .caughtUpContent p:not(
+            .continueLabel
+          ) {
+          max-width: 720px;
+          margin: 0;
+          color: rgba(
+            255,
+            255,
+            255,
+            0.6
+          );
+          line-height: 1.6;
+        }
+
         .overallProgressTrack {
           height: 14px;
           margin-top: 22px;
@@ -1516,6 +1657,103 @@ export default function IntroductorySoftwareTrainingPage() {
 
         .continueButton:hover {
           background: #fbbf24;
+        }
+
+        /*
+        ----------------------------------
+        RESET PROGRESS
+        ----------------------------------
+        */
+
+        .resetProgressRow {
+          display: flex;
+          align-items: center;
+          justify-content:
+            space-between;
+          gap: 24px;
+          margin-top: 22px;
+          padding-top: 20px;
+          border-top: 1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.08
+            );
+        }
+
+        .resetProgressRow strong {
+          display: block;
+          margin-bottom: 5px;
+          color: rgba(
+            255,
+            255,
+            255,
+            0.8
+          );
+          font-size: 14px;
+        }
+
+        .resetProgressRow p {
+          margin: 0;
+          color: rgba(
+            255,
+            255,
+            255,
+            0.48
+          );
+          font-size: 13px;
+        }
+
+        .resetProgressButton {
+          flex: 0 0 auto;
+          padding: 10px 15px;
+          border: 1px solid
+            rgba(
+              239,
+              68,
+              68,
+              0.35
+            );
+          border-radius: 10px;
+          background: rgba(
+            239,
+            68,
+            68,
+            0.08
+          );
+          color: #fca5a5;
+          font: inherit;
+          font-size: 13px;
+          font-weight: 900;
+          cursor: pointer;
+          transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease;
+        }
+
+        .resetProgressButton:hover:not(
+            :disabled
+          ) {
+          border-color: rgba(
+            239,
+            68,
+            68,
+            0.65
+          );
+          background: rgba(
+            239,
+            68,
+            68,
+            0.16
+          );
+          color: #fecaca;
+        }
+
+        .resetProgressButton:disabled {
+          opacity: 0.55;
+          cursor: not-allowed;
         }
 
         .progressError {
@@ -2218,6 +2456,15 @@ export default function IntroductorySoftwareTrainingPage() {
             text-align: center;
           }
 
+          .resetProgressRow {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .resetProgressButton {
+            width: 100%;
+          }
+
           .moduleHeader {
             grid-template-columns: 1fr;
             gap: 14px;
@@ -2245,9 +2492,11 @@ export default function IntroductorySoftwareTrainingPage() {
             gap: 18px;
             padding: 22px;
           }
-.caughtUpBox {
-  align-items: flex-start;
-}
+
+          .caughtUpBox {
+            align-items: flex-start;
+          }
+
           .lessonMeta {
             align-items: flex-start;
           }

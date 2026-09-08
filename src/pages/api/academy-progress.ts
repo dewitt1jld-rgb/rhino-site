@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "@supabase/supabase-js";
 
 type ProgressBody = {
-  action?: "visit" | "complete";
+  action?: "visit" | "complete" | "reset";
   lessonNumber?: number;
   stepNumber?: number;
   page?: string;
@@ -144,7 +144,7 @@ export default async function handler(
 
     /*
     --------------------------------------------------
-    SAVE USER PROGRESS
+    SAVE / RESET USER PROGRESS
     --------------------------------------------------
     */
 
@@ -155,6 +155,63 @@ export default async function handler(
         stepNumber,
         page,
       } = req.body as ProgressBody;
+
+      /*
+      ----------------------------------------------
+      RESET ALL ACADEMY PROGRESS
+      ----------------------------------------------
+      */
+
+      if (action === "reset") {
+        const {
+          error: stepDeleteError,
+        } = await supabase
+          .from("academy_progress")
+          .delete()
+          .eq("user_id", user.id);
+
+        if (stepDeleteError) {
+          console.error(
+            "Academy step reset error:",
+            stepDeleteError
+          );
+
+          return res.status(500).json({
+            error:
+              "Unable to reset completed lesson progress.",
+          });
+        }
+
+        const {
+          error: courseDeleteError,
+        } = await supabase
+          .from("academy_course_progress")
+          .delete()
+          .eq("user_id", user.id);
+
+        if (courseDeleteError) {
+          console.error(
+            "Academy course reset error:",
+            courseDeleteError
+          );
+
+          return res.status(500).json({
+            error:
+              "Unable to reset current course position.",
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          action: "reset",
+        });
+      }
+
+      /*
+      ----------------------------------------------
+      VALIDATE NORMAL PROGRESS ACTIONS
+      ----------------------------------------------
+      */
 
       if (
         action !== "visit" &&

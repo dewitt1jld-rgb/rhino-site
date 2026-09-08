@@ -9,7 +9,7 @@ export default function RhinoFabSupportPage() {
     "@type": "WebPage",
     name: "RhinoFab Support",
     description:
-      "RhinoFab support resources for glass fabrication shops using RhinoFab, Rhino Fab, Rhino 5000, Rhino 5600, Rhino 5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, and CNC glass fabrication equipment.",
+      "RhinoFab support resources for glass fabrication shops using RhinoFab, Rhino Fab, Rhino 5000, Rhino 5500, Rhino 5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, and CNC glass fabrication equipment.",
     publisher: {
       "@type": "Organization",
       name: "The Rhino Wrangler",
@@ -31,7 +31,7 @@ export default function RhinoFabSupportPage() {
           workflows, machine setup, and CNC glass fabrication problems.
         </p>
         <p className="lead secondaryLead">
-          Get support for RhinoFab, Rhino Fab, Rhino 5000, Rhino 5600, Rhino
+          Get support for RhinoFab, Rhino Fab, Rhino 5000, Rhino 5500, Rhino
           5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, saw and drill
           workflows, coolant problems, photo eyes, tool index issues, and common
           production problems.
@@ -55,7 +55,7 @@ export default function RhinoFabSupportPage() {
           "RhinoFab Support",
           "Rhino Fab Support",
           "Rhino 5000",
-          "Rhino 5600",
+          "Rhino 5500",
           "Rhino 5700",
           "Rhino 900",
           "Rhino 950",

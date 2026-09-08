@@ -9,7 +9,7 @@ export default function RhinoFabTroubleshootingPage() {
   "@type": "WebPage",
   name: "RhinoFab Troubleshooting",
   description:
-    "RhinoFab troubleshooting guides for Rhino 5000, Rhino 5600, Rhino 5700, drill collisions, air manifold issues, coolant problems, photo eye alignment, failed machine connections, calibration problems, and production downtime.",
+    "RhinoFab troubleshooting guides for Rhino 5000, Rhino 5500, Rhino 5700, drill collisions, air manifold issues, coolant problems, photo eye alignment, failed machine connections, calibration problems, and production downtime.",
   publisher: {
     "@type": "Organization",
     name: "The Rhino Wrangler",
@@ -30,7 +30,7 @@ export default function RhinoFabTroubleshootingPage() {
           issues.
         </p>
         <p className="lead secondaryLead">
-          Learn how to approach Rhino 5000 troubleshooting, Rhino 5600
+          Learn how to approach Rhino 5000 troubleshooting, Rhino 5500
           troubleshooting, Rhino 5700 troubleshooting, calibration problems,
           drill collisions, air manifold issues, coolant problems, photo eye
           alignment, failed machine connections, and other downtime-causing
@@ -53,7 +53,7 @@ export default function RhinoFabTroubleshootingPage() {
       <section className="machineStrip">
         {[
           "Rhino 5000",
-          "Rhino 5600",
+          "Rhino 5500",
           "Rhino 5700",
           "Rhino 900",
           "Rhino 950",
@@ -218,7 +218,7 @@ export default function RhinoFabTroubleshootingPage() {
           <p>
             The Rhino Wrangler is built for shops using RhinoFab equipment in
             real production environments. Whether your team is working with a
-            Rhino 5000, Rhino 5600, Rhino 5700, Rhino 9500, Rhino 9700, or other
+            Rhino 5000, Rhino 5500, Rhino 5700, Rhino 9500, Rhino 9700, or other
             RhinoFab machines, the goal is to make troubleshooting easier to
             understand and easier to repeat.
           </p>

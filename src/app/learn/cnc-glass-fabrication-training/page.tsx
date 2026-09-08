@@ -9,7 +9,7 @@ export default function RhinoFabSupportPage() {
     "@type": "WebPage",
     name: "RhinoFab Support",
     description:
-      "RhinoFab support resources for glass fabrication shops using RhinoFab, Rhino Fab, Rhino 5000, Rhino 5600, Rhino 5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, and CNC glass fabrication equipment.",
+      "RhinoFab support resources for glass fabrication shops using RhinoFab, Rhino Fab, Rhino 5000, Rhino 5500, Rhino 5700, Rhino 900, Rhino 950, Rhino 9500, Rhino 9600, and CNC glass fabrication equipment.",
     publisher: {
       "@type": "Organization",
       name: "The Rhino Wrangler",

@@ -223,7 +223,7 @@ export default function LessonThirteenXYZPage() {
         </p>
       </div>
 
-      <h3>RX & RY (5700, 5600 and 5000 series machines only) </h3>
+      <h3>RX & RY (5700, 5500 and 5000 series machines only) </h3>
 
       <div className="lessonText">
         <p>
@@ -291,7 +291,7 @@ export default function LessonThirteenXYZPage() {
         </Link>
 
         <Link
-          href="/dashboard/introductory-software-training/lesson-13-fabrication-options"
+          href="/dashboard/introductory-software-training/lesson-14-weep-anchor-basics"
           className="primary"
         >
           Next: Operations, Tools & Options →

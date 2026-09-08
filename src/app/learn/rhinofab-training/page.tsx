@@ -9,7 +9,7 @@ export default function RhinoFabTrainingPage() {
   "@type": "Course",
   name: "RhinoFab Training",
   description:
-    "Professional RhinoFab training for Rhino 5000, Rhino 5600, Rhino 5700, Rhino 9500, Rhino 9700, CNC RhinoFab machines, calibration workflows, troubleshooting, and glass fabrication shops.",
+    "Professional RhinoFab training for Rhino 5000, Rhino 5500, Rhino 5700, Rhino 9500, Rhino 9700, CNC RhinoFab machines, calibration workflows, troubleshooting, and glass fabrication shops.",
   provider: {
     "@type": "Organization",
     name: "The Rhino Wrangler",
@@ -35,7 +35,7 @@ export default function RhinoFabTrainingPage() {
         </p>
 
         <p className="lead smallLead">
-          Whether your shop runs a RhinoFab, Rhino Fab, Rhino 5000, Rhino 5600,
+          Whether your shop runs a RhinoFab, Rhino Fab, Rhino 5000, Rhino 5500,
           Rhino 5700, Rhino 900, Rhino 950, Rhino 1100, Rhino 1150, Rhino 1250,
           Rhino 1350, Rhino 9500, Rhino 9700, or other CNC RhinoFab equipment,
           standardized training can reduce downtime and improve production.
@@ -67,7 +67,7 @@ export default function RhinoFabTrainingPage() {
 
         <div className="machineGrid">
           <div>Rhino 5000</div>
-          <div>Rhino 5600</div>
+          <div>Rhino 5500</div>
           <div>Rhino 5700</div>
           <div>Rhino 900</div>
           <div>Rhino 950</div>
