@@ -551,11 +551,6 @@ async function ensureCompanyForPurchase({
         cancel_requested_at:
           nextCancelRequestedAt,
 
-        /*
-        Successful purchase means the
-        account is financially current.
-        */
-
         payment_status:
           "current",
 
@@ -1273,9 +1268,6 @@ export default async function handler(
       --------------------------------------------------
       PAYMENT SUCCEEDED
       --------------------------------------------------
-
-      Clear any past-due/grace-period status.
-      --------------------------------------------------
       */
 
       if (
@@ -1419,18 +1411,6 @@ export default async function handler(
       --------------------------------------------------
       PAYMENT FAILED
       --------------------------------------------------
-
-      IMPORTANT:
-
-      Do NOT deactivate access immediately.
-
-      Start a 7-day grace period.
-
-      If this account is already past_due,
-      preserve the ORIGINAL failure/grace
-      timestamps so every Stripe retry does
-      not restart the 7-day clock.
-      --------------------------------------------------
       */
 
       const failureDate =
@@ -1466,11 +1446,6 @@ export default async function handler(
         await supabaseAdmin
           .from("companies")
           .update({
-            /*
-              Customer stays active during
-              the grace period.
-            */
-
             plan_type:
               "annual",
 
@@ -1507,11 +1482,6 @@ export default async function handler(
           )
           .throwOnError();
 
-        /*
-          Keep legacy training access active
-          during the grace period.
-        */
-
         await syncMemberAccess({
           profileId,
 
@@ -1546,11 +1516,6 @@ export default async function handler(
         await supabaseAdmin
           .from("companies")
           .update({
-            /*
-              Support remains available
-              during the grace period.
-            */
-
             plan_type:
               nextPlanType,
 
@@ -2152,51 +2117,6 @@ export default async function handler(
 
       /*
       --------------------------------------------------
-      LIFETIME PAYMENT METHOD
-      --------------------------------------------------
-      */
-
-      if (
-        plan === "lifetime" &&
-        session.payment_intent
-      ) {
-        const paymentIntentId =
-          typeof session.payment_intent ===
-          "string"
-            ? session.payment_intent
-            : session.payment_intent.id;
-
-        const paymentIntent =
-          await stripe.paymentIntents.retrieve(
-            paymentIntentId
-          );
-
-        const paymentMethodId =
-          typeof paymentIntent
-            .payment_method ===
-          "string"
-            ? paymentIntent
-                .payment_method
-            : paymentIntent
-                .payment_method
-                ?.id ||
-              null;
-
-        if (paymentMethodId) {
-          await stripe.customers.update(
-            stripeCustomerId,
-            {
-              invoice_settings: {
-                default_payment_method:
-                  paymentMethodId,
-              },
-            }
-          );
-        }
-      }
-
-      /*
-      --------------------------------------------------
       COMPANY ENTITLEMENTS
       --------------------------------------------------
       */
@@ -2323,7 +2243,7 @@ export default async function handler(
       ) {
         if (
           company.platform_access !==
-          true
+            true
         ) {
           throw new Error(
             "Lifetime purchase did not activate platform access."
@@ -2331,26 +2251,32 @@ export default async function handler(
         }
       }
 
+      /*
+      --------------------------------------------------
+      PURCHASER EMAIL
+      --------------------------------------------------
+      */
 
       const purchaserEmail =
-  metadata.email ||
-  session.customer_details?.email ||
-  session.customer_email ||
-  null;
+        metadata.email ||
+        session.customer_details?.email ||
+        session.customer_email ||
+        null;
+
       /*
       --------------------------------------------------
       CUSTOMER EMAIL
       --------------------------------------------------
       */
 
-     if (purchaserEmail) {
+      if (purchaserEmail) {
         try {
           if (
             company.platform_access
           ) {
             await sendEmail({
               to:
-               purchaserEmail,
+                purchaserEmail,
 
               subject:
                 "Welcome to The Rhino Wrangler",
@@ -2365,7 +2291,7 @@ export default async function handler(
           } else {
             await sendEmail({
               to:
-               purchaserEmail,
+                purchaserEmail,
 
               subject:
                 "Rhino Wrangler Specialized Phone Support",
@@ -2427,14 +2353,16 @@ export default async function handler(
       }
 
       if (!purchaserEmail) {
-  console.error(
-    "Purchase completed but no customer email was found:",
-    {
-      sessionId: session.id,
-      profileId,
-    }
-  );
-}
+        console.error(
+          "Purchase completed but no customer email was found:",
+          {
+            sessionId:
+              session.id,
+
+            profileId,
+          }
+        );
+      }
 
       /*
       --------------------------------------------------
@@ -2445,7 +2373,7 @@ export default async function handler(
       try {
         await sendAdminSitePurchaseEmail({
           userEmail:
-            metadata.email,
+            purchaserEmail,
 
           amount:
             formatAmount(
