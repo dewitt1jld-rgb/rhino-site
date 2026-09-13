@@ -15,7 +15,7 @@ const lessons: Lesson[] = [
     number: 1,
     title: "Before You Start Estimating",
     description:
-      "Understand the purpose of this course, how customizable estimating can be, and what this training is designed to teach.",
+      "Understand the purpose of this course, what the software can and cannot decide for you, and the role of the estimator in building accurate project information.",
     sections: 2,
     status: "Ready",
     href: "/dashboard/estimator-training/lesson-1",
@@ -24,27 +24,27 @@ const lessons: Lesson[] = [
     number: 2,
     title: "Choosing Your Estimating Method",
     description:
-      "Compare detailed estimating metal groups with simpler general metal groups and decide which workflow best fits your company.",
+      "Learn why project-specific metal groups can connect estimating and fabrication, compare the two workflow options, and understand the vocabulary used throughout the Metal Groups screen.",
     sections: 2,
-    status: "In production",
+    status: "Ready",
     href: "/dashboard/estimator-training/lesson-2",
   },
   {
     number: 3,
     title: "Building Metal Groups for Estimating",
     description:
-      "Create metal groups specifically for estimating and learn how materials, glass, accessories, quantities, and costs work together.",
-    sections: 4,
-    status: "In production",
+      "Choose the correct starting metal group, verify the components that affect pricing, and prepare the project so fabrication can continue from the same work later.",
+    sections: 3,
+    status: "Ready",
     href: "/dashboard/estimator-training/lesson-3",
   },
   {
     number: 4,
     title: "Building Frames for an Estimate",
     description:
-      "Create frames, assign the correct systems and glass, enter quantities, and verify that the estimate reflects the project.",
+      "Create and organize the project, enter estimating frame settings, build and modify frames efficiently, and verify the conditions that actually affect material and pricing.",
     sections: 4,
-    status: "In production",
+    status: "Ready",
     href: "/dashboard/estimator-training/lesson-4",
   },
   {
