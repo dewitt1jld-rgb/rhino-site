@@ -2331,27 +2331,33 @@ export default async function handler(
         }
       }
 
+
+      const purchaserEmail =
+  metadata.email ||
+  session.customer_details?.email ||
+  session.customer_email ||
+  null;
       /*
       --------------------------------------------------
       CUSTOMER EMAIL
       --------------------------------------------------
       */
 
-      if (metadata.email) {
+     if (purchaserEmail) {
         try {
           if (
             company.platform_access
           ) {
             await sendEmail({
               to:
-                metadata.email,
+               purchaserEmail,
 
               subject:
                 "Welcome to The Rhino Wrangler",
 
               html:
                 buildWelcomeEmail(
-                  metadata.email,
+                  purchaserEmail,
                   rhinoAccessCode,
                   company.company_name
                 ),
@@ -2359,7 +2365,7 @@ export default async function handler(
           } else {
             await sendEmail({
               to:
-                metadata.email,
+               purchaserEmail,
 
               subject:
                 "Rhino Wrangler Specialized Phone Support",
@@ -2419,6 +2425,16 @@ export default async function handler(
           );
         }
       }
+
+      if (!purchaserEmail) {
+  console.error(
+    "Purchase completed but no customer email was found:",
+    {
+      sessionId: session.id,
+      profileId,
+    }
+  );
+}
 
       /*
       --------------------------------------------------
