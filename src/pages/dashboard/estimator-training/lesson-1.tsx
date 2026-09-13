@@ -1,542 +1,87 @@
-import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import AcademyLessonLayout from "../../../components/AcademyLessonLayout";
 
-type LessonStep = {
-  id: number;
-  shortTitle: string;
-  title: string;
-};
-
-const steps: LessonStep[] = [
+const steps = [
   {
-    id: 1,
-    shortTitle: "What This Course Is",
+    number: 1,
     title: "What This Course Is — and Is Not",
+    href: "/dashboard/estimator-training/lesson-1",
   },
   {
-    id: 2,
-    shortTitle: "The Role of an Estimator",
+    number: 2,
     title: "The Role of an Estimator",
+    href: "/dashboard/estimator-training/lesson-1-role-of-estimator",
   },
 ];
 
 export default function EstimatorLessonOnePage() {
-  const [activeStep, setActiveStep] = useState(1);
-
-  const currentStep =
-    steps.find(
-      (step) => step.id === activeStep
-    ) || steps[0];
-
-  function goToPreviousStep() {
-    if (activeStep > 1) {
-      setActiveStep(
-        (current) => current - 1
-      );
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
-  }
-
-  function goToNextStep() {
-    if (activeStep < steps.length) {
-      setActiveStep(
-        (current) => current + 1
-      );
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
-  }
-
   return (
-    <>
-      <Head>
-        <title>
-          Before You Start Estimating | The Rhino Wrangler
-        </title>
-
-        <meta
-          name="description"
-          content="Learn the purpose of estimator training and the role accurate estimating plays in Glazier Studio and PartnerPak."
-        />
-      </Head>
-
-      <main className="lessonPage">
-        <aside className="sidebar">
-          <div className="sidebarInner">
-            <Link
-              href="/dashboard/estimator-training"
-              className="backLink"
-            >
-              ← Back to Estimator Training
-            </Link>
-
-            <div className="lessonLabel">
-              LESSON 01
-            </div>
-
-            <h1>
-              Before You Start Estimating
-            </h1>
-
-            <p className="sidebarDescription">
-              Understand the purpose of this course,
-              what estimating software can and cannot
-              do, and the responsibility of the
-              estimator.
-            </p>
-
-            <div className="stepList">
-              {steps.map((step) => (
-                <button
-                  key={step.id}
-                  type="button"
-                  onClick={() => {
-                    setActiveStep(step.id);
-
-                    window.scrollTo({
-                      top: 0,
-                      behavior: "smooth",
-                    });
-                  }}
-                  className={
-                    activeStep === step.id
-                      ? "stepButton active"
-                      : "stepButton"
-                  }
-                >
-                  <div className="stepNumber">
-                    {step.id}
-                  </div>
-
-                  <div className="stepText">
-                    <span>
-                      Section {step.id}
-                    </span>
-
-                    <strong>
-                      {step.shortTitle}
-                    </strong>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </aside>
-
-        <section className="content">
-          <div className="contentInner">
-            <div className="topBar">
-              <div>
-                <div className="sectionLabel">
-                  SECTION {activeStep} OF {steps.length}
-                </div>
-
-                <h2>
-                  {currentStep.title}
-                </h2>
-              </div>
-
-              <div className="lessonProgress">
-                <span>
-                  Lesson Progress
-                </span>
-
-                <div className="progressTrack">
-                  <div
-                    className="progressFill"
-                    style={{
-                      width: `${
-                        (activeStep /
-                          steps.length) *
-                        100
-                      }%`,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {activeStep === 1 && (
-              <SectionOne />
-            )}
-
-            {activeStep === 2 && (
-              <SectionTwo />
-            )}
-
-            <div className="navigation">
-              <button
-                type="button"
-                onClick={goToPreviousStep}
-                disabled={activeStep === 1}
-                className="navButton secondary"
-              >
-                ← Previous Section
-              </button>
-
-              {activeStep <
-              steps.length ? (
-                <button
-                  type="button"
-                  onClick={goToNextStep}
-                  className="navButton primary"
-                >
-                  Next Section →
-                </button>
-              ) : (
-                <Link
-                  href="/dashboard/estimator-training"
-                  className="navButton primary"
-                >
-                  Finish Lesson →
-                </Link>
-              )}
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <style jsx>{`
-        .lessonPage {
-          min-height: 100vh;
-          display: grid;
-          grid-template-columns:
-            330px minmax(0, 1fr);
-          background: #f5f6f8;
-          color: #111827;
-        }
-
-        .sidebar {
-          background: #0b1220;
-          color: white;
-          border-right: 1px solid
-            rgba(255, 255, 255, 0.08);
-        }
-
-        .sidebarInner {
-          position: sticky;
-          top: 0;
-          padding: 36px 26px;
-        }
-
-        :global(.backLink) {
-          display: inline-block;
-          margin-bottom: 36px;
-          color: #cbd5e1;
-          font-size: 14px;
-          font-weight: 700;
-          text-decoration: none;
-        }
-
-        :global(.backLink:hover) {
-          color: #f59e0b;
-        }
-
-        .lessonLabel {
-          margin-bottom: 8px;
-          color: #f59e0b;
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.14em;
-        }
-
-        .sidebar h1 {
-          margin: 0;
-          font-size: 27px;
-          line-height: 1.2;
-          letter-spacing: -0.02em;
-        }
-
-        .sidebarDescription {
-          margin: 14px 0 30px;
-          color: #aeb7c5;
-          font-size: 14px;
-          line-height: 1.65;
-        }
-
-        .stepList {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        .stepButton {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          gap: 13px;
-          padding: 14px;
-          border: 1px solid
-            rgba(255, 255, 255, 0.08);
-          border-radius: 10px;
-          background:
-            rgba(255, 255, 255, 0.035);
-          color: white;
-          text-align: left;
-          cursor: pointer;
-          transition:
-            background 0.15s ease,
-            border-color 0.15s ease;
-        }
-
-        .stepButton:hover {
-          background:
-            rgba(255, 255, 255, 0.07);
-        }
-
-        .stepButton.active {
-          border-color:
-            rgba(245, 158, 11, 0.65);
-          background:
-            rgba(245, 158, 11, 0.12);
-        }
-
-        .stepNumber {
-          flex: 0 0 34px;
-          width: 34px;
-          height: 34px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 8px;
-          background:
-            rgba(255, 255, 255, 0.08);
-          color: #cbd5e1;
-          font-weight: 900;
-        }
-
-        .stepButton.active
-          .stepNumber {
-          background: #f59e0b;
-          color: #111827;
-        }
-
-        .stepText {
-          display: flex;
-          flex-direction: column;
-          gap: 3px;
-        }
-
-        .stepText span {
-          color: #8f9bad;
-          font-size: 11px;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 0.07em;
-        }
-
-        .stepText strong {
-          color: #f3f4f6;
-          font-size: 14px;
-          line-height: 1.35;
-        }
-
-        .content {
-          min-width: 0;
-        }
-
-        .contentInner {
-          width: 100%;
-          max-width: 950px;
-          margin: 0 auto;
-          padding: 58px 46px 80px;
-        }
-
-        .topBar {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          gap: 32px;
-          padding-bottom: 28px;
-          margin-bottom: 34px;
-          border-bottom: 1px solid #dfe3e8;
-        }
-
-        .sectionLabel {
-          margin-bottom: 8px;
-          color: #f59e0b;
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.13em;
-        }
-
-        .topBar h2 {
-          margin: 0;
-          font-size: clamp(
-            32px,
-            4vw,
-            44px
-          );
-          line-height: 1.12;
-          letter-spacing: -0.03em;
-        }
-
-        .lessonProgress {
-          flex: 0 0 180px;
-        }
-
-        .lessonProgress span {
-          display: block;
-          margin-bottom: 8px;
-          color: #6b7280;
-          font-size: 12px;
-          font-weight: 800;
-        }
-
-        .progressTrack {
-          height: 7px;
-          border-radius: 999px;
-          overflow: hidden;
-          background: #e5e7eb;
-        }
-
-        .progressFill {
-          height: 100%;
-          border-radius: 999px;
-          background: #f59e0b;
-          transition: width 0.2s ease;
-        }
-
-        .navigation {
-          display: flex;
-          justify-content: space-between;
-          gap: 18px;
-          margin-top: 46px;
-          padding-top: 26px;
-          border-top: 1px solid #dfe3e8;
-        }
-
-        .navButton {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 46px;
-          padding: 0 18px;
-          border-radius: 9px;
-          font-size: 14px;
-          font-weight: 900;
-          text-decoration: none;
-          cursor: pointer;
-        }
-
-        .navButton.primary {
-          border: 1px solid #f59e0b;
-          background: #f59e0b;
-          color: #111827;
-        }
-
-        .navButton.secondary {
-          border: 1px solid #cfd5dc;
-          background: white;
-          color: #374151;
-        }
-
-        .navButton:disabled {
-          opacity: 0.4;
-          cursor: not-allowed;
-        }
-
-        @media (
-          max-width: 900px
-        ) {
-          .lessonPage {
-            grid-template-columns: 1fr;
-          }
-
-          .sidebarInner {
-            position: static;
-          }
-
-          .stepList {
-            display: grid;
-            grid-template-columns:
-              repeat(2, minmax(0, 1fr));
-          }
-
-          .contentInner {
-            padding:
-              40px 24px 70px;
-          }
-        }
-
-        @media (
-          max-width: 620px
-        ) {
-          .stepList {
-            grid-template-columns: 1fr;
-          }
-
-          .topBar {
-            align-items: flex-start;
-            flex-direction: column;
-          }
-
-          .lessonProgress {
-            width: 100%;
-            flex: none;
-          }
-
-          .navigation {
-            flex-direction: column;
-          }
-
-          .navButton {
-            width: 100%;
-          }
-        }
-      `}</style>
-    </>
-  );
-}
-
-/*
---------------------------------------------------
-SECTION 1
---------------------------------------------------
-*/
-
-function SectionOne() {
-  return (
-    <article className="article">
-      <p className="lead">
-        Before you begin estimating, it is important
-        to understand exactly what this training is
-        designed to teach — and what it is not.
+    <AcademyLessonLayout
+      lessonNumber="01"
+      lessonTitle="Before You Start Estimating"
+      lessonDescription="Understand what this course is designed to teach, what it is not designed to teach, and what must be verified before relying on estimating results."
+      currentStep={1}
+      steps={steps}
+    >
+      <p className="academyEyebrow">
+        Step 1 of 2
       </p>
 
-      <div className="warningBox">
-        <div className="warningTitle">
-          Important Pricing Disclaimer
-        </div>
+      <h2>
+        What This Course Is — and Is Not
+      </h2>
 
+      <div className="goalBox">
+        <strong>Goal:</strong>{" "}
+        Understand the purpose of this training before using Glazier Studio or
+        PartnerPak to build real estimates.
+      </div>
+
+      <div className="lessonText">
         <p>
-          This course is <strong>not</strong> intended
-          to teach you what to charge for a project,
-          how to set your prices, what your labor rates
-          should be, or what an average project should
-          cost.
+          Before you begin estimating, it is important to understand exactly
+          what this training is designed to teach — and what it is{" "}
+          <strong>not</strong> designed to teach.
         </p>
 
         <p>
-          Any pricing, labor rates, material costs,
-          markups, or example numbers shown throughout
-          these lessons are for demonstration purposes
-          only.
+          Estimating can be extremely customizable. Every company has its own
+          procedures, material costs, labor rates, supplier agreements,
+          markups, waste factors, installation methods, overhead, and internal
+          estimating practices.
+        </p>
+
+        <p>
+          Because of that, there is no single pricing system that applies to
+          every company or every project.
+        </p>
+      </div>
+
+      <div className="warningBox">
+        <p className="sectionLabel">
+          Important Pricing Disclaimer
+        </p>
+
+        <h3>
+          This is software training — not pricing advice.
+        </h3>
+
+        <p>
+          This course is <strong>not</strong> intended to teach you what to
+          charge for a project, what your labor rates should be, how much
+          markup you should use, or what a particular project should cost.
+        </p>
+
+        <p>
+          Any material costs, labor rates, markups, quantities, or pricing
+          examples shown throughout this course are used only to demonstrate
+          how the software works.
         </p>
 
         <p>
           <strong>
-            Do not use any example from this course as
-            real-world pricing or as advice on what,
-            when, or how much your company should charge.
+            Do not use any example shown in this training as real-world pricing
+            or as advice on what, when, or how much your company should charge.
           </strong>
         </p>
       </div>
@@ -545,546 +90,366 @@ function SectionOne() {
         Every Company Is Different
       </h3>
 
-      <p>
-        Estimating is highly customizable. Two companies
-        bidding the exact same project may use completely
-        different procedures to arrive at their final
-        price.
-      </p>
+      <div className="lessonText">
+        <p>
+          Two companies can look at the exact same project and use very
+          different estimating procedures.
+        </p>
 
-      <p>
-        Material costs, labor rates, waste factors,
-        supplier agreements, overhead, markup strategies,
-        installation methods, equipment, and internal
-        procedures can all vary from one company to
-        another.
-      </p>
+        <p>
+          One company may purchase material at a different price, use a
+          different labor rate, include different waste percentages, install
+          the product differently, or use a completely different markup
+          structure.
+        </p>
 
-      <p>
-        Because of that, this course will not attempt to
-        tell you what those numbers should be.
-      </p>
+        <p>
+          Those differences are normal.
+        </p>
+
+        <p>
+          The purpose of this course is not to replace your company&apos;s
+          estimating procedures. Instead, it is designed to show you how to use{" "}
+          <strong>Glazier Studio and PartnerPak</strong> to support those
+          procedures.
+        </p>
+      </div>
+
+      <div className="explanationGrid">
+        <section className="explanationCard">
+          <p className="sectionLabel">
+            This Course Will Teach
+          </p>
+
+          <h3>
+            How to use the software
+          </h3>
+
+          <p>
+            Learn how to enter projects, build framing systems, add doors,
+            configure labor, review costs, and generate estimating information.
+          </p>
+        </section>
+
+        <section className="explanationCard">
+          <p className="sectionLabel">
+            This Course Will Not Teach
+          </p>
+
+          <h3>
+            What your company should charge
+          </h3>
+
+          <p>
+            Pricing strategy, labor rates, markups, profit expectations, and
+            final selling prices must be determined by your company.
+          </p>
+        </section>
+      </div>
 
       <h3>
-        What This Course Will Teach You
+        What We Are Trying to Accomplish
       </h3>
 
-      <p>
-        The purpose of this training is to help you
-        understand how to use
-        <strong> Glazier Studio and PartnerPak </strong>
-        as estimating tools.
-      </p>
+      <div className="lessonText">
+        <p>
+          The goal of this training is to show you how to take information from
+          a new project and enter it into Glazier Studio or PartnerPak in a way
+          that allows the software to quickly calculate and organize estimating
+          information.
+        </p>
 
-      <p>
-        You will learn how to take project information,
-        enter it into the software, organize it properly,
-        and use the program to quickly calculate and
-        review project costs.
-      </p>
+        <p>
+          Once the software is configured correctly, it can dramatically
+          reduce the amount of repetitive math and manual calculation required
+          to estimate a project.
+        </p>
 
-      <div className="infoBox">
+        <p>
+          However, the software can only calculate information based on the
+          data and settings that have been entered into it.
+        </p>
+      </div>
+
+      <div className="calloutBox">
         <strong>
-          The goal is not to tell you what your estimate
-          should cost.
+          The software does not know whether your numbers are correct.
         </strong>
 
         <p>
-          The goal is to show you how to configure and
-          use the software so that it can produce useful
-          estimating information based on your
-          company&apos;s own numbers and procedures.
+          Glazier Studio and PartnerPak will calculate using the information
+          they have been given. It is your responsibility to make sure that
+          information accurately represents your company&apos;s estimating
+          process.
         </p>
       </div>
 
       <h3>
-        Testing Is Required
+        Testing Must Be Done Before Trusting Final Numbers
       </h3>
 
-      <p>
-        Before trusting any final number produced by
-        Glazier Studio or PartnerPak, your company should
-        test and verify its estimating setup.
-      </p>
+      <div className="lessonText">
+        <p>
+          Before your company begins relying on Glazier Studio or PartnerPak
+          for real project pricing, the estimating setup must be tested.
+        </p>
 
-      <p>
-        Make sure your material costs, labor values,
-        defaults, quantities, waste factors, and other
-        settings are behaving the way you expect them to.
-      </p>
+        <p>
+          Material costs, labor values, quantities, defaults, waste factors,
+          formulas, and other settings should all be checked against known
+          examples.
+        </p>
+
+        <p>
+          Do not assume that a number is correct simply because the software
+          calculated it.
+        </p>
+      </div>
 
       <div className="criticalBox">
-        <strong>
-          Do not assume that a number is correct simply
-          because the software calculated it.
-        </strong>
+        <p className="sectionLabel">
+          Required Before Real-World Use
+        </p>
+
+        <h3>
+          Test your estimating setup.
+        </h3>
 
         <p>
-          Testing must be performed on your end before
-          relying on the software for real project
-          pricing.
+          Your company should verify the results produced by the software
+          before using those results to price real projects.
+        </p>
+
+        <p>
+          Run test estimates, compare the results against known costs, and
+          confirm that each part of the estimate is behaving the way you expect
+          it to.
         </p>
       </div>
 
       <h3>
-        Starting From Ground Zero
+        This Course Starts From Ground Zero
       </h3>
 
-      <p>
-        This course starts from the beginning and assumes
-        that you may be completely new to estimating with
-        Glazier Studio and PartnerPak.
-      </p>
+      <div className="lessonText">
+        <p>
+          This estimating course begins with the basics and assumes that some
+          users may be completely new to Glazier Studio and PartnerPak.
+        </p>
 
-      <p>
-        Because of that, some topics will overlap with
-        concepts covered in the Glazier Studio /
-        PartnerPak Foundations course.
-      </p>
+        <p>
+          Because of that, you will see some concepts that overlap with the
+          Glazier Studio / PartnerPak Foundations course.
+        </p>
 
-      <p>
-        If you are already familiar with a topic, feel
-        free to skip ahead. You do not need to complete
-        every page in order if you already understand
-        some of the fundamentals.
-      </p>
+        <p>
+          If you already understand a topic, feel free to move past it.
+          Experienced users do not need to work through every basic concept
+          again.
+        </p>
+      </div>
 
-      <ArticleStyles />
-    </article>
-  );
-}
+      <div className="sectionBox">
+        <p className="sectionLabel">
+          How to Use This Course
+        </p>
 
-/*
---------------------------------------------------
-SECTION 2
---------------------------------------------------
-*/
+        <div className="workflowGrid">
+          <div className="workflowStep">
+            <span>1</span>
 
-function SectionTwo() {
-  return (
-    <article className="article">
-      <p className="lead">
-        Estimating is the process of taking a new project
-        and converting the drawings, specifications, and
-        available project information into an accurate
-        bid.
-      </p>
+            <div>
+              <strong>Start With the Basics</strong>
 
-      <h3>
-        What Is Estimating?
-      </h3>
-
-      <p>
-        A new project may begin with architectural
-        drawings, engineering drawings, elevations,
-        schedules, specifications, written notes, and
-        other information provided by the customer,
-        architect, contractor, or project team.
-      </p>
-
-      <p>
-        The estimator takes that information and
-        determines what the company believes will be
-        required to complete the work.
-      </p>
-
-      <p>
-        That information is then converted into a bid in
-        hopes that the company can win the project and
-        perform the work successfully.
-      </p>
-
-      <div className="balanceBox">
-        <div className="balanceItem">
-          <span className="balanceIcon">
-            ↓
-          </span>
-
-          <div>
-            <strong>
-              Estimate Too Low
-            </strong>
-
-            <p>
-              The company may win the project but lose
-              money while completing the work.
-            </p>
+              <p>
+                New users can follow the course from beginning to end.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="balanceItem">
-          <span className="balanceIcon">
-            ↑
-          </span>
+          <div className="workflowStep">
+            <span>2</span>
 
-          <div>
-            <strong>
-              Estimate Too High
-            </strong>
+            <div>
+              <strong>Skip What You Already Know</strong>
 
-            <p>
-              Another company may submit a more
-              competitive bid and win the project.
-            </p>
+              <p>
+                Experienced users can move directly to the estimating topics
+                they need.
+              </p>
+            </div>
+          </div>
+
+          <div className="workflowStep">
+            <span>3</span>
+
+            <div>
+              <strong>Build Your Own Setup</strong>
+
+              <p>
+                Enter the costs, labor rates, and procedures that apply to your
+                company.
+              </p>
+            </div>
+          </div>
+
+          <div className="workflowStep">
+            <span>4</span>
+
+            <div>
+              <strong>Test the Results</strong>
+
+              <p>
+                Verify the system before depending on it for real project
+                pricing.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <p>
-        This is why estimating can have such a large
-        impact on a company. The estimator is constantly
-        trying to create a price that is both competitive
-        and complete.
-      </p>
-
-      <h3>
-        You Will Not Always Have Perfect Information
-      </h3>
-
-      <p>
-        At the time a project is being bid, many details
-        may still be theoretical.
-      </p>
-
-      <p>
-        Opening sizes may not have been field verified.
-        Final hardware may not be selected. Details may
-        still be changing. Some dimensions may be based
-        entirely on architectural drawings rather than
-        actual field conditions.
-      </p>
-
-      <p>
-        In most cases, you are estimating the project
-        based on the plans, drawings, specifications, and
-        information available at the time the bid is
-        submitted.
-      </p>
-
-      <div className="infoBox">
+      <div className="calloutBox finalCallout">
         <strong>
-          Bid what is shown and specified.
+          Remember this throughout the course:
         </strong>
 
         <p>
-          If project requirements change later, those
-          changes may be handled separately through
-          revisions or change orders depending on your
-          company&apos;s procedures and contract
-          requirements.
+          We are teaching you how to use the estimating tools. Your company is
+          responsible for determining the numbers that go into those tools and
+          verifying the numbers that come back out.
         </p>
       </div>
 
-      <h3>
-        Read More Than the Elevations
-      </h3>
+      <div className="navButtons">
+        <Link
+          href="/dashboard/estimator-training"
+          className="secondary"
+        >
+          ← Back to Estimator Training
+        </Link>
 
-      <p>
-        One of the most important habits an estimator can
-        develop is reviewing all of the information sent
-        over for bidding.
-      </p>
-
-      <p>
-        Do not assume that everything important will be
-        shown directly on the elevation.
-      </p>
-
-      <p>
-        Notes, specifications, schedules, detail pages,
-        and written descriptions may contain requirements
-        that dramatically change the cost of a project.
-      </p>
-
-      <div className="checkList">
-        <div>
-          ✓ Specific glass types
-        </div>
-
-        <div>
-          ✓ Special hardware
-        </div>
-
-        <div>
-          ✓ Different finishes
-        </div>
-
-        <div>
-          ✓ Door requirements
-        </div>
-
-        <div>
-          ✓ Structural requirements
-        </div>
-
-        <div>
-          ✓ Accessories
-        </div>
-
-        <div>
-          ✓ Sealants and consumables
-        </div>
-
-        <div>
-          ✓ Special fabrication
-        </div>
-
-        <div>
-          ✓ Installation requirements
-        </div>
-
-        <div>
-          ✓ Other project-specific requirements
-        </div>
+        <Link
+          href="/dashboard/estimator-training/lesson-1-role-of-estimator"
+          className="primary"
+        >
+          Next: The Role of an Estimator →
+        </Link>
       </div>
 
-      <p>
-        Missing even one of these items can cause a
-        significant difference between your estimate and
-        the actual cost of completing the project.
-      </p>
-
-      <h3>
-        Speed Matters — But Accuracy Matters More
-      </h3>
-
-      <p>
-        Glazier Studio and PartnerPak can greatly reduce
-        the amount of time required to build an estimate.
-        Once the system is configured properly, many
-        calculations that would otherwise need to be done
-        manually can be performed automatically.
-      </p>
-
-      <p>
-        However, speed is only valuable when the
-        information going into the system is accurate.
-      </p>
-
-      <div className="takeaway">
-        <div className="takeawayLabel">
-          KEY TAKEAWAY
-        </div>
-
-        <h4>
-          The software is only as accurate as the
-          information you put into it.
-        </h4>
-
-        <p>
-          Glazier Studio and PartnerPak can make
-          estimating much faster, but it is still the
-          estimator&apos;s responsibility to review the
-          drawings, understand the project requirements,
-          verify the setup, and confirm the final numbers
-          before submitting a bid.
-        </p>
-      </div>
-
-      <p className="closing">
-        Throughout the rest of this course, we will focus
-        on creating a workflow that helps you build
-        estimates quickly while reducing the chance that
-        important project information is overlooked.
-      </p>
-
-      <ArticleStyles />
-    </article>
-  );
-}
-
-/*
---------------------------------------------------
-SHARED ARTICLE STYLES
---------------------------------------------------
-*/
-
-function ArticleStyles() {
-  return (
-    <style jsx>{`
-      .article {
-        font-size: 17px;
-        line-height: 1.8;
-        color: #374151;
-      }
-
-      .lead {
-        margin: 0 0 32px;
-        color: #1f2937;
-        font-size: 20px;
-        line-height: 1.7;
-      }
-
-      h3 {
-        margin: 38px 0 12px;
-        color: #111827;
-        font-size: 25px;
-        line-height: 1.25;
-        letter-spacing: -0.015em;
-      }
-
-      p {
-        margin: 0 0 18px;
-      }
-
-      .warningBox,
-      .infoBox,
-      .criticalBox,
-      .takeaway {
-        margin: 28px 0;
-        padding: 22px 24px;
-        border-radius: 12px;
-      }
-
-      .warningBox {
-        border: 1px solid #f0c76f;
-        border-left: 5px solid #f59e0b;
-        background: #fff9e9;
-      }
-
-      .warningTitle {
-        margin-bottom: 10px;
-        color: #945d00;
-        font-size: 18px;
-        font-weight: 900;
-      }
-
-      .warningBox p:last-child,
-      .infoBox p:last-child,
-      .criticalBox p:last-child,
-      .takeaway p:last-child {
-        margin-bottom: 0;
-      }
-
-      .infoBox {
-        border: 1px solid #ccd7e4;
-        border-left: 5px solid #64748b;
-        background: #f7f9fc;
-      }
-
-      .criticalBox {
-        border: 1px solid #e1b5b5;
-        border-left: 5px solid #b42318;
-        background: #fff5f5;
-      }
-
-      .criticalBox strong {
-        color: #8f1d17;
-      }
-
-      .balanceBox {
-        display: grid;
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
-        gap: 16px;
-        margin: 28px 0;
-      }
-
-      .balanceItem {
-        display: flex;
-        gap: 15px;
-        padding: 20px;
-        border: 1px solid #dfe3e8;
-        border-radius: 12px;
-        background: white;
-      }
-
-      .balanceIcon {
-        flex: 0 0 38px;
-        width: 38px;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        background: #0b1220;
-        color: #f59e0b;
-        font-size: 20px;
-        font-weight: 900;
-      }
-
-      .balanceItem strong {
-        display: block;
-        margin-bottom: 6px;
-        color: #111827;
-        font-size: 16px;
-      }
-
-      .balanceItem p {
-        margin: 0;
-        color: #5f6978;
-        font-size: 14px;
-        line-height: 1.6;
-      }
-
-      .checkList {
-        display: grid;
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
-        gap: 10px 20px;
-        margin: 24px 0 28px;
-        padding: 22px;
-        border: 1px solid #dde2e8;
-        border-radius: 12px;
-        background: white;
-      }
-
-      .checkList div {
-        color: #374151;
-        font-size: 15px;
-        font-weight: 700;
-      }
-
-      .takeaway {
-        border: 1px solid
-          rgba(245, 158, 11, 0.5);
-        background: #0b1220;
-        color: white;
-      }
-
-      .takeawayLabel {
-        margin-bottom: 8px;
-        color: #f59e0b;
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: 0.13em;
-      }
-
-      .takeaway h4 {
-        margin: 0 0 12px;
-        color: white;
-        font-size: 24px;
-        line-height: 1.3;
-      }
-
-      .takeaway p {
-        color: #d4dae3;
-      }
-
-      .closing {
-        margin-top: 30px;
-        padding-top: 26px;
-        border-top: 1px solid #dfe3e8;
-        color: #1f2937;
-        font-weight: 700;
-      }
-
-      @media (
-        max-width: 700px
-      ) {
-        .article {
-          font-size: 16px;
+      <style jsx>{`
+        .warningBox,
+        .criticalBox {
+          margin: 30px 0;
+          padding: 26px;
+          border-radius: 18px;
         }
 
-        .lead {
-          font-size: 18px;
+        .warningBox {
+          border: 1px solid rgba(245, 158, 11, 0.38);
+          background: rgba(245, 158, 11, 0.08);
         }
 
-        .balanceBox,
-        .checkList {
-          grid-template-columns: 1fr;
+        .criticalBox {
+          border: 1px solid rgba(239, 68, 68, 0.32);
+          background: rgba(239, 68, 68, 0.07);
         }
-      }
-    `}</style>
+
+        .warningBox h3,
+        .criticalBox h3 {
+          margin: 4px 0 14px;
+          color: #ffffff;
+          font-size: 23px;
+        }
+
+        .warningBox p:not(.sectionLabel),
+        .criticalBox p:not(.sectionLabel) {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.76);
+          line-height: 1.75;
+        }
+
+        .warningBox p:not(.sectionLabel) + p,
+        .criticalBox p:not(.sectionLabel) + p {
+          margin-top: 15px;
+        }
+
+        .explanationGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
+          margin: 26px 0 36px;
+        }
+
+        .explanationCard {
+          padding: 24px;
+          border: 1px solid rgba(245, 158, 11, 0.18);
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.035);
+        }
+
+        .explanationCard h3 {
+          margin: 3px 0 12px;
+          color: #ffffff;
+          font-size: 21px;
+        }
+
+        .explanationCard p:not(.sectionLabel) {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.7);
+          line-height: 1.7;
+        }
+
+        .workflowGrid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        .workflowStep {
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+          padding: 18px;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .workflowStep > span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+          flex: 0 0 34px;
+          border-radius: 999px;
+          background: rgba(245, 158, 11, 0.14);
+          border: 1px solid rgba(245, 158, 11, 0.3);
+          color: #f59e0b;
+          font-weight: 900;
+        }
+
+        .workflowStep strong {
+          color: #ffffff;
+        }
+
+        .workflowStep p {
+          margin: 5px 0 0;
+          color: rgba(255, 255, 255, 0.65);
+          line-height: 1.55;
+        }
+
+        .finalCallout {
+          margin-top: 34px;
+        }
+
+        @media (max-width: 760px) {
+          .explanationGrid,
+          .workflowGrid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+    </AcademyLessonLayout>
   );
 }
