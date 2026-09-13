@@ -17,7 +17,7 @@ const lessons: Lesson[] = [
     description:
       "Understand the purpose of this course, how customizable estimating can be, and what this training is designed to teach.",
     sections: 2,
-    status: "In production",
+    status: "Ready",
     href: "/dashboard/estimator-training/lesson-1",
   },
   {
