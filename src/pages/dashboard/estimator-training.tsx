@@ -426,20 +426,21 @@ export default function EstimatorTrainingPage() {
             0 0 0 1px rgba(245, 158, 11, 0.06);
         }
 
-        .lessonTop {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 20px;
-          margin-bottom: 22px;
-        }
+.lessonTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 26px;
+}
 
-        .lessonNumber {
-          color: #f59e0b;
-          font-size: 13px;
-          font-weight: 900;
-          letter-spacing: 0.1em;
-        }
+.lessonNumber {
+  color: #f59e0b;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
 
         .status {
           padding: 7px 11px;
@@ -460,12 +461,14 @@ export default function EstimatorTrainingPage() {
           border: 1px solid rgba(34, 197, 94, 0.28);
         }
 
-        .lessonCard h3 {
-          margin: 0;
-          color: #ffffff;
-          font-size: 23px;
-          line-height: 1.25;
-        }
+.lessonCard h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
 
         .lessonDescription {
           flex: 1;
