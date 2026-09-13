@@ -117,9 +117,7 @@ export default function EstimatorTrainingPage() {
       <main className="page">
         <section className="hero">
           <div className="heroInner">
-            <div className="eyebrow">
-              ESTIMATOR TRAINING
-            </div>
+            <div className="eyebrow">ESTIMATOR TRAINING</div>
 
             <h1>
               Glazier Studio / PartnerPak
@@ -144,13 +142,9 @@ export default function EstimatorTrainingPage() {
 
         <section className="content">
           <div className="sectionIntro">
-            <div className="eyebrow">
-              10 LESSON COURSE
-            </div>
+            <div className="eyebrow">10 LESSON COURSE</div>
 
-            <h2>
-              Estimating From Setup to Final Bid
-            </h2>
+            <h2>Estimating From Setup to Final Bid</h2>
 
             <p>
               This course starts from the ground up. If you already understand
@@ -161,14 +155,10 @@ export default function EstimatorTrainingPage() {
 
           <div className="lessonGrid">
             {lessons.map((lesson) => (
-              <div
-                key={lesson.number}
-                className="lessonCard"
-              >
+              <div key={lesson.number} className="lessonCard">
                 <div className="lessonTop">
                   <div className="lessonNumber">
-                    LESSON{" "}
-                    {String(lesson.number).padStart(2, "0")}
+                    LESSON {String(lesson.number).padStart(2, "0")}
                   </div>
 
                   <div
@@ -182,9 +172,7 @@ export default function EstimatorTrainingPage() {
                   </div>
                 </div>
 
-                <h3>
-                  {lesson.title}
-                </h3>
+                <h3>{lesson.title}</h3>
 
                 <p className="lessonDescription">
                   {lesson.description}
@@ -193,23 +181,16 @@ export default function EstimatorTrainingPage() {
                 <div className="lessonFooter">
                   <div className="sectionCount">
                     {lesson.sections}{" "}
-                    {lesson.sections === 1
-                      ? "Section"
-                      : "Sections"}
+                    {lesson.sections === 1 ? "Section" : "Sections"}
                   </div>
 
                   {lesson.status === "Ready" ? (
-                    <Link
-                      href={lesson.href}
-                      className="button"
-                    >
+                    <Link href={lesson.href} className="button">
                       Start Lesson
                       <span>→</span>
                     </Link>
                   ) : (
-                    <div className="button disabled">
-                      Coming Soon
-                    </div>
+                    <div className="button disabled">Coming Soon</div>
                   )}
                 </div>
               </div>
@@ -219,19 +200,13 @@ export default function EstimatorTrainingPage() {
 
         <section className="workflowSection">
           <div className="workflowCard">
-            <div className="eyebrow">
-              COURSE FLOW
-            </div>
+            <div className="eyebrow">COURSE FLOW</div>
 
-            <h2>
-              A Practical Estimating Workflow
-            </h2>
+            <h2>A Practical Estimating Workflow</h2>
 
             <div className="workflowGrid">
               <div className="workflowItem">
-                <div className="workflowNumber">
-                  1
-                </div>
+                <div className="workflowNumber">1</div>
 
                 <div>
                   <h3>Set Up</h3>
@@ -244,9 +219,7 @@ export default function EstimatorTrainingPage() {
               </div>
 
               <div className="workflowItem">
-                <div className="workflowNumber">
-                  2
-                </div>
+                <div className="workflowNumber">2</div>
 
                 <div>
                   <h3>Build</h3>
@@ -259,9 +232,7 @@ export default function EstimatorTrainingPage() {
               </div>
 
               <div className="workflowItem">
-                <div className="workflowNumber">
-                  3
-                </div>
+                <div className="workflowNumber">3</div>
 
                 <div>
                   <h3>Review</h3>
@@ -274,9 +245,7 @@ export default function EstimatorTrainingPage() {
               </div>
 
               <div className="workflowItem">
-                <div className="workflowNumber">
-                  4
-                </div>
+                <div className="workflowNumber">4</div>
 
                 <div>
                   <h3>Finalize</h3>
@@ -295,24 +264,35 @@ export default function EstimatorTrainingPage() {
       <style jsx>{`
         .page {
           min-height: 100vh;
-          background: #f4f5f7;
-          color: #111827;
+          color: #f8fafc;
+          background:
+            radial-gradient(
+              circle at 15% 18%,
+              rgba(245, 158, 11, 0.08),
+              transparent 26%
+            ),
+            linear-gradient(
+              180deg,
+              #090e16 0%,
+              #0b111b 42%,
+              #0e1521 100%
+            );
         }
 
         .hero {
-          padding: 64px 32px 70px;
-          color: white;
+          padding: 64px 32px 72px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
           background:
             radial-gradient(
-              circle at top right,
-              rgba(245, 158, 11, 0.14),
-              transparent 36%
+              circle at top left,
+              rgba(245, 158, 11, 0.1),
+              transparent 34%
             ),
             linear-gradient(
               135deg,
-              #08111f 0%,
-              #0b1422 55%,
-              #111b2b 100%
+              #090d14 0%,
+              #0c1420 50%,
+              #111a29 100%
             );
         }
 
@@ -328,13 +308,14 @@ export default function EstimatorTrainingPage() {
           margin-bottom: 12px;
           color: #f59e0b;
           font-size: 13px;
-          font-weight: 800;
+          font-weight: 900;
           letter-spacing: 0.15em;
         }
 
         h1 {
           max-width: 900px;
           margin: 0;
+          color: #ffffff;
           font-size: clamp(38px, 5vw, 60px);
           line-height: 1.05;
           letter-spacing: -0.03em;
@@ -347,7 +328,7 @@ export default function EstimatorTrainingPage() {
         .heroText {
           max-width: 850px;
           margin: 22px 0 0;
-          color: #d7dce3;
+          color: #cbd5e1;
           font-size: 18px;
           line-height: 1.7;
         }
@@ -356,12 +337,16 @@ export default function EstimatorTrainingPage() {
           max-width: 900px;
           margin-top: 30px;
           padding: 18px 20px;
-          border: 1px solid rgba(245, 158, 11, 0.35);
+          border: 1px solid rgba(245, 158, 11, 0.32);
           border-left: 4px solid #f59e0b;
-          border-radius: 10px;
-          background: rgba(245, 158, 11, 0.08);
-          color: #f3f4f6;
+          border-radius: 12px;
+          background: rgba(245, 158, 11, 0.075);
+          color: #e5e7eb;
           line-height: 1.6;
+        }
+
+        .notice strong {
+          color: #fbbf24;
         }
 
         .content {
@@ -376,13 +361,14 @@ export default function EstimatorTrainingPage() {
         .sectionIntro h2,
         .workflowCard h2 {
           margin: 0;
+          color: #ffffff;
           font-size: 38px;
           letter-spacing: -0.025em;
         }
 
         .sectionIntro p {
           margin: 14px 0 0;
-          color: #5d6674;
+          color: #aeb8c7;
           font-size: 16px;
           line-height: 1.7;
         }
@@ -394,21 +380,50 @@ export default function EstimatorTrainingPage() {
         }
 
         .lessonCard {
+          position: relative;
           display: flex;
           flex-direction: column;
           min-height: 280px;
           padding: 26px;
-          border: 1px solid #dfe3e8;
-          border-radius: 14px;
-          background: white;
-          box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
-          transition: 0.18s ease;
+          overflow: hidden;
+          border: 1px solid rgba(245, 158, 11, 0.18);
+          border-radius: 16px;
+          background:
+            linear-gradient(
+              145deg,
+              rgba(18, 27, 42, 0.98),
+              rgba(13, 20, 32, 0.98)
+            );
+          box-shadow:
+            0 12px 30px rgba(0, 0, 0, 0.22),
+            inset 0 1px 0 rgba(255, 255, 255, 0.025);
+          transition:
+            transform 0.18s ease,
+            border-color 0.18s ease,
+            box-shadow 0.18s ease;
+        }
+
+        .lessonCard::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: linear-gradient(
+            90deg,
+            #f59e0b,
+            rgba(245, 158, 11, 0.15),
+            transparent
+          );
         }
 
         .lessonCard:hover {
-          transform: translateY(-3px);
+          transform: translateY(-4px);
           border-color: rgba(245, 158, 11, 0.5);
-          box-shadow: 0 14px 32px rgba(15, 23, 42, 0.09);
+          box-shadow:
+            0 18px 40px rgba(0, 0, 0, 0.28),
+            0 0 0 1px rgba(245, 158, 11, 0.06);
         }
 
         .lessonTop {
@@ -430,24 +445,24 @@ export default function EstimatorTrainingPage() {
           padding: 7px 11px;
           border-radius: 999px;
           font-size: 12px;
-          font-weight: 800;
+          font-weight: 900;
         }
 
         .production {
-          color: #8a5600;
-          background: #fff3d6;
-          border: 1px solid #f4d691;
+          color: #fbbf24;
+          background: rgba(245, 158, 11, 0.1);
+          border: 1px solid rgba(245, 158, 11, 0.28);
         }
 
         .ready {
-          color: #126232;
-          background: #eaf8ef;
-          border: 1px solid #b9e3c7;
+          color: #86efac;
+          background: rgba(34, 197, 94, 0.1);
+          border: 1px solid rgba(34, 197, 94, 0.28);
         }
 
         .lessonCard h3 {
           margin: 0;
-          color: #111827;
+          color: #ffffff;
           font-size: 23px;
           line-height: 1.25;
         }
@@ -455,7 +470,7 @@ export default function EstimatorTrainingPage() {
         .lessonDescription {
           flex: 1;
           margin: 14px 0 24px;
-          color: #5a6474;
+          color: #aeb8c7;
           font-size: 15px;
           line-height: 1.7;
         }
@@ -466,11 +481,11 @@ export default function EstimatorTrainingPage() {
           justify-content: space-between;
           gap: 18px;
           padding-top: 18px;
-          border-top: 1px solid #eceff3;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .sectionCount {
-          color: #6b7280;
+          color: #8f9aad;
           font-size: 12px;
           font-weight: 800;
           letter-spacing: 0.08em;
@@ -481,18 +496,36 @@ export default function EstimatorTrainingPage() {
           display: inline-flex;
           align-items: center;
           gap: 9px;
-          padding: 10px 14px;
-          border-radius: 8px;
+          padding: 10px 15px;
+          border: 1px solid #f59e0b;
+          border-radius: 9px;
           background: #f59e0b;
-          color: #111827;
+          color: #08111f;
           font-size: 14px;
           font-weight: 900;
           text-decoration: none;
+          box-shadow: 0 8px 18px rgba(245, 158, 11, 0.14);
+          transition:
+            transform 0.15s ease,
+            background 0.15s ease;
+        }
+
+        .button:hover {
+          transform: translateY(-1px);
+          background: #fbbf24;
         }
 
         .disabled {
-          background: #e5e7eb;
-          color: #8a9099;
+          border-color: rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.06);
+          color: #707b8d;
+          box-shadow: none;
+          cursor: default;
+        }
+
+        .disabled:hover {
+          transform: none;
+          background: rgba(255, 255, 255, 0.06);
         }
 
         .workflowSection {
@@ -501,9 +534,15 @@ export default function EstimatorTrainingPage() {
 
         .workflowCard {
           padding: 42px;
-          border: 1px solid #dfe3e8;
-          border-radius: 16px;
-          background: white;
+          border: 1px solid rgba(245, 158, 11, 0.18);
+          border-radius: 18px;
+          background:
+            linear-gradient(
+              145deg,
+              rgba(18, 27, 42, 0.98),
+              rgba(12, 19, 30, 0.98)
+            );
+          box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
         }
 
         .workflowGrid {
@@ -517,8 +556,9 @@ export default function EstimatorTrainingPage() {
           display: flex;
           gap: 16px;
           padding: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.07);
           border-radius: 12px;
-          background: #f8f9fb;
+          background: rgba(255, 255, 255, 0.03);
         }
 
         .workflowNumber {
@@ -528,8 +568,9 @@ export default function EstimatorTrainingPage() {
           display: flex;
           align-items: center;
           justify-content: center;
+          border: 1px solid rgba(245, 158, 11, 0.3);
           border-radius: 10px;
-          background: #0d1726;
+          background: rgba(245, 158, 11, 0.08);
           color: #f59e0b;
           font-size: 18px;
           font-weight: 900;
@@ -537,12 +578,13 @@ export default function EstimatorTrainingPage() {
 
         .workflowItem h3 {
           margin: 1px 0 6px;
+          color: #ffffff;
           font-size: 18px;
         }
 
         .workflowItem p {
           margin: 0;
-          color: #5e6674;
+          color: #9da8b8;
           font-size: 14px;
           line-height: 1.6;
         }
