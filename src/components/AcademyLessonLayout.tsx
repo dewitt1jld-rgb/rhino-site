@@ -23,6 +23,9 @@ type AcademyLessonLayoutProps = {
   steps: Step[];
   children: ReactNode;
 
+  courseHref?: string;
+  courseLabel?: string;
+
   previousHref?: string;
   previousLabel?: string;
   nextHref?: string;
@@ -42,12 +45,31 @@ export default function AcademyLessonLayout({
   currentStep,
   steps,
   children,
+  courseHref,
+  courseLabel = "← Back to Course",
   previousHref,
   previousLabel = "← Previous",
   nextHref,
   nextLabel = "Continue →",
 }: AcademyLessonLayoutProps) {
   const router = useRouter();
+
+  /*
+  --------------------------------------------------
+  DETERMINE WHICH COURSE THIS LESSON BELONGS TO
+  --------------------------------------------------
+  */
+
+  const isEstimatorCourse =
+    router.asPath.startsWith(
+      "/dashboard/estimator-training"
+    );
+
+  const resolvedCourseHref =
+    courseHref ??
+    (isEstimatorCourse
+      ? "/dashboard/estimator-training"
+      : "/dashboard/introductory-software-training");
 
   const showBottomNavigation =
     Boolean(previousHref || nextHref);
@@ -287,10 +309,10 @@ export default function AcademyLessonLayout({
     <main className="academyPage">
       <aside className="academySidebar">
         <Link
-          href="/dashboard/introductory-software-training"
+          href={resolvedCourseHref}
           className="academyBack"
         >
-          ← Back to Course
+          {courseLabel}
         </Link>
 
         <p className="academyEyebrow">

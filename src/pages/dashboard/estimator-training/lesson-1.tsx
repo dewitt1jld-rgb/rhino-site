@@ -206,27 +206,6 @@ export default function EstimatorLessonOnePage() {
         </p>
       </div>
 
-      <div className="criticalBox">
-        <p className="sectionLabel">
-          Required Before Real-World Use
-        </p>
-
-        <h3>
-          Test your estimating setup.
-        </h3>
-
-        <p>
-          Your company should verify the results produced by the software
-          before using those results to price real projects.
-        </p>
-
-        <p>
-          Run test estimates, compare the results against known costs, and
-          confirm that each part of the estimate is behaving the way you expect
-          it to.
-        </p>
-      </div>
-
       <h3>
         This Course Starts From Ground Zero
       </h3>
